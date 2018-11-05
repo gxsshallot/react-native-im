@@ -1,6 +1,7 @@
 {
   "name": "react-native-im",
   "version": "0.0.1",
+  "private": false,
   "description": "一个通用的IM视图框架(开发中)",
   "main": "index.js",
   "scripts": {
@@ -16,5 +17,8 @@
     "url": "https://github.com/gaoxiaosong/react-native-im/issues",
     "email": "gaoxiaosong06@gmail.com"
   },
-  "homepage": "https://github.com/gaoxiaosong/react-native-im#readme"
+  "homepage": "https://github.com/gaoxiaosong/react-native-im#readme",
+  "dependencies": {
+    "specials": "^1.0.0"
+  }
 }

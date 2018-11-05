@@ -1,0 +1,1 @@
+import * as Model from './model';
