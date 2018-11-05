@@ -1,2 +1,7 @@
-export * as IMStandard from './src';
-export * as IMPlugin from './plugin';
+import * as IMStandard from './src';
+import * as IMPlugin from './plugin';
+
+export {
+    IMStandard,
+    IMPlugin,
+};
