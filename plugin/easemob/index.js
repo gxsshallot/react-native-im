@@ -8,7 +8,7 @@ import { isMobileLocation, convertMobileLocation } from './location/location-mob
 import { isMobileVideo, convertMobileVideo } from './video/video-mobile';
 import { isMobileVoice, convertMobileVoice } from './voice/voice-mobile';
 
-export default function () {
+export function setup() {
     const parseActions = [
         [isMobileText, convertMobileText],
         [isWebText, convertWebText],
