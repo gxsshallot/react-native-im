@@ -1,6 +1,6 @@
 import { Model, Constant } from '../../src';
-import * as Util from './util';
-import * as Constant from './constant';
+import * as EMUtil from './util';
+import * as EMConstant from './constant';
 import { isMobileText, convertMobileText } from './text/text-mobile';
 import { isWebText, convertWebText } from './text/text-web';
 import { isMobileImage, convertMobileImage } from './image/image-mobile';
@@ -29,6 +29,6 @@ export function setup() {
 }
 
 export {
-    Constant,
-    Util,
+    EMConstant,
+    EMUtil,
 };
