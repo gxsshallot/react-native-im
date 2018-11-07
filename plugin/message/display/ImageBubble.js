@@ -33,18 +33,15 @@ export default class extends React.PureComponent {
     }
 
     render() {
-        const {message: {data: {size}}, maxWidth, style} = this.props;
-        const imgWidth = size && size.width || maxWidth;
-        const imgHeight = size && size.height || maxWidth;
-        const ratio = Math.max(imgWidth / maxWidth, imgHeight / maxWidth);
+        const {message: {data: {size}}, maxWidth: maxEdge, style} = this.props;
         return this.state.source ? (
             <View style={[styles.view, style]}>
                 <Image
                     resizeMode={'contain'}
                     source={this.state.source}
                     style={[styles.image, {
-                        width: imgWidth / ratio,
-                        height: imgHeight / ratio,
+                        maxWidth: maxEdge,
+                        maxHeight: maxEdge,
                     }]}
                 />
             </View>

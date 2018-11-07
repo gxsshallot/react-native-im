@@ -18,9 +18,6 @@ export const ImageMessage = {
         thumbnailPath: PropTypes.string,
         previewPath: PropTypes.string,
         remotePath: PropTypes.string,
-        size: PropTypes.shape({
-            width: PropTypes.number,
-            height: PropTypes.number,
-        }),
+        size: PropTypes.number,
     }),
 };
