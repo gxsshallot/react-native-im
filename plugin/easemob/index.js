@@ -28,6 +28,7 @@ export function setup() {
         );
     });
     const displayActions = [
+        [EMConstant.MessageType.Text, StandardMessage.Display.TextBubble],
         [EMConstant.MessageType.Image, StandardMessage.Display.ImageBubble],
     ];
     displayActions.forEach(([messageType, handleFunc, priority]) => {

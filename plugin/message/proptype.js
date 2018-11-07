@@ -11,13 +11,17 @@ export function DisplayProps(messageProps) {
     };
 };
 
+export const TextMessage = {
+    ...Types.BasicMessage,
+    data: PropTypes.shape({
+        text: PropTypes.string,
+    }),
+};
+
 export const ImageMessage = {
     ...Types.BasicMessage,
     data: PropTypes.shape({
-        localPath: PropTypes.string,
         thumbnailPath: PropTypes.string,
-        previewPath: PropTypes.string,
         remotePath: PropTypes.string,
-        size: PropTypes.number,
     }),
 };

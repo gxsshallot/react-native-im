@@ -17,11 +17,13 @@ export default class extends React.PureComponent {
         }
         this.state = {
             source: source,
+            width: null,
+            height: null,
         };
     }
 
     componentDidMount() {
-        const {message: {data: {localPath}}} = this.props;
+        const {message: {data: {localPath, thumbnailPath}}} = this.props;
         if (!this.state.source) {
             RNFS.readFile(localPath, 'base64')
                 .then(content => {
@@ -30,18 +32,24 @@ export default class extends React.PureComponent {
                     });
                 });
         }
+        Image.getSize(thumbnailPath, (width, height) => {
+            this.setState({width, height});
+        });
     }
 
     render() {
-        const {message: {data: {size}}, maxWidth: maxEdge, style} = this.props;
-        return this.state.source ? (
+        const {maxWidth, style} = this.props;
+        const imgWidth = this.state.width || maxWidth;
+        const imgHeight = this.state.height || maxWidth;
+        const ratio = Math.max(imgWidth / maxWidth, imgHeight / maxWidth);
+        return this.state.source && this.state.width && this.state.height ? (
             <View style={[styles.view, style]}>
                 <Image
                     resizeMode={'contain'}
                     source={this.state.source}
                     style={[styles.image, {
-                        maxWidth: maxEdge,
-                        maxHeight: maxEdge,
+                        width: imgWidth / ratio,
+                        height: imgHeight / ratio,
                     }]}
                 />
             </View>
