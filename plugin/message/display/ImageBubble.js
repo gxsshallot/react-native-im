@@ -1,7 +1,6 @@
 import React from 'react';
-import { StyleSheet, View, Platform, InteractionManager } from 'react-native';
+import { Image, StyleSheet, View, Platform, InteractionManager } from 'react-native';
 import RNFS from 'react-native-fs';
-import Image from 'react-native-scalable-image';
 import { DisplayProps, ImageMessage } from '../proptype';
 
 export default class extends React.PureComponent {

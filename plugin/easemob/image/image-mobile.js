@@ -9,13 +9,13 @@ export function convertMobileImage(message) {
     const newMessage = convertBasicMessage(message);
     newMessage.type = MessageType.Image;
     newMessage.data = {
-        localPath: message.body.localPath,
+        localPath: null,
         remotePath: message.body.remotePath,
         thumbnailLocalPath: null,
         thumbnailRemotePath: null,
         size: {
-            width: message.body.size.width,
-            height: message.body.size.height,
+            width: message.body.size && message.body.size.width,
+            height: message.body.size && message.body.size.height,
         },
     };
     return newMessage;

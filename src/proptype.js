@@ -11,3 +11,17 @@ export const BasicMessage = {
     timestamp: PropTypes.number,
     data: PropTypes.any,
 };
+
+export const ImOrg = {
+    orgId: PropTypes.string.isRequired,
+    name: PropTypes.string,
+    dept: PropTypes.shape(ImOrg),
+};
+
+export const ImUser = {
+    userId: PropTypes.string.isRequired,
+    name: PropTypes.string,
+    dept: PropTypes.shape(ImOrg),
+    avatar: PropTypes.string,
+    phone: PropTypes.string,
+};
