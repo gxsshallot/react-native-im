@@ -9,7 +9,8 @@ export default class extends React.PureComponent {
 
     constructor(props) {
         super(props);
-        const {message: {data: {localPath, thumbnailPath, size}}} = this.props;
+        const {message: {data}} = this.props;
+        const {localPath, thumbnailLocalPath, remotePath, thumbnailRemotePath} = data;
         let source = null;
         if (thumbnailLocalPath || localPath) {
             if (Platform.OS === 'android') {
