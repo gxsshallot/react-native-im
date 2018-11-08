@@ -24,7 +24,7 @@ export const takeVideo = {
     },
 };
 
-export const takeCamera {
+export const takeCamera = {
     text: '拍摄',
     icon: require('./image/more_take_pic.png'),
     onPress: (onDataChange) => {
