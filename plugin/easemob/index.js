@@ -1,4 +1,4 @@
-import { Model, Constant } from '../../src';
+import * as IMStandard from '../../src';
 import * as EMUtil from './util';
 import * as EMConstant from './constant';
 import { isMobileText, convertMobileText } from './text/text-mobile';
@@ -19,8 +19,8 @@ export function setup() {
         [isMobileVoice, convertMobileVoice],
     ];
     parseActions.forEach(([specialFunc, handleFunc, priority]) => {
-        Model.Action.register(
-            Constant.Action.Parse,
+        IMStandard.Model.Action.register(
+            IMStandard.Constant.Action.Parse,
             undefined,
             (message) => specialFunc(message),
             (message) => handleFunc(message),
@@ -30,10 +30,11 @@ export function setup() {
     const displayActions = [
         [EMConstant.MessageType.Text, StandardMessage.Display.TextBubble],
         [EMConstant.MessageType.Image, StandardMessage.Display.ImageBubble],
+        [EMConstant.MessageType.Location, StandardMessage.Display.LocationBubble],
     ];
     displayActions.forEach(([messageType, handleFunc, priority]) => {
-        Model.Action.register(
-            Constant.Action.Display,
+        IMStandard.Model.Action.register(
+            IMStandard.Constant.Action.Display,
             messageType,
             undefined,
             handleFunc,

@@ -3,7 +3,7 @@ import * as Constant from './constant';
 
 export const BasicMessage = {
     conversationId: PropTypes.string.isRequired,
-    messageId: PropTypes.string.isRequired,
+    messageId: PropTypes.string,
     status: PropTypes.oneOf(Object.values(Constant.Status)),
     type: PropTypes.number.isRequired,
     from: PropTypes.string,

@@ -9,6 +9,9 @@ export default {
         getMine: unset('user.getMine'),
         getUser: unset('user.getUser'),
     },
+    func: {
+        pushToLocationViewPage: unset('func.pushToLocationViewPage'),
+    },
     style: {
         viewBackgroundColor: 'white',
         seperatorLineColor: 'gray',

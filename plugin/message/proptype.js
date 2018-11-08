@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { Types } from '../../src';
+import * as IMStandard from '../../src';
 
 export function DisplayProps(messageProps) {
     return {
@@ -12,14 +12,14 @@ export function DisplayProps(messageProps) {
 };
 
 export const TextMessage = {
-    ...Types.BasicMessage,
+    ...IMStandard.Types.BasicMessage,
     data: PropTypes.shape({
         text: PropTypes.string,
     }),
 };
 
 export const ImageMessage = {
-    ...Types.BasicMessage,
+    ...IMStandard.Types.BasicMessage,
     data: PropTypes.shape({
         thumbnailLocalPath: PropTypes.string,
         thumbnailRemotePath: PropTypes.string,
@@ -33,7 +33,7 @@ export const ImageMessage = {
 };
 
 export const VoiceMessage = {
-    ...Types.BasicMessage,
+    ...IMStandard.Types.BasicMessage,
     data: PropTypes.shape({
         localPath: PropTypes.string,
         remotePath: PropTypes.string,
@@ -42,7 +42,7 @@ export const VoiceMessage = {
 };
 
 export const LocationMessage = {
-    ...Types.BasicMessage,
+    ...IMStandard.Types.BasicMessage,
     data: PropTypes.shape({
         latitude: PropTypes.number,
         longitude: PropTypes.number,
@@ -52,7 +52,7 @@ export const LocationMessage = {
 };
 
 export const VideoMessage = {
-    ...Types.BasicMessage,
+    ...IMStandard.Types.BasicMessage,
     data: PropTypes.shape({
         localPath: PropTypes.string,
         remotePath: PropTypes.string,
@@ -61,7 +61,7 @@ export const VideoMessage = {
 };
 
 export const FileMessage = {
-    ...Types.BasicMessage,
+    ...IMStandard.Types.BasicMessage,
     data: PropTypes.shape({
         localPath: PropTypes.string,
         remotePath: PropTypes.string,
