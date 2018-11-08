@@ -23,6 +23,7 @@
     "react-native-picklist": "^1.1.8",
     "react-native-pure-navigation-bar": "^1.4.6",
     "react-native-root-toast": "^3.0.1",
+    "react-native-video": "^3.2.1",
     "specials": "^1.0.0"
   }
 }
