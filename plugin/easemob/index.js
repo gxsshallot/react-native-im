@@ -31,6 +31,8 @@ export function setup() {
         [EMConstant.MessageType.Text, StandardMessage.Display.TextBubble],
         [EMConstant.MessageType.Image, StandardMessage.Display.ImageBubble],
         [EMConstant.MessageType.Location, StandardMessage.Display.LocationBubble],
+        [EMConstant.MessageType.Video, StandardMessage.Display.VideoBubble],
+        [EMConstant.MessageType.Voice, StandardMessage.Display.VoiceBubble],
     ];
     displayActions.forEach(([messageType, handleFunc, priority]) => {
         IMStandard.Model.Action.register(
