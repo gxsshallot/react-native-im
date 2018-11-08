@@ -1,6 +1,7 @@
 import React from 'react';
-import { Image, StyleSheet, View, Platform, InteractionManager } from 'react-native';
+import { StyleSheet, View, Platform, InteractionManager } from 'react-native';
 import RNFS from 'react-native-fs';
+import Image from 'react-native-scalable-image';
 import { DisplayProps, ImageMessage } from '../proptype';
 
 export default class extends React.PureComponent {
@@ -8,7 +9,7 @@ export default class extends React.PureComponent {
 
     constructor(props) {
         super(props);
-        const {message: {data: {localPath, thumbnailPath}}} = this.props;
+        const {message: {data: {localPath, thumbnailPath, size}}} = this.props;
         let source = null;
         if (thumbnailPath) {
             source = {uri: thumbnailPath};
@@ -17,8 +18,6 @@ export default class extends React.PureComponent {
         }
         this.state = {
             source: source,
-            width: null,
-            height: null,
         };
     }
 
@@ -32,25 +31,18 @@ export default class extends React.PureComponent {
                     });
                 });
         }
-        Image.getSize(thumbnailPath, (width, height) => {
-            this.setState({width, height});
-        });
     }
 
     render() {
-        const {maxWidth, style} = this.props;
-        const imgWidth = this.state.width || maxWidth;
-        const imgHeight = this.state.height || maxWidth;
-        const ratio = Math.max(imgWidth / maxWidth, imgHeight / maxWidth);
-        return this.state.source && this.state.width && this.state.height ? (
+        const {message: {data: {size}}, maxWidth, style} = this.props;
+        const width = size && size.width || maxWidth;
+        const height = size && size.height || maxWidth;
+        return this.state.source ? (
             <View style={[styles.view, style]}>
                 <Image
                     resizeMode={'contain'}
                     source={this.state.source}
-                    style={[styles.image, {
-                        width: imgWidth / ratio,
-                        height: imgHeight / ratio,
-                    }]}
+                    style={[styles.image, {width, height}]}
                 />
             </View>
         ) : null;

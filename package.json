@@ -20,6 +20,7 @@
   "homepage": "https://github.com/gaoxiaosong/react-native-im#readme",
   "dependencies": {
     "react-native-fs": "^2.12.1",
+    "react-native-scalable-image": "^0.4.0",
     "specials": "^1.0.0"
   }
 }

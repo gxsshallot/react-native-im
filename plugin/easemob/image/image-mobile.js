@@ -13,7 +13,10 @@ export function convertMobileImage(message) {
         thumbnailPath: message.body.remotePath,
         previewPath: message.body.remotePath,
         remotePath: message.body.remotePath,
-        size: message.body.size,
+        size: {
+            message.body.size.width,
+            message.body.size.height,
+        },
     };
     return newMessage;
 }

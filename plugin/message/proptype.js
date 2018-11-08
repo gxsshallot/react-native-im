@@ -56,6 +56,7 @@ export const VideoMessage = {
     data: PropTypes.shape({
         localPath: PropTypes.string,
         remotePath: PropTypes.string,
+        duration: PropTypes.number,
     }),
 };
 
@@ -64,6 +65,7 @@ export const FileMessage = {
     data: PropTypes.shape({
         localPath: PropTypes.string,
         remotePath: PropTypes.string,
+        name: PropTypes.string,
         size: PropTypes.number,
     }),
 };
