@@ -11,10 +11,14 @@ export default class extends React.PureComponent {
         super(props);
         const {message: {data: {localPath, thumbnailPath, size}}} = this.props;
         let source = null;
-        if (thumbnailPath) {
-            source = {uri: thumbnailPath};
-        } else if (Platform.OS === 'android') {
-            source = {uri: localPath};
+        if (thumbnailLocalPath || localPath) {
+            if (Platform.OS === 'android') {
+                source = {uri: thumbnailLocalPath || localPath};
+            } else {
+                // empty
+            }
+        } else {
+            source = {uri: thumbnailRemotePath || remotePath};
         }
         this.state = {
             source: source,
@@ -22,9 +26,9 @@ export default class extends React.PureComponent {
     }
 
     componentDidMount() {
-        const {message: {data: {localPath, thumbnailPath}}} = this.props;
+        const {message: {data: {localPath, thumbnailLocalPath}}} = this.props;
         if (!this.state.source) {
-            RNFS.readFile(localPath, 'base64')
+            RNFS.readFile(thumbnailLocalPath || localPath, 'base64')
                 .then(content => {
                     this.setState({
                         source: {uri: 'data:image/png;base64,' + content}
@@ -35,8 +39,11 @@ export default class extends React.PureComponent {
 
     render() {
         const {message: {data: {size}}, maxWidth, style} = this.props;
-        const width = size && size.width || maxWidth;
-        const height = size && size.height || maxWidth;
+        const imgWidth = size && size.width || maxWidth;
+        const imgHeight = size && size.height || maxWidth;
+        const ratio = Math.max(imgWidth * 1.0 / maxWidth, imgHeight * 1.0 / maxWidth);
+        const width = imgWidth / ratio;
+        const height = imgHeight / ratio;
         return this.state.source ? (
             <View style={[styles.view, style]}>
                 <Image

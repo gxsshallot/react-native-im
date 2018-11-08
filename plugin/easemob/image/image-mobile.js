@@ -10,9 +10,9 @@ export function convertMobileImage(message) {
     newMessage.type = MessageType.Image;
     newMessage.data = {
         localPath: message.body.localPath,
-        thumbnailPath: message.body.remotePath,
-        previewPath: message.body.remotePath,
         remotePath: message.body.remotePath,
+        thumbnailLocalPath: null,
+        thumbnailRemotePath: null,
         size: {
             width: message.body.size.width,
             height: message.body.size.height,
