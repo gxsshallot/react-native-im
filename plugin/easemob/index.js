@@ -43,6 +43,20 @@ export function setup() {
             priority,
         );
     });
+    const moreboardActions = [
+        ['photo', StandardMessage.MoreBoard.takePhoto, EMConstant.MessageType.Image],
+        ['camera', StandardMessage.MoreBoard.takeCamera, EMConstant.MessageType.Image],
+        ['video', StandardMessage.MoreBoard.takeVideo, EMConstant.MessageType.Video],
+    ];
+    moreboardActions.forEach(([action, handleFunc, messageType, priority]) => {
+        IMStandard.Model.Action.register(
+            IMStandard.Constant.Action.MoreBoard,
+            action,
+            undefined,
+            {...handleFunc, messageType},
+            priority,
+        );
+    });
 }
 
 export {
