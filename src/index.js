@@ -17,6 +17,7 @@ function setup_common_component() {
     Delegate.component.AvatarImage = Components.AvatarImage;
     Delegate.component.AvatarList = Components.AvatarList;
     Delegate.component.FakeSearchBar = Components.FakeSearchBar;
+    Delegate.component.SectionHeader = Components.SectionHeader;
 }
 
 export {
