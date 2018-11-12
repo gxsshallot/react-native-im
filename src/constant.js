@@ -13,3 +13,8 @@ export const Status = {
     Succeed: 2,
     Failed: 3,
 };
+
+export const ChatType = {
+    Single: 0,
+    Group: 1,
+};

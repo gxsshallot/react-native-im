@@ -2,6 +2,7 @@ import React from 'react';
 import { Image, StyleSheet, View } from 'react-native';
 import PropTypes from 'prop-types';
 import delegate from '../delegate';
+import * as Constant from '../constant';
 
 export default class extends React.PureComponent {
     static propTypes = {
@@ -71,12 +72,12 @@ export default class extends React.PureComponent {
 
     _getLayout = () => {
         const {imId, chatType} = this.props;
-        if (chatType === Constant.SingleChat) {
+        if (chatType === Constant.ChatType.Single) {
             return {
                 lines: 1,
                 layout: [[{userId: imId}]],
             };
-        } else if (chatType === Constant.GroupChat) {
+        } else if (chatType === Constant.ChatType.Group) {
             const avatar = delegate.im.group.getAvatar(imId);
             if (avatar) {
                 return {
