@@ -14,6 +14,7 @@ function setup_common_page() {
 
 function setup_common_component() {
     Delegate.component.ArrowImage = Components.ArrowImage;
+    Delegate.component.AvatarImage = Components.AvatarImage;
 }
 
 export {
