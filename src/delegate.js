@@ -17,6 +17,7 @@ export default {
     },
     func: {
         pushToLocationViewPage: unset('func.pushToLocationViewPage'),
+        pushToUserDetailPage: unset('func.pushToUserDetailPage'),
         fitUrlForAvatarSize: unset('util.fitUrlForAvatarSize'),
         getDefaultUserHeadImage: unset('util.getDefaultUserHeadImage'),
     },
