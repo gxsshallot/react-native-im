@@ -16,6 +16,7 @@ function setup_common_component() {
     Delegate.component.ArrowImage = Components.ArrowImage;
     Delegate.component.AvatarImage = Components.AvatarImage;
     Delegate.component.AvatarList = Components.AvatarList;
+    Delegate.component.FakeSearchBar = Components.FakeSearchBar;
 }
 
 export {
