@@ -2,12 +2,12 @@ import React from 'react';
 import { Image, StyleSheet, View } from 'react-native';
 import PropTypes from 'prop-types';
 import delegate from '../delegate';
+import * as Types from '../proptype';
 import * as Constant from '../constant';
 
 export default class extends React.PureComponent {
     static propTypes = {
-        imId: PropTypes.string.isRequired,
-        chatType: PropTypes.number.isRequired,
+        ...Types.Conversation,
         style: PropTypes.any,
     };
 

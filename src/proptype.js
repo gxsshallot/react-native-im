@@ -25,3 +25,8 @@ export const ImUser = {
     avatar: PropTypes.string,
     phone: PropTypes.string,
 };
+
+export const Conversation = {
+    imId: PropTypes.string.isRequired,
+    chatType: PropTypes.oneOf(Object.values(Constant.ChatType)),
+};

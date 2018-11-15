@@ -10,6 +10,9 @@ export default {
         getUser: unset('user.getUser'),
     },
     im: {
+        conversation: {
+            getConfig: unset('im.conversation.getConfig'),
+        },
         group: {
             getAvatar: unset('im.group.getAvatar'),
             getMembers: unset('im.group.getMembers'),

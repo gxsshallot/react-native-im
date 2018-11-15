@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/gaoxiaosong/react-native-im#readme",
   "dependencies": {
+    "dateformat": "^3.0.3",
     "react-native-fs": "^2.12.1",
     "react-native-full-image-picker": "^1.2.3",
     "react-native-general-searchbar": "^1.0.6",

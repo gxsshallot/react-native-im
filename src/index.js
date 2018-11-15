@@ -16,8 +16,13 @@ function setup_common_component() {
     Delegate.component.ArrowImage = Components.ArrowImage;
     Delegate.component.AvatarImage = Components.AvatarImage;
     Delegate.component.AvatarList = Components.AvatarList;
+    Delegate.component.BaseMessage = Components.BaseMessage;
     Delegate.component.FakeSearchBar = Components.FakeSearchBar;
+    Delegate.component.ListCell = Components.ListCell;
+    Delegate.component.MessageBubble = Components.MessageBubble;
     Delegate.component.SectionHeader = Components.SectionHeader;
+    Delegate.component.SettingItem = Components.SettingItem;
+    Delegate.component.TimeCell = Components.TimeCell;
 }
 
 export {
