@@ -1,6 +1,7 @@
 import React from 'react';
 import { Image, StyleSheet, View, Platform, InteractionManager } from 'react-native';
 import RNFS from 'react-native-fs';
+import { showPhotoBrowserPage } from 'react-native-photo-browse';
 import { DisplayProps, ImageMessage } from '../proptype';
 
 export default class extends React.PureComponent {
@@ -8,7 +9,7 @@ export default class extends React.PureComponent {
 
     constructor(props) {
         super(props);
-        const {message: {data}} = this.props;
+        const {message: {data}} = props;
         const {localPath, thumbnailLocalPath, remotePath, thumbnailRemotePath} = data;
         let source = null;
         if (thumbnailLocalPath || localPath) {
@@ -54,6 +55,14 @@ export default class extends React.PureComponent {
             </View>
         ) : null;
     }
+
+    onPress = () => {
+        const {message: {data: {remotePath}}} = this.props;
+        showPhotoBrowserPage({
+            images: [remotePath],
+            canSave: true,
+        });
+    };
 }
 
 const styles = StyleSheet.create({

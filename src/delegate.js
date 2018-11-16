@@ -14,6 +14,7 @@ export default {
             getConfig: unset('im.conversation.getConfig'),
         },
         group: {
+            getList: unset('im.group.getList'),
             getAvatar: unset('im.group.getAvatar'),
             getMembers: unset('im.group.getMembers'),
         },

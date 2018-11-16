@@ -1,2 +1,3 @@
 export const ChooseUser = 'IMChooseUser';
 export const ChooseUserFromOrg = 'IMChooseUserFromOrg';
+export const GroupList = 'IMGroupList';

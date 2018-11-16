@@ -10,6 +10,7 @@ import Delegate from './delegate';
 function setup_common_page() {
     Delegate.page[PageKeys.ChooseUser] = Pages.ChooseUserPage;
     Delegate.page[PageKeys.ChooseUserFromOrg] = Pages.ChooseUserFromOrgPage;
+    Delegate.page[PageKeys.GroupList] = Pages.GroupListPage;
 }
 
 function setup_common_component() {
