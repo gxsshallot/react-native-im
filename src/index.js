@@ -1,3 +1,4 @@
+import AsyncStorage from 'react-native-general-storage';
 import * as Constant from './constant';
 import * as Model from './model';
 import * as Types from './proptype';
@@ -26,6 +27,13 @@ function setup_common_component() {
     Delegate.component.TimeCell = Components.TimeCell;
 }
 
+function setup_common_model() {
+    AsyncStorage.setPrefix(Constant.StoragePart, Constant.StoragePart);
+    Delegate.model.Action = Model.Action;
+    Delegate.model.Group = Model.Group;
+    Delegate.model.Conversation = Model.Conversation;
+}
+
 export {
     Constant,
     Model,
@@ -37,4 +45,5 @@ export {
     Delegate,
     setup_common_page,
     setup_common_component,
+    setup_common_model,
 };

@@ -78,14 +78,14 @@ export default class extends React.PureComponent {
                 layout: [[{userId: imId}]],
             };
         } else if (chatType === Constant.ChatType.Group) {
-            const avatar = delegate.im.group.getAvatar(imId);
+            const avatar = delegate.model.Group.getAvatar(imId);
             if (avatar) {
                 return {
                     lines: 1,
                     layout: [[{avatar: avatar}]],
                 };
             } else {
-                const memberImIds = delegate.im.group.getMembers(imId);
+                const memberImIds = delegate.model.Group.getMembers(imId, true);
                 const lens = Math.min(memberImIds.length, this.groupLayout.length);
                 const item = this.groupLayout[lens - 1];
                 const layoutIds = item.layout.map((num, index) => {
