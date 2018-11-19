@@ -178,10 +178,13 @@ export function updateMessage(imId, message) {
     const item = getOne(imId);
     rootNode[types.list][imId].latestMessage = message;
     if (item.chatType === Constant.ChatType.Group) {
-        const hasAtMe = delegate.model.message.hasAtMe(message);
-        if (hasAtMe) {
-            rootNode[types.list][imId].atMe = hasAtMe;
+        let hasAtMe = false;
+        if (message.data && message.data.atMemberList) {
+            const index = message.data.atMemberList
+                .indexOf(delegate.user.getMine().userId);
+            hasAtMe = index >= 0;
         }
+        rootNode[types.list][imId].atMe = hasAtMe;
     }
     Listener.trigger([Constant.BaseEvent, Constant.ConversationUpdateEvent, imId]);
     return delegate.im.conversation.loadItem(imId, item.chatType, true)

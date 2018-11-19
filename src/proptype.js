@@ -12,6 +12,10 @@ export const BasicMessage = {
     data: PropTypes.any,
 };
 
+export const DefaultMessageData = {
+    atMemberList: PropTypes.arrayOf(PropTypes.string),
+};
+
 export const ImOrg = {
     orgId: PropTypes.string.isRequired,
     name: PropTypes.string,

@@ -9,8 +9,10 @@ import * as Utils from './util';
 import Delegate from './delegate';
 
 function setup_common_page() {
+    Delegate.page[PageKeys.ChooseConversation] = Pages.ChooseConversationPage;
     Delegate.page[PageKeys.ChooseUser] = Pages.ChooseUserPage;
     Delegate.page[PageKeys.ChooseUserFromOrg] = Pages.ChooseUserFromOrgPage;
+    Delegate.page[PageKeys.ContactList] = Pages.ContactListPage;
     Delegate.page[PageKeys.GroupList] = Pages.GroupListPage;
 }
 
@@ -18,11 +20,14 @@ function setup_common_component() {
     Delegate.component.ArrowImage = Components.ArrowImage;
     Delegate.component.AvatarImage = Components.AvatarImage;
     Delegate.component.AvatarList = Components.AvatarList;
+    Delegate.component.Badge = Components.Badge;
     Delegate.component.BaseMessage = Components.BaseMessage;
     Delegate.component.FakeSearchBar = Components.FakeSearchBar;
     Delegate.component.ListCell = Components.ListCell;
     Delegate.component.MessageBubble = Components.MessageBubble;
     Delegate.component.SectionHeader = Components.SectionHeader;
+    Delegate.component.SeekBarSectionList = Components.SeekBarSectionList;
+    Delegate.component.SelectList = Components.SelectList;
     Delegate.component.SettingItem = Components.SettingItem;
     Delegate.component.TimeCell = Components.TimeCell;
 }

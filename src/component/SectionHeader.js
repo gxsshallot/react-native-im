@@ -6,13 +6,19 @@ import delegate from '../delegate';
 export default class extends React.PureComponent {
     static propTypes = {
         title: PropTypes.string,
+        height: PropTypes.number,
+    };
+
+    static defaultProps = {
+        height: 25,
     };
 
     render() {
-        const { title } = this.props;
+        const { title, height } = this.props;
         const style = {
             borderBottomWidth: StyleSheet.hairlineWidth,
             borderBottomColor: delegate.style.seperatorLineColor,
+            height: height,
         }
         return (
             <View style={[styles.section, style]}>
@@ -26,7 +32,6 @@ export default class extends React.PureComponent {
 
 const styles = StyleSheet.create({
     section: {
-        height: 25,
         justifyContent: 'center',
         paddingLeft: 16,
         backgroundColor: '#e1e1e1',
