@@ -22,11 +22,13 @@ function setup_common_component() {
     Delegate.component.AvatarList = Components.AvatarList;
     Delegate.component.Badge = Components.Badge;
     Delegate.component.BaseMessage = Components.BaseMessage;
+    Delegate.component.EmojiPickView = Components.EmojiPickView;
     Delegate.component.FakeSearchBar = Components.FakeSearchBar;
     Delegate.component.ListCell = Components.ListCell;
     Delegate.component.MessageBubble = Components.MessageBubble;
     Delegate.component.SectionHeader = Components.SectionHeader;
     Delegate.component.SeekBarSectionList = Components.SeekBarSectionList;
+    Delegate.component.SegmentControl = Components.SegmentControl;
     Delegate.component.SelectList = Components.SelectList;
     Delegate.component.SettingItem = Components.SettingItem;
     Delegate.component.TimeCell = Components.TimeCell;
@@ -35,8 +37,9 @@ function setup_common_component() {
 function setup_common_model() {
     AsyncStorage.setPrefix(Constant.StoragePart, Constant.StoragePart);
     Delegate.model.Action = Model.Action;
-    Delegate.model.Group = Model.Group;
     Delegate.model.Conversation = Model.Conversation;
+    Delegate.model.Emoji = Model.Emoji;
+    Delegate.model.Group = Model.Group;
 }
 
 export {

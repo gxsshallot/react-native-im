@@ -9,7 +9,7 @@ export default class extends React.PureComponent {
         avatar: PropTypes.oneOfType([
             PropTypes.string,
             PropTypes.number,
-            PropTypes.shape(Types.Conversation),
+            PropTypes.shape(Types.BasicConversation),
             PropTypes.shape({
                 uri: PropTypes.string,
             })

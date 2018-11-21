@@ -7,7 +7,7 @@ import * as Constant from '../constant';
 
 export default class extends React.PureComponent {
     static propTypes = {
-        ...Types.Conversation,
+        ...Types.BasicConversation,
         style: PropTypes.any,
     };
 

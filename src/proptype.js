@@ -38,9 +38,13 @@ export const ConversationConfig = {
     avoid: PropTypes.bool,
 };
 
-export const Conversation = {
+export const BasicConversation = {
     imId: PropTypes.string.isRequired,
     chatType: PropTypes.oneOf(Object.values(Constant.ChatType)),
+};
+
+export const Conversation = {
+    ...BasicConversation,
     config: PropTypes.shape(ConversationConfig),
     latestMessage: PropTypes.shape(BasicMessage),
     unreadMessagesCount: PropTypes.number,
