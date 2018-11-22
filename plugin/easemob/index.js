@@ -57,6 +57,8 @@ export function setup() {
             priority,
         );
     });
+    IMStandard.Delegate.component.MoreBoard.defaultProps.getItems = (imId, chatType) =>
+        ['photo', 'camera', 'video', 'location'];
 }
 
 export {

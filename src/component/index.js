@@ -7,6 +7,7 @@ import EmojiPickView from './EmojiPickView';
 import FakeSearchBar from './FakeSearchBar';
 import ListCell from './ListCell';
 import MessageBubble from './MessageBubble';
+import MoreBoard from './MoreBoard';
 import SectionHeader from './SectionHeader';
 import SeekBarSectionList from './SeekBarSectionList';
 import SegmentControl from './SegmentControl';
@@ -24,6 +25,7 @@ export {
     FakeSearchBar,
     ListCell,
     MessageBubble,
+    MoreBoard,
     SectionHeader,
     SeekBarSectionList,
     SegmentControl,

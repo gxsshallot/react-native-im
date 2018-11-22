@@ -26,6 +26,7 @@ function setup_common_component() {
     Delegate.component.FakeSearchBar = Components.FakeSearchBar;
     Delegate.component.ListCell = Components.ListCell;
     Delegate.component.MessageBubble = Components.MessageBubble;
+    Delegate.component.MoreBoard = Components.MoreBoard;
     Delegate.component.SectionHeader = Components.SectionHeader;
     Delegate.component.SeekBarSectionList = Components.SeekBarSectionList;
     Delegate.component.SegmentControl = Components.SegmentControl;

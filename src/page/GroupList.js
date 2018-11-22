@@ -124,7 +124,7 @@ export default class extends React.PureComponent {
             .filter((group) => {
                 const {name = '', name_py = '', memberObjList} = group;
                 group.matchInMember = memberObjList
-                    .find({name, name_py = ''} =>
+                    .find(({name, name_py = ''}) =>
                         name.includes(text) || name_py.includes(text)
                     );
                 return name.includes(text) || name_py.includes(text) || group.matchInMember;

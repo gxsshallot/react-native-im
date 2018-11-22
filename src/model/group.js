@@ -63,7 +63,7 @@ export function loadDetail(groupId) {
             } else {
                 deleteOne(groupId);
             }
-        });
+        })
         .catch((err) => {
             if (global.__DEV__) {
                 Toast.show(err.message);
