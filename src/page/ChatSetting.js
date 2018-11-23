@@ -170,7 +170,7 @@ export default class extends React.PureComponent {
 
     _renderSeparatorLine = () => {
         const style = {
-            backgroundColor: delegate.style.seperatorLineColor,
+            backgroundColor: delegate.style.separatorLineColor,
             height: StyleSheet.hairlineWidth,
         };
         return <View style={style} />;

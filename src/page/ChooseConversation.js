@@ -57,7 +57,7 @@ export default class extends React.PureComponent {
     _renderHeader = () => {
         const style = {
             borderBottomWidth: StyleSheet.hairlineWidth,
-            borderBottomColor: delegate.style.seperatorLineColor,
+            borderBottomColor: delegate.style.separatorLineColor,
         };
         return (
             <View style={styles.row}>
@@ -75,7 +75,7 @@ export default class extends React.PureComponent {
     _renderRow = (treeNode) => {
         const style = {
             borderBottomWidth: StyleSheet.hairlineWidth,
-            borderBottomColor: delegate.style.seperatorLineColor,
+            borderBottomColor: delegate.style.separatorLineColor,
         };
         const info = treeNode.getInfo();
         const isSelected = treeNode.isFullSelect();

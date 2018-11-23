@@ -17,7 +17,7 @@ export default class extends React.PureComponent {
         const { title, height } = this.props;
         const style = {
             borderBottomWidth: StyleSheet.hairlineWidth,
-            borderBottomColor: delegate.style.seperatorLineColor,
+            borderBottomColor: delegate.style.separatorLineColor,
             height: height,
         }
         return (

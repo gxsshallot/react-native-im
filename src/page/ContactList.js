@@ -163,7 +163,7 @@ export default class extends React.PureComponent {
         return {
             height: this.props.itemHeight,
             borderBottomWidth: StyleSheet.hairlineWidth,
-            borderBottomColor: delegate.style.seperatorLineColor,
+            borderBottomColor: delegate.style.separatorLineColor,
         };
     };
 }

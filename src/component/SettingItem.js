@@ -17,7 +17,7 @@ export default class extends React.PureComponent {
         const {onPressLine} = this.props;
         return onPressLine ? (
             <TouchableHighlight
-                underlayColor={delegate.style.seperatorLineColor}
+                underlayColor={delegate.style.separatorLineColor}
                 onPress={onPressLine}
             >
                 {this._renderLine()}

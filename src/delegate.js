@@ -41,7 +41,7 @@ export default {
     },
     style: {
         viewBackgroundColor: 'white',
-        seperatorLineColor: 'gray',
+        separatorLineColor: 'gray',
     },
     config: {
         pinyinField: 'pinyin',

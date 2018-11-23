@@ -81,7 +81,7 @@ export default class extends React.PureComponent {
     _renderHeader = () => {
         const style = {
             borderBottomWidth: StyleSheet.hairlineWidth,
-            borderBottomColor: delegate.style.seperatorLineColor,
+            borderBottomColor: delegate.style.separatorLineColor,
         };
         return (
             <View style={styles.row}>

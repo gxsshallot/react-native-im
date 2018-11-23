@@ -34,6 +34,7 @@ export default class extends React.PureComponent {
             PropTypes.arrayOf(PropTypes.element),
             PropTypes.func,
         ]),
+        style: PropTypes.any,
     };
 
     static defaultProps = {

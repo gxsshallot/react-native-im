@@ -34,7 +34,7 @@ export default class extends React.PureComponent {
         const tabStyle = {
             height: tabViewHeight,
             borderTopWidth: StyleSheet.hairlineWidth,
-            borderTopColor: delegate.style.seperatorLineColor,
+            borderTopColor: delegate.style.separatorLineColor,
         };
         const emojis = delegate.model.Emoji.getPartEmojis(key);
         const collection = this._dataSource(emojis);
