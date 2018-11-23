@@ -168,6 +168,70 @@ export function quitOne(groupId) {
         })
 }
 
+// 添加群成员
+export function addMembers(groupId, members) {
+    return delegate.im.group.addMembers(groupId, members)
+        .then(() => {
+            const newMembers = [...rootNode[types.list][groupId], ...members];
+            changeGroupInfo({members: Array.from(new Set(newMembers))});
+            return newMembers;
+        });
+}
+
+// 删除群成员
+export function removeMembers(groupId, members) {
+    return delegate.im.group.removeMembers(groupId, members)
+        .then(() => {
+            const oldMembers = rootNode[types.list][groupId].members;
+            const newMembers = oldMembers.filter(id => members.indexOf(id) < 0);
+            changeGroupInfo({members: newMembers});
+            return newMembers;
+        });
+}
+
+// 更改群名称
+export function changeName(groupId, newName) {
+    return delegate.im.group.changeName(groupId, newName)
+        .then(() => {
+            changeGroupInfo({name: newName});
+            return newName;
+        });
+}
+
+// 更改群头像
+export function changeAvatar(groupId, newAvatarUrl) {
+    return delegate.im.group.changeAvatar(groupId, newAvatarUrl)
+        .then(() => {
+            changeGroupInfo({avatar: newAvatarUrl});
+            return newAvatarUrl;
+        });
+}
+
+// 转交群主
+export function changeOwner(groupId, newOwnerId) {
+    return delegate.im.group.changeOwner(groupId, newOwnerId)
+        .then(() => {
+            const newMembers = getMembers(groupId, true)
+                .filter(id => id !== newOwnerId)
+            const result = {
+                owner: newOwnerId,
+                members: newMembers,
+            };
+            changeGroupInfo(groupId, result);
+            return result;
+        });
+}
+
+// 更新群信息
+function changeGroupInfo(groupId, newGroupInfo) {
+    rootNode[types.list][groupId] = {
+        ...rootNode[types.list][groupId],
+        ...newGroupInfo,
+    };
+    writeData(types.list);
+    Listener.trigger([Constant.BaseEvent, Constant.GroupUpdateEvent, groupId]);
+}
+
 // 在本地删除群聊
 function deleteOne(groupId) {
     if (groupId) {

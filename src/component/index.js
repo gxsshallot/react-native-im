@@ -8,6 +8,8 @@ import FakeSearchBar from './FakeSearchBar';
 import ListCell from './ListCell';
 import MessageBubble from './MessageBubble';
 import MoreBoard from './MoreBoard';
+import Popover from './Popover';
+import Prompt from './Prompt';
 import SectionHeader from './SectionHeader';
 import SeekBarSectionList from './SeekBarSectionList';
 import SegmentControl from './SegmentControl';
@@ -26,6 +28,8 @@ export {
     ListCell,
     MessageBubble,
     MoreBoard,
+    Popover,
+    Prompt,
     SectionHeader,
     SeekBarSectionList,
     SegmentControl,

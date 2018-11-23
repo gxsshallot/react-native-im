@@ -28,6 +28,7 @@ export default class extends React.PureComponent {
             PropTypes.array
         ]),
         onClick: PropTypes.func,
+        onLongPress: PropTypes.func,
         right: PropTypes.oneOfType([
             PropTypes.element,
             PropTypes.arrayOf(PropTypes.element),
@@ -40,10 +41,10 @@ export default class extends React.PureComponent {
     };
 
     render() {
-        const {onClick} = this.props;
+        const {onClick, onLongPress} = this.props;
         const content = this._renderContent();
-        return onClick ? (
-            <TouchableHighlight onPress={onClick}>
+        return onClick || onLongPress ? (
+            <TouchableHighlight onPress={onClick} onLongPress={onLongPress}>
                 {content}
             </TouchableHighlight>
         ) : content;

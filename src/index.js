@@ -9,11 +9,13 @@ import * as Utils from './util';
 import Delegate from './delegate';
 
 function setup_common_page() {
+    Delegate.page[PageKeys.ChatSetting] = Pages.ChatSettingPage;
     Delegate.page[PageKeys.ChooseConversation] = Pages.ChooseConversationPage;
     Delegate.page[PageKeys.ChooseUser] = Pages.ChooseUserPage;
     Delegate.page[PageKeys.ChooseUserFromOrg] = Pages.ChooseUserFromOrgPage;
     Delegate.page[PageKeys.ContactList] = Pages.ContactListPage;
     Delegate.page[PageKeys.GroupList] = Pages.GroupListPage;
+    Delegate.page[PageKeys.GroupMembers] = Pages.GroupMembersPage;
 }
 
 function setup_common_component() {
@@ -27,6 +29,8 @@ function setup_common_component() {
     Delegate.component.ListCell = Components.ListCell;
     Delegate.component.MessageBubble = Components.MessageBubble;
     Delegate.component.MoreBoard = Components.MoreBoard;
+    Delegate.component.Popover = Components.Popover;
+    Delegate.component.Prompt = Components.Prompt;
     Delegate.component.SectionHeader = Components.SectionHeader;
     Delegate.component.SeekBarSectionList = Components.SeekBarSectionList;
     Delegate.component.SegmentControl = Components.SegmentControl;
