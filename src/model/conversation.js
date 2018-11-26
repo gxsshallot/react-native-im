@@ -180,9 +180,14 @@ export function updateMessage(imId, message) {
     if (item.chatType === Constant.ChatType.Group) {
         let hasAtMe = false;
         if (message.data && message.data.atMemberList) {
-            const index = message.data.atMemberList
+            const {atMemberList} = message.data;
+            if (atMemberList === Constant.atAll) {
+                hasAtMe = true;
+            } else {
+                const index = message.data.atMemberList
                 .indexOf(delegate.user.getMine().userId);
-            hasAtMe = index >= 0;
+                hasAtMe = index >= 0;
+            }
         }
         rootNode[types.list][imId].atMe = hasAtMe;
     }

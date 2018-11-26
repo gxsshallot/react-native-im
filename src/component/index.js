@@ -7,6 +7,7 @@ import EmojiPickView from './EmojiPickView';
 import FakeSearchBar from './FakeSearchBar';
 import ListCell from './ListCell';
 import MessageBubble from './MessageBubble';
+import MessageMenu from './MessageMenu';
 import MoreBoard from './MoreBoard';
 import Popover from './Popover';
 import Prompt from './Prompt';
@@ -27,6 +28,7 @@ export {
     FakeSearchBar,
     ListCell,
     MessageBubble,
+    MessageMenu,
     MoreBoard,
     Popover,
     Prompt,

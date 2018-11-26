@@ -22,6 +22,7 @@ export default class extends React.PureComponent {
     };
 
     static defaultProps = {
+        firstTitleLine: '所有部门',
         multiple: false,
         hasSelf: false,
         parentOrgId: undefined,

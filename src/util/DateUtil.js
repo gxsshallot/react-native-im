@@ -27,7 +27,6 @@ export function dateFormat(times, dateType, format = undefined) {
  * 根据通用业务规则，获取指定历史时间的显示方式
  * @param timestamp 展示时间
  * @param pattern 默认格式
- * @returns {*}
  */
 export function showDateTime(timestamp, pattern = "yy/mm/dd HH:MM") {
     if (typeof timestamp !== 'number') {
@@ -53,6 +52,33 @@ export function showDateTime(timestamp, pattern = "yy/mm/dd HH:MM") {
         return week[that.getDay()] + " " + DateFormat(that, "HH:MM");
     } else if (sameYear(now, that)) {
         return DateFormat(that, sameYearPattern);
+    } else {
+        return DateFormat(that, pattern);
+    }
+}
+
+/**
+ * 根据通用业务规则，获取指定历史时间的显示方式
+ * @param timestamp 展示时间
+ * @param useWeek 7天内是否展示星期
+ * @param pattern 默认格式
+ * @param useToday 如果true，当天展示"今天"，如果false，则展示HH-MM
+ */
+export function showDate(timestamp, params = {}) {
+    if (typeof timestamp !== 'number') {
+        return '';
+    }
+    const {useWeek = true, pattern = "m-d", useToday} = params;
+    const now = new Date();
+    const that = new Date(timestamp);
+    if (sameDay(now, that)) {
+        return useToday ? todayStr : DateFormat(that, "HH:MM");
+    } else if (yesterday(now, that)) {
+        return yesterdayStr;
+    } else if (beforeYesterday(now, that)) {
+        return beforeYesterdayStr;
+    } else if (useWeek && sameWeek(now, that)) {
+        return week[that.getDay()];
     } else {
         return DateFormat(that, pattern);
     }

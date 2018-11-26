@@ -6,7 +6,7 @@ export function DisplayProps(messageProps) {
         message: PropTypes.shape(messageProps).isRequired,
         isSender: PropTypes.bool.isRequired,
         maxWidth: PropTypes.number,
-        enableBubble: PropTypes.func, // (status: boolean) => void
+        enableBubble: PropTypes.func,
         style: PropTypes.any,
     };
 };

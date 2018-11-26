@@ -8,6 +8,7 @@ export const BasicMessage = {
     type: PropTypes.number.isRequired,
     from: PropTypes.string,
     to: PropTypes.string,
+    localTime: PropTypes.number,
     timestamp: PropTypes.number,
     data: PropTypes.any,
 };
