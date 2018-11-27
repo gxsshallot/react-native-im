@@ -34,6 +34,7 @@ export default {
     },
     func: {
         pushToLocationViewPage: unset('func.pushToLocationViewPage'),
+        pushToLocationChoosePage: unset('func.pushToLocationChoosePage'),
         pushToUserDetailPage: unset('func.pushToUserDetailPage'),
         fitUrlForAvatarSize: unset('func.fitUrlForAvatarSize'),
         getDefaultUserHeadImage: unset('func.getDefaultUserHeadImage'),

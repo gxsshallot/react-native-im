@@ -2,8 +2,8 @@ import * as ImagePicker from 'react-native-full-image-picker';
 
 export const takePhoto = {
     text: '照片',
-    icon: require('./image/more_gallery.png'),
-    onPress: (onDataChange) => {
+    icon: require('./image/more_photo.png'),
+    onPress: ({onDataChange}) => {
         ImagePicker.getAlbum({
             autoConvertPath: true,
             maxSize: 1,
@@ -15,8 +15,8 @@ export const takePhoto = {
 
 export const takeVideo = {
     text: '视频',
-    icon: require('./image/more_movie.png'),
-    onPress: (onDataChange) => {
+    icon: require('./image/more_video.png'),
+    onPress: ({onDataChange}) => {
         ImagePicker.getVideo({
             canEdit: true,
             callback: onPhotoViewFinish.bind(this, true, onDataChange),
@@ -26,8 +26,8 @@ export const takeVideo = {
 
 export const takeCamera = {
     text: '拍摄',
-    icon: require('./image/more_take_pic.png'),
-    onPress: (onDataChange) => {
+    icon: require('./image/more_camera.png'),
+    onPress: ({onDataChange}) => {
         ImagePicker.getCamera({
             maxSize: 1,
             canEdit: true,

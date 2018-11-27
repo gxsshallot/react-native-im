@@ -43,10 +43,29 @@ export function setup() {
             priority,
         );
     });
+    const abstractActions = [
+        [undefined, (params) => ''],
+        [EMConstant.MessageType.Text, StandardMessage.Abstract.TextAbstract],
+        [EMConstant.MessageType.Image, StandardMessage.Abstract.ImageAbstract],
+        [EMConstant.MessageType.Location, StandardMessage.Abstract.LocationAbstract],
+        [EMConstant.MessageType.Video, StandardMessage.Abstract.VideoAbstract],
+        [EMConstant.MessageType.Voice, StandardMessage.Abstract.VoiceAbstract],
+        [EMConstant.MessageType.File, StandardMessage.Abstract.FileAbstract],
+    ];
+    abstractActions.forEach(([messageType, abstractFunc, priority]) => {
+        IMStandard.Model.Action.register(
+            IMStandard.Constant.Action.Abstract,
+            messageType,
+            undefined,
+            abstractFunc,
+            priority,
+        );
+    });
     const moreboardActions = [
         ['photo', StandardMessage.MoreBoard.takePhoto, EMConstant.MessageType.Image],
         ['camera', StandardMessage.MoreBoard.takeCamera, EMConstant.MessageType.Image],
         ['video', StandardMessage.MoreBoard.takeVideo, EMConstant.MessageType.Video],
+        ['location', StandardMessage.MoreBoard.chooseLocation, EMConstant.MessageType.Location],
     ];
     moreboardActions.forEach(([action, handleFunc, messageType, priority]) => {
         IMStandard.Model.Action.register(
