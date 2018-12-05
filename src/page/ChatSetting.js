@@ -82,7 +82,7 @@ export default class extends React.PureComponent {
     _renderGroupNameAvatarSection = () => {
         const {groupName, groupAvatar} = this.state;
         const avatar = !groupAvatar ? undefined : {
-            uri: delegate.func.fitUrlForAvatarSize(groupAvatar, 30);
+            uri: delegate.func.fitUrlForAvatarSize(groupAvatar, 30),
         };
         const showNameLineFunc = !isOwner ? undefined : () => {
             this.setState({showPrompt: true});

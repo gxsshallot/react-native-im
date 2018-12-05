@@ -9,7 +9,7 @@ export default class extends React.PureComponent {
         ...Types.BasicConversation,
         getItems: PropTypes.func,
         onDataChange: PropTypes.func.isRequired,
-        navigation: PropTypes.any,
+        navigation: PropTypes.any.isRequired,
     };
 
     static defaultProps = {};

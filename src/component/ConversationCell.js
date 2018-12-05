@@ -25,7 +25,6 @@ export default class extends React.PureComponent {
             [Constant.ReceiveMessageEvent, this._onMessageReceive],
             [Constant.SendMessageEvent, this._onMessageSend],
             [Constant.ConversationUpdateEvent, this._refresh],
-            [Constant.MarkReadEvent, this._onUnreadCountChange.bind(this, 0)],
             [Constant.UnreadMessageCountChangeEvent, this._onUnreadCountChange],
         ];
         if (chatType === Constant.ChatType.Group) {

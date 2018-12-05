@@ -29,7 +29,6 @@ export const UnreadMessageCountChangeEvent = '__im_unread_message_count_change__
 export const GroupUpdateEvent = '__im_group_update__';
 export const SendMessageEvent = '__im_send_message__';
 export const ReceiveMessageEvent = '__im_receive_message__';
-export const MarkReadEvent = '__im_mark_read__';
 
 export const SettingItemType = {
     Image: 'image',

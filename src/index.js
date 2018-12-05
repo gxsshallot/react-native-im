@@ -9,6 +9,7 @@ import * as Utils from './util';
 import Delegate from './delegate';
 
 function setup_common_page() {
+    Delegate.page[PageKeys.ChatList] = Pages.ChatListPage;
     Delegate.page[PageKeys.ChatSetting] = Pages.ChatSettingPage;
     Delegate.page[PageKeys.ChooseConversation] = Pages.ChooseConversationPage;
     Delegate.page[PageKeys.ChooseUser] = Pages.ChooseUserPage;

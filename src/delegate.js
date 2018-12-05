@@ -18,6 +18,8 @@ export default {
             removeFromList: unset('im.conversation.removeFromList'),
             deleteOne: unset('im.conversation.deleteOne'),
             updateConfig: unset('im.conversation.updateConfig'),
+            markAllRead: unset('im.conversation.markAllRead'),
+            markLatestUnread: unset('im.conversation.markLatestUnread'),
         },
         group: {
             loadList: unset('im.group.loadList'),

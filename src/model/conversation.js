@@ -6,30 +6,17 @@ import delegate from '../delegate';
 
 const types = {
     list: 'ConversationList',
-    markReadEvent: 'ListenMarkReadEvent',
     sendMessageEvent: 'ListenSendMessageEvent'
 };
 
 const rootNode = {
     [types.list]: {},
-    [types.markReadEvent]: null,
     [types.sendMessageEvent]: null,
 };
 
 export const name = 'im.conversation';
 
 export function init(forceUpdate) {
-    rootNode[types.markReadEvent] = Listener.registerWithSubEvent(
-        [Constant.BaseEvent, Constant.MarkReadEvent],
-        (data) => {
-            const imId = data[Listener.innerEventType][2];
-            if (rootNode[types.list][imId]) {
-                rootNode[types.list][imId].unreadMessagesCount = 0;
-                rootNode[types.list][imId].atMe = false;
-            }
-            onUnreadCountChanged();
-        }
-    );
     rootNode[types.sendMessageEvent] = Listener.registerWithSubEvent(
         [Constant.BaseEvent, Constant.SendMessageEvent],
         (data) => {
@@ -54,10 +41,6 @@ export function init(forceUpdate) {
 
 export function uninit() {
     rootNode[types.list] = {};
-    Listener.unregister(
-        [Constant.BaseEvent, Constant.MarkReadEvent],
-        rootNode[types.markReadEvent]
-    );
     Listener.unregister(
         [Constant.BaseEvent, Constant.SendMessageEvent],
         rootNode[types.sendMessageEvent]
@@ -279,6 +262,28 @@ export function createOne(members) {
                 addOne(imId, chatType, undefined, true);
             }
             return {imId, chatType};
+        });
+}
+
+// 标记会话为已读/未读
+export function markReadStatus(imId, status) {
+    let promise;
+    if (status) {
+        promise = delegate.im.conversation.markAllRead(imId);
+    } else {
+        promise = delegate.im.conversation.markLatestUnread(imId);
+    }
+    return promise
+        .then(() => {
+            if (rootNode[types.list][imId]) {
+                rootNode[types.list][imId].unreadMessagesCount = status ? 0 : 1;
+                rootNode[types.list][imId].atMe = false;
+                Listener.trigger(
+                    [Constant.BaseEvent, Constant.UnreadMessageCountChangeEvent, imId],
+                    rootNode[types.list][imId].unreadMessagesCount
+                );
+            }
+            onUnreadCountChanged();
         });
 }
 
