@@ -1,5 +1,5 @@
 import { MessageType } from '../constant';
-import { isMobile, convertBasicMessage } from '../util';
+import { isMobile, convertBasicMessage, generateBasicMessage } from '../util';
 
 export function isMobileImage(message) {
     return isMobile(message) && message.body.type === MessageType.Image;
@@ -19,4 +19,11 @@ export function convertMobileImage(message) {
         },
     };
     return newMessage;
+}
+
+export function generateImage({imId, chatType, data}) {
+    const message = generateBasicMessage(imId, chatType, data);
+    message.body.type = MessageType.Image;
+    message.body.localPath = data.localPath;
+    return message;
 }

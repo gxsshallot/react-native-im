@@ -1,5 +1,5 @@
 import { MessageType } from '../constant';
-import { isMobile, convertBasicMessage } from '../util';
+import { isMobile, convertBasicMessage, generateBasicMessage } from '../util';
 
 export function isMobileVoice(message) {
     return isMobile(message) && message.body.type === MessageType.Voice;
@@ -14,4 +14,12 @@ export function convertMobileVoice(message) {
         duration: message.body.duration,
     };
     return newMessage;
+}
+
+export function generateVoice({imId, chatType, data}) {
+    const message = generateBasicMessage(imId, chatType, data);
+    message.body.type = MessageType.Voice;
+    message.body.localPath = data.localPath;
+    message.body.duration = data.duration;
+    return message;
 }

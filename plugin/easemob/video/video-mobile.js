@@ -1,5 +1,5 @@
 import { MessageType } from '../constant';
-import { isMobile, convertBasicMessage } from '../util';
+import { isMobile, convertBasicMessage, generateBasicMessage } from '../util';
 
 export function isMobileVideo(message) {
     return isMobile(message) && message.body.type === MessageType.Video;
@@ -13,4 +13,11 @@ export function convertMobileVideo(message) {
         remotePath: message.body.remotePath,
     };
     return newMessage;
+}
+
+export function generateVideo({imId, chatType, data}) {
+    const message = generateBasicMessage(imId, chatType, data);
+    message.body.type = MessageType.Video;
+    message.body.localPath = data.localPath;
+    return message;
 }

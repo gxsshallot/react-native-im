@@ -1,5 +1,5 @@
 import { MessageType } from '../constant';
-import { isMobile, convertBasicMessage } from '../util';
+import { isMobile, convertBasicMessage, generateBasicMessage } from '../util';
 
 export function isMobileLocation(message) {
     return isMobile(message) && message.body.type === MessageType.Location;
@@ -15,4 +15,14 @@ export function convertMobileLocation(message) {
         name: message.ext ? message.ext.name : '',
     };
     return newMessage;
+}
+
+export function generateLocation({imId, chatType, data}) {
+    const message = generateBasicMessage(imId, chatType, data);
+    message.body.type = MessageType.Location;
+    message.body.latitude = data.latitude;
+    message.body.longitude = data.longitude;
+    message.body.address = data.address;
+    message.ext.name = data.name;
+    return message;
 }

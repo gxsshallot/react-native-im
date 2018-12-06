@@ -1,3 +1,5 @@
+import * as IMStandard from '../../src';
+
 const mobileType = 0;
 const webType = 1;
 
@@ -27,4 +29,20 @@ export function convertBasicMessage(message) {
     newMessage.to = message.to;
     newMessage.timestamp = message.timestamp;
     return newMessage;
+}
+
+export function generateBasicMessage(imId, chatType, data) {
+    return {
+        conversationId: imId,
+        chatType: chatType,
+        status: IMStandard.Constant.Status.Pending,
+        from: IMStandard.Delegate.user.getMine().userId,
+        to: imId,
+        localTime: new Date().getTime(),
+        timestamp: new Date().getTime(),
+        body: {},
+        ext: {
+            atMemberList: data.atMemberList,
+        },
+    };
 }

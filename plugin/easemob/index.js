@@ -1,15 +1,31 @@
 import * as IMStandard from '../../src';
 import * as EMUtil from './util';
 import * as EMConstant from './constant';
-import { isMobileText, convertMobileText } from './text/text-mobile';
+import { isMobileText, convertMobileText, generateText } from './text/text-mobile';
 import { isWebText, convertWebText } from './text/text-web';
-import { isMobileImage, convertMobileImage } from './image/image-mobile';
-import { isMobileLocation, convertMobileLocation } from './location/location-mobile';
-import { isMobileVideo, convertMobileVideo } from './video/video-mobile';
-import { isMobileVoice, convertMobileVoice } from './voice/voice-mobile';
+import { isMobileImage, convertMobileImage, generateImage } from './image/image-mobile';
+import { isMobileLocation, convertMobileLocation, generateLocation } from './location/location-mobile';
+import { isMobileVideo, convertMobileVideo, generateVideo } from './video/video-mobile';
+import { isMobileVoice, convertMobileVoice, generateVoice } from './voice/voice-mobile';
 import * as StandardMessage from '../message';
 
 export function setup() {
+    const generateActions = [
+        [EMConstant.MessageType.Text, generateText],
+        [EMConstant.MessageType.Image, generateImage],
+        [EMConstant.MessageType.Voice, generateVoice],
+        [EMConstant.MessageType.Video, generateVideo],
+        [EMConstant.MessageType.Location, generateLocation],
+    ];
+    generateActions.forEach(([messageType, handleFunc, priority]) => {
+        IMStandard.Model.Action.register(
+            IMStandard.Constant.Action.Generate,
+            messageType,
+            undefined,
+            handleFunc,
+            priority,
+        );
+    });
     const parseActions = [
         [isMobileText, convertMobileText],
         [isWebText, convertWebText],
