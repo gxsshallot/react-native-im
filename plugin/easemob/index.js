@@ -30,6 +30,7 @@ export function setup() {
     });
     // Display操作
     const displayActions = [
+        [undefined, StandardMessage.Display.GeneralBubble],
         [EMConstant.MessageType.Text, StandardMessage.Display.TextBubble],
         [EMConstant.MessageType.Image, StandardMessage.Display.ImageBubble],
         [EMConstant.MessageType.Location, StandardMessage.Display.LocationBubble],
