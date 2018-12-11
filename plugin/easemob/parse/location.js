@@ -1,11 +1,11 @@
 import { MessageType } from '../constant';
-import { isMobile, convertBasicMessage } from '../util';
+import { convertBasicMessage } from '../util';
 
-export function isMobileLocation(message) {
-    return isMobile(message) && message.body.type === MessageType.Location;
+export function isLocation(message) {
+    return message.body.type === MessageType.Location;
 }
 
-export function convertMobileLocation(message) {
+export function convertLocation(message) {
     const newMessage = convertBasicMessage(message);
     newMessage.type = MessageType.Location;
     newMessage.data = {

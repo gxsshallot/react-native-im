@@ -1,11 +1,11 @@
 import { MessageType } from '../constant';
-import { isMobile, convertBasicMessage } from '../util';
+import { convertBasicMessage } from '../util';
 
-export function isMobileVoice(message) {
-    return isMobile(message) && message.body.type === MessageType.Voice;
+export function isVoice(message) {
+    return message.body.type === MessageType.Voice;
 }
 
-export function convertMobileVoice(message) {
+export function convertVoice(message) {
     const newMessage = convertBasicMessage(message);
     newMessage.type = MessageType.Voice;
     newMessage.data = {

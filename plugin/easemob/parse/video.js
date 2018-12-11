@@ -1,11 +1,11 @@
 import { MessageType } from '../constant';
-import { isMobile, convertBasicMessage } from '../util';
+import { convertBasicMessage } from '../util';
 
-export function isMobileVideo(message) {
-    return isMobile(message) && message.body.type === MessageType.Video;
+export function isVideo(message) {
+    return message.body.type === MessageType.Video;
 }
 
-export function convertMobileVideo(message) {
+export function convertVideo(message) {
     const newMessage = convertBasicMessage(message);
     newMessage.type = MessageType.Video;
     newMessage.data = {

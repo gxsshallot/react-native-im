@@ -1,23 +1,21 @@
 import * as IMStandard from '../../src';
 import * as EMUtil from './util';
 import * as EMConstant from './constant';
-import { isMobileText, convertMobileText } from './text/text-mobile';
-import { isWebText, convertWebText } from './text/text-web';
-import { isMobileImage, convertMobileImage } from './image/image-mobile';
-import { isMobileLocation, convertMobileLocation } from './location/location-mobile';
-import { isMobileVideo, convertMobileVideo } from './video/video-mobile';
-import { isMobileVoice, convertMobileVoice } from './voice/voice-mobile';
+import { isText, convertText } from './parse/text';
+import { isImage, convertImage } from './parse/image';
+import { isLocation, convertLocation } from './parse/location';
+import { isVideo, convertVideo } from './parse/video';
+import { isVoice, convertVoice } from './parse/voice';
 import * as StandardMessage from '../message';
 
 export function setup() {
     // Parse操作
     const parseActions = [
-        [isMobileText, convertMobileText],
-        [isWebText, convertWebText],
-        [isMobileImage, convertMobileImage],
-        [isMobileLocation, convertMobileLocation],
-        [isMobileVideo, convertMobileVideo],
-        [isMobileVoice, convertMobileVoice],
+        [isText, convertText],
+        [isImage, convertImage],
+        [isLocation, convertLocation],
+        [isVideo, convertVideo],
+        [isVoice, convertVoice],
     ];
     parseActions.forEach(([specialFunc, handleFunc, priority]) => {
         IMStandard.Model.Action.register(
