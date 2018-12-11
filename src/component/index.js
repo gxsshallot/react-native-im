@@ -3,6 +3,8 @@ import AvatarImage from './AvatarImage';
 import AvatarList from './AvatarList';
 import Badge from './Badge';
 import BaseMessage from './BaseMessage';
+import BottomBar from './BottomBar';
+import DetailListView from './DetailListView';
 import EmojiPickView from './EmojiPickView';
 import FakeSearchBar from './FakeSearchBar';
 import ListCell from './ListCell';
@@ -11,6 +13,7 @@ import MessageMenu from './MessageMenu';
 import MoreBoard from './MoreBoard';
 import Popover from './Popover';
 import Prompt from './Prompt';
+import SearchList from './SearchList';
 import SectionHeader from './SectionHeader';
 import SeekBarSectionList from './SeekBarSectionList';
 import SegmentControl from './SegmentControl';
@@ -24,6 +27,8 @@ export {
     AvatarList,
     Badge,
     BaseMessage,
+    BottomBar,
+    DetailListView,
     EmojiPickView,
     FakeSearchBar,
     ListCell,
@@ -32,6 +37,7 @@ export {
     MoreBoard,
     Popover,
     Prompt,
+    SearchList,
     SectionHeader,
     SeekBarSectionList,
     SegmentControl,

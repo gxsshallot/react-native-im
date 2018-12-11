@@ -9,6 +9,7 @@ import * as Utils from './util';
 import Delegate from './delegate';
 
 function setup_common_page() {
+    Delegate.page[PageKeys.ChatDetail] = Pages.ChatDetailPage;
     Delegate.page[PageKeys.ChatList] = Pages.ChatListPage;
     Delegate.page[PageKeys.ChatSetting] = Pages.ChatSettingPage;
     Delegate.page[PageKeys.ChooseConversation] = Pages.ChooseConversationPage;
@@ -17,6 +18,8 @@ function setup_common_page() {
     Delegate.page[PageKeys.ContactList] = Pages.ContactListPage;
     Delegate.page[PageKeys.GroupList] = Pages.GroupListPage;
     Delegate.page[PageKeys.GroupMembers] = Pages.GroupMembersPage;
+    Delegate.page[PageKeys.Search] = Pages.SearchPage;
+    Delegate.page[PageKeys.SearchMore] = Components.SearchList;
 }
 
 function setup_common_component() {
@@ -25,6 +28,8 @@ function setup_common_component() {
     Delegate.component.AvatarList = Components.AvatarList;
     Delegate.component.Badge = Components.Badge;
     Delegate.component.BaseMessage = Components.BaseMessage;
+    Delegate.component.BottomBar = Components.BottomBar;
+    Delegate.component.DetailListView = Components.DetailListView;
     Delegate.component.EmojiPickView = Components.EmojiPickView;
     Delegate.component.FakeSearchBar = Components.FakeSearchBar;
     Delegate.component.ListCell = Components.ListCell;
@@ -33,6 +38,7 @@ function setup_common_component() {
     Delegate.component.MoreBoard = Components.MoreBoard;
     Delegate.component.Popover = Components.Popover;
     Delegate.component.Prompt = Components.Prompt;
+    Delegate.component.SearchList = Components.SearchList;
     Delegate.component.SectionHeader = Components.SectionHeader;
     Delegate.component.SeekBarSectionList = Components.SeekBarSectionList;
     Delegate.component.SegmentControl = Components.SegmentControl;

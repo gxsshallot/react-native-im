@@ -1,6 +1,7 @@
 import React from 'react';
 import { Image, StyleSheet, Text, View, TouchableWithoutFeedback, ActivityIndicator } from 'react-native';
 import PropTypes from 'prop-types';
+import Listener from 'react-native-general-listener';
 import Toast from 'react-native-root-toast';
 import * as Types from '../proptype';
 import * as Constant from '../constant';
@@ -8,12 +9,28 @@ import delegate from '../delegate';
 
 export default class extends React.PureComponent {
     static propTypes = {
+        ...Types.BasicConversation,
         position: PropTypes.number.isRequired,
         message: PropTypes.shape(Types.BasicMessage).isRequired,
-        showMembersName: PropTypes.bool.isRequired,
         onShowMenu: PropTypes.func,
         onResend: PropTypes.func,
     };
+
+    constructor(props) {
+        super(props);
+        this.updateEvent = [Constant.BaseEvent, Constant.ConversationUpdateEvent, props.imId];
+        this.state = {
+            showMembersName: this._showMembersName(),
+        };
+    }
+
+    componentDidMount() {
+        this.listenUpdate = Listener.register(this.updateEvent, this._onUpdate);
+    }
+
+    componentWillUnmount() {
+        this.listenUpdate && Listener.unregister(this.updateEvent, this.listenUpdate);
+    }
 
     render() {
         const {position} = this.props;
@@ -44,7 +61,7 @@ export default class extends React.PureComponent {
             <View style={styles.rowLeft}>
                 {this._renderAvatar(leftAvatarStyle)}
                 <View>
-                    {this.props.showMembersName && (
+                    {this.state.showMembersName && (
                         <Text style={styles.userName}>
                             {username}
                         </Text>
@@ -139,6 +156,17 @@ export default class extends React.PureComponent {
                     Toast.show('发送成功');
                 });
         };
+    };
+
+    _showMembersName = () => {
+        const config = delegate.model.Conversation.getConfig(this.props.imId);
+        return config.showMembersName;
+    };
+
+    _onUpdate = () => {
+        this.setState({
+            showMembersName: this._showMembersName(),
+        });
     };
 }
 

@@ -8,3 +8,4 @@ export const ContactList = 'IMContactList';
 export const GroupList = 'IMGroupList';
 export const GroupMembers = 'IMGroupMembers';
 export const Search = 'IMSearch';
+export const SearchMore = 'IMSearchMore';

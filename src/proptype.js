@@ -4,6 +4,7 @@ import * as Constant from './constant';
 export const BasicMessage = {
     conversationId: PropTypes.string.isRequired,
     messageId: PropTypes.string,
+    innerId: PropTypes.string,
     status: PropTypes.oneOf(Object.values(Constant.Status)),
     type: PropTypes.number.isRequired,
     from: PropTypes.string,
@@ -11,10 +12,6 @@ export const BasicMessage = {
     localTime: PropTypes.number,
     timestamp: PropTypes.number,
     data: PropTypes.any,
-};
-
-export const DefaultMessageData = {
-    atMemberList: PropTypes.arrayOf(PropTypes.string),
 };
 
 export const ImOrg = {
@@ -31,6 +28,7 @@ export const ImUser = {
     dept: PropTypes.shape(ImOrg),
     avatar: PropTypes.string,
     phone: PropTypes.string,
+    email: PropTypes.string,
 };
 
 export const ConversationConfig = {

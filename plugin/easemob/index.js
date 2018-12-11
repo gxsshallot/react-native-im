@@ -1,31 +1,16 @@
 import * as IMStandard from '../../src';
 import * as EMUtil from './util';
 import * as EMConstant from './constant';
-import { isMobileText, convertMobileText, generateText } from './text/text-mobile';
+import { isMobileText, convertMobileText } from './text/text-mobile';
 import { isWebText, convertWebText } from './text/text-web';
-import { isMobileImage, convertMobileImage, generateImage } from './image/image-mobile';
-import { isMobileLocation, convertMobileLocation, generateLocation } from './location/location-mobile';
-import { isMobileVideo, convertMobileVideo, generateVideo } from './video/video-mobile';
-import { isMobileVoice, convertMobileVoice, generateVoice } from './voice/voice-mobile';
+import { isMobileImage, convertMobileImage } from './image/image-mobile';
+import { isMobileLocation, convertMobileLocation } from './location/location-mobile';
+import { isMobileVideo, convertMobileVideo } from './video/video-mobile';
+import { isMobileVoice, convertMobileVoice } from './voice/voice-mobile';
 import * as StandardMessage from '../message';
 
 export function setup() {
-    const generateActions = [
-        [EMConstant.MessageType.Text, generateText],
-        [EMConstant.MessageType.Image, generateImage],
-        [EMConstant.MessageType.Voice, generateVoice],
-        [EMConstant.MessageType.Video, generateVideo],
-        [EMConstant.MessageType.Location, generateLocation],
-    ];
-    generateActions.forEach(([messageType, handleFunc, priority]) => {
-        IMStandard.Model.Action.register(
-            IMStandard.Constant.Action.Generate,
-            messageType,
-            undefined,
-            handleFunc,
-            priority,
-        );
-    });
+    // Parse操作
     const parseActions = [
         [isMobileText, convertMobileText],
         [isWebText, convertWebText],
@@ -43,6 +28,7 @@ export function setup() {
             priority,
         );
     });
+    // Display操作
     const displayActions = [
         [EMConstant.MessageType.Text, StandardMessage.Display.TextBubble],
         [EMConstant.MessageType.Image, StandardMessage.Display.ImageBubble],
@@ -59,6 +45,7 @@ export function setup() {
             priority,
         );
     });
+    // Abstract操作
     const abstractActions = [
         [undefined, (params) => ''],
         [EMConstant.MessageType.Text, StandardMessage.Abstract.TextAbstract],
@@ -77,6 +64,7 @@ export function setup() {
             priority,
         );
     });
+    // MoreBoard操作
     const moreboardActions = [
         ['photo', StandardMessage.MoreBoard.takePhoto, EMConstant.MessageType.Image],
         ['camera', StandardMessage.MoreBoard.takeCamera, EMConstant.MessageType.Image],
@@ -92,7 +80,11 @@ export function setup() {
             priority,
         );
     });
-    IMStandard.Delegate.component.MoreBoard.defaultProps.getItems = (imId, chatType) =>
+    // 默认值设置
+    const { BottomBar, MoreBoard } = IMStandard.Delegate.component;
+    BottomBar.defaultProps.textMessageType = EMConstant.MessageType.Text;
+    BottomBar.defaultProps.voiceMessageType = EMConstant.MessageType.Voice;
+    MoreBoard.defaultProps.getItems = (imId, chatType) =>
         ['photo', 'camera', 'video', 'location'];
 }
 

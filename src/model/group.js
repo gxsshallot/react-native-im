@@ -44,11 +44,7 @@ export function load() {
             Listener.trigger([Constant.BaseEvent, Constant.GroupUpdateEvent]);
         })
         .catch((err) => {
-            if (global.__DEV__) {
-                Toast.show(err.message);
-            } else {
-                Toast.show('加载群列表失败');
-            }
+            Toast.show('加载群列表失败');
         });
 }
 
@@ -65,11 +61,7 @@ export function loadDetail(groupId) {
             }
         })
         .catch((err) => {
-            if (global.__DEV__) {
-                Toast.show(err.message);
-            } else {
-                Toast.show('加载群详情失败');
-            }
+            Toast.show('加载群详情失败');
         });
 }
 

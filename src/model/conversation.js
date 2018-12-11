@@ -66,11 +66,7 @@ export function load() {
             writeData(types.list);
         })
         .catch((err) => {
-            if (global.__DEV__) {
-                Toast.show(err.message);
-            } else {
-                Toast.show('加载会话列表失败');
-            }
+            Toast.show('加载会话列表失败');
         });
 }
 

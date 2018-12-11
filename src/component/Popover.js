@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Animated, TouchableWithoutFeedback, View, Easing } from 'react-native';
+import { Dimensions, StyleSheet, Animated, TouchableWithoutFeedback, View, Easing } from 'react-native';
 import PropTypes from 'prop-types';
 
 const noop = () => {
@@ -69,9 +69,10 @@ export default class extends React.Component {
 
     computeGeometry = ({contentSize, placement}) => {
         placement = placement || this.props.placement;
+        const {width, height} = Dimensions.get('window');
         const options = {
             displayArea: this.props.displayArea
-                || new Rect(10, 10, global.screenWidth() - 20, global.screenHeight() - 20),
+                || new Rect(10, 10, width - 20, height - 20),
             fromRect: this.props.fromRect,
             arrowSize: this.getArrowSize(placement),
             contentSize,

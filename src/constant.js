@@ -1,7 +1,6 @@
 export const Action = {
     Display: 'display',
     Parse: 'Parse',
-    Generate: 'Generate',
     Send: 'send',
     Abstract: 'abstract',
     MoreBoard: 'moreboard',
@@ -29,6 +28,8 @@ export const UnreadMessageCountChangeEvent = '__im_unread_message_count_change__
 export const GroupUpdateEvent = '__im_group_update__';
 export const SendMessageEvent = '__im_send_message__';
 export const ReceiveMessageEvent = '__im_receive_message__';
+export const RecallMessageEvent = '__im_recall_message__';
+export const SystemMessageEvent = '__im_system_message__';
 
 export const SettingItemType = {
     Image: 'image',

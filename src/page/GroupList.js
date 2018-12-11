@@ -1,5 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, View, FlatList } from 'react-native';
+import PropTypes from 'prop-types';
 import NaviBar from 'react-native-pure-navigation-bar';
 import Listener from 'react-native-general-listener';
 import * as PageKeys from '../pagekey';
@@ -8,6 +9,12 @@ import { DateUtil } from '../util';
 import delegate from '../delegate';
 
 export default class extends React.PureComponent {
+    static propTypes = {
+        navigation: PropTypes.any,
+    };
+
+    static defaultProps = {};
+    
     constructor(props) {
         super(props);
         this.state = {
@@ -92,14 +99,17 @@ export default class extends React.PureComponent {
     };
 
     _clickFakeSearchBar = () => {
-        global.push(PageKey.IMSearchTypePage, {
-            keyExtractor: item => item.groupId,
-            showHistory: false,
-            searchHint: '搜索群名称、群成员',
-            maxSectionItemLength: 0,
-            doSearch: this._search,
-            renderItem: this._renderSearchItem,
-        });
+        this.props.navigation.navigate({
+            routeName: PageKeys.SearchMore,
+            params: {
+                keyExtractor: item => item.groupId,
+                showHistory: false,
+                searchHint: '搜索群名称、群成员',
+                maxSectionItemLength: 0,
+                doSearch: this._search,
+                renderItem: this._renderSearchItem,
+            },
+        })
     };
 
     _refresh = () => {

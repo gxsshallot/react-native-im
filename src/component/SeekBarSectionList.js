@@ -1,5 +1,5 @@
 import React from 'react';
-import { LayoutAnimation, StyleSheet, Text, TouchableHighlight, View, SectionList } from 'react-native';
+import { Platform, LayoutAnimation, StyleSheet, Text, TouchableHighlight, View, SectionList } from 'react-native';
 import PropTypes from 'prop-types';
 import getItemLayout from 'react-native-section-list-get-item-layout';
 import delegate from '../delegate';
@@ -87,7 +87,7 @@ export default class extends React.PureComponent {
     };
 
     _showBackTopBtn = (isShow) => {
-        global.isIos && LayoutAnimation.easeInEaseOut();
+        Platform.OS === 'ios' && LayoutAnimation.easeInEaseOut();
         this.setState({
             isShowBackTop: isShow,
         });

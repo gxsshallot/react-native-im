@@ -24,6 +24,7 @@ export function convertBasicMessage(message) {
     const newMessage = {};
     newMessage.conversationId = message.conversationId;
     newMessage.messageId = message.messageId;
+    newMessage.innerId = message.ext ? message.ext.innerId : undefined;
     newMessage.status = message.status;
     newMessage.from = message.from;
     newMessage.to = message.to;
@@ -43,6 +44,7 @@ export function generateBasicMessage(imId, chatType, data) {
         body: {},
         ext: {
             atMemberList: data.atMemberList,
+            innerId: IMStandard.Utils.guid(),
         },
     };
 }
