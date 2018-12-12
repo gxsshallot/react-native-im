@@ -17,6 +17,7 @@ export default class extends React.PureComponent {
         title: PropTypes.oneOfType([
             PropTypes.string,
             PropTypes.element,
+            PropTypes.arrayOf(PropTypes.element),
         ]),
         labels: PropTypes.arrayOf(PropTypes.shape({
             name: PropTypes.string,
@@ -58,7 +59,7 @@ export default class extends React.PureComponent {
                 {this._renderIcon()}
                 <View style={styles.layout}>
                     {this._renderTitleLine()}
-                    {subTitle && (
+                    {!!subTitle && (
                         <Text style={styles.subTitle} numberOfLines={1}>
                             {subTitle}
                         </Text>

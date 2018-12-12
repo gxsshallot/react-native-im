@@ -3,17 +3,18 @@ import { View, StyleSheet, Text, Image, TouchableOpacity, Dimensions } from 'rea
 import PropTypes from 'prop-types';
 import { getSafeAreaInset } from 'react-native-pure-navigation-bar';
 import * as PageKeys from '../pagekey';
+import * as Types from '../proptype';
 import delegate from '../delegate';
 
 export default class extends React.PureComponent {
     static propTypes = {
+        ...Types.Navigation,
         owner: PropTypes.string,
         data: PropTypes.arrayOf(PropTypes.string),
         canAdd: PropTypes.bool,
         canRemove: PropTypes.bool,
         onAddMembers: PropTypes.func,
         onRemoveMembers: PropTypes.func,
-        navigation: PropTypes.object.isRequired,
         titleChooseGroupMember: PropTypes.string,
     };
 

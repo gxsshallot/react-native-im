@@ -12,14 +12,11 @@ import delegate from '../delegate';
 export default class extends React.PureComponent {
     static propTypes = {
         ...Types.BasicConversation,
+        ...Types.Navigation,
         onSendMessage: PropTypes.func.isRequired,
-        navigation: PropTypes.any.isRequired,
     };
 
-    static defaultProps = {
-        textMessageType: null,
-        voiceMessageType: null,
-    };
+    static defaultProps = {};
 
     constructor(props) {
         super(props);
@@ -154,16 +151,9 @@ export default class extends React.PureComponent {
                 />
             );
         } else if (this.state.showMoreBoard) {
-            return (
-                <delegate.component.MoreBoard
-                    navigation={this.props.navigation}
-                    onDataChange={this.props.onSendMessage}
-                />
-            );
+            return <delegate.component.MoreBoard {...this.props} />;
         } else {
-            return (
-                <View style={{height: this.state.keyboardHeight}} />
-            );
+            return <View style={{height: this.state.keyboardHeight}} />;
         }
     };
 
@@ -183,7 +173,7 @@ export default class extends React.PureComponent {
             atMemberList = Object.values(memberMap);
         }
         const message = {
-            type: this.props.textMessageType,
+            type: delegate.config.messageType.text,
             body: {
                 text: this.state.message,
                 atMemberList: atMemberList,
@@ -223,7 +213,7 @@ export default class extends React.PureComponent {
                     return;
                 }
                 const message = {
-                    type: this.props.voiceMessageType,
+                    type: delegate.config.messageType.voice,
                     body: {
                         duration: result.duration,
                         localPath: result.path,

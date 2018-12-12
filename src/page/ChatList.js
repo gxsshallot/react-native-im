@@ -8,6 +8,10 @@ import delegate from '../delegate';
 import * as Constant from '../constant';
 
 export default class extends React.PureComponent {
+    static propTypes = {};
+
+    static defaultProps = {};
+
     constructor(props) {
         super(props);
         this.state = {
@@ -59,19 +63,19 @@ export default class extends React.PureComponent {
 
     _renderRow = ({item, index}) => {
         const isBottom = index === this.state.dataSource.length - 1;
-        const seperatorLeft = !isBottom ? 75 : -1;
+        const separatorLeft = !isBottom ? 75 : -1;
         return (
             <delegate.component.ConversationCell
                 imId={item.imId}
                 chatType={item.chatType}
-                seperatorLeft={seperatorLeft}
+                separatorLeft={separatorLeft}
+                navigation={this.props.navigation}
             />
         );
     };
 
     _renderHiddenItem = ({item}, rowMap) => {
         const config = delegate.model.Conversation.getConfig(item.imId);
-        const item = delegate.model.Conversation.getOne(item.imId);
         const isRead = !(item.unreadMessagesCount > 0);
         const markTitle = isRead ? '标记未读' : '标记已读';
         return (

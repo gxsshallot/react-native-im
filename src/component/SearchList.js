@@ -260,37 +260,32 @@ export default class extends React.PureComponent {
         }
         !this.props.onItemClick && this._addHistory(text);
         !this.props.searchOnTextChange && Keyboard.dismiss();
-        this.props.doSearch(text)
-            .then((result) => {
-                result = result.filter(i => i);
-                if (this.props.maxSectionItemLength) {
-                    result.forEach((section) => {
-                        const hasMore = section.data.length > this.props.maxSectionItemLength;
-                        if (hasMore) {
-                            section.data = section.data.splice(0, this.props.maxSectionItemLength);
-                        }
-                        section.hasMore = hasMore;
-                    });
+        const result = this.props.doSearch(text).filter(i => i);
+        if (this.props.maxSectionItemLength) {
+            result.forEach((section) => {
+                const hasMore = section.data.length > this.props.maxSectionItemLength;
+                if (hasMore) {
+                    section.data = section.data.splice(0, this.props.maxSectionItemLength);
                 }
-                result.forEach((item) => {
-                    item.renderItem = item.renderItem && this._renderResultItem(item.renderItem);
-                });
-                this.setState({result});
-            })
-            .catch((err) => {
-                console.error(err);
+                section.hasMore = hasMore;
             });
+        }
+        result.forEach((item) => {
+            item.renderItem = item.renderItem && this._renderResultItem(item.renderItem);
+        });
+        this.setState({result});
     };
 }
 
 const naviBarStyle = {
+    titleContainer: {
+        paddingHorizontal: 0,
+    },
     buttonView: {
         paddingHorizontal: 0,
-        minWidth: 0,
     },
     gobackView: {
-        marginLeft: 0,
-        marginRight: 8,
+        paddingRight: 0,
     },
 };
 

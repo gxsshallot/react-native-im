@@ -4,8 +4,8 @@ import PropTypes from 'prop-types';
 
 export default class extends React.PureComponent {
     static propTypes = {
-        onLoadPage: PropTypes.func.isRequired, // 加载指定页面的方法，(data, pageSize) => ({data, isEnd, isAllData})
-        style: PropTypes.any, // 自定义样式
+        onLoadPage: PropTypes.func.isRequired,
+        style: PropTypes.any,
     };
 
     static defaultProps = {

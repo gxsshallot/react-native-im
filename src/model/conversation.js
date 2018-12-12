@@ -238,7 +238,7 @@ export function createOne(members) {
     if (isGroup) {
         promise = delegate.model.Group.createOne(members)
             .then((result) => ({
-                imId: r.groupId,
+                imId: result.groupId,
                 chatType: Constant.ChatType.Group,
             }));
     } else {

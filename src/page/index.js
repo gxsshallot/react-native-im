@@ -11,7 +11,7 @@ import SearchPage from './Search';
 
 export {
     ChatDetailPage,
-    ChatListPage.
+    ChatListPage,
     ChatSettingPage,
     ChooseConversationPage,
     ChooseUserPage,

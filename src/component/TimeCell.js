@@ -42,7 +42,7 @@ export default class extends React.PureComponent {
     }
 
     _timeText = () => {
-        return DateUtil.showDateTime(this.props.time, 'yyyy-mm-dd HH:MM');
+        return DateUtil.showDate(this.props.time, true);
     };
 }
 

@@ -29,6 +29,7 @@ function setup_common_component() {
     Delegate.component.Badge = Components.Badge;
     Delegate.component.BaseMessage = Components.BaseMessage;
     Delegate.component.BottomBar = Components.BottomBar;
+    Delegate.component.ConversationCell = Components.ConversationCell;
     Delegate.component.DetailListView = Components.DetailListView;
     Delegate.component.EmojiPickView = Components.EmojiPickView;
     Delegate.component.FakeSearchBar = Components.FakeSearchBar;

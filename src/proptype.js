@@ -1,6 +1,10 @@
 import PropTypes from 'prop-types';
 import * as Constant from './constant';
 
+export const Navigation = {
+    navigation: PropTypes.object.isRequired,
+};
+
 export const BasicMessage = {
     conversationId: PropTypes.string.isRequired,
     messageId: PropTypes.string,

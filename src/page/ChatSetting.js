@@ -80,10 +80,11 @@ export default class extends React.PureComponent {
     };
 
     _renderGroupNameAvatarSection = () => {
-        const {groupName, groupAvatar} = this.state;
+        const {groupName, groupAvatar, groupOwner} = this.state;
         const avatar = !groupAvatar ? undefined : {
             uri: delegate.func.fitUrlForAvatarSize(groupAvatar, 30),
         };
+        const isOwner = this.isGroup && groupOwner === delegate.user.getMine().userId;
         const showNameLineFunc = !isOwner ? undefined : () => {
             this.setState({showPrompt: true});
         };
@@ -182,8 +183,11 @@ export default class extends React.PureComponent {
             params: {
                 groupId: this.props.imId,
                 members: this.state.groupMembers,
-                adminList: [this.state.groupOwner],
-                canDelete: this.state.groupOwner === delegate.user.getMine().userId,
+                admins: [this.state.groupOwner],
+                canAdd: true,
+                canRemove: this.state.groupOwner === delegate.user.getMine().userId,
+                onAddMembers: this._onAddMembers,
+                onRemoveMembers: this._onRemoveMembers,
             },
         });
     };
@@ -279,17 +283,23 @@ export default class extends React.PureComponent {
 
     _onAddMembers = (members) => {
         if (this.isGroup) {
-            delegate.model.Group.addMembers(this.props.imId, members)
-                .then((newMembers) => {
+            return delegate.model.Group.addMembers(this.props.imId, members)
+                .then(() => {
+                    const newMembers = delegate.model.Group.getMembers(this.props.imId);
                     this.setState({groupMembers: newMembers});
+                    return newMembers;
                 })
                 .catch(error => {
                     Toast.show('添加成员失败');
                 });
         } else {
             const newMembers = [this.props.imId, ...members];
-            delegate.model.Conversation.createOne(newMembers)
+            return delegate.model.Conversation.createOne(newMembers)
                 .then(({imId, chatType}) => {
+                    this.props.navigation.navigate({
+                        routeName: PageKeys.ChatList,
+                        params: {},
+                    });
                     InteractionManager.runAfterInteractions(() => {
                         this.props.navigation.navigate({
                             routeName: PageKeys.ChatDetail,
@@ -303,19 +313,15 @@ export default class extends React.PureComponent {
                 .catch(() => {
                     Toast.show('创建群聊失败');
                 });
-            this.props.navigation.navigate({
-                routeName: PageKeys.ChatList,
-                params: {},
-            });
         }
     };
 
     _onRemoveMembers = (members) => {
-        delegate.model.Group.removeMembers(this.props.imId, members)
-            .then((newMembers) => {
-                this.setState({
-                    groupMembers: newMembers,
-                });
+        return delegate.model.Group.removeMembers(this.props.imId, members)
+            .then(() => {
+                const newMembers = delegate.model.Group.getMembers(this.props.imId);
+                this.setState({groupMembers: newMembers});
+                return newMembers;
             })
             .catch(() => {
                 Toast.show('删除群成员失败');

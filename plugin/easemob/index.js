@@ -79,12 +79,13 @@ export function setup() {
             priority,
         );
     });
-    // 默认值设置
-    const { BottomBar, MoreBoard } = IMStandard.Delegate.component;
-    BottomBar.defaultProps.textMessageType = EMConstant.MessageType.Text;
-    BottomBar.defaultProps.voiceMessageType = EMConstant.MessageType.Voice;
-    MoreBoard.defaultProps.getItems = (imId, chatType) =>
+    // 组件默认值设置
+    const Components = IMStandard.Delegate.component;
+    Components.MoreBoard.defaultProps.getItems = (imId, chatType) =>
         ['photo', 'camera', 'video', 'location'];
+    // 代理设置
+    IMStandard.Delegate.config.messageType.text = EMConstant.MessageType.Text;
+    IMStandard.Delegate.config.messageType.voice = EMConstant.MessageType.Voice;
 }
 
 export {

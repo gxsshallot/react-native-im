@@ -1,10 +1,9 @@
 import React from 'react';
+import { Clipboard, Keyboard, SafeAreaView, StyleSheet, View, TouchableWithoutFeedback } from 'react-native';
 import PropTypes from 'prop-types';
-import { Clipboard, Keyboard, SafeAreaView, StyleSheet, View } from 'react-native';
 import NaviBar, { forceInset } from 'react-native-pure-navigation-bar';
-import * as CustomPageKeys from '../PageKeys';
+import * as PageKeys from '../pagekey';
 import { ChatManager, IMConstant } from 'react-native-im-easemob';
-import { StringUtil } from 'react-native-hecom-common';
 import Toast from 'react-native-root-toast';
 import Listener from 'react-native-general-listener';
 import * as Types from '../proptype';
@@ -15,7 +14,10 @@ import delegate from '../delegate';
 export default class extends React.PureComponent {
     static propTypes = {
         ...Types.BasicConversation,
+        ...Types.Navigation,
     };
+
+    static defaultProps = {};
 
     timeInterval = 60;
     latestLocalTime = 0;
@@ -69,40 +71,35 @@ export default class extends React.PureComponent {
     }
 
     render() {
-        const rightElement = this.isGroup ? ['设置', '资料'] : '设置';
         const {imId, chatType} = this.props;
-        let title;
-        if (this.isGroup) {
-            const groupName = delegate.model.Group.getName(imId, false);
-            title = (groupName ? groupName : '群聊') + ' ('
-                + delegate.model.Group.getMembers(imId).length + ')';
-        } else {
-            title = delegate.user.getUser(imId).name;
-        }
         return (
             <View style={[styles.view, {backgroundColor: delegate.style.viewBackgroundColor}]}>
-                <NaviBar
-                    title={title}
-                    rightElement={rightElement}
-                    onRight={this._onRight}
-                />
+                {this._renderNaviBar()}
                 <SafeAreaView
                     style={styles.innerview}
                     forceInset={forceInset(0, 1, 0, 1)}
                 >
-                    <delegate.component.DetailListView
-                        ref={ref => this.list = ref}
-                        style={{flex: 0}}
-                        renderItem={this._renderItem}
-                        onLoadPage={this._refresh}
-                        markAllRead={this._markAllRead}
-                    />
-                    <View style={{flex: 10000}} />
+                    <TouchableWithoutFeedback
+                        style={styles.touch}
+                        onPress={() => Keyboard.dismiss()}
+                    >
+                        <View style={styles.container}>
+                            <delegate.component.DetailListView
+                                ref={ref => this.list = ref}
+                                style={{flex: 0}}
+                                renderItem={this._renderItem}
+                                onLoadPage={this._refresh}
+                            />
+                            <View style={{flex: 10000}} />
+                        </View>
+                    </TouchableWithoutFeedback>
                 </SafeAreaView>
                 <delegate.component.BottomBar
                     ref={ref => this.bottomBar = ref}
+                    imId={imId}
+                    chatType={chatType}
                     onSendMessage={this._onSendMessage.bind(this, imId, chatType)}
-                    isGroup={this.isGroup}
+                    navigation={this.props.navigation}
                 />
                 <delegate.component.MessageMenu
                     menuShow={this.state.menuShow}
@@ -114,6 +111,39 @@ export default class extends React.PureComponent {
         );
     }
 
+    _renderNaviBar = () => {
+        const {imId} = this.props;
+        let title;
+        if (this.isGroup) {
+            const groupName = delegate.model.Group.getName(imId, false);
+            title = (groupName ? groupName : '群聊') + ' ('
+                + delegate.model.Group.getMembers(imId).length + ')';
+        } else {
+            title = delegate.user.getUser(imId).name;
+        }
+        return (
+            <NaviBar
+                title={title}
+                rightElement={this._renderRightElement()}
+                onRight={this._onRight}
+            />
+        );
+    };
+
+    _renderRightElement = () => {
+        return ['设置'];
+    };
+
+    _onRight = () => {
+        this.props.navigation.navigate({
+            routeName: PageKeys.ChatSetting,
+            params: {
+                imId: this.props.imId,
+                chatType: this.props.chatType,
+            },
+        });
+    };
+
     _setKeyboardStatus = (status) => {
         this.setState({
             keyboardShow: status,
@@ -124,27 +154,27 @@ export default class extends React.PureComponent {
         });
     };
 
-    _refresh = (pageNumber) => {
-        const isFirst = pageNumber === Constant.config.pageInitialNumber;
+    _refresh = (oldData, pageSize) => {
+        const isFirst = !oldData || oldData.length <= 0;
         const lastMessageId = isFirst ? undefined : this.lastMessageId;
-        const loadPromise = ChatManager.loadMessages(
-            this.props.imId,
-            this.props.chatType,
-            lastMessageId,
-            this.pageCount,
-            IMConstant.MessageSearchDirection.up
-        );
-        // TODO LoadMessage之后做处理
-        // const newMessage = IMStandard.Model.Action.match(
-        //     IMStandard.Constant.Action.Parse,
-        //     undefined,
-        //     this.props.originMessage,
-        //     this.props.originMessage
-        // );
+        const loadPromise = delegate.im.conversation.loadMessage({
+            imId: this.props.imId,
+            chatType: this.props.chatType,
+            lastMessageId: lastMessageId,
+            count: this.pageCount,
+        });
         const markPromise = this._markAllRead();
         return Promise.all([loadPromise, markPromise])
             .then(([result, _]) => {
                 result = result
+                    .map(item => {
+                        return delegate.model.Action.match(
+                            Constant.Action.Parse,
+                            undefined,
+                            item,
+                            item,
+                        );
+                    })
                     .sort((a, b) => a.localTime >= b.localTime ? -1 : 1);
                 if (result && result.length > 0) {
                     this.lastMessageId = result[result.length - 1].messageId;
@@ -173,7 +203,7 @@ export default class extends React.PureComponent {
     };
 
     _timeMessage = (localTime) => {
-        const msgId = StringUtil.guid();
+        const msgId = guid();
         return {
             innerType: 'time',
             imId: this.props.imId,
@@ -260,8 +290,11 @@ export default class extends React.PureComponent {
     };
 
     _onForward = (data) => {
-        global.push(CustomPageKeys.IMChooseConversation, {
-            onSelectData: this._onSelectConversation.bind(this, data),
+        this.props.navigation.navigate({
+            routeName: PageKeys.ChooseConversation,
+            params: {
+                onSelectData: this._onSelectConversation.bind(this, data),
+            },
         });
     };
 
@@ -287,7 +320,7 @@ export default class extends React.PureComponent {
             chatType,
             ext: {
                 isSystemMessage: true,
-                [global.standard.im.message.constant.inner_id]: StringUtil.guid()
+                [global.standard.im.message.constant.inner_id]: guid()
             },
             from: data.from,
             localTime: data.localTime,
@@ -317,7 +350,7 @@ export default class extends React.PureComponent {
             chatType: this.props.chatType,
             ext: {
                 isSystemMessage: true,
-                [global.standard.im.message.constant.inner_id]: StringUtil.guid(),
+                [global.standard.im.message.constant.inner_id]: guid(),
             },
             from: to,
             localTime,
@@ -339,33 +372,15 @@ export default class extends React.PureComponent {
         this._onSendMessage(conversations[0].imId, conversations[0].type || conversations[0].isGroup, message);
     };
 
-    _onRight = (index) => {
-        if (index === 1) {
-            // TODO canDel需要根据当前用户的权限设置
-            global.push(CustomPageKeys.IMGroupRecordPage, {
-                groupId: this.props.imId,
-                canDel: true,
-            });
-        } else {
-            global.push(CustomPageKeys.IMChatSettingPage, {
-                imId: this.props.imId,
-                chatType: this.props.chatType,
-            });
-        }
-    };
-
     _markAllRead = () => {
-        return global.standard.im.message.markAllRead(
-            this.props.imId,
-            this.props.chatType
-        );
+        return delegate.model.Conversation.markReadStatus(this.props.imId, true);
     };
 
     _renderItem = ({item}) => {
         if (item.innerType === 'time') {
             return <delegate.component.TimeCell time={item.localTime} />;
         }
-        const isMe = item.from === Model.userinfo.part.imId();
+        const isMe = item.from === delegate.user.getMine().userId;
         const isSystem = !!(item.ext && item.ext.isSystemMessage);
         const position = isSystem ? 0 : isMe ? 1 : -1;
         return (
@@ -373,7 +388,7 @@ export default class extends React.PureComponent {
                 imId={this.props.imId}
                 chatType={this.props.chatType}
                 position={position}
-                data={item}
+                message={item}
                 onShowMenu={this._onShowMenu}
                 onResend={this._resend}
             />
@@ -409,6 +424,12 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     innerview: {
+        flex: 1,
+    },
+    touch: {
+        flex: 1,
+    },
+    container: {
         flex: 1,
     },
 });

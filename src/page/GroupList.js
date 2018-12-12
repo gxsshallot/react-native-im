@@ -1,16 +1,17 @@
 import React from 'react';
-import { StyleSheet, Text, View, FlatList } from 'react-native';
+import { StyleSheet, Text, View, FlatList, SafeAreaView } from 'react-native';
 import PropTypes from 'prop-types';
-import NaviBar from 'react-native-pure-navigation-bar';
+import NaviBar, { forceInset } from 'react-native-pure-navigation-bar';
 import Listener from 'react-native-general-listener';
 import * as PageKeys from '../pagekey';
 import * as Constant from '../constant';
+import * as Types from '../proptype';
 import { DateUtil } from '../util';
 import delegate from '../delegate';
 
 export default class extends React.PureComponent {
     static propTypes = {
-        navigation: PropTypes.any,
+        ...Types.Navigation,
     };
 
     static defaultProps = {};
@@ -46,13 +47,18 @@ export default class extends React.PureComponent {
                     onFocus={this._clickFakeSearchBar}
                     placeholder={'搜索'}
                 />
-                <FlatList
-                    style={styles.list}
-                    data={this.state.groups}
-                    renderItem={this._renderItem}
-                    keyExtractor={(item) => item.groupId}
-                    ListFooterComponent={this._renderFooterComponent()}
-                />
+                <SafeAreaView
+                    style={styles.safeview}
+                    forceInset={forceInset(0, 1, 1, 1)}
+                >
+                    <FlatList
+                        style={styles.list}
+                        data={this.state.groups}
+                        renderItem={this._renderItem}
+                        keyExtractor={(item) => item.groupId}
+                        ListFooterComponent={this._renderFooterComponent()}
+                    />
+                </SafeAreaView>
             </View>
         );
     }
@@ -70,7 +76,7 @@ export default class extends React.PureComponent {
     };
 
     _renderItemRight = (item) => {
-        const text = DateUtil.showDateTime(item.createdOn, 'yyyy年mm月dd日');
+        const text = DateUtil.showDate(item.createdOn, false);
         return (
             <Text style={styles.right}>
                 {text}
@@ -201,6 +207,9 @@ export default class extends React.PureComponent {
 
 const styles = StyleSheet.create({
     view: {
+        flex: 1,
+    },
+    safeview: {
         flex: 1,
     },
     list: {

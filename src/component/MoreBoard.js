@@ -1,18 +1,18 @@
 import React from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import PropTypes from 'prop-types';
-import * as Types from '../proptype';
 import * as Constant from '../constant';
+import delegate from '../delegate';
+import BottomBar from './BottomBar';
 
 export default class extends React.PureComponent {
     static propTypes = {
-        ...Types.BasicConversation,
-        getItems: PropTypes.func,
-        onDataChange: PropTypes.func.isRequired,
-        navigation: PropTypes.any.isRequired,
+        ...BottomBar.propTypes,
     };
 
-    static defaultProps = {};
+    static defaultProps = {
+        getItems: () => [],
+    };
 
     itemWidth = 60;
     
@@ -67,8 +67,7 @@ export default class extends React.PureComponent {
     };
 
     _onDataChange = (messageType, messageBody) => {
-        const {onDataChange} = this.props;
-        onDataChange && onDataChange({
+        this.props.onSendMessage({
             type: messageType,
             body: messageBody,
         });

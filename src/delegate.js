@@ -20,6 +20,7 @@ export default {
             updateConfig: unset('im.conversation.updateConfig'),
             markAllRead: unset('im.conversation.markAllRead'),
             markLatestUnread: unset('im.conversation.markLatestUnread'),
+            loadMessage: unset('im.conversation.loadMessage'),
         },
         group: {
             loadList: unset('im.group.loadList'),
@@ -50,6 +51,10 @@ export default {
         pinyinField: 'pinyin',
         titleLoading: '加载中',
         buttonOK: '确定',
+        messageType: {
+            text: null,
+            voice: null,
+        },
     },
 };
 

@@ -134,7 +134,7 @@ export function getAvatar(groupId) {
 export function createOne(members) {
     return delegate.im.group.createOne(members)
         .then((result) => {
-            if (!findByGroupId(result.groupId)) {
+            if (!findByGroupId(result.groupId, false)) {
                 rootNode[types.list][result.groupId] = result;
                 writeData(types.list);
             }
@@ -164,8 +164,8 @@ export function quitOne(groupId) {
 export function addMembers(groupId, members) {
     return delegate.im.group.addMembers(groupId, members)
         .then(() => {
-            const newMembers = [...rootNode[types.list][groupId], ...members];
-            changeGroupInfo({members: Array.from(new Set(newMembers))});
+            const newMembers = [...rootNode[types.list][groupId].members, ...members];
+            changeGroupInfo(groupId, {members: Array.from(new Set(newMembers))});
             return newMembers;
         });
 }
@@ -176,7 +176,7 @@ export function removeMembers(groupId, members) {
         .then(() => {
             const oldMembers = rootNode[types.list][groupId].members;
             const newMembers = oldMembers.filter(id => members.indexOf(id) < 0);
-            changeGroupInfo({members: newMembers});
+            changeGroupInfo(groupId, {members: newMembers});
             return newMembers;
         });
 }
@@ -185,7 +185,7 @@ export function removeMembers(groupId, members) {
 export function changeName(groupId, newName) {
     return delegate.im.group.changeName(groupId, newName)
         .then(() => {
-            changeGroupInfo({name: newName});
+            changeGroupInfo(groupId, {name: newName});
             return newName;
         });
 }
@@ -194,7 +194,7 @@ export function changeName(groupId, newName) {
 export function changeAvatar(groupId, newAvatarUrl) {
     return delegate.im.group.changeAvatar(groupId, newAvatarUrl)
         .then(() => {
-            changeGroupInfo({avatar: newAvatarUrl});
+            changeGroupInfo(groupId, {avatar: newAvatarUrl});
             return newAvatarUrl;
         });
 }

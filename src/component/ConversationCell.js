@@ -13,6 +13,7 @@ import delegate from '../delegate';
 export default class extends React.PureComponent {
     static propTypes = {
         ...Types.BasicConversation,
+        ...Types.Navigation,
         separatorLeft: PropTypes.number.isRequired,
     };
 
@@ -59,7 +60,7 @@ export default class extends React.PureComponent {
         return (
             <SafeAreaView style={styles.view} forceInset={forceInset(0, 1, 0, 1)}>
                 <delegate.component.ListCell
-                    style={isTop && styles.top}
+                    style={this.state.top && styles.top}
                     avatar={{imId, chatType}}
                     title={name}
                     subTitle={content}
@@ -67,7 +68,7 @@ export default class extends React.PureComponent {
                     onClick={this._clickRow}
                 />
                 {separatorLeft >= 0 && this._renderSeparatorLine()}
-                {this.state.unreadMessagesCount && this._renderBadge()}
+                {!!this.state.unreadMessagesCount && this._renderBadge()}
             </SafeAreaView>
         );
     }
@@ -99,7 +100,7 @@ export default class extends React.PureComponent {
         return (
             <View style={styles.right}>
                 <Text style={styles.time}>
-                    {latestMessage && DateUtil.showDate(latestMessage.timestamp)}
+                    {latestMessage && DateUtil.showDate(latestMessage.timestamp, false)}
                 </Text>
                 {avoid && (
                     <View style={styles.silent}>
@@ -170,7 +171,7 @@ export default class extends React.PureComponent {
     };
 
     _stateWithProps = (imId) => {
-        const conversation = delegate.model.Conversation.getOne(props.imId, true);
+        const conversation = delegate.model.Conversation.getOne(imId, true);
         return {
             latestMessage: conversation.latestMessage,
             unreadMessagesCount: conversation.unreadMessagesCount,

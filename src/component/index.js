@@ -4,6 +4,7 @@ import AvatarList from './AvatarList';
 import Badge from './Badge';
 import BaseMessage from './BaseMessage';
 import BottomBar from './BottomBar';
+import ConversationCell from './ConversationCell';
 import DetailListView from './DetailListView';
 import EmojiPickView from './EmojiPickView';
 import FakeSearchBar from './FakeSearchBar';
@@ -28,6 +29,7 @@ export {
     Badge,
     BaseMessage,
     BottomBar,
+    ConversationCell,
     DetailListView,
     EmojiPickView,
     FakeSearchBar,

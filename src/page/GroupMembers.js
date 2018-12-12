@@ -17,12 +17,11 @@ export default class extends React.PureComponent {
         admins: PropTypes.arrayOf(PropTypes.string).isRequired,
         canAdd: PropTypes.bool,
         canRemove: PropTypes.bool,
+        onAddMembers: PropTypes.func.isRequired,
+        onRemoveMembers: PropTypes.func.isRequired,
     };
 
-    static defaultProps = {
-        canAdd: true,
-        canRemove: true,
-    };
+    static defaultProps = {};
 
     constructor(props) {
         super(props);
@@ -85,7 +84,7 @@ export default class extends React.PureComponent {
         );
     };
 
-    _renderSearchItem = (text) => {
+    _renderSearchItem = (text = '') => {
         const index = text.indexOf(this.state.searchText);
         return !text || index < 0 ? text : [
             <Text key={1}>
@@ -102,12 +101,12 @@ export default class extends React.PureComponent {
 
     _onLongPress = (item) => {
         ActionSheet.showActionSheetWithOptions({
-            options: ['删除', '取消'],
+            options: ['删除' + item.name, '取消'],
             destructiveButtonIndex: 0,
             cancelButtonIndex: 1,
         }, (index) => {
             if (index === 0) {
-                this._onRemoveMembers(item);
+                this._onRemoveMembers([item.userId]);
             }
         });
     };
@@ -129,10 +128,10 @@ export default class extends React.PureComponent {
                     .map((adminId) => {
                         const user = delegate.user.getUser(adminId);
                         if (user) {
-                            user.label = {
+                            user.label = [{
                                 name: '群主',
                                 color: '#00ffff',
-                            };
+                            }];
                             user.disableRemove = true;
                             return user;
                         } else {
@@ -162,24 +161,18 @@ export default class extends React.PureComponent {
     };
 
     _onAddMembers = (memberIds) => {
-        delegate.model.Group.addMembers(this.props.groupId, memberIds)
+        this.props.onAddMembers(memberIds)
             .then((newMembers) => {
                 this.allMembers = this._generateSections(newMembers, undefined);
                 this.setState({members: newMembers});
-            })
-            .catch(() => {
-                Toast.show('添加成员失败');
             });
     };
 
-    _onRemoveMembers = (item) => {
-        delegate.model.Group.removeMembers(this.props.groupId, [userId])
+    _onRemoveMembers = (memberIds) => {
+        this.props.onRemoveMembers(memberIds)
             .then((newMembers) => {
                 this.allMembers = this._generateSections(newMembers, undefined);
                 this.setState({members: newMembers});
-            })
-            .catch(() => {
-                Toast.show('删除' + item.name + '失败');
             });
     };
 
