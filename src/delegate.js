@@ -21,6 +21,8 @@ export default {
             markAllRead: unset('im.conversation.markAllRead'),
             markLatestUnread: unset('im.conversation.markLatestUnread'),
             loadMessage: unset('im.conversation.loadMessage'),
+            deleteMessage: unset('im.conversation.deleteMessage'),
+            recallMessage: unset('im.conversation.recallMessage'),
         },
         group: {
             loadList: unset('im.group.loadList'),
@@ -54,6 +56,7 @@ export default {
         messageType: {
             text: null,
             voice: null,
+            system: null,
         },
     },
 };

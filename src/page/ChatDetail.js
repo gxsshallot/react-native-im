@@ -8,7 +8,7 @@ import Toast from 'react-native-root-toast';
 import Listener from 'react-native-general-listener';
 import * as Types from '../proptype';
 import * as Constant from '../constant';
-import { guid } from '../util';
+import { guid, DateUtil } from '../util';
 import delegate from '../delegate';
 
 export default class extends React.PureComponent {
@@ -18,9 +18,6 @@ export default class extends React.PureComponent {
     };
 
     static defaultProps = {};
-
-    timeInterval = 60;
-    latestLocalTime = 0;
 
     constructor(props) {
         super(props);
@@ -179,61 +176,16 @@ export default class extends React.PureComponent {
                 if (result && result.length > 0) {
                     this.lastMessageId = result[result.length - 1].messageId;
                 }
-                const allResult = [];
-                let timestampTag = 0;
-                result
-                    .reverse()
-                    .forEach((item) => {
-                        const {localTime} = item;
-                        const interval = (timestampTag - localTime) / 1000;
-                        if (Math.abs(interval) > this.timeInterval) {
-                            allResult.push(this._timeMessage(localTime));
-                            if (isFirst) {
-                                this.latestLocalTime = localTime;
-                            }
-                            timestampTag = localTime;
-                        }
-                        allResult.push(item);
-                    });
                 return {
-                    data: allResult.reverse(),
+                    data: result.reverse(),
                     isEnd: result.length < this.pageCount,
                 };
             });
     };
 
-    _timeMessage = (localTime) => {
-        const msgId = guid();
-        return {
-            innerType: 'time',
-            imId: this.props.imId,
-            chatType: this.props.chatType,
-            ext: {
-                isSystemMessage: true,
-                [global.standard.im.message.constant.inner_id]: msgId,
-            },
-            from: this.props.imId,
-            to: this.props.imId,
-            localTime: localTime,
-            timestamp: localTime,
-            status: IMConstant.MessageStatus.succeed,
-            body: {type: IMConstant.MessageType.text, text: ''},
-            messageId: msgId,
-        };
-    };
-
     _insertMessageToList = (message) => {
         console.log(message);
-        const result = [];
-        const {localTime} = message;
-        const interval = (this.latestLocalTime - localTime) / 1000;
-        if (Math.abs(interval) > this.timeInterval) {
-            result.push(this._timeMessage(localTime));
-            this.latestLocalTime = localTime;
-        }
-        result.push(message);
-        this.list.insert(result);
-        this._markAllRead();
+        this.list.insert([message]);
     };
 
     _onReceiveMessage = (message) => {
@@ -245,14 +197,19 @@ export default class extends React.PureComponent {
         const message = this._generateMessage(type, body);
         if (isCurrent) {
             this._insertMessageToList(originMessage);
+            this._markAllRead();
         }
-        return global.standard.im.message.send(originMessage)
+        return delegate.model.Conversation.sendMessage(imId, chatType, message, {})
             .then((newMessage) => {
                 if (isCurrent) {
                     this._insertMessageToList(newMessage);
+                    this._markAllRead();
                 } else {
                     Toast.show('发送成功');
                 }
+            })
+            .catch((err) => {
+                Toast.show(err);
             });
     };
 
@@ -314,12 +271,12 @@ export default class extends React.PureComponent {
     _onExchangeMessage = (cmdMessage) => {
         const data = cmdMessage.ext.body.message;
         const {chatType} = this.props;
-        ChatManager.deleteMessage(data.to, chatType, data.messageId);
+        delegate.im.conversation.deleteMessage(data.to, chatType, data.messageId);
         const message = {
             conversationId: data.to,
             chatType,
             ext: {
-                isSystemMessage: true,
+                isSystem: true,
                 [global.standard.im.message.constant.inner_id]: guid()
             },
             from: data.from,
@@ -349,7 +306,7 @@ export default class extends React.PureComponent {
             imId: body.groupId,
             chatType: this.props.chatType,
             ext: {
-                isSystemMessage: true,
+                isSystem: true,
                 [global.standard.im.message.constant.inner_id]: guid(),
             },
             from: to,
@@ -361,28 +318,32 @@ export default class extends React.PureComponent {
             messageId: cmdMessage.messageId,
         };
         this._insertMessageToList(message);
+        this._markAllRead();
     };
 
-    _onQuote = (data) => {
-        this.bottomBar.changeInputText(data.from, data.body.text);
+    _onQuote = (item) => {
+        this.bottomBar.changeInputText(item.from, item.data.text);
     };
 
     _onSelectConversation = (data, conversations) => {
-        const message = {messageType: data.body.type, ...data.body};
-        this._onSendMessage(conversations[0].imId, conversations[0].type || conversations[0].isGroup, message);
+        this._onSendMessage(
+            conversations[0].imId,
+            conversations[0].chatType,
+            {type: data.type, body: data.body}
+        );
     };
 
     _markAllRead = () => {
-        return delegate.model.Conversation.markReadStatus(this.props.imId, true);
+        const {imId, chatType} = this.props;
+        return delegate.model.Conversation.markReadStatus(imId, chatType, true);
     };
 
     _renderItem = ({item}) => {
-        if (item.innerType === 'time') {
-            return <delegate.component.TimeCell time={item.localTime} />;
-        }
         const isMe = item.from === delegate.user.getMine().userId;
-        const isSystem = !!(item.ext && item.ext.isSystemMessage);
-        const position = isSystem ? 0 : isMe ? 1 : -1;
+        const position = item.data.isSystem ? 0 : isMe ? 1 : -1;
+        if (item.data.isSystem && item.data.text.length <= 0) {
+            item.data.text = DateUtil.showDate(item.localTime, true);
+        }
         return (
             <delegate.component.BaseMessage
                 imId={this.props.imId}
@@ -390,16 +351,8 @@ export default class extends React.PureComponent {
                 position={position}
                 message={item}
                 onShowMenu={this._onShowMenu}
-                onResend={this._resend}
             />
         );
-    };
-
-    _resend = (message) => {
-        global.standard.im.message.send(message)
-            .then(() => {
-                Toast.show('发送成功');
-            });
     };
 
     _generateMessage = (type, body, others) => {
@@ -407,8 +360,8 @@ export default class extends React.PureComponent {
             conversationId: this.props.imId,
             messageId: undefined,
             innerId: guid(),
-            chatType: this.props.chatType,
             status: Constant.Status.Pending,
+            type: type,
             from: delegate.user.getMine().userId,
             to: imId,
             localTime: new Date().getTime(),

@@ -136,7 +136,7 @@ export default class extends React.PureComponent {
     };
 
     _clickMarkReadStatus = (item, status) => {
-        delegate.model.Conversation.markReadStatus(item.imId, status);
+        delegate.model.Conversation.markReadStatus(item.imId, item.chatType, status);
     };
 
     _clickDelete = (item) => {

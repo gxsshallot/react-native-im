@@ -13,7 +13,6 @@ export default class extends React.PureComponent {
         position: PropTypes.number.isRequired,
         message: PropTypes.shape(Types.BasicMessage).isRequired,
         onShowMenu: PropTypes.func,
-        onResend: PropTypes.func,
     };
 
     constructor(props) {
@@ -150,12 +149,11 @@ export default class extends React.PureComponent {
     };
 
     _resend = () => {
-        if (this.props.onResend) {
-            this.props.onResend(this.props.message)
-                .then(() => {
-                    Toast.show('发送成功');
-                });
-        };
+        const {imId, chatType, message} = this.props;
+        delegate.model.Conversation.sendMessage(imId, chatType, message, {})
+            .then(() => {
+                Toast.show('发送成功');
+            });
     };
 
     _showMembersName = () => {

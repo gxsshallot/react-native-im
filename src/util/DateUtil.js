@@ -10,7 +10,7 @@ export function showDate(timestamp, alwaysShowTime) {
     }
     const now = new Date();
     const that = new Date(timestamp);
-    const timeStr = times[that.getHours() / 6] + DateFormat(that, 'h:MM');
+    const timeStr = times[Math.floor(that.getHours() / 6)] + DateFormat(that, 'h:MM');
     const timeOption = alwaysShowTime ? ' ' + timeStr : '';
     if (sameDay(now, that)) {
         return timeStr;

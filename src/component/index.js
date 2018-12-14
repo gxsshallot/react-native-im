@@ -20,7 +20,6 @@ import SeekBarSectionList from './SeekBarSectionList';
 import SegmentControl from './SegmentControl';
 import SelectList from './SelectList';
 import SettingItem from './SettingItem';
-import TimeCell from './TimeCell';
 
 export {
     ArrowImage,
@@ -45,5 +44,4 @@ export {
     SegmentControl,
     SelectList,
     SettingItem,
-    TimeCell,
 };

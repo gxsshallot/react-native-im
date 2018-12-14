@@ -1,33 +1,20 @@
 import AsyncStorage from 'react-native-general-storage';
 import Listener from 'react-native-general-listener';
 import * as Constant from '../constant';
-import { simpleExport } from '../util';
+import { simpleExport, guid } from '../util';
 import delegate from '../delegate';
 
 const types = {
     list: 'ConversationList',
-    sendMessageEvent: 'ListenSendMessageEvent'
 };
 
 const rootNode = {
     [types.list]: {},
-    [types.sendMessageEvent]: null,
 };
 
 export const name = 'im.conversation';
 
 export function init(forceUpdate) {
-    rootNode[types.sendMessageEvent] = Listener.registerWithSubEvent(
-        [Constant.BaseEvent, Constant.SendMessageEvent],
-        (data) => {
-            const imId = data[Listener.innerEventType][2];
-            if (getOne(imId, false)) {
-                updateMessage(imId, data);
-            } else {
-                addOne(imId, data.chatType, data, true);
-            }
-        },
-    );
     return AsyncStorage.get(keys(types.list), Constant.StoragePart)
         .then(result => {
             if (result) {
@@ -41,10 +28,6 @@ export function init(forceUpdate) {
 
 export function uninit() {
     rootNode[types.list] = {};
-    Listener.unregister(
-        [Constant.BaseEvent, Constant.SendMessageEvent],
-        rootNode[types.sendMessageEvent]
-    );
 }
 
 // 加载远程全部会话，只有重新登陆才会调用
@@ -156,7 +139,8 @@ export function updateConfig(imId, config) {
 export function updateMessage(imId, message) {
     const item = getOne(imId);
     rootNode[types.list][imId].latestMessage = message;
-    if (item.chatType === Constant.ChatType.Group) {
+    const isFromMe = message.from === delegate.user.getMine().userId;
+    if (item.chatType === Constant.ChatType.Group && !isFromMe) {
         let hasAtMe = false;
         if (message.data && message.data.atMemberList) {
             const {atMemberList} = message.data;
@@ -202,7 +186,7 @@ export function deleteOne(imId) {
 }
 
 // 添加一个会话到会话列表和远程
-export function addOne(imId, chatType, latestMessage, toRemote = true) {
+export function addOne(imId, chatType, latestMessage) {
     return delegate.im.conversation.loadItem(imId, chatType, true)
         .then(() => {
             const isGroup = chatType === Constant.ChatType.Group;
@@ -224,9 +208,7 @@ export function addOne(imId, chatType, latestMessage, toRemote = true) {
                 Listener.trigger([Constant.BaseEvent, Constant.ConversationUpdateEvent, imId]);
             }
             writeData(types.list);
-            if (toRemote) {
-                return delegate.im.conversation.addToList(imId, chatType);
-            }
+            return delegate.im.conversation.addToList(imId, chatType);
         });
 }
 
@@ -255,19 +237,19 @@ export function createOne(members) {
     return promise
         .then(({imId, chatType}) => {
             if (isGroup && !getOne(imId, false)) {
-                addOne(imId, chatType, undefined, true);
+                addOne(imId, chatType, undefined);
             }
             return {imId, chatType};
         });
 }
 
 // 标记会话为已读/未读
-export function markReadStatus(imId, status) {
+export function markReadStatus(imId, chatType, status) {
     let promise;
     if (status) {
-        promise = delegate.im.conversation.markAllRead(imId);
+        promise = delegate.im.conversation.markAllRead(imId, chatType);
     } else {
-        promise = delegate.im.conversation.markLatestUnread(imId);
+        promise = delegate.im.conversation.markLatestUnread(imId, chatType);
     }
     return promise
         .then(() => {
@@ -280,6 +262,97 @@ export function markReadStatus(imId, status) {
                 );
             }
             onUnreadCountChanged();
+        });
+}
+
+// 发送消息
+export function sendMessage(imId, chatType, message, ext = {}) {
+    const sendEventName = [Constant.BaseEvent, Constant.SendMessageEvent, imId];
+    let promise;
+    if (getOne(imId, false)) {
+        promise = updateMessage(imId, newMessage);
+    } else {
+        promise = addOne(imId, chatType, newMessage);
+    }
+    return promise
+        .then(() => {
+            Listener.trigger(sendEventName, message);
+            const promise = delegate.model.Action.match(
+                Constant.Action.Send,
+                message.type,
+                {imId, chatType, message, ext},
+                {imId, chatType, message, ext},
+            );
+            return promise || Promise.reject('暂不支持发送该消息类型');
+        })
+        .then((newOriginMessage) => {
+            const newMessage = delegate.model.Action.match(
+                Constant.Action.Parse,
+                undefined,
+                newOriginMessage,
+                newOriginMessage,
+            );
+            updateMessage(imId, newMessage);
+            Listener.trigger(sendEventName, newMessage);
+            return newMessage;
+        });
+}
+
+// 插入时间标签或不插入
+export function insertTimeMessage(imId, chatType, message) {
+    const conversation = getOne(imId, false);
+    let insertTime = true;
+    if (conversation && conversation.latestMessage) {
+        const oldMessage = conversation.latestMessage;
+        const delta = message.localTime - oldMessage.localTime;
+        if (delta <= 0) {
+            insertTime = false;
+        } else if (delta < 3 * 60 * 1000) {
+            const oldTime = new Date(oldMessage.localTime).getMinutes();
+            const newTime = new Date(message.localTime).getMinutes();
+            if (Math.floor(oldTime / 3) === Math.floor(newTime / 3)) {
+                insertTime = false;
+            }
+        }
+    }
+    if (!insertTime) {
+        return Promise.resolve();
+    }
+    const promises = [];
+    const timeMessage = {
+        conversationId: imId,
+        messageId: undefined,
+        innerId: guid(),
+        status: Constant.Status.Succeed,
+        type: delegate.config.messageType.text,
+        from: delegate.user.getMine().userId,
+        to: imId,
+        localTime: message.localTime - 1,
+        timestamp: message.localTime - 1,
+        data: {
+            text: '',
+            isSystem: true,
+        },
+    };
+    const promise = delegate.model.Action.match(
+        Constant.Action.Send,
+        message.type,
+        {imId, chatType, message: timeMessage, ext: {}},
+        {imId, chatType, message: timeMessage, ext: {}},
+    );
+    promises.push(promise);
+    if (!conversation) {
+        promises.push(addOne(imId, chatType));
+    }
+    return promises
+        .then(([newOriginMessage]) => {
+            const newMessage = delegate.model.Action.match(
+                Constant.Action.Parse,
+                undefined,
+                newOriginMessage,
+                newOriginMessage,
+            );
+            return newMessage;
         });
 }
 

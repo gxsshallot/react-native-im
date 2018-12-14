@@ -6,6 +6,7 @@ export function convertBasicMessage(message) {
     newMessage.status = message.status;
     newMessage.from = message.from;
     newMessage.to = message.to;
+    newMessage.localTime = message.localTime;
     newMessage.timestamp = message.timestamp;
     return newMessage;
 }

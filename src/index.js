@@ -45,7 +45,6 @@ function setup_common_component() {
     Delegate.component.SegmentControl = Components.SegmentControl;
     Delegate.component.SelectList = Components.SelectList;
     Delegate.component.SettingItem = Components.SettingItem;
-    Delegate.component.TimeCell = Components.TimeCell;
 }
 
 function setup_common_model() {

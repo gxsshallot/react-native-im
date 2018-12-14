@@ -19,6 +19,7 @@ export const TextMessage = {
             PropTypes.arrayOf(PropTypes.string),
         ]),
         text: PropTypes.string,
+        isSystem: PropTypes.bool,
     }),
 };
 

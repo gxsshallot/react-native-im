@@ -104,23 +104,14 @@ export default class extends React.PureComponent {
                 oldInnerIdMap[item.innerId] = index;
             }
         });
-        let isPreviousTime = -1;
         for (let i = 0; i < newMessages.length; i++) {
             const item = newMessages[i];
-            if (item.innerType === 'time') {
-                isPreviousTime = i;
-                continue;
-            }
             const {messageId, innerId} = item;
             if (oldIdMap[messageId] !== undefined) {
                 data[oldIdMap[messageId]] = item;
             } else if (oldInnerIdMap[innerId] !== undefined) {
                 data[oldInnerIdMap[innerId]] = item;
             } else {
-                if (isPreviousTime >= 0) {
-                    data.push(newMessages[isPreviousTime]);
-                    isPreviousTime = -1;
-                }
                 data.push(item);
             }
         }
