@@ -177,7 +177,7 @@ export default class extends React.PureComponent {
                     this.lastMessageId = result[result.length - 1].messageId;
                 }
                 return {
-                    data: result.reverse(),
+                    data: result,
                     isEnd: result.length < this.pageCount,
                 };
             });
@@ -185,7 +185,8 @@ export default class extends React.PureComponent {
 
     _insertMessageToList = (message) => {
         console.log(message);
-        this.list.insert([message]);
+        const messages = Array.isArray(message) ? message : [message];
+        this.list.insert(messages);
     };
 
     _onReceiveMessage = (message) => {
@@ -195,11 +196,14 @@ export default class extends React.PureComponent {
     _onSendMessage = (imId, chatType, {type, body}) => {
         const isCurrent = this.props.imId === imId;
         const message = this._generateMessage(type, body);
-        if (isCurrent) {
-            this._insertMessageToList(originMessage);
-            this._markAllRead();
-        }
-        return delegate.model.Conversation.sendMessage(imId, chatType, message, {})
+        delegate.model.Conversation.insertTimeMessage(imId, chatType, message)
+            .then((timeMessage) => {
+                const messages = [timeMessage];
+                isCurrent && messages.push(message);
+                this._insertMessageToList(messages.filter(i => i));
+                isCurrent && this._markAllRead();
+                return delegate.model.Conversation.sendMessage(imId, chatType, message, {});
+            })
             .then((newMessage) => {
                 if (isCurrent) {
                     this._insertMessageToList(newMessage);
@@ -363,7 +367,7 @@ export default class extends React.PureComponent {
             status: Constant.Status.Pending,
             type: type,
             from: delegate.user.getMine().userId,
-            to: imId,
+            to: this.props.imId,
             localTime: new Date().getTime(),
             timestamp: new Date().getTime(),
             data: body,

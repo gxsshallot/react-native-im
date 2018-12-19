@@ -1,6 +1,7 @@
 import React from 'react';
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Image, StyleSheet, Text, TouchableOpacity, View, Dimensions } from 'react-native';
 import PropTypes from 'prop-types';
+import { getSafeAreaInset } from 'react-native-pure-navigation-bar';
 import * as Constant from '../constant';
 import delegate from '../delegate';
 import BottomBar from './BottomBar';
@@ -15,28 +16,78 @@ export default class extends React.PureComponent {
     };
 
     itemWidth = 60;
-    
+    lineHeight = 120;
+    innerHorizontal = 30;
+
     render() {
         const { imId, chatType, getItems } = this.props;
         const allItems = getItems(imId, chatType);
+        const {width, height} = Dimensions.get('window');
+        let pageSize;
+        if (width < height) {
+            pageSize = 8;
+        } else {
+            const safeInset = getSafeAreaInset();
+            pageSize = Math.floor((width - safeInset.left - safeInset.right - this.innerHorizontal * 2) / this.itemWidth) * 2;
+        }
+        const count = Math.floor((allItems.length - 1) / pageSize) + 1;
+        const style = {
+            height: this.lineHeight * 2,
+        };
         return (
-            <View style={styles.view}>
-                {items.map((rowData, rowIndex) => (
-                    <View key={rowIndex} style={styles.rowContainer}>
-                        {rowData.map((item, itemIndex) => {
-                            if (item.text) {
-                                return this._renderItem(item, itemIndex);
-                            } else {
-                                return this._renderEmptyItem(itemIndex);
-                            }
-                        })}
-                    </View>
-                ))}
+            <View style={[styles.view, style]}>
+                {new Array(count).fill(1).map((_, pageNumber) => {
+                    return this._renderPage(allItems, pageNumber, pageSize);
+                })}
             </View>
         );
     }
 
-    _renderItem = (item, index) => {
+    _renderPage = (allItems, pageNumber, pageSize) => {
+        const func = (base, size) => {
+            const items = [];
+            for (let i = base; i < base + size; i++) {
+                if (i < allItems.length) {
+                    items.push(allItems[i]);
+                } else {
+                    items.push(null);
+                }
+            }
+            return items;
+        };
+        const base = pageNumber * pageSize;
+        const upLine = func(base, pageSize / 2);
+        const downLine = func(base + pageSize / 2, pageSize / 2);
+        return (
+            <View key={pageNumber} style={{paddingHorizontal: this.innerHorizontal}}>
+                <View style={[styles.rowContainer]}>
+                    {upLine.map(this._renderCell)}
+                </View>
+                <View style={[styles.rowContainer]}>
+                    {downLine.map(this._renderCell)}
+                </View>
+            </View>
+        );
+    };
+
+    _renderCell = (item, index) => {
+        if (item === null) {
+            return this._renderEmptyItem(index);
+        } else {
+            return this._renderItem(item, index);
+        }
+    };
+
+    _renderItem = (action, index) => {
+        const item = delegate.model.Action.match(
+            Constant.Action.MoreBoard,
+            action,
+            {imId: this.props.imId, chatType: this.props.chatType, action},
+            undefined,
+        );
+        if (!item) {
+            return this._renderEmptyItem(index);
+        }
         const onPressParams = {
             onDataChange: this._onDataChange.bind(this, item.messageType),
             navigation: this.props.navigation,
@@ -63,7 +114,11 @@ export default class extends React.PureComponent {
     };
 
     _renderEmptyItem = (index) => {
-        return <View key={index} style={styles.cellEmpty} />;
+        const style = {
+            width: this.itemWidth,
+            height: this.lineHeight,
+        };
+        return <View key={index} style={style} />;
     };
 
     _onDataChange = (messageType, messageBody) => {
@@ -77,13 +132,11 @@ export default class extends React.PureComponent {
 const styles = StyleSheet.create({
     view: {
         backgroundColor: '#f5f5f6',
-        height: 240,
         borderTopColor: '#dddddd',
         borderTopWidth: StyleSheet.hairlineWidth,
     },
     rowContainer: {
         flexDirection: 'row',
-        paddingHorizontal: 29,
         justifyContent: 'space-between',
         alignItems: 'center',
     },
@@ -91,10 +144,6 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         marginTop: 21,
-    },
-    cellEmpty: {
-        width: 60,
-        height: 60,
     },
     cellImgContainer: {
         width: 60,

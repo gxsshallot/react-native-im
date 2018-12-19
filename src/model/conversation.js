@@ -270,10 +270,11 @@ export function sendMessage(imId, chatType, message, ext = {}) {
     const sendEventName = [Constant.BaseEvent, Constant.SendMessageEvent, imId];
     let promise;
     if (getOne(imId, false)) {
-        promise = updateMessage(imId, newMessage);
+        promise = updateMessage(imId, message);
     } else {
-        promise = addOne(imId, chatType, newMessage);
+        promise = addOne(imId, chatType, message);
     }
+    ext = {...ext, innerId: message.innerId};
     return promise
         .then(() => {
             Listener.trigger(sendEventName, message);
@@ -336,7 +337,7 @@ export function insertTimeMessage(imId, chatType, message) {
     };
     const promise = delegate.model.Action.match(
         Constant.Action.Send,
-        message.type,
+        timeMessage.type,
         {imId, chatType, message: timeMessage, ext: {}},
         {imId, chatType, message: timeMessage, ext: {}},
     );
@@ -344,7 +345,7 @@ export function insertTimeMessage(imId, chatType, message) {
     if (!conversation) {
         promises.push(addOne(imId, chatType));
     }
-    return promises
+    return Promise.all(promises)
         .then(([newOriginMessage]) => {
             const newMessage = delegate.model.Action.match(
                 Constant.Action.Parse,

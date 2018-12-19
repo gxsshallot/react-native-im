@@ -11,7 +11,7 @@ export default (params) => {
         }
     }
     if (message.data.text) {
-        return prefix + text;
+        return prefix + message.data.text;
     } else {
         return prefix;
     }

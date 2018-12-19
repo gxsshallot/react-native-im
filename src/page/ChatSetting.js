@@ -1,6 +1,7 @@
 import React from 'react';
 import { Alert, InteractionManager, ScrollView, StyleSheet, Text, TouchableHighlight, View } from 'react-native';
 import PropTypes from 'prop-types';
+import { StackActions } from 'react-navigation';
 import NaviBar, { getSafeAreaInset } from 'react-native-pure-navigation-bar';
 import Toast from 'react-native-root-toast';
 import ActionSheet from 'react-native-general-actionsheet';
@@ -202,12 +203,10 @@ export default class extends React.PureComponent {
         return promise
             .then(() => {
                 Toast.show(text + '成功');
-                const routes = this.props.navgation.state.routes;
-                const routeName = routes.length >= 3 ? routes[routes.length - 3].routeName : PageKeys.ChatList;
-                this.props.navigation.navigate({
-                    routeName: routeName,
-                    params: {},
+                const action = StackActions.pop({
+                    n: 2,
                 });
+                this.props.navigation.dispatch(action);
             })
             .catch(() => {
                 Toast.show(text + '失败');
