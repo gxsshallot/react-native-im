@@ -5,7 +5,7 @@ import delegate from '../delegate';
 import * as Types from '../proptype';
 import * as Constant from '../constant';
 
-export default class extends React.PureComponent {
+export default class extends React.Component {
     static propTypes = {
         ...Types.BasicConversation,
         style: PropTypes.any,

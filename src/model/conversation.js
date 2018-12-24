@@ -266,18 +266,23 @@ export function markReadStatus(imId, chatType, status) {
 }
 
 // 发送消息
-export function sendMessage(imId, chatType, message, ext = {}) {
+export function sendMessage(imId, chatType, message, ext = {}, isSystem = false) {
     const sendEventName = [Constant.BaseEvent, Constant.SendMessageEvent, imId];
     let promise;
     if (getOne(imId, false)) {
-        promise = updateMessage(imId, message);
+        promise = Promise.resolve();
     } else {
-        promise = addOne(imId, chatType, message);
+        promise = addOne(imId, chatType, undefined);
     }
     ext = {...ext, innerId: message.innerId};
     return promise
+        .then(() => insertTimeMessage(imId, chatType, message))
+        .then((timeMessage) => {
+            timeMessage && Listener.trigger(sendEventName, timeMessage);
+            return updateMessage(imId, message);
+        })
         .then(() => {
-            Listener.trigger(sendEventName, message);
+            !isSystem && Listener.trigger(sendEventName, message);
             const promise = delegate.model.Action.match(
                 Constant.Action.Send,
                 message.type,
@@ -355,6 +360,64 @@ export function insertTimeMessage(imId, chatType, message) {
             );
             return newMessage;
         });
+}
+
+// 插入系统消息
+export function insertSystemMessage(imId, chatType, text, localTime, timestamp) {
+    const systemMessage = {
+        conversationId: imId,
+        messageId: undefined,
+        innerId: guid(),
+        status: Constant.Status.Succeed,
+        type: delegate.config.messageType.text,
+        from: delegate.user.getMine().userId,
+        to: imId,
+        localTime: localTime,
+        timestamp: timestamp,
+        data: {
+            text: text,
+            isSystem: true,
+        },
+    };
+    return sendMessage(imId, chatType, systemMessage, {}, true);
+}
+
+// 接收到消息
+export function onMessageReceived(originMessage) {
+    const message = delegate.model.Action.match(
+        Constant.Action.Parse,
+        undefined,
+        originMessage,
+        originMessage,
+    );
+    if (!message) {
+        return Promise.reject('无法处理该消息');
+    }
+    const imId = data.conversationId;
+    const isSingleChat = !!delegate.user.getUser(imId);
+    const chatType = isSingleChat ? Constant.ChatType.Single : Constant.ChatType.Group;
+    let promise;
+    if (!getOne(imId, false)) {
+        promise = addOne(imId, chatType, message);
+    } else {
+        promise = updateMessage(imId, message);
+    }
+    return promise
+        .then(() => {
+            Listener.trigger(
+                [Constant.BaseEvent, Constant.ReceiveMessageEvent, imId],
+                message
+            );
+            return {chatType, ...message};
+        });
+}
+
+export function onRecallMessage(imId, chatType, fromUserId, messageId, localTime, timestamp) {
+    const user = getOperatorName(fromUserId);
+    const text = user + '撤回了一条消息';
+    const deletePromise = delegate.im.conversation.deleteMessage({imId, chatType, message: {messageId}});
+    const systemPromise = insertSystemMessage(groupId, Constant.ChatType.Group, text, localTime, timestamp);
+    return Promise.all([deletePromise, systemPromise]);
 }
 
 function onUnreadCountChanged() {

@@ -214,6 +214,52 @@ export function changeOwner(groupId, newOwnerId) {
         });
 }
 
+export function onUserJoin(groupId, invitorId, userJoinedIds, localTime, timestamp) {
+    const invitor = getOperatorName(invitorId);
+    const users = userJoinedIds
+        .map(userId => getOperatorName(userId))
+        .join(',');
+    const text = invitor + '邀请' + users + '加入了群聊';
+    return Promise.all(groupUpdateOperation(groupId, text, localTime, timestamp));
+}
+
+export function onUserLeave(groupId, userLeavedIds, localTime, timestamp) {
+    const users = userLeavedIds
+        .map(userId => getOperatorName(userId))
+        .join(',');
+    const text = users + '退出了群聊';
+    return Promise.all(groupUpdateOperation(groupId, text, localTime, timestamp));
+}
+
+export function onUpdateName(groupId, updatorId, newGroupName, localTime, timestamp) {
+    const updator = getOperatorName(updatorId);
+    const text = updator + '修改群名称为' + newGroupName;
+    return Promise.all(groupUpdateOperation(groupId, text, localTime, timestamp));
+}
+
+export function onUpdateOwner(groupId, newOwnerId, localTime, timestamp) {
+    const user = getOperatorName(newOwnerId);
+    const text = '群主已经更换为' + user;
+    return Promise.all(groupUpdateOperation(groupId, text, localTime, timestamp));
+}
+
+export function onDelete(groupId, localTime, timestamp) {
+    const text = '群主解散了群聊';
+    const deletePromise = delegate.model.Conversation.deleteOne(groupId);
+    return Promise.all([...groupUpdateOperation(groupId, text, localTime, timestamp), deletePromise]);
+}
+
+export function getOperatorName(userId) {
+    const isMe = userId === delegate.user.getMine().userId;
+    return isMe ? '你' : delegate.user.getUser(userId).name;
+}
+
+function groupUpdateOperation(groupId, text, localTime, timestamp) {
+    const loadPromise = loadDetail(groupId);
+    const systemPromise = delegate.model.Conversation.insertSystemMessage(groupId, Constant.ChatType.Group, text, localTime, timestamp);
+    return [loadPromise, systemPromise];
+}
+
 // 更新群信息
 function changeGroupInfo(groupId, newGroupInfo) {
     rootNode[types.list][groupId] = {

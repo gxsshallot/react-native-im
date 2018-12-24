@@ -24,9 +24,9 @@ export default class extends React.PureComponent {
         this.isGroup = props.chatType === Constant.ChatType.Group;
         this.pageCount = delegate.component.DetailListView.defaultProps.pageSize;
         this.events = [
+            [Constant.SendMessageEvent, this._onReceiveMessage],
             [Constant.ReceiveMessageEvent, this._onReceiveMessage],
             [Constant.RecallMessageEvent, this._onExchangeMessage],
-            [Constant.SystemMessageEvent, this._insertSystemMessage],
         ];
         this.listeners = new Array(this.events.length);
         this.state = {
@@ -196,17 +196,9 @@ export default class extends React.PureComponent {
     _onSendMessage = (imId, chatType, {type, body}) => {
         const isCurrent = this.props.imId === imId;
         const message = this._generateMessage(type, body);
-        delegate.model.Conversation.insertTimeMessage(imId, chatType, message)
-            .then((timeMessage) => {
-                const messages = [timeMessage];
-                isCurrent && messages.push(message);
-                this._insertMessageToList(messages.filter(i => i));
-                isCurrent && this._markAllRead();
-                return delegate.model.Conversation.sendMessage(imId, chatType, message, {});
-            })
+        delegate.model.Conversation.sendMessage(imId, chatType, message, {})
             .then((newMessage) => {
                 if (isCurrent) {
-                    this._insertMessageToList(newMessage);
                     this._markAllRead();
                 } else {
                     Toast.show('发送成功');
@@ -218,19 +210,19 @@ export default class extends React.PureComponent {
     };
 
     _onShowMenu = (param) => {
-        const {rect, isSender, originMessage} = param;
-        const messageType = originMessage.body.type;
+        const {rect, isSender, message} = param;
+        const messageType = message.type;
         const actionList = [];
         // const interval = (new Date().getTime() - originMessage.timestamp) / 1000;
         // const canRecall = interval < 5 * 60;
-        if (messageType === IMConstant.MessageType.text) {
-            actionList.push({title: '复制', action: this._onCopy.bind(this, originMessage)});
+        if (messageType === delegate.config.messageType.text) {
+            actionList.push({title: '复制', action: this._onCopy.bind(this, message)});
             this.isGroup && !isSender && actionList.push({
                 title: '引用',
-                action: this._onQuote.bind(this, originMessage)
+                action: this._onQuote.bind(this, message)
             });
         }
-        actionList.push({title: '转发', action: this._onForward.bind(this, originMessage)});
+        actionList.push({title: '转发', action: this._onForward.bind(this, message)});
         // if (isSender && canRecall) {
         //     actionList.push({title: '撤回', action: this._onRecall.bind(this, originMessage)});
         // }
@@ -245,30 +237,30 @@ export default class extends React.PureComponent {
         this.setState({menuShow: false});
     };
 
-    _onCopy = (data) => {
-        const text = data.body.text;
+    _onCopy = (message) => {
+        const text = message.data.text;
         Clipboard.setString(text);
     };
 
-    _onForward = (data) => {
+    _onForward = (message) => {
         this.props.navigation.navigate({
             routeName: PageKeys.ChooseConversation,
             params: {
-                onSelectData: this._onSelectConversation.bind(this, data),
+                onSelectData: this._onSelectConversation.bind(this, message),
             },
         });
     };
 
-    _onRecall = (data) => {
+    _onRecall = (message) => {
         const {imId, chatType} = this.props;
         if (Model.app.env() !== Constant.environment.test178) {
-            global.standard.im.message.remove(data, chatType);
+            global.standard.im.message.remove(message, chatType);
         }
-        this._onExchangeMessage({text: '你撤回了一条消息', ext: {body: {message: data}}});
+        this._onExchangeMessage({text: '你撤回了一条消息', ext: {body: {message}}});
         const appName = global.standard.im.constant.cmd_message.IM_MESSAGE;
         ChatManager.sendCmd(imId, chatType, appName, {
             appName,
-            body: {message: data, type: global.standard.im.constant.type.recall_message}
+            body: {message, type: global.standard.im.constant.type.recall_message}
         });
     };
 
@@ -304,36 +296,15 @@ export default class extends React.PureComponent {
             });
     };
 
-    _insertSystemMessage = (cmdMessage) => {
-        const {ext: {body}, to, timestamp, localTime, text} = cmdMessage;
-        const message = {
-            imId: body.groupId,
-            chatType: this.props.chatType,
-            ext: {
-                isSystem: true,
-                [global.standard.im.message.constant.inner_id]: guid(),
-            },
-            from: to,
-            localTime,
-            status: IMConstant.MessageStatus.succeed,
-            timestamp,
-            to: this.props.imId,
-            body: {type: IMConstant.MessageType.text, text},
-            messageId: cmdMessage.messageId,
-        };
-        this._insertMessageToList(message);
-        this._markAllRead();
-    };
-
     _onQuote = (item) => {
         this.bottomBar.changeInputText(item.from, item.data.text);
     };
 
-    _onSelectConversation = (data, conversations) => {
+    _onSelectConversation = (message, conversations) => {
         this._onSendMessage(
             conversations[0].imId,
             conversations[0].chatType,
-            {type: data.type, body: data.body}
+            {type: message.type, body: message.data}
         );
     };
 

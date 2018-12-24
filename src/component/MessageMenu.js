@@ -53,7 +53,7 @@ export default class extends React.PureComponent {
                 <TouchableWithoutFeedback onPress={this._onPress.bind(this, action)}>
                     <View style={styles.btnContainer}>
                         <Text style={styles.btnTitle}>
-                            {item.title}
+                            {title}
                         </Text>
                     </View>
                 </TouchableWithoutFeedback>

@@ -109,8 +109,8 @@ export default class extends React.PureComponent {
     };
 
     _onFinish = (selectedTreeNodes) => {
-        const selectedIds = selectedTreeNodes.map(treeNode => treeNode.getInfo().imId);
-        this.props.onSelectData && this.props.onSelectData(selectedIds);
+        const selectedInfos = selectedTreeNodes.map(treeNode => treeNode.getInfo());
+        this.props.onSelectData && this.props.onSelectData(selectedInfos);
     };
 
     _clickChangeMulti = (status) => {

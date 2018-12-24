@@ -358,7 +358,7 @@ export default class extends React.PureComponent {
     };
 
     _onTransferOwner = (newOwner) => {
-        delegate.model.Group.changeOwner(group, newOwner.userId)
+        delegate.model.Group.changeOwner(this.props.imId, newOwner.userId)
             .then(({members, owner}) => {
                 Toast.show('转交成功');
                 this.setState({groupMembers: [owner, ...members], groupOwner: owner});
