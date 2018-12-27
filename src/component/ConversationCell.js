@@ -25,11 +25,11 @@ export default class extends React.PureComponent {
         this.events = [
             [Constant.ReceiveMessageEvent, this._onMessageReceive],
             [Constant.SendMessageEvent, this._onMessageSend],
-            [Constant.ConversationUpdateEvent, this._refresh],
-            [Constant.UnreadMessageCountChangeEvent, this._onUnreadCountChange],
+            [Constant.ConversationEvent, this._refresh],
+            [Constant.UnreadCountEvent, this._onUnreadCountChange],
         ];
         if (chatType === Constant.ChatType.Group) {
-            this.events.push([Constant.GroupUpdateEvent, this._refresh]);
+            this.events.push([Constant.GroupEvent, this._refresh]);
         }
         this.state = {
             ...this._stateWithProps(imId),
@@ -189,7 +189,9 @@ export default class extends React.PureComponent {
         );
     };
 
-    _onUnreadCountChange = (count) => {
+    _onUnreadCountChange = () => {
+        const conversation = delegate.model.Conversation.getOne(this.props.imId, true);
+        const count = conversation.unreadMessagesCount;
         this.setState({
             unreadMessagesCount: count,
         });

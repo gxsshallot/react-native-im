@@ -22,14 +22,14 @@ export default class extends React.PureComponent {
     componentDidMount() {
         this._refresh();
         this.listenListUpdate = Listener.registerWithSubEvent(
-            [Constant.BaseEvent, Constant.ConversationUpdateEvent],
+            [Constant.BaseEvent, Constant.ConversationEvent],
             this._refresh
         );
     }
 
     componentWillUnmount() {
         Listener.unregister(
-            [Constant.BaseEvent, Constant.ConversationUpdateEvent],
+            [Constant.BaseEvent, Constant.ConversationEvent],
             this.listenListUpdate
         );
     }

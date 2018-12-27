@@ -3,15 +3,19 @@ import * as IMStandard from '../../src';
 
 export default function () {
     // TODO loadList
-    IMStandard.Delegate.im.conversation.loadItem = (imId, chatType, autoCreate) => {
-        return ChatManager.getConversation(imId, chatType, autoCreate)
-            .then(() => ({
-                imId: imId,
-                chatType: chatType,
-            }));
+    IMStandard.Delegate.im.conversation.loadItem = (imId, chatType) => {
+        return ChatManager.getConversation(imId, chatType, false)
+            .then((result) => {
+                return {
+                    ...result,
+                    imId: result.conversationId,
+                    chatType: result.type,
+                };
+            });
     };
-    // TODO addToList
-    // TODO removeFromList
+    IMStandard.Delegate.im.conversation.addOne = (imId, chatType) => {
+        return ChatManager.getConversation(imId, chatType, true);
+    };
     IMStandard.Delegate.im.conversation.deleteOne = (imId) => {
         return ChatManager.deleteConversation(imId);
     };

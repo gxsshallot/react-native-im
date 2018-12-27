@@ -5,59 +5,74 @@ import * as Constant from '../constant';
 import { simpleExport } from '../util'
 import delegate from '../delegate';
 
-const types = {
-    list: 'GroupList',
-};
+const rootNode = {};
 
-const rootNode = {
-    [types.list]: {},
-};
+/**
+ * 群组模块名称。
+ */
+export const name = 'im-group';
 
-export const name = 'im.group';
-
+/**
+ * 初始化模块。
+ * @param {boolean} forceUpdate 是否强制重载群组列表
+ */
 export function init(forceUpdate) {
-    return AsyncStorage.get(keys(types.list), Constant.StoragePart)
-        .then((result) => {
-            if (result) {
-                rootNode[types.list] = result;
-            }
+    return AsyncStorage.getKeys(keys(), Constant.StoragePart)
+        .then((items) => {
+            Object.values(items).forEach((item) => {
+                rootNode[item.groupId] = item;
+            });
             if (forceUpdate) {
                 return load();
             }
         });
 }
 
-export function uninit() {
-    rootNode[types.list] = {};
+/**
+ * 反初始化模块。
+ * @param {boolean} forceClear 是否清除持久化存储
+ */
+export function uninit(forceClear) {
+    const keys = Object.keys(rootNode);
+    keys.forEach(groupId => delete rootNode[groupId]);
+    if (forceClear) {
+        const promises = keys.map(groupId => deleteData(groupId));
+        return Promise.all(promises);
+    } else {
+        return Promise.resolve();
+    }
 }
 
-// 重新加载群列表
+/**
+ * 重新加载群组列表。
+ */
 export function load() {
     return delegate.im.group.loadList()
         .then((result) => {
-            rootNode[types.list] = result
-                .reduce((prv, cur) => {
-                    prv[cur.groupId] = cur;
-                    return prv;
-                }, {});
-            writeData(types.list);
-            Listener.trigger([Constant.BaseEvent, Constant.GroupUpdateEvent]);
+            const promises = result.map((item) => {
+                rootNode[item.groupId] = groupHandle(item);
+                return writeData(item.groupId);
+            });
+            return Promise.all(promises);
         })
         .catch((err) => {
             Toast.show('加载群列表失败');
         });
 }
 
-// 加载群详情
-export function loadDetail(groupId) {
+/**
+ * 加载群组详情。
+ * @param {string} groupId 群组ID
+ */
+export function loadItem(groupId) {
     return delegate.im.group.loadItem(groupId)
         .then((result) => {
             if (result) {
-                rootNode[types.list][result.groupId] = result;
-                writeData(types.list);
-                Listener.trigger([Constant.BaseEvent, Constant.GroupUpdateEvent, result.groupId]);
+                rootNode[result.groupId] = groupHandle(result);
+                Listener.trigger([Constant.BaseEvent, Constant.GroupEvent, result.groupId]);
+                return writeData(groupId);
             } else {
-                deleteOne(groupId);
+                return deleteOne(groupId);
             }
         })
         .catch((err) => {
@@ -65,28 +80,41 @@ export function loadDetail(groupId) {
         });
 }
 
-// 获取群列表
+/**
+ * 获取群组列表。
+ */
 export function get() {
-    const items = Object.values(rootNode[types.list]);
+    const items = Object.values(rootNode);
     return simpleExport(items);
 }
 
-// 根据groupId查找指定群
+/**
+ * 查找指定群组。
+ * @param {string} groupId 群组ID
+ * @param {boolean} enableExport 是否导出副本，默认为true，在模块内部使用一般不导出副本
+ */
 export function findByGroupId(groupId, enableExport = true) {
     if (enableExport) {
-        return simpleExport(rootNode[types.list][groupId]);
+        return simpleExport(rootNode[groupId]);
     } else {
-        return rootNode[types.list][groupId];
+        return rootNode[groupId];
     }
 }
 
-// 获取群主用户信息
+/**
+ * 获取群主用户信息。
+ * @param {string} groupId 群组ID
+ */
 export function getOwner(groupId) {
     const group = findByGroupId(groupId, false);
     return group ? group.owner : undefined;
 }
 
-// 获取群成员列表，hasOwner表示是否包含群主
+/**
+ * 获取群组成员列表。
+ * @param {string} groupId 群组ID
+ * @param {boolean} hasOwner 是否包含群主
+ */
 export function getMembers(groupId, hasOwner = true) {
     const group = findByGroupId(groupId, false);
     if (!group) {
@@ -96,13 +124,15 @@ export function getMembers(groupId, hasOwner = true) {
     if (hasOwner && group.owner) {
         members.push(group.owner);
     }
-    if (group.members) {
-        group.members.forEach(item => members.push(item));
-    }
+    group.members.forEach(item => members.push(item));
     return members;
 }
 
-// 获取群名称，控制是否自动连接
+/**
+ * 获取群组名称。
+ * @param {string} groupId 群组ID
+ * @param {boolean} autoConjWhenEmpty 是否自动连接群组成员名称
+ */
 export function getName(groupId, autoConjWhenEmpty = true) {
     const group = findByGroupId(groupId, false);
     if (!group) {
@@ -124,82 +154,112 @@ export function getName(groupId, autoConjWhenEmpty = true) {
     }
 }
 
-// 获取群头像
+/**
+ * 获取群组头像。
+ * @param {string} groupId 群组ID
+ */
 export function getAvatar(groupId) {
     const group = findByGroupId(groupId, false);
     return group ? group.avatar : undefined;
 }
 
-// 创建群聊
-export function createOne(members) {
-    return delegate.im.group.createOne(members)
+/**
+ * 创建一个群组。
+ * @param {string[]} memberUserIds 成员ID列表
+ */
+export function createOne(memberUserIds) {
+    return delegate.im.group.createOne(memberUserIds)
         .then((result) => {
+            const promises = [];
             if (!findByGroupId(result.groupId, false)) {
-                rootNode[types.list][result.groupId] = result;
-                writeData(types.list);
+                rootNode[result.groupId] = result;
+                promises.push(Promise.resolve(result));
+                promises.push(writeData(result.groupId));
+            } else {
+                const group = findByGroupId(result.groupId, true);
+                promises.push(Promise.resolve(group));
             }
-            return result;
-        });
+            return Promise.all(promises);
+        })
+        .then(([result]) => result);
 }
 
-// 解散群聊
+/**
+ * 解散一个群组。
+ * @param {string} groupId 群组ID
+ */
 export function destroyOne(groupId) {
     return delegate.im.group.destroyOne(groupId)
-        .then(() => {
-            deleteOne(groupId);
-            delegate.model.Conversation.deleteOne(groupId);
-        });
+        .then(() => deleteOne(groupId))
+        .then(() => delegate.model.Conversation.deleteOne(groupId));
 }
 
-// 退出群聊
+/**
+ * 退出一个群组。
+ * @param {string} groupId 群组ID
+ */
 export function quitOne(groupId) {
     return delegate.im.group.quitOne(groupId)
-        .then(() => {
-            deleteOne(groupId);
-            delegate.model.Conversation.deleteOne(groupId);
-        })
+        .then(() => deleteOne(groupId))
+        .then(() => delegate.model.Conversation.deleteOne(groupId));
 }
 
-// 添加群成员
-export function addMembers(groupId, members) {
-    return delegate.im.group.addMembers(groupId, members)
+/**
+ * 添加群组成员。
+ * @param {string} groupId 群组ID
+ * @param {string[]} memberUserIds 待添加的成员ID列表
+ */
+export function addMembers(groupId, memberUserIds) {
+    return delegate.im.group.addMembers(groupId, memberUserIds)
         .then(() => {
-            const newMembers = [...rootNode[types.list][groupId].members, ...members];
-            changeGroupInfo(groupId, {members: Array.from(new Set(newMembers))});
-            return newMembers;
+            const members = [...rootNode[groupId].members, ...memberUserIds];
+            return changeGroupInfo(groupId, {members}, members);
         });
 }
 
-// 删除群成员
-export function removeMembers(groupId, members) {
-    return delegate.im.group.removeMembers(groupId, members)
+/**
+ * 删除群组成员。
+ * @param {string} groupId 群组ID
+ * @param {string[]} memberUserIds 待删除的成员ID列表
+ */
+export function removeMembers(groupId, memberUserIds) {
+    return delegate.im.group.removeMembers(groupId, memberUserIds)
         .then(() => {
-            const oldMembers = rootNode[types.list][groupId].members;
-            const newMembers = oldMembers.filter(id => members.indexOf(id) < 0);
-            changeGroupInfo(groupId, {members: newMembers});
-            return newMembers;
+            const oldMembers = rootNode[groupId].members;
+            const newMembers = oldMembers.filter(id => memberUserIds.indexOf(id) < 0);
+            return changeGroupInfo(groupId, {members: newMembers}, newMembers);
         });
 }
 
-// 更改群名称
+/**
+ * 更改群组名称。
+ * @param {string} groupId 群组ID
+ * @param {string} newName 新的群组名称
+ */
 export function changeName(groupId, newName) {
     return delegate.im.group.changeName(groupId, newName)
         .then(() => {
-            changeGroupInfo(groupId, {name: newName});
-            return newName;
+            return changeGroupInfo(groupId, {name: newName}, newName);
         });
 }
 
-// 更改群头像
+/**
+ * 更改群组头像。
+ * @param {string} groupId 群组ID
+ * @param {string} newAvatarUrl 新头像的URL地址
+ */
 export function changeAvatar(groupId, newAvatarUrl) {
     return delegate.im.group.changeAvatar(groupId, newAvatarUrl)
         .then(() => {
-            changeGroupInfo(groupId, {avatar: newAvatarUrl});
-            return newAvatarUrl;
+            return changeGroupInfo(groupId, {avatar: newAvatarUrl}, newAvatarUrl);
         });
 }
 
-// 转交群主
+/**
+ * 转交群主。
+ * @param {string} groupId 群组ID
+ * @param {string} newOwnerId 新群主ID
+ */
 export function changeOwner(groupId, newOwnerId) {
     return delegate.im.group.changeOwner(groupId, newOwnerId)
         .then(() => {
@@ -209,83 +269,57 @@ export function changeOwner(groupId, newOwnerId) {
                 owner: newOwnerId,
                 members: newMembers,
             };
-            changeGroupInfo(groupId, result);
-            return result;
+            return changeGroupInfo(groupId, result, result);
         });
 }
 
-export function onUserJoin(groupId, invitorId, userJoinedIds, localTime, timestamp) {
-    const invitor = getOperatorName(invitorId);
-    const users = userJoinedIds
-        .map(userId => getOperatorName(userId))
-        .join(',');
-    const text = invitor + '邀请' + users + '加入了群聊';
-    return Promise.all(groupUpdateOperation(groupId, text, localTime, timestamp));
-}
-
-export function onUserLeave(groupId, userLeavedIds, localTime, timestamp) {
-    const users = userLeavedIds
-        .map(userId => getOperatorName(userId))
-        .join(',');
-    const text = users + '退出了群聊';
-    return Promise.all(groupUpdateOperation(groupId, text, localTime, timestamp));
-}
-
-export function onUpdateName(groupId, updatorId, newGroupName, localTime, timestamp) {
-    const updator = getOperatorName(updatorId);
-    const text = updator + '修改群名称为' + newGroupName;
-    return Promise.all(groupUpdateOperation(groupId, text, localTime, timestamp));
-}
-
-export function onUpdateOwner(groupId, newOwnerId, localTime, timestamp) {
-    const user = getOperatorName(newOwnerId);
-    const text = '群主已经更换为' + user;
-    return Promise.all(groupUpdateOperation(groupId, text, localTime, timestamp));
-}
-
-export function onDelete(groupId, localTime, timestamp) {
-    const text = '群主解散了群聊';
-    const deletePromise = delegate.model.Conversation.deleteOne(groupId);
-    return Promise.all([...groupUpdateOperation(groupId, text, localTime, timestamp), deletePromise]);
-}
-
-export function getOperatorName(userId) {
-    const isMe = userId === delegate.user.getMine().userId;
-    return isMe ? '你' : delegate.user.getUser(userId).name;
-}
-
-function groupUpdateOperation(groupId, text, localTime, timestamp) {
-    const loadPromise = loadDetail(groupId);
-    const systemPromise = delegate.model.Conversation.insertSystemMessage(groupId, Constant.ChatType.Group, text, localTime, timestamp);
-    return [loadPromise, systemPromise];
-}
-
-// 更新群信息
-function changeGroupInfo(groupId, newGroupInfo) {
-    rootNode[types.list][groupId] = {
-        ...rootNode[types.list][groupId],
+/**
+ * 更新群组信息。
+ * @param {string} groupId 群组ID
+ * @param {object} newGroupInfo 新的群组信息对象
+ * @param {object} promiseResult Promise的返回结果
+ */
+function changeGroupInfo(groupId, newGroupInfo, promiseResult) {
+    rootNode[groupId] = {
+        ...rootNode[groupId],
         ...newGroupInfo,
     };
-    writeData(types.list);
-    Listener.trigger([Constant.BaseEvent, Constant.GroupUpdateEvent, groupId]);
+    Listener.trigger([Constant.BaseEvent, Constant.GroupEvent, groupId]);
+    return writeData(groupId)
+        .then(() => promiseResult);
 }
 
-// 在本地删除群聊
+/**
+ * 在本地删除群组。
+ * @param {string} groupId 群组ID
+ */
 function deleteOne(groupId) {
     if (groupId) {
-        delete rootNode[types.list][groupId];
+        delete rootNode[groupId];
     }
-    writeData(types.list);
-    Listener.trigger([Constant.BaseEvent, Constant.GroupUpdateEvent]);
+    Listener.trigger([Constant.BaseEvent, Constant.GroupEvent, groupId]);
+    return deleteData(groupId);
 }
 
-function writeData(type, data) {
-    if (data) {
-        rootNode[type] = data;
-    }
-    AsyncStorage.set(keys(type), rootNode[type], Constant.StoragePart);
+/**
+ * 处理群组信息，保证数据有效性。
+ * @param {object} group 群组信息
+ */
+function groupHandle(group) {
+    return {
+        ...group,
+        members: group.members || [],
+    };
 }
 
-function keys(type) {
-    return [name, type];
+function writeData(groupId) {
+    return AsyncStorage.set(keys(groupId), rootNode[groupId], Constant.StoragePart);
+}
+
+function deleteData(groupId) {
+    return AsyncStorage.remove(keys(groupId), Constant.StoragePart);
+}
+
+function keys(groupId) {
+    return [name, groupId].filter(i => i);
 }

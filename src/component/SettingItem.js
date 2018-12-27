@@ -36,8 +36,8 @@ export default class extends React.PureComponent {
     };
 
     _renderLine = () => {
-        const {title, type} = this.props;
-        const hasArrow = type !== Constant.SettingItemType.Switch;
+        const {title, type, onPressLine} = this.props;
+        const hasArrow = type !== Constant.SettingItemType.Switch && onPressLine;
         return (
             <View style={styles.container}>
                 <View style={styles.line}>
@@ -103,9 +103,10 @@ const styles = StyleSheet.create({
         color: '#333',
     },
     subtitle: {
+        flex: 1,
         fontSize: 14,
         color: '#aaaaaa',
-        marginLeft: 12,
+        marginHorizontal: 12,
         textAlign: 'right',
     },
     image: {

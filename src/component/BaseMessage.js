@@ -17,7 +17,7 @@ export default class extends React.PureComponent {
 
     constructor(props) {
         super(props);
-        this.updateEvent = [Constant.BaseEvent, Constant.ConversationUpdateEvent, props.imId];
+        this.updateEvent = [Constant.BaseEvent, Constant.ConversationEvent, props.imId];
         this.state = {
             showMembersName: this._showMembersName(),
         };
@@ -150,7 +150,7 @@ export default class extends React.PureComponent {
 
     _resend = () => {
         const {imId, chatType, message} = this.props;
-        delegate.model.Conversation.sendMessage(imId, chatType, message, {})
+        delegate.model.Message.sendMessage(imId, chatType, message, {})
             .then(() => {
                 Toast.show('发送成功');
             });

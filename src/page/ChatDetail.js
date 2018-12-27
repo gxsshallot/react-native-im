@@ -196,8 +196,8 @@ export default class extends React.PureComponent {
     _onSendMessage = (imId, chatType, {type, body}) => {
         const isCurrent = this.props.imId === imId;
         const message = this._generateMessage(type, body);
-        delegate.model.Conversation.sendMessage(imId, chatType, message, {})
-            .then((newMessage) => {
+        delegate.model.Message.sendMessage(imId, chatType, message, {})
+            .then(() => {
                 if (isCurrent) {
                     this._markAllRead();
                 } else {

@@ -1,3 +1,7 @@
 export default function (data) {
-    return JSON.parse(JSON.stringify(data));
+    if (data) {
+        return JSON.parse(JSON.stringify(data));
+    } else {
+        return null;
+    }
 }

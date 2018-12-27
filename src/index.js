@@ -52,7 +52,9 @@ function setup_common_model() {
     Delegate.model.Action = Model.Action;
     Delegate.model.Conversation = Model.Conversation;
     Delegate.model.Emoji = Model.Emoji;
+    Delegate.model.External = Model.External;
     Delegate.model.Group = Model.Group;
+    Delegate.model.Message = Model.Message;
 }
 
 export {

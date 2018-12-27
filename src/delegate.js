@@ -14,8 +14,7 @@ export default {
         conversation: {
             loadList: unset('im.conversation.loadList'),
             loadItem: unset('im.conversation.loadItem'),
-            addToList: unset('im.conversation.addToList'),
-            removeFromList: unset('im.conversation.removeFromList'),
+            addOne: unset('im.conversation.addOne'),
             deleteOne: unset('im.conversation.deleteOne'),
             updateConfig: unset('im.conversation.updateConfig'),
             markAllRead: unset('im.conversation.markAllRead'),
@@ -58,6 +57,8 @@ export default {
             voice: null,
             system: null,
         },
+    },
+    option: {
     },
 };
 

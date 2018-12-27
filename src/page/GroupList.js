@@ -25,7 +25,7 @@ export default class extends React.PureComponent {
 
     componentDidMount() {
         this.listenGroupLoaded = Listener.registerWithSubEvent(
-            [Constant.BaseEvent, Constant.GroupUpdateEvent],
+            [Constant.BaseEvent, Constant.GroupEvent],
             this._refresh
         );
         delegate.model.Group.load()
@@ -34,7 +34,7 @@ export default class extends React.PureComponent {
 
     componentWillUnmount() {
         Listener.unregister(
-            [Constant.BaseEvent, Constant.GroupUpdateEvent],
+            [Constant.BaseEvent, Constant.GroupEvent],
             this.listenGroupLoaded
         );
     }
