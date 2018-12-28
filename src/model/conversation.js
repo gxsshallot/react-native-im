@@ -356,9 +356,10 @@ function writeData(imId) {
 }
 
 function deleteData(imId) {
-    return AsyncStorage.remove(keys(key), Constant.StoragePart);
+    return AsyncStorage.remove(keys(imId), Constant.StoragePart);
 }
 
 function keys(imId) {
-    return [name, imId].filter(i => i);
+    const myUserId = delegate.user.getMine().userId;
+    return [myUserId, name, imId].filter(i => i);
 }

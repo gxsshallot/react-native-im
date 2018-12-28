@@ -210,7 +210,8 @@ export default class extends React.PureComponent {
     };
 
     _initHistory = () => {
-        return AsyncStorage.get([Constant.StoragePart, this.props.historyKey])
+        const myUserId = delegate.user.getMine().userId;
+        return AsyncStorage.get([myUserId, this.props.historyKey], Constant.StoragePart)
             .then((result) => {
                 this.setState({searchHistory: result || []});
             })
@@ -229,10 +230,11 @@ export default class extends React.PureComponent {
                 }
             }
             return history;
-        }
+        };
         if (this.props.historyKey) {
+            const myUserId = delegate.user.getMine().userId;
             const history = getNewHistory();
-            AsyncStorage.set([Constant.StoragePart, this.props.historyKey], history)
+            AsyncStorage.set([myUserId, this.props.historyKey], history, Constant.StoragePart)
                 .then(() => {
                     this.setState({searchHistory: history});
                 });
@@ -244,7 +246,8 @@ export default class extends React.PureComponent {
 
     _clearHistory = () => {
         if (this.props.historyKey) {
-            AsyncStorage.set([Constant.StoragePart, this.props.historyKey], [])
+            const myUserId = delegate.user.getMine().userId;
+            AsyncStorage.set([myUserId, this.props.historyKey], [], Constant.StoragePart)
                 .then(() => {
                     this.setState({searchHistory: []});
                 });

@@ -321,5 +321,6 @@ function deleteData(groupId) {
 }
 
 function keys(groupId) {
-    return [name, groupId].filter(i => i);
+    const myUserId = delegate.user.getMine().userId;
+    return [myUserId, name, groupId].filter(i => i);
 }
