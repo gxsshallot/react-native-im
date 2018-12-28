@@ -1,3 +1,3 @@
-export default (params) => {
+export default (_) => {
     return '[视频]';
 };

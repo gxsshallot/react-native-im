@@ -1,6 +1,5 @@
 import React from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View, Dimensions } from 'react-native';
-import PropTypes from 'prop-types';
 import { getSafeAreaInset } from 'react-native-pure-navigation-bar';
 import * as Constant from '../constant';
 import delegate from '../delegate';

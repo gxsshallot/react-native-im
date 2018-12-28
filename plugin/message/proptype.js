@@ -9,7 +9,7 @@ export function DisplayProps(messageProps) {
         enableBubble: PropTypes.func,
         style: PropTypes.any,
     };
-};
+}
 
 export const TextMessage = {
     ...IMStandard.Types.BasicMessage,

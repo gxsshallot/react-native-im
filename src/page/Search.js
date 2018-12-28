@@ -69,7 +69,7 @@ export default class extends React.PureComponent {
                 searchText: searchText,
                 maxSectionItemLength: 0,
                 doSearch: title === '通讯录' ? this._searchFromContacts : this._searchFromGroup,
-            })
+            });
         };
         return (
             <delegate.component.SearchList
@@ -178,7 +178,7 @@ export default class extends React.PureComponent {
         }
         return (
             <delegate.component.ListCell
-                avatar={{imId: item.groupId, chatType: IMConstant.ChatType.group}}
+                avatar={{imId: item.groupId, chatType: Constant.ChatType.Group}}
                 title={title}
                 subTitle={subTitle}
             />
@@ -217,7 +217,7 @@ export default class extends React.PureComponent {
         }
         return (
             <delegate.component.ListCell
-                avatar={{imId: item.userId, chatType: IMConstant.ChatType.single}}
+                avatar={{imId: item.userId, chatType: Constant.ChatType.Single}}
                 title={title}
                 subTitle={subTitle}
             />

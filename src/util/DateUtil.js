@@ -1,7 +1,6 @@
 import DateFormat from 'dateformat';
 
 const times = ['凌晨', '早上', '下午', '晚上'];
-const todayStr = '今天';
 const yesterdayStr = '昨天';
 
 export function showDate(timestamp, alwaysShowTime) {

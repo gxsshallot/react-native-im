@@ -1,6 +1,5 @@
 import React from 'react';
 import { StyleSheet, Text, View, FlatList, SafeAreaView } from 'react-native';
-import PropTypes from 'prop-types';
 import NaviBar, { forceInset } from 'react-native-pure-navigation-bar';
 import Listener from 'react-native-general-listener';
 import * as PageKeys from '../pagekey';
@@ -115,7 +114,7 @@ export default class extends React.PureComponent {
                 doSearch: this._search,
                 renderItem: this._renderSearchItem,
             },
-        })
+        });
     };
 
     _refresh = () => {

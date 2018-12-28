@@ -51,7 +51,6 @@ export default class extends React.PureComponent {
 
     render() {
         const {imId, chatType, separatorLeft} = this.props;
-        const {latestMessage, top} = this.state;
         const name = delegate.model.Conversation.getName(imId);
         const content = [];
         this.state.atMe && content.push(this._renderAtMeText());
@@ -150,7 +149,7 @@ export default class extends React.PureComponent {
         const style = {
             backgroundColor: delegate.style.separatorLineColor,
             marginLeft: separatorLeft,
-        }
+        };
         return <View style={[styles.separator, style]} />;
     };
 

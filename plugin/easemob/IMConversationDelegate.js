@@ -3,8 +3,8 @@ import * as IMStandard from '../../src';
 
 export default function () {
     // TODO loadList
-    IMStandard.Delegate.im.conversation.loadItem = (imId, chatType) => {
-        return ChatManager.getConversation(imId, chatType, false)
+    IMStandard.Delegate.im.conversation.loadItem = (imId, chatType, autoCreate) => {
+        return ChatManager.getConversation(imId, chatType, autoCreate)
             .then((result) => {
                 return {
                     ...result,
@@ -12,9 +12,6 @@ export default function () {
                     chatType: result.type,
                 };
             });
-    };
-    IMStandard.Delegate.im.conversation.addOne = (imId, chatType) => {
-        return ChatManager.getConversation(imId, chatType, true);
     };
     IMStandard.Delegate.im.conversation.deleteOne = (imId) => {
         return ChatManager.deleteConversation(imId);

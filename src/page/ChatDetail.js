@@ -1,6 +1,5 @@
 import React from 'react';
 import { Clipboard, Keyboard, SafeAreaView, StyleSheet, View, TouchableWithoutFeedback } from 'react-native';
-import PropTypes from 'prop-types';
 import NaviBar, { forceInset } from 'react-native-pure-navigation-bar';
 import * as PageKeys from '../pagekey';
 import { ChatManager, IMConstant } from 'react-native-im-easemob';
@@ -151,7 +150,7 @@ export default class extends React.PureComponent {
         });
     };
 
-    _refresh = (oldData, pageSize) => {
+    _refresh = (oldData, _) => {
         const isFirst = !oldData || oldData.length <= 0;
         const lastMessageId = isFirst ? undefined : this.lastMessageId;
         const loadPromise = delegate.im.conversation.loadMessage({

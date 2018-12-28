@@ -18,7 +18,7 @@ export function sendMessage(imId, chatType, message, ext = {}, isSystem = false)
     if (delegate.model.Conversation.getOne(imId, false)) {
         promise = Promise.resolve();
     } else {
-        promise = delegate.model.Conversation.addOne(imId, chatType);
+        promise = delegate.model.Conversation.loadItem(imId, chatType);
     }
     return promise
         .then(() => insertTimeMessage(imId, chatType, message))

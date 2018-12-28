@@ -1,5 +1,5 @@
 import React from 'react';
-import { Image, StyleSheet, View, Platform, InteractionManager } from 'react-native';
+import { Image, StyleSheet, View, Platform } from 'react-native';
 import RNFS from 'react-native-fs';
 import { showPhotoBrowserPage } from 'react-native-photo-browse';
 import { DisplayProps, ImageMessage } from '../proptype';

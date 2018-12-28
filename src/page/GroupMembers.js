@@ -1,8 +1,7 @@
 import React from 'react';
-import { LayoutAnimation, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { LayoutAnimation, StyleSheet, Text, View } from 'react-native';
 import PropTypes from 'prop-types';
 import NaviBar from 'react-native-pure-navigation-bar';
-import Toast from 'react-native-root-toast';
 import SearchBar from 'react-native-general-searchbar';
 import ActionSheet from 'react-native-general-actionsheet';
 import * as PageKeys from '../pagekey';

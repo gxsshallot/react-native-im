@@ -2,7 +2,7 @@ import Toast from 'react-native-root-toast';
 import AsyncStorage from 'react-native-general-storage';
 import Listener from 'react-native-general-listener';
 import * as Constant from '../constant';
-import { simpleExport } from '../util'
+import { simpleExport } from '../util';
 import delegate from '../delegate';
 
 const rootNode = {};
@@ -55,7 +55,7 @@ export function load() {
             });
             return Promise.all(promises);
         })
-        .catch((err) => {
+        .catch(() => {
             Toast.show('加载群列表失败');
         });
 }
@@ -75,7 +75,7 @@ export function loadItem(groupId) {
                 return deleteOne(groupId);
             }
         })
-        .catch((err) => {
+        .catch(() => {
             Toast.show('加载群详情失败');
         });
 }
@@ -264,7 +264,7 @@ export function changeOwner(groupId, newOwnerId) {
     return delegate.im.group.changeOwner(groupId, newOwnerId)
         .then(() => {
             const newMembers = getMembers(groupId, true)
-                .filter(id => id !== newOwnerId)
+                .filter(id => id !== newOwnerId);
             const result = {
                 owner: newOwnerId,
                 members: newMembers,

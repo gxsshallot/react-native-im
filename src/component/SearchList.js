@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import NaviBar from 'react-native-pure-navigation-bar';
 import SearchBar from 'react-native-general-searchbar';
 import AsyncStorage from 'react-native-general-storage';
-import Listener from 'react-native-general-listener';
 import { KeyboardAwareFlatList, KeyboardAwareSectionList } from 'react-native-keyboard-aware-scroll-view';
 import * as Constant from '../constant';
 import delegate from '../delegate';
@@ -79,7 +78,7 @@ export default class extends React.PureComponent {
     }
 
     _renderSearchBar = () => {
-        const {searchHint, searchOnTextChange} = this.props;
+        const {searchHint} = this.props;
         return (
             <SearchBar
                 style={searchBarStyle}
@@ -138,8 +137,8 @@ export default class extends React.PureComponent {
                 onSectionFooterClick && onSectionFooterClick({
                     title,
                     searchText: this.state.searchText,
-                })
-            }
+                });
+            };
             return (
                 <TouchableHighlight onPress={onPress}>
                     <View style={styles.footer}>
@@ -190,7 +189,7 @@ export default class extends React.PureComponent {
         const style = {
             backgroundColor: delegate.style.separatorLineColor,
         };
-        return <View style={[styles.separator, style]} />
+        return <View style={[styles.separator, style]} />;
     };
 
     _clickHistory = (searchText) => {

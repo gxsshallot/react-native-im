@@ -1,7 +1,8 @@
+import Toast from 'react-native-root-toast';
 import AsyncStorage from 'react-native-general-storage';
 import Listener from 'react-native-general-listener';
 import * as Constant from '../constant';
-import { simpleExport, guid } from '../util';
+import { simpleExport } from '../util';
 import delegate from '../delegate';
 
 const rootNode = {};
@@ -62,7 +63,7 @@ export function load() {
                     ...item,
                     config: {
                         ...defaultConfig,
-                        ...(item.config || {}),
+                        ...item.config || {},
                     },
                     unreadMessagesCount: item.unreadMessagesCount || 0,
                 };
@@ -70,7 +71,7 @@ export function load() {
             });
             return Promise.all(promises);
         })
-        .catch((err) => {
+        .catch(() => {
             Toast.show('加载会话列表失败');
         });
 }
@@ -81,35 +82,41 @@ export function load() {
  * @param {number} chatType 会话类型
  */
 export function loadItem(imId, chatType) {
-    return delegate.im.conversation.loadItem(imId, chatType)
+    return delegate.im.conversation.loadItem(imId, chatType, true)
         .then((result) => {
+            const message = !result.latestMessage ? undefined : 
+                delegate.model.Action.match(
+                    Constant.Action.Parse,
+                    undefined,
+                    result.latestMessage,
+                    result.latestMessage,
+                );
+            result.latestMessage = message;
+            result.unreadMessagesCount = result.unreadMessagesCount || 0;
             if (!rootNode[imId]) {
-                rootNode[imId] = {
-                    ...result,
-                    unreadMessagesCount: result.unreadMessagesCount || 0,
-                }
+                rootNode[imId] = {...result};
             } else {
-                rootNode[imId].unreadMessagesCount = result.unreadMessagesCount || 0;
-                const message = !result.latestMessage ? undefined : 
-                    delegate.model.Action.match(
-                        Constant.Action.Parse,
-                        undefined,
-                        result.latestMessage,
-                        result.latestMessage,
-                    );
+                rootNode[imId].unreadMessagesCount = result.unreadMessagesCount;
                 if (rootNode[imId].latestMessage) {
-                    if (message) {
+                    if (result.latestMessage) {
                         const {localTime: l1} = rootNode[imId].latestMessage;
-                        const {localTime: l2} = message;
+                        const {localTime: l2} = result.latestMessage;
                         if (l1 < l2) {
-                            rootNode[imId].latestMessage = message;
+                            rootNode[imId].latestMessage = result.latestMessage;
                         }
                     }
                 } else {
-                    rootNode[imId].latestMessage = message;
+                    rootNode[imId].latestMessage = result.latestMessage;
                 }
             }
             return writeData(imId);
+        })
+        .then(() => {
+            const isGroup = chatType === Constant.ChatType.Group;
+            const group = isGroup ? delegate.model.Group.findByGroupId(imId) : null;
+            if (isGroup && !group) {
+                return delegate.model.Group.loadItem(imId);
+            }
         });
 }
 
@@ -229,7 +236,7 @@ export function updateMessage(imId, message) {
                 hasAtMe = true;
             } else {
                 const index = message.data.atMemberList
-                .indexOf(delegate.user.getMine().userId);
+                    .indexOf(delegate.user.getMine().userId);
                 hasAtMe = index >= 0;
             }
         }
@@ -260,34 +267,6 @@ export function deleteOne(imId) {
 }
 
 /**
- * 添加一个会话。
- * @param {string} imId 会话ID
- * @param {number} chatType 会话类型
- */
-export function addOne(imId, chatType) {
-    return delegate.im.conversation.addOne(imId, chatType)
-        .then(() => {
-            const isGroup = chatType === Constant.ChatType.Group;
-            const group = isGroup ? delegate.model.Group.findByGroupId(imId) : null;
-            // TODO 去掉加载群列表
-            if (isGroup && !group) {
-                return delegate.model.Group.load();
-            }
-        })
-        .then(() => {
-            rootNode[imId] = {
-                imId: imId,
-                chatType: chatType,
-                unreadMessagesCount: 0,
-                latestMessage: undefined,
-                config: {...defaultConfig},
-            };
-            Listener.trigger([Constant.BaseEvent, Constant.ConversationEvent, imId]);
-            return writeData(imId);
-        });
-}
-
-/**
  * 创建一个会话，根据members长度判断单聊或者群聊。
  * @param {string[]} members 成员的UserID列表
  */
@@ -300,14 +279,14 @@ export function createOne(members) {
         promise = delegate.model.Group.createOne(members)
             .then((result) => result.groupId);
     } else {
-        promise = delegate.im.conversation.addOne(members[0], Constant.ChatType.Single)
+        promise = delegate.im.conversation.loadItem(members[0], Constant.ChatType.Single, true)
             .then(() => members[0]);
     }
     return promise
         .then((imId) => {
             resultImId = imId;
             if (isGroup && !getOne(imId, false)) {
-                return addOne(imId, chatType);
+                return loadItem(imId, chatType);
             }
         })
         .then(() => ({imId: resultImId, chatType}));

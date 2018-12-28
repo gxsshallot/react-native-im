@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, FlatList, InteractionManager, StyleSheet } from 'react-native';
+import { FlatList, StyleSheet } from 'react-native';
 import PropTypes from 'prop-types';
 
 export default class extends React.PureComponent {

@@ -1,6 +1,5 @@
 import React from 'react';
 import { Alert, InteractionManager, ScrollView, StyleSheet, Text, TouchableHighlight, View } from 'react-native';
-import PropTypes from 'prop-types';
 import { StackActions } from 'react-navigation';
 import NaviBar, { getSafeAreaInset } from 'react-native-pure-navigation-bar';
 import Toast from 'react-native-root-toast';
@@ -39,7 +38,7 @@ export default class extends React.PureComponent {
         const style = {
             backgroundColor: delegate.style.viewBackgroundColor,
         };
-        const title = this.isGroup ? '群设置' : '聊天设置'
+        const title = this.isGroup ? '群设置' : '聊天设置';
         return (
             <View style={[styles.view, style]}>
                 <NaviBar title={title} />
@@ -233,7 +232,7 @@ export default class extends React.PureComponent {
     _clickTransferOwner = () => {
         const dataSource = this.state.groupMembers
             .filter(userId => userId !== delegate.user.getMine().userId)
-            .map(userId => delegate.user.getUser(userId))
+            .map(userId => delegate.user.getUser(userId));
         this.props.navigation.navigate({
             routeName: PageKeys.ChooseUser,
             params: {
@@ -243,7 +242,7 @@ export default class extends React.PureComponent {
                 onSelectData: this._onTransferOwnerAlert,
                 selectedIds: [],
             },
-        })
+        });
     };
     
     _clickGroupAvatar = () => {
@@ -288,7 +287,7 @@ export default class extends React.PureComponent {
                     this.setState({groupMembers: newMembers});
                     return newMembers;
                 })
-                .catch(error => {
+                .catch(() => {
                     Toast.show('添加成员失败');
                 });
         } else {
@@ -344,7 +343,6 @@ export default class extends React.PureComponent {
     };
 
     _onTransferOwnerAlert = (data) => {
-        const {groupMembers} = this.state;
         const newOwner = delegate.user.getUser(data[0]);
         Alert.alert('转交群主给:', newOwner.name,
             [

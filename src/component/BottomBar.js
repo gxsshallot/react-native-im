@@ -295,7 +295,7 @@ export default class extends React.PureComponent {
     _onKeyPress = (event) => {
         const {nativeEvent: {key}} = event;
         if (key === '@' && this.props.isGroup) {
-            const members = delegate.model.Group.getMembers(props.imId);
+            const members = delegate.model.Group.getMembers(this.props.imId);
             const dataSource = members
                 .filter(userId => userId !== delegate.user.getMine().userId)
                 .map(userId => delegate.user.getUser(userId));
@@ -390,8 +390,8 @@ export default class extends React.PureComponent {
     };
 
     changeInputText = (imId, text) => {
-        const user = Model.organization.alluser.findByImId(imId);
-        const newText = '@' + user.name + ' : "' + text + '"\n' + '-----\n' + Model.userinfo.part.name() + ': ';
+        const user = delegate.user.getUser(imId);
+        const newText = '@' + user.name + ' : "' + text + '"\n' + '-----\n' + delegate.user.getMine().name + ': ';
         this.setState({
             message: newText,
         });

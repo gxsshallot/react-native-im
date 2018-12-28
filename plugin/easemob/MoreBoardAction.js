@@ -19,6 +19,6 @@ export default function () {
         );
     });
     // 默认值设置
-    IMStandard.Delegate.component.MoreBoard.defaultProps.getItems = (imId, chatType) =>
+    IMStandard.Delegate.component.MoreBoard.defaultProps.getItems = () =>
         ['photo', 'camera', 'video', 'location'];
 }

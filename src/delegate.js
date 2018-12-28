@@ -14,7 +14,6 @@ export default {
         conversation: {
             loadList: unset('im.conversation.loadList'),
             loadItem: unset('im.conversation.loadItem'),
-            addOne: unset('im.conversation.addOne'),
             deleteOne: unset('im.conversation.deleteOne'),
             updateConfig: unset('im.conversation.updateConfig'),
             markAllRead: unset('im.conversation.markAllRead'),

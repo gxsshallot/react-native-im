@@ -164,7 +164,7 @@ export default class extends React.PureComponent {
                     selectedIds: [],
                     excludedUserIds: this.props.data,
                 },
-            })
+            });
         } else if (rowItem === this.remove) {
             const dataSource = this.props.data
                 .filter(item => item !== this.props.owner)

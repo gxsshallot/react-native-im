@@ -1,3 +1,4 @@
+import Listener from 'react-native-general-listener';
 import * as Constant from '../constant';
 import delegate from '../delegate';
 
@@ -15,12 +16,12 @@ export function onMessageReceived(originMessage) {
     if (!message) {
         return Promise.reject('无法处理该消息');
     }
-    const imId = data.conversationId;
+    const imId = message.conversationId;
     const isSingle = !!delegate.user.getUser(imId);
     const chatType = isSingle ? Constant.ChatType.Single : Constant.ChatType.Group;
     let promise;
     if (!delegate.model.Conversation.getOne(imId, false)) {
-        promise = delegate.model.Conversation.addOne(imId, chatType);
+        promise = delegate.model.Conversation.loadItem(imId, chatType);
     } else {
         promise = Promise.resolve();
     }
@@ -39,7 +40,7 @@ export function onRecallMessage(imId, chatType, fromUserId, messageId, localTime
     const user = getOperatorName(fromUserId);
     const text = user + '撤回了一条消息';
     const deletePromise = delegate.im.conversation.deleteMessage({imId, chatType, message: {messageId}});
-    const systemPromise = delegate.model.Message.insertSystemMessage(groupId, Constant.ChatType.Group, text, localTime, timestamp);
+    const systemPromise = delegate.model.Message.insertSystemMessage(imId, Constant.ChatType.Group, text, localTime, timestamp);
     return Promise.all([deletePromise, systemPromise]);
 }
 
@@ -89,7 +90,7 @@ export function groupUpdateOperation(groupId, text, localTime, timestamp) {
     promises.push(loadPromise);
     if (text && text.length > 0) {
         const systemPromise = delegate.model.Message.insertSystemMessage(groupId, Constant.ChatType.Group, text, localTime, timestamp);
-        promises.push(systemPromise)
+        promises.push(systemPromise);
     }
     return promises;
 }

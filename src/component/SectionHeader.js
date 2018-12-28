@@ -19,7 +19,7 @@ export default class extends React.PureComponent {
             borderBottomWidth: StyleSheet.hairlineWidth,
             borderBottomColor: delegate.style.separatorLineColor,
             height: height,
-        }
+        };
         return (
             <View style={[styles.section, style]}>
                 <Text style={styles.sectionText} numberOfLines={1}>
