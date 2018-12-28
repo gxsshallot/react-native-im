@@ -58,7 +58,7 @@ export default class extends React.PureComponent {
                 selectedIds={selectedIds}
                 split={this._splitSections}
                 sectionListProps={{
-                    initialNumToRender: this.state.users.length,
+                    initialNumToRender: 20,
                     renderSectionHeader: this._renderSectionHeader,
                 }}
             />
