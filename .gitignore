@@ -1,3 +1,8 @@
 .DS_Store
 node_modules
 yarn.lock
+
+# iOS
+Podfile.lock
+*.xcworkspace
+Pods

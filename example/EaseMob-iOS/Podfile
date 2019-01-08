@@ -1,0 +1,35 @@
+source 'https://github.com/CocoaPods/Specs.git'
+platform :ios, '9.0'
+
+target "Easemob" do
+    pod 'React', :path => '../node_modules/react-native', :subspecs => [
+        'Core',
+        'CxxBridge',
+        'DevSupport',
+        'RCTActionSheet',
+        'RCTAnimation',
+        'RCTCameraRoll',
+        'RCTGeolocation',
+        'RCTImage',
+        'RCTNetwork',
+        'RCTPushNotification',
+        'RCTSettings',
+        'RCTText',
+        'RCTVibration',
+        'RCTWebSocket',
+        'RCTLinkingIOS',
+    ]
+    pod 'yoga', :path => '../node_modules/react-native/ReactCommon/yoga'
+    pod 'DoubleConversion', :podspec => '../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec'
+    pod 'glog', :podspec => '../node_modules/react-native/third-party-podspecs/glog.podspec'
+    pod 'Folly', :podspec => '../node_modules/react-native/third-party-podspecs/Folly.podspec'
+    pod 'react-native-camera', :path => '../node_modules/react-native-camera'
+    pod 'react-native-video', :path => '../node_modules/react-native-video'
+    pod 'react-native-im-easemob', :podspec => '../node_modules/react-native-im-easemob/react-native-im-easemob.podspec'
+    pod 'Hyphenate', '= 3.5.1'
+    pod 'RNFS', :path => '../node_modules/react-native-fs'
+    pod 'RNSound', :path => '../node_modules/react-native-sound'
+    pod 'RNSoundRecorder', :path => '../node_modules/react-native-sound-recorder'
+    pod 'ReactNativePermissions', :path => '../node_modules/react-native-permissions'
+    pod 'MJExtension', :git => 'https://github.com/RNCommon/MJExtension.git', :commit => 'cd3de71c4955935a762a46e59d90160991f5fa92'
+end
