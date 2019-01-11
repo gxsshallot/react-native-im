@@ -11,4 +11,4 @@
 | title | string | 标题 |
 | allowMulti | boolean | 是否允许多选 |
 | selectedIds | Array\<string\> | 预置已选中的会话ID |
-| onSelectData | (selectedIds: Array\<Conversation\>) => void | 选中数据的回调方法，返回选中的[会话对象](Conversation#会话对象)数组 |
+| onSelectData | (selectedIds: Array\<Conversation\>) => void | 选中数据的回调方法，返回选中的[会话对象](struct/Conversation#会话对象)数组 |

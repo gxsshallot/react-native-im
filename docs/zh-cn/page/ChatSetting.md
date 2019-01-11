@@ -8,5 +8,5 @@
 
 | 名称 | 类型 | 描述 |
 | :-: | :-: | :- |
-| imId | string | [会话ID](Conversation#会话对象) |
-| chatType | number | [会话类型](Conversation#会话类型) |
+| imId | string | [会话ID](struct/Conversation#会话对象) |
+| chatType | number | [会话类型](struct/Conversation#会话类型) |

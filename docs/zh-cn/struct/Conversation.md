@@ -25,7 +25,7 @@
 
 | 属性 | 类型 | 必须 | 描述 |
 | :-: | :-: | :-: | :- |
-| imId | string | 是 | 会话ID，可以是一个[ImUser](Organization#用户)的userId或一个群组的groupId |
+| imId | string | 是 | 会话ID，可以是一个[ImUser](struct/Organization#用户)的userId或一个群组的groupId |
 | chatType | number | 是 | [会话类型](#会话类型) |
 | config | [Config](#会话配置) | 否 | 配置信息 |
 | latestMessage | [ImMessage](#消息) | 否 | 最新一条消息 |

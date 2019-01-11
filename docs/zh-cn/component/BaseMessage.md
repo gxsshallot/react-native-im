@@ -9,5 +9,5 @@
 | imId | string | 会话唯一标识，可以是一个用户ID或者群组ID |
 | chatType | number | 聊天类型 |
 | position | number | 消息的位置信息，小于0表示位于左侧，等于0表示位于中间，大于0表示位于右侧 |
-| message | [Message](Conversation#消息) | 待展示的消息体 |
+| message | [Message](struct/Conversation#消息) | 待展示的消息体 |
 | onShowMenu | (rect: {x: number, y: number, width: number, height: number}, isSender: boolean, message: Message) => void | 当前消息显示操作菜单的回调方法 |

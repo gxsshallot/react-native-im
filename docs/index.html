@@ -10,22 +10,34 @@
   <link rel="stylesheet" href="//unpkg.com/docsify/lib/themes/vue.css">
 </head>
 <body>
-  <div id="app">加载中</div>
+  <div id="app"></div>
   <script>
     window.$docsify = {
       name: 'react-native-im',
       repo: 'gaoxiaosong/react-native-im',
       loadSidebar: 'SUMMARY.md',
+      coverpage: {
+        '/': 'en-us/COVER.md',
+        '/en-us': 'en-us/COVER.md',
+        '/zh-cn': 'zh-cn/COVER.md',
+      },
       logo: 'image/favicon.ico',
-      subMaxLevel: 1,
+      subMaxLevel: 2,
       auto2top: true,
       markdown: {
         gfm: true,
         tables: true,
       },
       search: {
-        placeholder: '输入搜索内容',
-        noData: '找不到结果',
+        placeholder: {
+          '/en-us': 'Search',
+          '/zh-cn': '输入搜索内容',
+        },
+        noData: {
+          '/en-us': 'No results!',
+          '/zh-cn': '找不到结果',
+        },
+        paths: 'auto',
         depth: 6,
       },
     }
