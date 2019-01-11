@@ -30,7 +30,7 @@ export default class extends React.PureComponent {
 
     componentDidMount() {
         if (!this.state.users) {
-            delegate.contact.loadAllUser()
+            delegate.contact.loadAllUser(true)
                 .then((users) => {
                     this.setState({users});
                 })

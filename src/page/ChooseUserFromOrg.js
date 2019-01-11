@@ -39,8 +39,8 @@ export default class extends React.PureComponent {
     }
 
     componentDidMount() {
-        const userPromise = delegate.contact.loadAllUser();
-        const orgPromise = delegate.contact.loadAllOrg();
+        const userPromise = delegate.contact.loadAllUser(true);
+        const orgPromise = delegate.contact.loadAllOrg(true);
         Promise.all([userPromise, orgPromise])
             .then(([users, orgs]) => {
                 const tree = this._generateTree(users, orgs);

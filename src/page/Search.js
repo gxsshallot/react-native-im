@@ -41,7 +41,7 @@ export default class extends React.PureComponent {
     }
 
     componentDidMount() {
-        delegate.contact.loadAllUser()
+        delegate.contact.loadAllUser(true)
             .then((users) => this.employees = users);
     }
 

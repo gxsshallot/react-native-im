@@ -119,13 +119,13 @@ export default class extends React.PureComponent {
     };
 
     _loadData = () => {
-        const loadUser = delegate.contact.loadAllUser();
-        const loadOrg = delegate.contact.loadAllOrg();
+        const loadUser = delegate.contact.loadAllUser(true);
+        const loadOrg = delegate.contact.loadAllOrg(false);
         return Promise.all([loadUser, loadOrg])
-            .then(([users, _]) => {
+            .then(([users]) => {
                 const data = mapListToSection(users, delegate.config.pinyinField);
                 const {getHeaderConfig} = this.props;
-                const items = getHeaderConfig ? getHeaderConfig() : [];
+                const items = getHeaderConfig ? getHeaderConfig({users, sections: data}) : [];
                 LayoutAnimation.easeInEaseOut();
                 this.setState({data, items});
             });
