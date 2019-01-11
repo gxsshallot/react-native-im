@@ -1,4 +1,12 @@
 * [简介](README)
+* [安装](Install)
+* [样例工程](Example)
+
+---
+
+* 配置
+  * [选项](config/Option)
+  * [代理](config/Delegate)
 
 ---
 

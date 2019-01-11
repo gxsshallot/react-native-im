@@ -8,22 +8,23 @@
 
 /* Begin PBXBuildFile section */
 		09AA1F6AC41B6A97A66F86E8 /* libPods-Easemob.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 33A693C826C682ED605FAB14 /* libPods-Easemob.a */; };
-		13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
-		13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB11A68108700A75B9A /* LaunchScreen.xib */; };
-		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
-		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
+		1FF0846321E8D4A8005117F7 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1FF0845B21E8D4A8005117F7 /* LaunchScreen.xib */; };
+		1FF0846421E8D4A8005117F7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 1FF0845D21E8D4A8005117F7 /* main.m */; };
+		1FF0846521E8D4A8005117F7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1FF0845E21E8D4A8005117F7 /* Images.xcassets */; };
+		1FF0846621E8D4A8005117F7 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1FF0845F21E8D4A8005117F7 /* AppDelegate.m */; };
+		1FF0846721E8D4A8005117F7 /* main.jsbundle in Resources */ = {isa = PBXBuildFile; fileRef = 1FF0846121E8D4A8005117F7 /* main.jsbundle */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		008F07F21AC5B25A0029DE68 /* main.jsbundle */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = main.jsbundle; sourceTree = "<group>"; };
 		0961895BD993E4D6E0DE4856 /* Pods-Easemob.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Easemob.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Easemob/Pods-Easemob.debug.xcconfig"; sourceTree = "<group>"; };
-		13B07F961A680F5B00A75B9A /* Easemob.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Easemob.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = Easemob/AppDelegate.h; sourceTree = "<group>"; };
-		13B07FB01A68108700A75B9A /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = Easemob/AppDelegate.m; sourceTree = "<group>"; };
-		13B07FB21A68108700A75B9A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
-		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = Easemob/Images.xcassets; sourceTree = "<group>"; };
-		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = Easemob/Info.plist; sourceTree = "<group>"; };
-		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = Easemob/main.m; sourceTree = "<group>"; };
+		13B07F961A680F5B00A75B9A /* IMEasemob.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = IMEasemob.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		1FF0845A21E8D4A8005117F7 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		1FF0845C21E8D4A8005117F7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
+		1FF0845D21E8D4A8005117F7 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		1FF0845E21E8D4A8005117F7 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		1FF0845F21E8D4A8005117F7 /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		1FF0846121E8D4A8005117F7 /* main.jsbundle */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = main.jsbundle; sourceTree = "<group>"; };
+		1FF0846221E8D4A8005117F7 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		33A693C826C682ED605FAB14 /* libPods-Easemob.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Easemob.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6FF560CA20C78BB3826B8B54 /* Pods-Easemob.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Easemob.release.xcconfig"; path = "Pods/Target Support Files/Pods-Easemob/Pods-Easemob.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -40,18 +41,26 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		13B07FAE1A68108700A75B9A /* Easemob */ = {
+		1FF0845921E8D4A8005117F7 /* Example */ = {
 			isa = PBXGroup;
 			children = (
-				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
-				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
-				13B07FB01A68108700A75B9A /* AppDelegate.m */,
-				13B07FB51A68108700A75B9A /* Images.xcassets */,
-				13B07FB61A68108700A75B9A /* Info.plist */,
-				13B07FB11A68108700A75B9A /* LaunchScreen.xib */,
-				13B07FB71A68108700A75B9A /* main.m */,
+				1FF0845A21E8D4A8005117F7 /* AppDelegate.h */,
+				1FF0845F21E8D4A8005117F7 /* AppDelegate.m */,
+				1FF0845D21E8D4A8005117F7 /* main.m */,
+				1FF0845B21E8D4A8005117F7 /* LaunchScreen.xib */,
+				1FF0845E21E8D4A8005117F7 /* Images.xcassets */,
+				1FF0846221E8D4A8005117F7 /* Info.plist */,
+				1FF0846021E8D4A8005117F7 /* Resource */,
 			);
-			name = Easemob;
+			path = Example;
+			sourceTree = "<group>";
+		};
+		1FF0846021E8D4A8005117F7 /* Resource */ = {
+			isa = PBXGroup;
+			children = (
+				1FF0846121E8D4A8005117F7 /* main.jsbundle */,
+			);
+			path = Resource;
 			sourceTree = "<group>";
 		};
 		4799F6E358706CEFED03BC7F /* Pods */ = {
@@ -66,7 +75,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
-				13B07FAE1A68108700A75B9A /* Easemob */,
+				1FF0845921E8D4A8005117F7 /* Example */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 				4799F6E358706CEFED03BC7F /* Pods */,
 				CF11CF4C520F9BAB442989CB /* Frameworks */,
@@ -79,7 +88,7 @@
 		83CBBA001A601CBA00E9B192 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				13B07F961A680F5B00A75B9A /* Easemob.app */,
+				13B07F961A680F5B00A75B9A /* IMEasemob.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -103,7 +112,6 @@
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
-				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
 				AFE063583D3D66980BCF568B /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
@@ -112,7 +120,7 @@
 			);
 			name = Easemob;
 			productName = "Hello World";
-			productReference = 13B07F961A680F5B00A75B9A /* Easemob.app */;
+			productReference = 13B07F961A680F5B00A75B9A /* IMEasemob.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -124,7 +132,7 @@
 				LastUpgradeCheck = 0940;
 				ORGANIZATIONNAME = Facebook;
 			};
-			buildConfigurationList = 83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "Easemob" */;
+			buildConfigurationList = 83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "Example" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -147,28 +155,15 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
-				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
+				1FF0846721E8D4A8005117F7 /* main.jsbundle in Resources */,
+				1FF0846321E8D4A8005117F7 /* LaunchScreen.xib in Resources */,
+				1FF0846521E8D4A8005117F7 /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Bundle React Native code and images";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh";
-		};
 		81EEA7BD5BF45EDE72B80C33 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -220,21 +215,20 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
-				13B07FC11A68108700A75B9A /* main.m in Sources */,
+				1FF0846621E8D4A8005117F7 /* AppDelegate.m in Sources */,
+				1FF0846421E8D4A8005117F7 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		13B07FB11A68108700A75B9A /* LaunchScreen.xib */ = {
+		1FF0845B21E8D4A8005117F7 /* LaunchScreen.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
-				13B07FB21A68108700A75B9A /* Base */,
+				1FF0845C21E8D4A8005117F7 /* Base */,
 			);
 			name = LaunchScreen.xib;
-			path = Easemob;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -247,15 +241,15 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = NO;
-				INFOPLIST_FILE = Easemob/Info.plist;
+				INFOPLIST_FILE = "$(SRCROOT)/Example/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
-				PRODUCT_NAME = Easemob;
+				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.example.easemob;
+				PRODUCT_NAME = IMEasemob;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
@@ -266,15 +260,15 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CURRENT_PROJECT_VERSION = 1;
-				INFOPLIST_FILE = Easemob/Info.plist;
+				INFOPLIST_FILE = "$(SRCROOT)/Example/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
-				PRODUCT_NAME = Easemob;
+				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.example.easemob;
+				PRODUCT_NAME = IMEasemob;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;
@@ -390,7 +384,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "Easemob" */ = {
+		83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "Example" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				83CBBA201A601CBA00E9B192 /* Debug */,

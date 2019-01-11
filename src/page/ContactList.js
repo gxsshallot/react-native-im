@@ -1,9 +1,8 @@
 import React from 'react';
-import { Alert, InteractionManager, LayoutAnimation, Linking, StyleSheet, TouchableOpacity, View, SafeAreaView } from 'react-native';
+import { Alert, InteractionManager, LayoutAnimation, Linking, StyleSheet, TouchableOpacity, View, SafeAreaView, Image } from 'react-native';
 import PropTypes from 'prop-types';
 import Toast from 'react-native-root-toast';
 import NaviBar, { forceInset } from 'react-native-pure-navigation-bar';
-import { IconFontImage } from 'core/common';
 import * as Constant from '../constant';
 import * as PageKeys from '../pagekey';
 import { mapListToSection } from '../util';
@@ -113,7 +112,10 @@ export default class extends React.PureComponent {
                 style={styles.phoneBtn}
                 onPress={this._clickPhone.bind(this, phone)}
             >
-                {IconFontImage.renderImage('e623', styles.phone)}
+                <Image
+                    source={require('./phone.png')}
+                    style={styles.phone}
+                />
             </TouchableOpacity>
         ) : undefined;
     };
@@ -177,8 +179,8 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
     },
     phone: {
+        width: 24,
         height: 24,
-        color: '#e15151',
     },
     phoneBtn: {
         height: 48,
