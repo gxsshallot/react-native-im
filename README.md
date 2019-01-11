@@ -1,3 +1,3 @@
 # react-native-im
 
-参见[Wiki](https://github.com/gaoxiaosong/react-native-im/wiki)。
+详细说明，参见[文档网站](https://gaoxiaosong.github.io/react-native-im/)。
