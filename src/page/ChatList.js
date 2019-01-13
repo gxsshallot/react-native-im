@@ -8,6 +8,10 @@ import delegate from '../delegate';
 import * as Constant from '../constant';
 
 export default class extends React.PureComponent {
+    static navigationOptions = {
+        title: '聊天列表',
+    };
+
     static propTypes = {};
 
     static defaultProps = {};

@@ -2,7 +2,18 @@ import { ChatManager, IMConstant } from 'react-native-im-easemob';
 import * as IMStandard from '../../src';
 
 export default function () {
-    // TODO loadList
+    IMStandard.Delegate.im.conversation.loadList = () => {
+        return ChatManager.getAllConversations()
+            .then((result) => {
+                console.log(result);
+                result = result.map((item) => ({
+                    ...item,
+                    imId: item.conversationId,
+                    chatType: item.type,
+                }));
+                return result;
+            });
+    };
     IMStandard.Delegate.im.conversation.loadItem = (imId, chatType, autoCreate) => {
         return ChatManager.getConversation(imId, chatType, autoCreate)
             .then((result) => {

@@ -7,6 +7,7 @@ import * as Pages from './page';
 import * as PageKeys from './pagekey';
 import * as Utils from './util';
 import Delegate from './delegate';
+import Option from './option';
 
 function setup_common_page() {
     Delegate.page[PageKeys.ChatDetail] = Pages.ChatDetailPage;
@@ -56,6 +57,20 @@ function setup_common_model() {
     Delegate.model.Message = Model.Message;
 }
 
+function login(forceUpdate) {
+    return Promise.all([
+        Delegate.model.Conversation.init(forceUpdate),
+        Delegate.model.Group.init(forceUpdate)
+    ]);
+}
+
+function logout(forceClear) {
+    return Promise.all([
+        Delegate.model.Conversation.uninit(forceClear),
+        Delegate.model.Group.uninit(forceClear)
+    ]);
+}
+
 export {
     Constant,
     Model,
@@ -65,7 +80,10 @@ export {
     PageKeys,
     Utils,
     Delegate,
+    Option,
     setup_common_page,
     setup_common_component,
     setup_common_model,
+    login,
+    logout,
 };

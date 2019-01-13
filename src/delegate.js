@@ -57,8 +57,6 @@ export default {
             system: null,
         },
     },
-    option: {
-    },
 };
 
 function unset(message) {
