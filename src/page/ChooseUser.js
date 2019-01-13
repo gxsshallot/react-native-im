@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import Toast from 'react-native-root-toast';
 import PickList from 'react-native-picklist';
 import NaviBar from 'react-native-pure-navigation-bar';
+import ArrowImage from '@hecom/image-arrow';
 import ChooseUserFromOrgPage from './ChooseUserFromOrg';
 import delegate from '../delegate';
 import * as Types from '../proptype';
@@ -90,7 +91,7 @@ export default class extends React.PureComponent {
                         <Text style={styles.text}>
                             {this.props.labelSelectUserFromOrg}
                         </Text>
-                        <delegate.component.ArrowImage style={styles.icon} />
+                        <ArrowImage style={styles.icon} />
                     </View>
                 </TouchableOpacity>
             </View>

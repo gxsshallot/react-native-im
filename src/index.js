@@ -24,7 +24,6 @@ function setup_common_page() {
 }
 
 function setup_common_component() {
-    Delegate.component.ArrowImage = Components.ArrowImage;
     Delegate.component.AvatarImage = Components.AvatarImage;
     Delegate.component.AvatarList = Components.AvatarList;
     Delegate.component.BaseMessage = Components.BaseMessage;

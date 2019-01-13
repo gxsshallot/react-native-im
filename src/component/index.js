@@ -1,4 +1,3 @@
-import ArrowImage from './ArrowImage';
 import AvatarImage from './AvatarImage';
 import AvatarList from './AvatarList';
 import BaseMessage from './BaseMessage';
@@ -21,7 +20,6 @@ import SelectList from './SelectList';
 import SettingItem from './SettingItem';
 
 export {
-    ArrowImage,
     AvatarImage,
     AvatarList,
     BaseMessage,

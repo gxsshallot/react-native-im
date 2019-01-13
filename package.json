@@ -20,6 +20,7 @@
   "homepage": "https://github.com/gaoxiaosong/react-native-im#readme",
   "dependencies": {
     "@hecom/badge": "^1.0.0",
+    "@hecom/image-arrow": "^1.0.0",
     "dateformat": "^3.0.3",
     "react-native-fs": "^2.13.3",
     "react-native-full-image-picker": "^1.2.7",

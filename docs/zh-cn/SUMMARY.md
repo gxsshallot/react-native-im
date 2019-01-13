@@ -50,7 +50,6 @@
     * [添加更多面板](component/MoreBoard)
     * [表情选择视图](component/EmojiPickView)
     * [滑动控制圆点](component/SegmentControl)
-    * [通用右箭头图片](component/ArrowImage)
     * [群或个人的头像图片](component/AvatarImage)
     * [群设置中的头像列表](component/AvatarList)
     * [会话单元格](component/ConversationCell)

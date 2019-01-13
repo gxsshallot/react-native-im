@@ -1,6 +1,7 @@
 import React from 'react';
 import { Image, StyleSheet, Switch, Text, View, TouchableHighlight } from 'react-native';
 import PropTypes from 'prop-types';
+import ArrowImage from '@hecom/image-arrow';
 import * as Constant from '../constant';
 import delegate from '../delegate';
 
@@ -43,7 +44,7 @@ export default class extends React.PureComponent {
                 <View style={styles.line}>
                     {this._renderLabel(title)}
                     {this._renderContent()}
-                    {hasArrow && <delegate.component.ArrowImage />}
+                    {hasArrow && <ArrowImage />}
                 </View>
             </View>
         );
