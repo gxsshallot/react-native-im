@@ -45,7 +45,6 @@
     * [通用右箭头图片](component/ArrowImage)
     * [群或个人的头像图片](component/AvatarImage)
     * [群设置中的头像列表](component/AvatarList)
-    * [数字角标](component/Badge)
     * [会话单元格](component/ConversationCell)
     * [可点击的假搜索栏](component/FakeSearchBar)
     * [基本展示单元格](component/ListCell)

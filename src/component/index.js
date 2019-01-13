@@ -1,7 +1,6 @@
 import ArrowImage from './ArrowImage';
 import AvatarImage from './AvatarImage';
 import AvatarList from './AvatarList';
-import Badge from './Badge';
 import BaseMessage from './BaseMessage';
 import BottomBar from './BottomBar';
 import ConversationCell from './ConversationCell';
@@ -25,7 +24,6 @@ export {
     ArrowImage,
     AvatarImage,
     AvatarList,
-    Badge,
     BaseMessage,
     BottomBar,
     ConversationCell,

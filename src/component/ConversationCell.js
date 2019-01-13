@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, SafeAreaView, Dimensions, Image } from 'react-n
 import PropTypes from 'prop-types';
 import Listener from 'react-native-general-listener';
 import { getSafeAreaInset, forceInset } from 'react-native-pure-navigation-bar';
+import Badge from '@hecom/badge';
 import * as Types from '../proptype';
 import * as PageKeys from '../pagekey';
 import * as Constant from '../constant';
@@ -84,7 +85,7 @@ export default class extends React.PureComponent {
             right: width - 70 - inset.left,
         };
         return (
-            <delegate.component.Badge
+            <Badge
                 count={avoid ? undefined : unreadMessagesCount}
                 maxCount={99}
                 radius={avoid ? 3 : 8}

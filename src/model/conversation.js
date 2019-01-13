@@ -56,8 +56,10 @@ export function uninit(forceClear) {
  * 重新加载全部会话。
  */
 export function load() {
-    return delegate.im.conversation.loadList()
-        .then((result) => {
+    const loadPromise = delegate.im.conversation.loadList();
+    const clearPromise = uninit(true);
+    return Promise.all([loadPromise, clearPromise])
+        .then(([result]) => {
             const promises = result.map((item) => {
                 rootNode[item.imId] = {
                     ...item,
