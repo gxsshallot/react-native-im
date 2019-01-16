@@ -15,6 +15,7 @@
 * `getMembers(groupId, hasOwner)`：获取指定群组的群成员ID列表，使用`hasOwner`表示是否包含群主。
 * `getName(groupId, autoConjWhenEmpty)`：获取指定群组的名称，若不存在，则返回`undefined`或自动连接群成员名称作为群组名称。
 * `getAvatar(groupId)`：获取指定群组的自定义头像。
+* `getAllowAdd(groupId)`：获取指定群组的是否允许添加成员配置。
 * `createOne(memberUserIds)`：创建一个群组，传入成员列表。
 * `destroyOne(groupId)`：解散指定群聊。
 * `quitOne(groupId)`：退出指定群聊。
@@ -23,3 +24,4 @@
 * `changeName(groupId, newName)`：修改指定群组的群名称。
 * `changeAvatar(groupId, newAvatarUrl)`：修改指定群组的群头像。
 * `changeOwner(groupId, newOwnerId)`：修改指定群组的群主。
+* `changeAllowAdd(groupId, isAllowAdd)`：修改指定群组的允许添加成员配置。
