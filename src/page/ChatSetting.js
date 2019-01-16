@@ -27,6 +27,7 @@ export default class extends React.PureComponent {
             state.groupAvatar = delegate.model.Group.getAvatar(imId);
             state.groupName = delegate.model.Group.getName(imId, false);
             state.groupOwner = delegate.model.Group.getOwner(imId);
+            state.groupAllowAdd = delegate.model.Group.getAllowAdd(imId)
         }
         this.state = {
             ...delegate.model.Conversation.getConfig(imId),
@@ -65,7 +66,7 @@ export default class extends React.PureComponent {
                     owner={groupOwner}
                     onAddMembers={this._onAddMembers}
                     onRemoveMembers={this._onRemoveMembers}
-                    canAdd={true}
+                    canAdd={isOwner || this.state.groupAllowAdd}
                     canRemove={isOwner}
                     navigation={this.props.navigation}
                 />
@@ -104,6 +105,15 @@ export default class extends React.PureComponent {
                     onPressLine={isOwner ? this._clickGroupAvatar : undefined}
                 />
                 {this._renderSeparatorLine()}
+                {isOwner && (
+                    <delegate.component.SettingItem
+                        type={Constant.SettingItemType.Switch}
+                        title="允许添加成员"
+                        data={this.state.groupAllowAdd}
+                        onPressSwitch={isAllowAdd => this._clickChangeAllowAdd(isAllowAdd)}
+                    />
+                )}
+                {isOwner && this._renderSeparatorLine()}
             </View>
         );
     };
@@ -212,6 +222,16 @@ export default class extends React.PureComponent {
             });
     };
 
+    _clickChangeAllowAdd = (isAllowAdd) => {
+        delegate.model.Group.changeAllowAdd(this.props.imId, isAllowAdd)
+            .then((result) => {
+                this.setState({groupAllowAdd: result});
+            })
+            .catch(() => {
+                Toast.show('更改设置失败');
+            });
+    };
+
     _clickName = (newName) => {
         this.setState({
             showPrompt: false,
@@ -244,7 +264,7 @@ export default class extends React.PureComponent {
             },
         });
     };
-    
+
     _clickGroupAvatar = () => {
         const options = {
             maxSize: 1,
