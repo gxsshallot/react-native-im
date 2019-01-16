@@ -164,6 +164,15 @@ export function getAvatar(groupId) {
 }
 
 /**
+ * 获取群组添加成员设置。
+ * @param {string} groupId 群组ID
+ */
+export function getAllowAdd(groupId) {
+    const group = findByGroupId(groupId, false);
+    return group ? group.allowInvites : undefined;
+}
+
+/**
  * 创建一个群组。
  * @param {string[]} memberUserIds 成员ID列表
  */
@@ -252,6 +261,18 @@ export function changeAvatar(groupId, newAvatarUrl) {
     return delegate.im.group.changeAvatar(groupId, newAvatarUrl)
         .then(() => {
             return changeGroupInfo(groupId, {avatar: newAvatarUrl}, newAvatarUrl);
+        });
+}
+
+/**
+ * 更改是否允许其他人添加成员设置。
+ * @param {string} groupId 群组ID
+ * @param {string} isAllowAdd 新头像的URL地址
+ */
+export function changeAllowAdd(groupId, isAllowAdd) {
+    return delegate.im.group.changeAllowAdd(groupId, isAllowAdd)
+        .then(() => {
+            return changeGroupInfo(groupId, {allowInvites: isAllowAdd}, isAllowAdd);
         });
 }
 

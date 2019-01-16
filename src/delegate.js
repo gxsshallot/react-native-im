@@ -33,6 +33,7 @@ export default {
             changeName: unset('im.group.changeName'),
             changeAvatar: unset('im.group.changeAvatar'),
             changeOwner: unset('im.group.changeOwner'),
+            changeAllowAdd: unset('im.group.changeAllowAdd'),
         },
     },
     func: {

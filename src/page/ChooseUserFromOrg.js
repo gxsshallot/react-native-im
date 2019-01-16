@@ -8,6 +8,8 @@ import { deepExport } from '../util';
 import delegate from '../delegate';
 
 export default class extends React.PureComponent {
+    static navigationOptions = PickList.navigationOptions;
+
     static propTypes = {
         title: PropTypes.string.isRequired,
         firstTitleLine: PropTypes.string,
@@ -76,6 +78,7 @@ export default class extends React.PureComponent {
                     initialNumToRender: 30,
                     renderSectionFooter: this._renderSectionFooter,
                 }}
+                navigation={this.props.navigation}
             />
         ) : <NaviBar title={delegate.config.titleLoading} />;
     }
