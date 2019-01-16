@@ -7,7 +7,6 @@ import * as Pages from './page';
 import * as PageKeys from './pagekey';
 import * as Utils from './util';
 import Delegate from './delegate';
-import Option from './option';
 
 function setup_common_page() {
     Delegate.page[PageKeys.ChatDetail] = Pages.ChatDetailPage;
@@ -79,7 +78,6 @@ export {
     PageKeys,
     Utils,
     Delegate,
-    Option,
     setup_common_page,
     setup_common_component,
     setup_common_model,
