@@ -6,7 +6,7 @@
 
 | 名称 | 类型 | 描述 |
 | :-: | :-: | :- |
-| imId | string | [会话ID](struct/Conversation#会话对象) |
-| chatType | number | [会话类型](struct/Conversation#会话类型) |
+| imId | string | [会话ID](zh-cn/struct/Conversation#会话对象) |
+| chatType | number | [会话类型](zh-cn/struct/Conversation#会话类型) |
 | onSendMessage | ({type: number, body: object}) => void | 发送消息的回调方式，传回一个对象，包含消息类型和消息体 |
 | navigation | object | 导航器 |

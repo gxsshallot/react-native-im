@@ -66,8 +66,8 @@ IMStandard.setup_common_model();
 
 包括如下接口：
 
-* `loadAllUser: (isAll: boolean) => Promise<ImUser[] | void>`：这里`isAll`表示是否返回数据，返回数组的元素是[用户信息](struct/Organization#用户)。
-* `loadAllOrg: (isAll: boolean) => Promise<ImOrg[] | void>`：这里`isAll`表示是否返回数据，返回数组的元素是[部门信息](struct/Organization#部门)。
+* `loadAllUser: (isAll: boolean) => Promise<ImUser[] | void>`：这里`isAll`表示是否返回数据，返回数组的元素是[用户信息](zh-cn/struct/Organization#用户)。
+* `loadAllOrg: (isAll: boolean) => Promise<ImOrg[] | void>`：这里`isAll`表示是否返回数据，返回数组的元素是[部门信息](zh-cn/struct/Organization#部门)。
 
 ## 用户(user)
 
@@ -75,8 +75,8 @@ IMStandard.setup_common_model();
 
 包括如下接口：
 
-* `getMine: () => Promise<ImUser>`：获取当前[用户信息](struct/Organization#用户)。
-* `getUser: (userId: string) => Promise<ImUser>`：获取指定[用户信息](struct/Organization#用户)。
+* `getMine: () => Promise<ImUser>`：获取当前[用户信息](zh-cn/struct/Organization#用户)。
+* `getUser: (userId: string) => Promise<ImUser>`：获取指定[用户信息](zh-cn/struct/Organization#用户)。
 
 ## 聊天(im)
 
@@ -86,10 +86,10 @@ IMStandard.setup_common_model();
 
 对于会话部分的操作，如下所示：
 
-* `loadList: () => Promise<Array<Conversation>>`：加载会话列表，返回一个Promise，包含[会话对象](struct/Conversation#会话对象)的数组。
-* `loadItem: (imId: string, chatType: ChatType, autoCreate: boolean) => Promise<Conversation>`：获取一个会话，指定会话ID和[会话类型](struct/Conversation#会话类型)，`autoCreate`表示不存在的时候是否自动创建会话，返回一个包含[会话对象](struct/Conversation#会话对象)的Promise。
+* `loadList: () => Promise<Array<Conversation>>`：加载会话列表，返回一个Promise，包含[会话对象](zh-cn/struct/Conversation#会话对象)的数组。
+* `loadItem: (imId: string, chatType: ChatType, autoCreate: boolean) => Promise<Conversation>`：获取一个会话，指定会话ID和[会话类型](zh-cn/struct/Conversation#会话类型)，`autoCreate`表示不存在的时候是否自动创建会话，返回一个包含[会话对象](zh-cn/struct/Conversation#会话对象)的Promise。
 * `deleteOne: (imId: string) => Promise`：删除指定会话，可以从本地删除，也可以同时从服务器删除，返回一个空的Promise。
-* `updateConfig: (imId: string, config: ConversationConfig) => Promise<ConversationConfig>`：更新指定会话配置，返回包含新的[会话配置](struct/Conversation#会话配置)的Promise。
+* `updateConfig: (imId: string, config: ConversationConfig) => Promise<ConversationConfig>`：更新指定会话配置，返回包含新的[会话配置](zh-cn/struct/Conversation#会话配置)的Promise。
 * `markAllRead: (imId: string, chatType: ChatType) => Promise`：标记指定会话为已读状态，返回一个空的Promise。
 * `markLatestUnread: (imId: string, chatType: ChatType) => Promise`：标记指定会话最近一条消息为未读状态，返回一个空的Promise。
 * `loadMessage: ({imId: string, chatType: ChatType, lastMessageId: string, count: number}) => Promise<Array>`：获取指定会话的消息列表，可以指定上一次最后一条消息的ID，和每次获取的数量，返回原始消息的Promise。
@@ -133,7 +133,7 @@ IMStandard.setup_common_model();
 
 一些全局的配置信息，包括如下配置：
 
-* `pinyinField`：在[用户信息](struct/Organization#用户)中，被用于拼音检索的字段名称，预置为`'pinyin'`。这是因为前端一般不直接做中文转拼音，而是由后台接口返回，前端直接使用即可。
+* `pinyinField`：在[用户信息](zh-cn/struct/Organization#用户)中，被用于拼音检索的字段名称，预置为`'pinyin'`。这是因为前端一般不直接做中文转拼音，而是由后台接口返回，前端直接使用即可。
 * `titleLoading`：在进入页面后，数据还没有准备好的时候，页面导航条标题显示的`加载中`字样。
 * `buttonOK`：确定按钮的文本。
 * `messageType`：消息类型的实际数值设置。

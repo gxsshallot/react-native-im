@@ -45,11 +45,11 @@
 
 ## Display
 
-将[标准消息](struct/Conversation#消息)展示成UI组件。
+将[标准消息](zh-cn/struct/Conversation#消息)展示成UI组件。
 
 默认部分：按照消息的类型来进行划分，注册处理方式时，可以用消息类型作为二级分区。
 
-特殊处理判断：传递`message`为[标准消息](struct/Conversation#消息)，返回布尔值表示是否匹配成功。
+特殊处理判断：传递`message`为[标准消息](zh-cn/struct/Conversation#消息)，返回布尔值表示是否匹配成功。
 
 处理方式：
 
@@ -59,7 +59,7 @@
 
 | 参数 | 类型 | 说明 |
 | :-: | :-: | :- |
-| message | [ImMessage](struct/Conversation#消息) | 标准消息 |
+| message | [ImMessage](zh-cn/struct/Conversation#消息) | 标准消息 |
 | isSender | boolean | 是否是发送方 |
 | maxWidth | number | 组件的最大宽度 |
 | enableBubble | (status: boolean) => void | 启用/隐藏气泡的回调方法 |
@@ -69,15 +69,15 @@
 
 ## Parse
 
-解析操作，将原始消息，转换为[标准消息](struct/Conversation#消息)。
+解析操作，将原始消息，转换为[标准消息](zh-cn/struct/Conversation#消息)。
 
 特殊处理判断：传递`message`为原始消息，返回布尔值表示是否匹配成功。
 
-处理方式：传递`message`为原始消息，返回`newMessage`为[标准消息](struct/Conversation#消息)。
+处理方式：传递`message`为原始消息，返回`newMessage`为[标准消息](zh-cn/struct/Conversation#消息)。
 
 ## Send
 
-将[标准消息](struct/Conversation#消息)发送到指定会话。
+将[标准消息](zh-cn/struct/Conversation#消息)发送到指定会话。
 
 默认部分：按照消息的类型来进行划分，注册处理方式时，可以用消息类型作为二级分区。
 
@@ -89,18 +89,18 @@
 
 | 参数 | 类型 | 说明 |
 | :-: | :-: | :- |
-| imId | string | 消息的[会话ID](struct/Conversation#会话对象) |
-| chatType | number | 消息的[会话类型](struct/Conversation#会话类型) |
-| message | [ImMessage](struct/Conversation#消息) | 标准消息 |
+| imId | string | 消息的[会话ID](zh-cn/struct/Conversation#会话对象) |
+| chatType | number | 消息的[会话类型](zh-cn/struct/Conversation#会话类型) |
+| message | [ImMessage](zh-cn/struct/Conversation#消息) | 标准消息 |
 | ext | object | 扩展字段 |
 
 ## Abstract
 
-将[标准消息](struct/Conversation#消息)缩略成摘要信息，展示在会话的单元格中。
+将[标准消息](zh-cn/struct/Conversation#消息)缩略成摘要信息，展示在会话的单元格中。
 
 默认部分：按照消息的类型来进行划分，注册处理方式时，可以用消息类型作为二级分区。
 
-特殊处理判断：传递`message`为[标准消息](struct/Conversation#消息)，返回布尔值表示是否匹配成功。
+特殊处理判断：传递`message`为[标准消息](zh-cn/struct/Conversation#消息)，返回布尔值表示是否匹配成功。
 
 处理方式：
 
@@ -108,9 +108,9 @@
 
 | 参数 | 类型 | 说明 |
 | :-: | :-: | :- |
-| imId | string | 消息的[会话ID](struct/Conversation#会话对象) |
-| chatType | number | 消息的[会话类型](struct/Conversation#会话类型) |
-| message | [ImMessage](struct/Conversation#消息) | 标准消息 |
+| imId | string | 消息的[会话ID](zh-cn/struct/Conversation#会话对象) |
+| chatType | number | 消息的[会话类型](zh-cn/struct/Conversation#会话类型) |
+| message | [ImMessage](zh-cn/struct/Conversation#消息) | 标准消息 |
 
 ## MoreBoard
 

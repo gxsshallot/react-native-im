@@ -7,7 +7,7 @@
 | 名称 | 类型 | 描述 |
 | :-: | :-: | :- |
 | isSender | boolean | 是否是发送者 |
-| message | [Message](struct/Conversation#消息) | 消息体 |
+| message | [Message](zh-cn/struct/Conversation#消息) | 消息体 |
 | onShowMenu | (rect: {x: number, y: number, width: number, height: number}, isSender: boolean, message: Message) => void | 当前消息显示操作菜单的回调方法 |
 | leftBubble | ImageSourcePropType | 左侧的气泡箭头图标 |
 | rightBubble | ImageSourcePropType | 右侧的气泡箭头图标 |

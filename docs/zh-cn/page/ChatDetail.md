@@ -8,6 +8,6 @@
 
 | 名称 | 类型 | 描述 |
 | :-: | :-: | :- |
-| imId | string | [会话ID](struct/Conversation#会话对象) |
-| chatType | number | [会话类型](struct/Conversation#会话类型) |
+| imId | string | [会话ID](zh-cn/struct/Conversation#会话对象) |
+| chatType | number | [会话类型](zh-cn/struct/Conversation#会话类型) |
 | navigation | object | 导航器 |
