@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, InteractionManager } from 'react-native';
+import { InteractionManager, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import PropTypes from 'prop-types';
 import Toast from 'react-native-root-toast';
 import PickList from 'react-native-picklist';
@@ -11,6 +11,8 @@ import * as Types from '../proptype';
 import * as PageKeys from '../pagekey';
 
 export default class extends React.PureComponent {
+    static navigationOptions = PickList.navigationOptions;
+
     static propTypes = {
         ...ChooseUserFromOrgPage.propTypes,
         dataSource: PropTypes.arrayOf(PropTypes.shape(Types.ImUser)),
@@ -62,6 +64,7 @@ export default class extends React.PureComponent {
                     initialNumToRender: 20,
                     renderSectionHeader: this._renderSectionHeader,
                 }}
+                navigation={this.props.navigation}
             />
         ) : <NaviBar title={delegate.config.titleLoading} />;
     }

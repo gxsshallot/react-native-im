@@ -1,10 +1,12 @@
 import React from 'react';
-import { Image, StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import PropTypes from 'prop-types';
 import PickList, { PickListRowUtil } from 'react-native-picklist';
 import delegate from '../delegate';
 
 export default class extends React.PureComponent {
+    static navigationOptions = PickList.navigationOptions;
+
     static propTypes = {
         title: PropTypes.string,
         allowMulti: PropTypes.bool,
@@ -27,7 +29,7 @@ export default class extends React.PureComponent {
     }
 
     render() {
-        const { title } = this.props;
+        const {title} = this.props;
         const rights = {};
         if (this.state.multi) {
             rights.rightTitle = '单选';
@@ -50,6 +52,7 @@ export default class extends React.PureComponent {
                 selectedIds={this.selectedIndexs}
                 idKey='imId'
                 {...rights}
+                navigation={this.props.navigation}
             />
         );
     }
