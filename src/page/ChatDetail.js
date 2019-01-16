@@ -1,6 +1,5 @@
 import React from 'react';
-import { Clipboard, Keyboard, SafeAreaView, StyleSheet, View, TouchableWithoutFeedback } from 'react-native';
-import NaviBar, { forceInset } from 'react-native-pure-navigation-bar';
+import { Button, Clipboard, Keyboard, SafeAreaView, StyleSheet, View, TouchableWithoutFeedback } from 'react-native';
 import * as PageKeys from '../pagekey';
 import { ChatManager, IMConstant } from 'react-native-im-easemob';
 import Toast from 'react-native-root-toast';
@@ -9,8 +8,17 @@ import * as Types from '../proptype';
 import * as Constant from '../constant';
 import { guid, DateUtil } from '../util';
 import delegate from '../delegate';
+import i18n from '../../language';
 
 export default class extends React.PureComponent {
+    static navigationOptions = function ({navigation}) {
+        const {_title_, _right_} = navigation.state.params;
+        return {
+            title: _title_,
+            headerRight: _right_,
+        };
+    };
+
     static propTypes = {
         ...Types.BasicConversation,
         ...Types.Navigation,
@@ -38,6 +46,7 @@ export default class extends React.PureComponent {
     }
 
     componentDidMount() {
+        this._setNaviBar();
         this.keyboardShow = Keyboard.addListener(
             'keyboardDidShow',
             this._setKeyboardStatus.bind(this, true)
@@ -70,10 +79,8 @@ export default class extends React.PureComponent {
         const {imId, chatType} = this.props;
         return (
             <View style={[styles.view, {backgroundColor: delegate.style.viewBackgroundColor}]}>
-                {this._renderNaviBar()}
                 <SafeAreaView
                     style={styles.innerview}
-                    forceInset={forceInset(0, 1, 0, 1)}
                 >
                     <TouchableWithoutFeedback
                         style={styles.touch}
@@ -83,10 +90,10 @@ export default class extends React.PureComponent {
                             <delegate.component.DetailListView
                                 ref={ref => this.list = ref}
                                 style={{flex: 0}}
-                                renderItem={this._renderItem}
-                                onLoadPage={this._refresh}
+                                renderItem={this._renderItem.bind(this)}
+                                onLoadPage={this._refresh.bind(this)}
                             />
-                            <View style={{flex: 10000}} />
+                            <View style={{flex: 1}} />
                         </View>
                     </TouchableWithoutFeedback>
                 </SafeAreaView>
@@ -100,47 +107,46 @@ export default class extends React.PureComponent {
                 <delegate.component.MessageMenu
                     menuShow={this.state.menuShow}
                     menuRect={this.state.menuRect}
-                    onClose={this._onCloseMenu}
+                    onClose={this._onCloseMenu.bind(this)}
                     actionList={this.state.actionList}
                 />
             </View>
         );
     }
 
-    _renderNaviBar = () => {
+    _setNaviBar() {
         const {imId} = this.props;
         let title;
         if (this.isGroup) {
-            const groupName = delegate.model.Group.getName(imId, false);
-            title = (groupName ? groupName : '群聊') + ' ('
-                + delegate.model.Group.getMembers(imId).length + ')';
+            const groupName = delegate.model.Group.getName(imId, false) || i18n.t('GroupChatType');
+            title = groupName + ' (' + delegate.model.Group.getMembers(imId).length + ')';
         } else {
             title = delegate.user.getUser(imId).name;
         }
+        this.props.navigation.setParams({
+            _title_: title,
+            _right_: this._renderRightElement(),
+        });
+    }
+
+    _renderRightElement() {
         return (
-            <NaviBar
-                title={title}
-                rightElement={this._renderRightElement()}
-                onRight={this._onRight}
+            <Button
+                title={i18n.t('SettingButtonLabel')}
+                onPress={() => {
+                    this.props.navigation.navigate({
+                        routeName: PageKeys.ChatSetting,
+                        params: {
+                            imId: this.props.imId,
+                            chatType: this.props.chatType,
+                        },
+                    })
+                }}
             />
         );
-    };
+    }
 
-    _renderRightElement = () => {
-        return ['设置'];
-    };
-
-    _onRight = () => {
-        this.props.navigation.navigate({
-            routeName: PageKeys.ChatSetting,
-            params: {
-                imId: this.props.imId,
-                chatType: this.props.chatType,
-            },
-        });
-    };
-
-    _setKeyboardStatus = (status) => {
+    _setKeyboardStatus(status) {
         this.setState({
             keyboardShow: status,
         }, () => {
@@ -148,9 +154,9 @@ export default class extends React.PureComponent {
                 this.list.scrollToTop();
             }
         });
-    };
+    }
 
-    _refresh = (oldData, _) => {
+    _refresh(oldData, _) {
         const isFirst = !oldData || oldData.length <= 0;
         const lastMessageId = isFirst ? undefined : this.lastMessageId;
         const loadPromise = delegate.im.conversation.loadMessage({
@@ -180,19 +186,19 @@ export default class extends React.PureComponent {
                     isEnd: result.length < this.pageCount,
                 };
             });
-    };
+    }
 
-    _insertMessageToList = (message) => {
+    _insertMessageToList(message) {
         console.log(message);
         const messages = Array.isArray(message) ? message : [message];
         this.list.insert(messages);
-    };
+    }
 
-    _onReceiveMessage = (message) => {
+    _onReceiveMessage(message) {
         this._insertMessageToList(message);
-    };
+    }
 
-    _onSendMessage = (imId, chatType, {type, body}) => {
+    _onSendMessage(imId, chatType, {type, body}) {
         const isCurrent = this.props.imId === imId;
         const message = this._generateMessage(type, body);
         delegate.model.Message.sendMessage(imId, chatType, message, {})
@@ -200,15 +206,15 @@ export default class extends React.PureComponent {
                 if (isCurrent) {
                     this._markAllRead();
                 } else {
-                    Toast.show('发送成功');
+                    Toast.show(i18n.t('SendMessageSuccess'));
                 }
             })
             .catch((err) => {
-                Toast.show(err);
+                Toast.show(err.message);
             });
-    };
+    }
 
-    _onShowMenu = (param) => {
+    _onShowMenu(param) {
         const {rect, isSender, message} = param;
         const messageType = message.type;
         const actionList = [];
@@ -230,27 +236,27 @@ export default class extends React.PureComponent {
             menuRect: rect,
             actionList: actionList,
         });
-    };
+    }
 
-    _onCloseMenu = () => {
+    _onCloseMenu() {
         this.setState({menuShow: false});
-    };
+    }
 
-    _onCopy = (message) => {
+    _onCopy(message) {
         const text = message.data.text;
         Clipboard.setString(text);
-    };
+    }
 
-    _onForward = (message) => {
+    _onForward(message) {
         this.props.navigation.navigate({
             routeName: PageKeys.ChooseConversation,
             params: {
                 onSelectData: this._onSelectConversation.bind(this, message),
             },
         });
-    };
+    }
 
-    _onRecall = (message) => {
+    _onRecall(message) {
         const {imId, chatType} = this.props;
         // if (Model.app.env() !== Constant.environment.test178) {
         //     global.standard.im.message.remove(message, chatType);
@@ -261,9 +267,9 @@ export default class extends React.PureComponent {
             appName,
             body: {message, type: global.standard.im.constant.type.recall_message}
         });
-    };
+    }
 
-    _onExchangeMessage = (cmdMessage) => {
+    _onExchangeMessage(cmdMessage) {
         const data = cmdMessage.ext.body.message;
         const {chatType} = this.props;
         delegate.im.conversation.deleteMessage(data.to, chatType, data.messageId);
@@ -293,26 +299,26 @@ export default class extends React.PureComponent {
             .then((newMessage) => {
                 this.list.recallMessage(newMessage, data.messageId);
             });
-    };
+    }
 
-    _onQuote = (item) => {
+    _onQuote(item) {
         this.bottomBar.changeInputText(item.from, item.data.text);
-    };
+    }
 
-    _onSelectConversation = (message, conversations) => {
+    _onSelectConversation(message, conversations) {
         this._onSendMessage(
             conversations[0].imId,
             conversations[0].chatType,
             {type: message.type, body: message.data}
         );
-    };
+    }
 
-    _markAllRead = () => {
+    _markAllRead() {
         const {imId, chatType} = this.props;
         return delegate.model.Conversation.markReadStatus(imId, chatType, true);
-    };
+    }
 
-    _renderItem = ({item}) => {
+    _renderItem({item}) {
         const isMe = item.from === delegate.user.getMine().userId;
         const position = item.data.isSystem ? 0 : isMe ? 1 : -1;
         if (item.data.isSystem && item.data.text.length <= 0) {
@@ -324,12 +330,12 @@ export default class extends React.PureComponent {
                 chatType={this.props.chatType}
                 position={position}
                 message={item}
-                onShowMenu={this._onShowMenu}
+                onShowMenu={this._onShowMenu.bind(this)}
             />
         );
-    };
+    }
 
-    _generateMessage = (type, body, others) => {
+    _generateMessage(type, body, others) {
         return {
             conversationId: this.props.imId,
             messageId: undefined,
@@ -343,7 +349,7 @@ export default class extends React.PureComponent {
             data: body,
             ...others,
         };
-    };
+    }
 }
 
 const styles = StyleSheet.create({

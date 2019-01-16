@@ -9,4 +9,3 @@
 | 名称 | 类型 | 描述 |
 | :-: | :-: | :- |
 | dataSource | Array\<ImUser\> | 自定义数据源，如果不传，则使用整个通讯录人员列表 |
-| labelSelectUserFromOrg | string | 进入从部门选择人员页面的按钮文本 |

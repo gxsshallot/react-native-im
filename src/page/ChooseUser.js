@@ -3,25 +3,31 @@ import { InteractionManager, StyleSheet, Text, TouchableOpacity, View } from 're
 import PropTypes from 'prop-types';
 import Toast from 'react-native-root-toast';
 import PickList from 'react-native-picklist';
-import NaviBar from 'react-native-pure-navigation-bar';
 import ArrowImage from '@hecom/image-arrow';
 import ChooseUserFromOrgPage from './ChooseUserFromOrg';
 import delegate from '../delegate';
 import * as Types from '../proptype';
 import * as PageKeys from '../pagekey';
+import i18n from '../../language';
 
 export default class extends React.PureComponent {
-    static navigationOptions = PickList.navigationOptions;
+    static navigationOptions = function (options) {
+        if (PickList.initialized(options)) {
+            return PickList.navigationOptions(options);
+        } else {
+            return {
+                title: i18n.t('LoadingTitle'),
+            };
+        }
+    };
 
     static propTypes = {
         ...ChooseUserFromOrgPage.propTypes,
         dataSource: PropTypes.arrayOf(PropTypes.shape(Types.ImUser)),
-        labelSelectUserFromOrg: PropTypes.string,
     };
 
     static defaultProps = {
         ...ChooseUserFromOrgPage.defaultProps,
-        labelSelectUserFromOrg: '按部门选同事',
     };
 
     constructor(props) {
@@ -38,38 +44,38 @@ export default class extends React.PureComponent {
                     this.setState({users});
                 })
                 .catch(() => {
-                    Toast.show(this.props.labelLoadError);
+                    Toast.show(i18n.t('LoadOrganizationErrorToast'));
                 });
         }
     }
 
     render() {
-        const {title, selectedIds, multiple, dataSource} = this.props;
-        return this.state.users !== undefined ? (
+        const {navigation, title, selectedIds, multiple, dataSource} = this.props;
+        return this.state.users !== undefined && (
             <PickList
+                navigation={navigation}
                 title={title}
                 multilevel={false}
                 multiselect={multiple}
                 showBottomView={false}
                 data={this.state.users}
-                onFinish={this._onFinish}
-                renderHeader={dataSource ? undefined : this._renderHeader}
+                onFinish={this._onFinish.bind(this)}
+                renderHeader={dataSource ? undefined : this._renderHeader.bind(this)}
                 rightTitle={multiple ? delegate.config.buttonOK : undefined}
                 searchKeys={[delegate.config.pinyinField]}
                 labelKey={'name'}
                 idKey={'userId'}
                 selectedIds={selectedIds}
-                split={this._splitSections}
+                split={this._splitSections.bind(this)}
                 sectionListProps={{
                     initialNumToRender: 20,
-                    renderSectionHeader: this._renderSectionHeader,
+                    renderSectionHeader: this._renderSectionHeader.bind(this),
                 }}
-                navigation={this.props.navigation}
             />
-        ) : <NaviBar title={delegate.config.titleLoading} />;
+        );
     }
 
-    _renderSectionHeader = ({section}) => {
+    _renderSectionHeader({section}) {
         const style = {
             backgroundColor: delegate.style.viewBackgroundColor,
         };
@@ -80,28 +86,28 @@ export default class extends React.PureComponent {
                 </Text>
             </View>
         );
-    };
+    }
 
-    _renderHeader = () => {
+    _renderHeader() {
         const style = {
             borderBottomWidth: StyleSheet.hairlineWidth,
             borderBottomColor: delegate.style.separatorLineColor,
         };
         return (
             <View style={styles.row}>
-                <TouchableOpacity onPress={this._clickHeader}>
+                <TouchableOpacity onPress={this._clickHeader.bind(this)}>
                     <View style={[styles.container, style]}>
                         <Text style={styles.text}>
-                            {this.props.labelSelectUserFromOrg}
+                            {i18n.t('SelectUserFromOrgLabel')}
                         </Text>
                         <ArrowImage style={styles.icon} />
                     </View>
                 </TouchableOpacity>
             </View>
         );
-    };
+    }
 
-    _splitSections = (users) => {
+    _splitSections(users) {
         const {excludedUserIds, hasSelf} = this.props;
         if (Array.isArray(excludedUserIds) && excludedUserIds.length > 0) {
             users = users.filter(item => excludedUserIds.indexOf(item.getId()) < 0);
@@ -147,16 +153,16 @@ export default class extends React.PureComponent {
                 };
             });
         return users;
-    };
+    }
 
-    _onFinish = (nodes) => {
+    _onFinish(nodes) {
         nodes = nodes
             .reduce((prv, cur) => [...prv, ...cur.getLeafChildren()], [])
             .map(node => node.getInfo().userId);
         this.props.onSelectData && this.props.onSelectData(nodes);
-    };
+    }
 
-    _clickHeader = () => {
+    _clickHeader() {
         const onSelectDataFunc = (nodes) => {
             this.props.onSelectData && this.props.onSelectData(nodes);
             InteractionManager.runAfterInteractions(() => {
@@ -167,11 +173,11 @@ export default class extends React.PureComponent {
             routeName: PageKeys.ChooseUserFromOrg,
             params: {
                 ...this.props,
-                firstTitleLine: 'IM测试', // TODO 修改企业名称
+                firstTitleLine: delegate.user.getMine().entName,
                 onSelectData: onSelectDataFunc,
             },
         });
-    };
+    }
 }
 
 const styles = StyleSheet.create({

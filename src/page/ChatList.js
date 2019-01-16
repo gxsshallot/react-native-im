@@ -6,10 +6,13 @@ import Listener from 'react-native-general-listener';
 import * as PageKeys from '../pagekey';
 import delegate from '../delegate';
 import * as Constant from '../constant';
+import i18n from '../../language';
 
 export default class extends React.PureComponent {
-    static navigationOptions = {
-        title: '聊天列表',
+    static navigationOptions = function () {
+        return {
+            title: i18n.t('ChatListPageTitle')
+        };
     };
 
     static propTypes = {};
@@ -19,7 +22,7 @@ export default class extends React.PureComponent {
     constructor(props) {
         super(props);
         this.state = {
-            dataSource: undefined,
+            dataSource: null,
         };
     }
 
@@ -40,32 +43,29 @@ export default class extends React.PureComponent {
 
     render() {
         const listStyle = {
+            flex: 1,
             borderTopWidth: StyleSheet.hairlineWidth,
             borderTopColor: delegate.style.separatorLineColor,
             borderBottomWidth: StyleSheet.hairlineWidth,
             borderBottomColor: delegate.style.separatorLineColor,
         };
-        return (
-            <View style={styles.container}>
-                {this.state.dataSource !== undefined && (
-                    <SwipeListView
-                        useFlatList
-                        disableRightSwipe
-                        closeOnRowBeginSwipe
-                        style={listStyle}
-                        data={this.state.dataSource}
-                        renderItem={this._renderRow}
-                        renderHiddenItem={this._renderHiddenItem}
-                        ListHeaderComponent={this._renderFakeSearchBar()}
-                        rightOpenValue={-225}
-                        keyExtractor={item => item.imId}
-                    />
-                )}
-            </View>
+        return this.state.dataSource !== null && (
+            <SwipeListView
+                useFlatList={true}
+                disableRightSwipe={true}
+                closeOnRowBeginSwipe={true}
+                style={listStyle}
+                data={this.state.dataSource}
+                renderItem={this._renderRow.bind(this)}
+                renderHiddenItem={this._renderHiddenItem.bind(this)}
+                ListHeaderComponent={this._renderFakeSearchBar()}
+                rightOpenValue={-225}
+                keyExtractor={item => item.imId}
+            />
         );
     }
 
-    _renderRow = ({item, index}) => {
+    _renderRow({item, index}) {
         const isBottom = index === this.state.dataSource.length - 1;
         const separatorLeft = !isBottom ? 75 : -1;
         return (
@@ -76,9 +76,9 @@ export default class extends React.PureComponent {
                 navigation={this.props.navigation}
             />
         );
-    };
+    }
 
-    _renderHiddenItem = ({item}, rowMap) => {
+    _renderHiddenItem({item}, rowMap) {
         const config = delegate.model.Conversation.getConfig(item.imId);
         const isRead = !(item.unreadMessagesCount > 0);
         const markTitle = isRead ? '标记未读' : '标记已读';
@@ -99,12 +99,12 @@ export default class extends React.PureComponent {
                 )}
             </View>
         );
-    };
+    }
 
-    _renderButton = (rowMap, item, text, style, onPress) => {
+    _renderButton(rowMap, item, text, style, onPress) {
         return (
             <TouchableOpacity
-                onPress={() => {
+                onPress={function () {
                     rowMap[item.imId].closeRow();
                     onPress && onPress();
                 }}
@@ -115,50 +115,47 @@ export default class extends React.PureComponent {
                 </Text>
             </TouchableOpacity>
         );
-    };
+    }
 
-    _renderFakeSearchBar = () => {
+    _renderFakeSearchBar() {
         return (
             <delegate.component.FakeSearchBar
-                onFocus={this._clickSearch}
+                onFocus={this._clickSearch.bind(this)}
                 placeholder={'搜索'}
             />
         );
-    };
+    }
 
-    _refresh = () => {
+    _refresh() {
         const dataSource = delegate.model.Conversation.get();
         this.setState({dataSource});
-    };
+    }
 
-    _clickTop = (item, config) => {
+    _clickTop(item, config) {
         const top = !config.top;
         delegate.model.Conversation.updateConfig(item.imId, {top})
-            .catch(() => {
+            .catch(function () {
                 Toast.show('置顶失败，请稍后重试');
             });
-    };
+    }
 
-    _clickMarkReadStatus = (item, status) => {
+    _clickMarkReadStatus(item, status) {
         delegate.model.Conversation.markReadStatus(item.imId, item.chatType, status);
-    };
+    }
 
-    _clickDelete = (item) => {
+    _clickDelete(item) {
         delegate.model.Conversation.deleteOne(item.imId);
-    };
+    }
 
-    _clickSearch = () => {
+    _clickSearch() {
         this.props.navigation.navigate({
             routeName: PageKeys.Search,
             params: {},
         });
-    };
+    }
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-    },
     hidden: {
         alignSelf: 'stretch',
         flexDirection: 'row',

@@ -68,6 +68,7 @@ IMStandard.setup_common_model();
 
 * `loadAllUser: (isAll: boolean) => Promise<ImUser[] | void>`：这里`isAll`表示是否返回数据，返回数组的元素是[用户信息](zh-cn/struct/Organization#用户)。
 * `loadAllOrg: (isAll: boolean) => Promise<ImOrg[] | void>`：这里`isAll`表示是否返回数据，返回数组的元素是[部门信息](zh-cn/struct/Organization#部门)。
+* `loadUserOrgTree: (hasSelf: boolean, parentOrgId: string, excludedUserIds: string[]) => Promise<ImOrg[]>`：获取通讯录的员工部门树，非叶节点为部门，叶节点为员工，部门中的`children`字段表示子节点列表。这里的参数分别是是否包含自己、父部门Id、排除的人员Id列表。因为如果人员和部门数据量很大的话，用自带的内部算法建树复杂度是很高的，可以通过外部方式直接传入树，或使用更深层次的联系快速建树。
 
 ## 用户(user)
 
@@ -76,7 +77,7 @@ IMStandard.setup_common_model();
 包括如下接口：
 
 * `getMine: () => Promise<ImUser>`：获取当前[用户信息](zh-cn/struct/Organization#用户)。
-* `getUser: (userId: string) => Promise<ImUser>`：获取指定[用户信息](zh-cn/struct/Organization#用户)。
+* `getUser: (userId: string) => Promise<ImUser>`：获取指定[用户信息](zh-cn/struct/Organization#用户)。包含`entName`企业名称。
 
 ## 聊天(im)
 

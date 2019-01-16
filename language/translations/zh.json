@@ -1,0 +1,9 @@
+{
+    "ChatListPageTitle": "聊天列表",
+    "GroupChatType": "群聊",
+    "LoadingTitle": "加载中",
+    "LoadOrganizationErrorToast": "加载组织架构失败",
+    "SelectUserFromOrgLabel": "按部门选同事",
+    "SendMessageSuccess": "发送成功",
+    "SettingButtonLabel": "设置"
+}

@@ -2,13 +2,21 @@ import React from 'react';
 import { View } from 'react-native';
 import PropTypes from 'prop-types';
 import Toast from 'react-native-root-toast';
-import NaviBar from 'react-native-pure-navigation-bar';
 import PickList, { PickListRowUtil } from 'react-native-picklist';
 import { deepExport } from '../util';
 import delegate from '../delegate';
+import i18n from '../../language';
 
 export default class extends React.PureComponent {
-    static navigationOptions = PickList.navigationOptions;
+    static navigationOptions = function (options) {
+        if (PickList.initialized(options)) {
+            return PickList.navigationOptions(options);
+        } else {
+            return {
+                title: i18n.t('LoadingTitle'),
+            };
+        }
+    };
 
     static propTypes = {
         title: PropTypes.string.isRequired,
@@ -19,17 +27,14 @@ export default class extends React.PureComponent {
         excludedUserIds: PropTypes.arrayOf(PropTypes.string),
         selectedIds: PropTypes.arrayOf(PropTypes.string),
         onSelectData: PropTypes.func,
-        labelLoadError: PropTypes.string,
         spaceHeight: PropTypes.number,
     };
 
     static defaultProps = {
-        firstTitleLine: '所有部门',
         multiple: false,
         hasSelf: false,
         parentOrgId: undefined,
         excludedUserIds: [],
-        labelLoadError: '加载组织架构失败',
         spaceHeight: 10,
     };
 
@@ -41,74 +46,88 @@ export default class extends React.PureComponent {
     }
 
     componentDidMount() {
-        const userPromise = delegate.contact.loadAllUser(true);
-        const orgPromise = delegate.contact.loadAllOrg(true);
-        Promise.all([userPromise, orgPromise])
-            .then(([users, orgs]) => {
-                const tree = this._generateTree(users, orgs);
-                this.setState({
-                    tree: tree,
-                });
+        let promise;
+        if (delegate.contact.loadUserOrgTree) {
+            const {hasSelf, parentOrgId, excludedUserIds} = this.props;
+            promise = delegate.contact.loadUserOrgTree(hasSelf, parentOrgId, excludedUserIds);
+        } else {
+            const userPromise = delegate.contact.loadAllUser(true);
+            const orgPromise = delegate.contact.loadAllOrg(true);
+            promise = Promise.all([userPromise, orgPromise])
+                .then(([users, orgs]) => this._generateTree(users, orgs));
+        }
+        return promise
+            .then((tree) => {
+                this.setState({tree});
             })
             .catch(() => {
-                Toast.show(this.props.labelLoadError);
+                Toast.show(i18n.t('LoadOrganizationErrorToast'));
             });
     }
 
     render() {
-        const {title, firstTitleLine, selectedIds, multiple} = this.props;
-        return this.state.tree !== undefined ? (
+        const {navigation, title, firstTitleLine, selectedIds, multiple} = this.props;
+        const {tree = []} = this.state;
+        let data, titleLine;
+        if (tree.length === 1) {
+            data = tree[0].children;
+            titleLine = tree[0].name;
+        } else {
+            data = tree;
+            titleLine = firstTitleLine;
+        }
+        return this.state.tree !== undefined && (
             <PickList
+                navigation={navigation}
                 title={title}
                 firstTitleLine={firstTitleLine}
                 multilevel={true}
                 multiselect={multiple}
-                data={this.state.tree}
-                renderRow={this._renderRow}
+                data={data}
+                renderRow={this._renderRow.bind(this)}
                 showCount={true}
-                onFinish={this._onFinish}
+                onFinish={this._onFinish.bind(this)}
                 searchKeys={[delegate.config.pinyinField]}
-                selectable={this._selectable}
+                selectable={this._selectable.bind(this)}
                 labelKey={'name'}
-                idKey={'id'}
+                idKey={['userId', 'orgId']}
                 selectedIds={selectedIds}
-                split={this._splitSection}
+                split={this._splitSection.bind(this)}
                 directBackWhenSingle={false}
                 sectionListProps={{
                     initialNumToRender: 30,
-                    renderSectionFooter: this._renderSectionFooter,
+                    renderSectionFooter: this._renderSectionFooter.bind(this),
                 }}
-                navigation={this.props.navigation}
             />
-        ) : <NaviBar title={delegate.config.titleLoading} />;
+        );
     }
 
-    _renderSectionFooter = ({section}) => {
+    _renderSectionFooter({section}) {
         const viewStyle = {
             height: this.props.spaceHeight,
             backgroundColor: delegate.style.separatorLineColor,
         };
         return section.hasFooter ? <View style={viewStyle} /> : null;
-    };
+    }
 
-    _renderRow = (treeNode, props) => {
+    _renderRow(treeNode, props) {
         return treeNode.getInfo().userId ?
             PickListRowUtil.multiLevelLeafNode(treeNode, props) :
             PickListRowUtil.multiLevelNotLeafNode(treeNode, props);
-    };
+    }
 
-    _onFinish = (nodes) => {
+    _onFinish(nodes) {
         nodes = nodes
             .reduce((prv, cur) => [...prv, ...cur.getLeafChildren()], [])
             .map(node => node.getInfo().userId);
         this.props.onSelectData && this.props.onSelectData(nodes);
-    };
+    }
 
-    _selectable = (treeNode) => {
+    _selectable(treeNode) {
         return this.props.multiple || treeNode.getInfo().userId;
-    };
+    }
 
-    _splitSection = (children) => {
+    _splitSection(children) {
         const notLeafItems = children.filter(treeNode => treeNode.getInfo().orgId);
         const leafItems = children.filter(treeNode => treeNode.getInfo().userId);
         const hasFooter = leafItems.length > 0 && notLeafItems.length > 0;
@@ -116,9 +135,9 @@ export default class extends React.PureComponent {
             {data: notLeafItems, hasFooter: hasFooter},
             {data: leafItems}
         ];
-    };
+    }
 
-    _generateTree = (users, orgs) => {
+    _generateTree(users, orgs) {
         const {hasSelf, parentOrgId, excludedUserIds} = this.props;
         let tree;
         if (parentOrgId && parentOrgId.length > 0) {
@@ -138,7 +157,6 @@ export default class extends React.PureComponent {
         const meUserId = delegate.user.getMine().userId;
         while (queue.length > 0) {
             const parent = queue[0];
-            parent.id = parent.orgId;
             parent.children = [];
             // Orgs
             if (orgs) {
@@ -159,12 +177,11 @@ export default class extends React.PureComponent {
                     .filter(item => Array.isArray(excludedUserIds) ? excludedUserIds.indexOf(item.userId) < 0 : true);
                 const useritems = deepExport(subusers);
                 useritems.forEach(item => {
-                    item.id = item.userId;
                     parent.children.push(item);
                 });
             }
             queue = queue.slice(1);
         }
         return tree;
-    };
+    }
 }

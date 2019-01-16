@@ -16,5 +16,4 @@
 | excludedUserIds | Array\<string\> | 排除掉的人员的userId列表 |
 | selectedIds | Array\<string\> | 预置已选中的人员的userId列表 |
 | onSelectData | (data: Array\<string\>) => void | 选中后对选择结果的回调，参数是选中人员的userId列表 |
-| labelLoadError | string | 加载组织架构错误时提示语 |
 | spaceHeight | number | 页面展示时，上方部门和下方人员中间的分隔高度 |
