@@ -252,9 +252,9 @@ export default class extends React.PureComponent {
 
     _onRecall = (message) => {
         const {imId, chatType} = this.props;
-        if (Model.app.env() !== Constant.environment.test178) {
-            global.standard.im.message.remove(message, chatType);
-        }
+        // if (Model.app.env() !== Constant.environment.test178) {
+        //     global.standard.im.message.remove(message, chatType);
+        // }
         this._onExchangeMessage({text: '你撤回了一条消息', ext: {body: {message}}});
         const appName = global.standard.im.constant.cmd_message.IM_MESSAGE;
         ChatManager.sendCmd(imId, chatType, appName, {

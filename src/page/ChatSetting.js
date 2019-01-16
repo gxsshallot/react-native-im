@@ -27,7 +27,7 @@ export default class extends React.PureComponent {
             state.groupAvatar = delegate.model.Group.getAvatar(imId);
             state.groupName = delegate.model.Group.getName(imId, false);
             state.groupOwner = delegate.model.Group.getOwner(imId);
-            state.groupAllowAdd = delegate.model.Group.getAllowAdd(imId)
+            state.groupAllowAdd = delegate.model.Group.getAllowAdd(imId);
         }
         this.state = {
             ...delegate.model.Conversation.getConfig(imId),
