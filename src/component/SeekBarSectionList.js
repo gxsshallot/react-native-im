@@ -38,7 +38,7 @@ export default class extends React.PureComponent {
                     })}
                 />
                 <delegate.component.SelectList
-                    sections={['↑'].concat(this.props.sections.map(i => i.title))}
+                    sections={['↑'].concat(this.props.sections.map(i => i.key))}
                     onItemChange={this._scrollToLocation}
                 />
                 {this.state.isShowBackTop && this._renderBackTop()}

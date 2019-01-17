@@ -15,6 +15,7 @@ export default function (users, firstLetterKey, sortKey = 'name') {
             return pre;
         }, {});
     return Object.keys(data)
+    // title用于展示ListSectionHeader，key用于展示右侧索引
         .map(key => ({key, title: key, data: data[key]}))
         .sort(sort.bind(this, 'title'));
 }

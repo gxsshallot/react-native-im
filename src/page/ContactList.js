@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import Toast from 'react-native-root-toast';
 import NaviBar, { forceInset } from 'react-native-pure-navigation-bar';
 import ArrowImage from '@hecom/image-arrow';
+import Listener from 'react-native-general-listener';
 import * as Constant from '../constant';
 import * as PageKeys from '../pagekey';
 import { mapListToSection } from '../util';
@@ -25,9 +26,16 @@ export default class extends React.PureComponent {
     }
 
     componentDidMount() {
+        if (delegate.contact.loadStarUser) {
+            this.listener = Listener.register([Constant.BaseEvent, Constant.StarUserChangeEvent], this._onStarUserChange)
+        }
         InteractionManager.runAfterInteractions(() => {
             this._loadData();
         });
+    }
+
+    componentWillUnmount() {
+        this.listener && Listener.unregister([Constant.BaseEvent, Constant.StarUserChangeEvent], this.listener)
     }
 
     render() {
@@ -74,7 +82,7 @@ export default class extends React.PureComponent {
 
     _renderSectionHeader = ({section: {title}}) => {
         return <delegate.component.SectionHeader title={title} />;
-    }
+    };
 
     _renderHeader = () => {
         return this.state.items.map(({title, subTitle, onClick, icon}, index) => (
@@ -105,7 +113,7 @@ export default class extends React.PureComponent {
     };
 
     _renderRight = (item) => {
-        const { phone } = item;
+        const {phone} = item;
         return phone && phone.length > 0 ? (
             <TouchableOpacity
                 style={styles.phoneBtn}
@@ -122,9 +130,13 @@ export default class extends React.PureComponent {
     _loadData = () => {
         const loadUser = delegate.contact.loadAllUser(true);
         const loadOrg = delegate.contact.loadAllOrg(false);
-        return Promise.all([loadUser, loadOrg])
-            .then(([users]) => {
+        const loadStarUser = delegate.contact.loadStarUser ? delegate.contact.loadStarUser() : [];
+        return Promise.all([loadUser, loadOrg, loadStarUser])
+            .then(([users, _, starUsers = []]) => {
                 const data = mapListToSection(users, delegate.config.pinyinField);
+                if (starUsers.length > 0) {
+                    data.unshift({key: '☆', title: '星标好友', data: starUsers})
+                }
                 const {getHeaderConfig} = this.props;
                 const items = getHeaderConfig ? getHeaderConfig({users, sections: data}) : [];
                 LayoutAnimation.easeInEaseOut();
@@ -134,6 +146,26 @@ export default class extends React.PureComponent {
 
     _clickItem = (item) => {
         delegate.func.pushToUserDetailPage(item.imId);
+    };
+
+    _onStarUserChange = () => {
+        delegate.contact.loadStarUser()
+            .then(starUsers => {
+                const {data} = this.state;
+                if (Array.isArray(data) && data.length > 0) {
+                    const first = data[0];
+                    if (first.key === '☆') {
+                        if (starUsers.length === 0) {
+                            data.shift()
+                        } else {
+                            first.data = starUsers;
+                        }
+                    } else {
+                        data.unshift({key: '☆', title: '星标好友', data: starUsers})
+                    }
+                    this.setState({data: [...data]})
+                }
+            })
     };
 
     _clickSearchBar = () => {
