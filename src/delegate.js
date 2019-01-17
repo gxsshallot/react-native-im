@@ -6,6 +6,7 @@ export default {
         loadAllUser: unset('contact.loadAllUser'),
         loadAllOrg: unset('contact.loadAllOrg'),
         loadUserOrgTree: null,
+        loadStarUser: null,
     },
     user: {
         getMine: unset('user.getMine'),
