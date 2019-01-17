@@ -24,4 +24,4 @@
 * `changeName(groupId, newName)`：修改指定群组的群名称。
 * `changeAvatar(groupId, newAvatarUrl)`：修改指定群组的群头像。
 * `changeOwner(groupId, newOwnerId)`：修改指定群组的群主。
-* `changeAllowAdd(groupId, isAllowAdd)`：修改指定群组的允许添加成员配置。
+* `changeAllowInvite(groupId, isAllowAdd)`：修改指定群组的允许添加成员配置。

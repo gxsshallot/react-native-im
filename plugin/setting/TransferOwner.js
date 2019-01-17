@@ -1,3 +1,5 @@
+import { Alert } from 'react-native';
+import Toast from 'react-native-root-toast';
 import * as IMStandard from '../../src';
 import getGeneralButton from './GeneralButton';
 import i18n from '../../language';
@@ -22,10 +24,10 @@ export function getUi(props) {
 
 function _clickTransferOwner(props) {
     const {imId, navigation} = props;
-    const groupMembers = delegate.model.Group.getMembers(imId);
+    const groupMembers = IMStandard.Delegate.model.Group.getMembers(imId);
     const dataSource = groupMembers
-        .filter(userId => userId !== delegate.user.getMine().userId)
-        .map(userId => delegate.user.getUser(userId));
+        .filter(userId => userId !== IMStandard.Delegate.user.getMine().userId)
+        .map(userId => IMStandard.Delegate.user.getUser(userId));
     navigation.navigate({
         routeName: IMStandard.PageKeys.ChooseUser,
         params: {
@@ -41,7 +43,7 @@ function _clickTransferOwner(props) {
 }
 
 function _onTransferOwnerAlert(props, data) {
-    const newOwner = delegate.user.getUser(data[0]);
+    const newOwner = IMStandard.Delegate.user.getUser(data[0]);
     Alert.alert('转交群主给:', newOwner.name, [
         {text: i18n.t('IMCommonCancel')},
         {text: i18n.t('IMCommonOK'), onPress: function () {
@@ -52,8 +54,8 @@ function _onTransferOwnerAlert(props, data) {
 
 function _onTransferOwner(props, newOwner) {
     const {imId, onDataChange} = props;
-    delegate.model.Group.changeOwner(imId, newOwner.userId)
-        .then(({members, owner}) => {
+    IMStandard.Delegate.model.Group.changeOwner(imId, newOwner.userId)
+        .then(() => {
             Toast.show(i18n.t('IMToastSuccess', {
                 action: i18n.t('IMSettingTransferOwnerAction')
             }));

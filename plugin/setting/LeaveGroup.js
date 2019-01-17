@@ -1,3 +1,5 @@
+import { StackActions } from 'react-navigation';
+import Toast from 'react-native-root-toast';
 import * as IMStandard from '../../src';
 import getGeneralButton from './GeneralButton';
 import i18n from '../../language';
@@ -22,9 +24,9 @@ function _clickLeave(props, text, isOwner) {
     const {imId, navigation} = props;
     let promise;
     if (isOwner) {
-        promise = delegate.model.Group.destroyOne(imId);
+        promise = IMStandard.Delegate.model.Group.destroyOne(imId);
     } else {
-        promise = delegate.model.Group.quitOne(imId);
+        promise = IMStandard.Delegate.model.Group.quitOne(imId);
     }
     return promise
         .then(() => {

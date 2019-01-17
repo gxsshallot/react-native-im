@@ -169,7 +169,7 @@ export function getAvatar(groupId) {
  */
 export function getAllowAdd(groupId) {
     const group = findByGroupId(groupId, false);
-    return group ? group.allowInvites : undefined;
+    return group ? group.allowInvite : undefined;
 }
 
 /**
@@ -267,12 +267,12 @@ export function changeAvatar(groupId, newAvatarUrl) {
 /**
  * 更改是否允许其他人添加成员设置。
  * @param {string} groupId 群组ID
- * @param {string} isAllowAdd 新头像的URL地址
+ * @param {string} allowInvite 是否允许添加成员
  */
-export function changeAllowAdd(groupId, isAllowAdd) {
-    return delegate.im.group.changeAllowAdd(groupId, isAllowAdd)
+export function changeAllowInvite(groupId, allowInvite) {
+    return delegate.im.group.changeAllowInvite(groupId, allowInvite)
         .then(() => {
-            return changeGroupInfo(groupId, {allowInvites: isAllowAdd}, isAllowAdd);
+            return changeGroupInfo(groupId, {allowInvite}, allowInvite);
         });
 }
 

@@ -90,11 +90,11 @@ export default class extends React.PureComponent {
                         <View style={styles.container}>
                             <delegate.component.DetailListView
                                 ref={ref => this.list = ref}
-                                style={{flex: 0}}
+                                style={styles.fixedList}
                                 renderItem={this._renderItem.bind(this)}
                                 onLoadPage={this._refresh.bind(this)}
                             />
-                            <View style={{flex: 1}} />
+                            <View style={styles.flexList} />
                         </View>
                     </TouchableWithoutFeedback>
                 </SafeAreaView>
@@ -141,7 +141,7 @@ export default class extends React.PureComponent {
                             imId: this.props.imId,
                             chatType: this.props.chatType,
                         },
-                    })
+                    });
                 }}
             />
         );
@@ -212,7 +212,7 @@ export default class extends React.PureComponent {
                     }));
                 }
             })
-            .catch((err) => {
+            .catch(() => {
                 Toast.show(i18n.t('IMToastError', {
                     action: i18n.t('IMSendMessage')
                 }));
@@ -363,6 +363,12 @@ const styles = StyleSheet.create({
     },
     innerview: {
         flex: 1,
+    },
+    fixedList: {
+        flex: 0,
+    },
+    flexList: {
+        flex: 10000,
     },
     touch: {
         flex: 1,
