@@ -1,9 +1,10 @@
 import React from 'react';
-import { Button, Clipboard, Keyboard, SafeAreaView, StyleSheet, View, TouchableWithoutFeedback } from 'react-native';
-import * as PageKeys from '../pagekey';
+import { Clipboard, Keyboard, SafeAreaView, StyleSheet, View, TouchableWithoutFeedback } from 'react-native';
+import { HeaderButton } from 'react-navigation-header-buttons';
 import { ChatManager, IMConstant } from 'react-native-im-easemob';
 import Toast from 'react-native-root-toast';
 import Listener from 'react-native-general-listener';
+import * as PageKeys from '../pagekey';
 import * as Types from '../proptype';
 import * as Constant from '../constant';
 import { guid, DateUtil } from '../util';
@@ -131,7 +132,7 @@ export default class extends React.PureComponent {
 
     _renderRightElement() {
         return (
-            <Button
+            <HeaderButton
                 title={i18n.t('SettingButtonLabel')}
                 onPress={() => {
                     this.props.navigation.navigate({
