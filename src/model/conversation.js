@@ -57,7 +57,7 @@ export function uninit(forceClear) {
  */
 export function load() {
     return delegate.im.conversation.loadList()
-        .then(([result]) => {
+        .then((result) => {
             const promises = result.map((item) => {
                 rootNode[item.imId] = {
                     ...item,

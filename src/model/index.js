@@ -4,6 +4,7 @@ import * as Emoji from './emoji';
 import * as External from './external';
 import * as Group from './group';
 import * as Message from './message';
+import * as Setting from './setting';
 
 export {
     Action,
@@ -12,4 +13,5 @@ export {
     External,
     Group,
     Message,
+    Setting,
 };

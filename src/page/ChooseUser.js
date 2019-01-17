@@ -16,7 +16,7 @@ export default class extends React.PureComponent {
             return PickList.navigationOptions(options);
         } else {
             return {
-                title: i18n.t('LoadingTitle'),
+                title: i18n.t('IMCommonPageTitle'),
             };
         }
     };
@@ -44,7 +44,9 @@ export default class extends React.PureComponent {
                     this.setState({users});
                 })
                 .catch(() => {
-                    Toast.show(i18n.t('LoadOrganizationErrorToast'));
+                    Toast.show(i18n.t('IMToastError', {
+                        action: i18n.t('IMLoadOrganization')
+                    }));
                 });
         }
     }
@@ -98,7 +100,7 @@ export default class extends React.PureComponent {
                 <TouchableOpacity onPress={this._clickHeader.bind(this)}>
                     <View style={[styles.container, style]}>
                         <Text style={styles.text}>
-                            {i18n.t('SelectUserFromOrgLabel')}
+                            {i18n.t('IMPageChooseUserSelectFromOrg')}
                         </Text>
                         <ArrowImage style={styles.icon} />
                     </View>

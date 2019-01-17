@@ -1,7 +1,8 @@
 import React from 'react';
 import { Alert, InteractionManager, ScrollView, StyleSheet, Text, TouchableHighlight, View } from 'react-native';
+import PropTypes from 'prop-types';
 import { StackActions } from 'react-navigation';
-import NaviBar, { getSafeAreaInset } from 'react-native-pure-navigation-bar';
+import { getSafeAreaInset } from 'react-native-pure-navigation-bar';
 import Toast from 'react-native-root-toast';
 import ActionSheet from 'react-native-general-actionsheet';
 import * as ImagePicker from 'react-native-full-image-picker';
@@ -9,13 +10,25 @@ import * as PageKeys from '../pagekey';
 import * as Constant from '../constant';
 import * as Types from '../proptype';
 import delegate from '../delegate';
+import i18n from '../../language';
 
 export default class extends React.PureComponent {
-    static propTypes = {
-        ...Types.BasicConversation,
+    static navigationOptions = function ({navigation}) {
+        const {chatType} = navigation.state.params;
+        const isGroup = chatType === Constant.ChatType.Group;
+        const title = isGroup ? i18n.t('IMPageChatSettingTitleGroup') : i18n.t('IMPageChatSettingTitleSingle');
+        return {title};
     };
 
-    static defaultProps = {};
+    static propTypes = {
+        ...Types.BasicConversation,
+        ...Types.Navigation,
+        buttons: PropTypes.arrayOf(PropTypes.string),
+    };
+
+    static defaultProps = {
+        buttons: [],
+    };
 
     constructor(props) {
         super(props);
@@ -39,10 +52,8 @@ export default class extends React.PureComponent {
         const style = {
             backgroundColor: delegate.style.viewBackgroundColor,
         };
-        const title = this.isGroup ? '群设置' : '聊天设置';
         return (
             <View style={[styles.view, style]}>
-                <NaviBar title={title} />
                 <ScrollView style={styles.scrollView}>
                     {this.isGroup && this._renderGroupMemberSection()}
                     <View style={styles.section}>
@@ -56,7 +67,7 @@ export default class extends React.PureComponent {
         );
     }
 
-    _renderGroupMemberSection = () => {
+    _renderGroupMemberSection() {
         const {groupMembers, groupOwner} = this.state;
         const isOwner = this.isGroup && groupOwner === delegate.user.getMine().userId;
         return (
@@ -64,8 +75,8 @@ export default class extends React.PureComponent {
                 <delegate.component.AvatarList
                     data={groupMembers}
                     owner={groupOwner}
-                    onAddMembers={this._onAddMembers}
-                    onRemoveMembers={this._onRemoveMembers}
+                    onAddMembers={this._onAddMembers.bind(this)}
+                    onRemoveMembers={this._onRemoveMembers.bind(this)}
                     canAdd={isOwner || this.state.groupAllowAdd}
                     canRemove={isOwner}
                     navigation={this.props.navigation}
@@ -74,13 +85,13 @@ export default class extends React.PureComponent {
                 <delegate.component.SettingItem
                     type={Constant.SettingItemType.Text}
                     title={'全体成员(' + groupMembers.length + ')'}
-                    onPressLine={this._clickAllMembers}
+                    onPressLine={this._clickAllMembers.bind(this)}
                 />
             </View>
         );
-    };
+    }
 
-    _renderGroupNameAvatarSection = () => {
+    _renderGroupNameAvatarSection() {
         const {groupName, groupAvatar, groupOwner} = this.state;
         const avatar = !groupAvatar ? undefined : {
             uri: delegate.func.fitUrlForAvatarSize(groupAvatar, 30),
@@ -102,7 +113,7 @@ export default class extends React.PureComponent {
                     type={Constant.SettingItemType.Image}
                     title={'群头像'}
                     data={avatar}
-                    onPressLine={isOwner ? this._clickGroupAvatar : undefined}
+                    onPressLine={isOwner ? this._clickGroupAvatar.bind(this) : undefined}
                 />
                 {this._renderSeparatorLine()}
                 {isOwner && (
@@ -110,15 +121,15 @@ export default class extends React.PureComponent {
                         type={Constant.SettingItemType.Switch}
                         title="允许添加成员"
                         data={this.state.groupAllowAdd}
-                        onPressSwitch={isAllowAdd => this._clickChangeAllowAdd(isAllowAdd)}
+                        onPressSwitch={this._clickChangeAllowAdd.bind(this)}
                     />
                 )}
                 {isOwner && this._renderSeparatorLine()}
             </View>
         );
-    };
+    }
 
-    _renderCommonSection = () => {
+    _renderCommonSection() {
         return (
             <View>
                 <delegate.component.SettingItem
@@ -136,58 +147,74 @@ export default class extends React.PureComponent {
                 />
             </View>
         );
-    };
+    }
 
-    _renderPrompt = () => {
+    _renderPrompt() {
         return (
             <delegate.component.Prompt
                 title={'请输入群聊名称'}
                 textInputProps={{secureTextEntry: false}}
                 visible={this.state.showPrompt}
                 onCancel={() => this.setState({showPrompt: false})}
-                onSubmit={this._clickName}
+                onSubmit={this._clickName.bind(this)}
             />
         );
-    };
+    }
 
-    _renderBottom = () => {
+    _renderBottom() {
         const isOwner = this.isGroup && this.state.groupOwner === delegate.user.getMine().userId;
         const text = isOwner ? '解散' : '退出';
         const inset = getSafeAreaInset();
-        return (
+        const buttons = [];
+        this.props.buttons.forEach((button, index) => {
+            const view = delegate.model.Setting.match(button, {
+                ...this.props,
+                key: index,
+                onDataChange: this._onDataChange.bind(this),
+            });
+            if (!view) {
+                return;
+            }
+            buttons.push(view);
+            buttons.push((
+                <View
+                    style={styles.separator}
+                    key={index + this.props.buttons.length}
+                />
+            ));
+        });
+        const views = buttons.length > 0 ? buttons.slice(0, buttons.length - 1) : buttons;
+        return buttons.length > 0 && (
             <View style={[styles.bottom, {bottom: inset.bottom}]}>
-                {this._renderButton(text + '群聊', this._clickLeave.bind(this, isOwner, text))}
-                {isOwner && <View style={styles.separator} />}
-                {isOwner && this._renderButton('转交群主', this._clickTransferOwner)}
+                {views}
             </View>
         );
-    };
+    }
 
-    _renderButton = (text, onPress) => {
-        return (
-            <TouchableHighlight
-                style={styles.btn}
-                activeOpacity={0.9}
-                onPress={onPress}
-            >
-                <View>
-                    <Text style={styles.btntext}>
-                        {text}
-                    </Text>
-                </View>
-            </TouchableHighlight>
-        );
-    };
-
-    _renderSeparatorLine = () => {
+    _renderSeparatorLine() {
         const style = {
             backgroundColor: delegate.style.separatorLineColor,
             height: StyleSheet.hairlineWidth,
         };
         return <View style={style} />;
+    }
+
+    _onDataChange() {
+        const state = {}
+        if (this.isGroup) {
+            state.groupMembers = delegate.model.Group.getMembers(imId);
+            state.groupAvatar = delegate.model.Group.getAvatar(imId);
+            state.groupName = delegate.model.Group.getName(imId, false);
+            state.groupOwner = delegate.model.Group.getOwner(imId);
+            state.groupAllowAdd = delegate.model.Group.getAllowAdd(imId);
+        }
+        this.setState({
+            ...delegate.model.Conversation.getConfig(imId),
+            ...state,
+        });
     };
 
-    _clickAllMembers = () => {
+    _clickAllMembers() {
         this.props.navigation.navigate({
             routeName: PageKeys.GroupMembers,
             params: {
@@ -196,33 +223,13 @@ export default class extends React.PureComponent {
                 admins: [this.state.groupOwner],
                 canAdd: true,
                 canRemove: this.state.groupOwner === delegate.user.getMine().userId,
-                onAddMembers: this._onAddMembers,
-                onRemoveMembers: this._onRemoveMembers,
+                onAddMembers: this._onAddMembers.bind(this),
+                onRemoveMembers: this._onRemoveMembers.bind(this),
             },
         });
-    };
+    }
 
-    _clickLeave = (isOwner, text) => {
-        let promise;
-        if (isOwner) {
-            promise = delegate.model.Group.destroyOne(this.props.imId);
-        } else {
-            promise = delegate.model.Group.quitOne(this.props.imId);
-        }
-        return promise
-            .then(() => {
-                Toast.show(text + '成功');
-                const action = StackActions.pop({
-                    n: 2,
-                });
-                this.props.navigation.dispatch(action);
-            })
-            .catch(() => {
-                Toast.show(text + '失败');
-            });
-    };
-
-    _clickChangeAllowAdd = (isAllowAdd) => {
+    _clickChangeAllowAdd(isAllowAdd) {
         delegate.model.Group.changeAllowAdd(this.props.imId, isAllowAdd)
             .then((result) => {
                 this.setState({groupAllowAdd: result});
@@ -230,9 +237,9 @@ export default class extends React.PureComponent {
             .catch(() => {
                 Toast.show('更改设置失败');
             });
-    };
+    }
 
-    _clickName = (newName) => {
+    _clickName(newName) {
         this.setState({
             showPrompt: false,
         });
@@ -247,29 +254,13 @@ export default class extends React.PureComponent {
             .catch(() => {
                 Toast.show('更改群聊名称失败');
             });
-    };
+    }
 
-    _clickTransferOwner = () => {
-        const dataSource = this.state.groupMembers
-            .filter(userId => userId !== delegate.user.getMine().userId)
-            .map(userId => delegate.user.getUser(userId));
-        this.props.navigation.navigate({
-            routeName: PageKeys.ChooseUser,
-            params: {
-                title: '选择群成员',
-                multiple: false,
-                dataSource: dataSource,
-                onSelectData: this._onTransferOwnerAlert,
-                selectedIds: [],
-            },
-        });
-    };
-
-    _clickGroupAvatar = () => {
+    _clickGroupAvatar() {
         const options = {
             maxSize: 1,
             canEdit: true,
-            callback: this._onImagePickerFinish,
+            callback: this._onImagePickerFinish.bind(this),
         };
         const actions = ['拍照', '从相册选择', '取消'];
         ActionSheet.showActionSheetWithOptions({
@@ -285,7 +276,7 @@ export default class extends React.PureComponent {
                 ImagePicker.getAlbum(options);
             }
         });
-    };
+    }
 
     _clickConfig = (newConfig) => {
         this.setState(newConfig);
@@ -297,9 +288,9 @@ export default class extends React.PureComponent {
                 const config = delegate.model.Conversation.getConfig(this.props.imId);
                 this.setState(config);
             });
-    };
+    }
 
-    _onAddMembers = (members) => {
+    _onAddMembers(members) {
         if (this.isGroup) {
             return delegate.model.Group.addMembers(this.props.imId, members)
                 .then(() => {
@@ -332,9 +323,9 @@ export default class extends React.PureComponent {
                     Toast.show('创建群聊失败');
                 });
         }
-    };
+    }
 
-    _onRemoveMembers = (members) => {
+    _onRemoveMembers(members) {
         return delegate.model.Group.removeMembers(this.props.imId, members)
             .then(() => {
                 const newMembers = delegate.model.Group.getMembers(this.props.imId);
@@ -344,9 +335,9 @@ export default class extends React.PureComponent {
             .catch(() => {
                 Toast.show('删除群成员失败');
             });
-    };
+    }
 
-    _onImagePickerFinish = (data) => {
+    _onImagePickerFinish(data) {
         if (!data || data.length === 0) {
             return;
         }
@@ -360,31 +351,7 @@ export default class extends React.PureComponent {
             .catch(() => {
                 Toast.show('设置头像失败');
             });
-    };
-
-    _onTransferOwnerAlert = (data) => {
-        const newOwner = delegate.user.getUser(data[0]);
-        Alert.alert('转交群主给:', newOwner.name,
-            [
-                {text: '取消'},
-                {
-                    text: '确定',
-                    onPress: this._onTransferOwner.bind(this, newOwner),
-                }
-            ],
-            {cancelable: true});
-    };
-
-    _onTransferOwner = (newOwner) => {
-        delegate.model.Group.changeOwner(this.props.imId, newOwner.userId)
-            .then(({members, owner}) => {
-                Toast.show('转交成功');
-                this.setState({groupMembers: [owner, ...members], groupOwner: owner});
-            })
-            .catch(() => {
-                Toast.show('转交失败');
-            });
-    };
+    }
 }
 
 const styles = StyleSheet.create({
@@ -406,15 +373,6 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         backgroundColor: 'white',
         height: 50,
-    },
-    btn: {
-        justifyContent: 'center',
-        alignItems: 'center',
-        flex: 1,
-    },
-    btntext: {
-        color: 'red',
-        fontSize: 18,
     },
     separator: {
         width: StyleSheet.hairlineWidth,

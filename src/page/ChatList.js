@@ -11,7 +11,7 @@ import i18n from '../../language';
 export default class extends React.PureComponent {
     static navigationOptions = function () {
         return {
-            title: i18n.t('ChatListPageTitle')
+            title: i18n.t('IMPageChatListTitle')
         };
     };
 
@@ -30,7 +30,7 @@ export default class extends React.PureComponent {
         this._refresh();
         this.listenListUpdate = Listener.registerWithSubEvent(
             [Constant.BaseEvent, Constant.ConversationEvent],
-            this._refresh
+            this._refresh.bind(this)
         );
     }
 

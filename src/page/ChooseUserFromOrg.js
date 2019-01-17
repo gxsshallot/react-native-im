@@ -13,7 +13,7 @@ export default class extends React.PureComponent {
             return PickList.navigationOptions(options);
         } else {
             return {
-                title: i18n.t('LoadingTitle'),
+                title: i18n.t('IMCommonPageTitle'),
             };
         }
     };
@@ -61,7 +61,9 @@ export default class extends React.PureComponent {
                 this.setState({tree});
             })
             .catch(() => {
-                Toast.show(i18n.t('LoadOrganizationErrorToast'));
+                Toast.show(i18n.t('IMToastError', {
+                    action: i18n.t('IMLoadOrganization')
+                }));
             });
     }
 

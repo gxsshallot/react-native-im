@@ -119,7 +119,7 @@ export default class extends React.PureComponent {
         const {imId} = this.props;
         let title;
         if (this.isGroup) {
-            const groupName = delegate.model.Group.getName(imId, false) || i18n.t('GroupChatType');
+            const groupName = delegate.model.Group.getName(imId, false) || i18n.t('IMCommonChatTypeGroup');
             title = groupName + ' (' + delegate.model.Group.getMembers(imId).length + ')';
         } else {
             title = delegate.user.getUser(imId).name;
@@ -133,7 +133,7 @@ export default class extends React.PureComponent {
     _renderRightElement() {
         return (
             <HeaderButton
-                title={i18n.t('SettingButtonLabel')}
+                title={i18n.t('IMPageChatDetailSetting')}
                 onPress={() => {
                     this.props.navigation.navigate({
                         routeName: PageKeys.ChatSetting,
@@ -207,11 +207,15 @@ export default class extends React.PureComponent {
                 if (isCurrent) {
                     this._markAllRead();
                 } else {
-                    Toast.show(i18n.t('SendMessageSuccess'));
+                    Toast.show(i18n.t('IMToastSuccess', {
+                        action: i18n.t('IMSendMessage')
+                    }));
                 }
             })
             .catch((err) => {
-                Toast.show(err.message);
+                Toast.show(i18n.t('IMToastError', {
+                    action: i18n.t('IMSendMessage')
+                }));
             });
     }
 
