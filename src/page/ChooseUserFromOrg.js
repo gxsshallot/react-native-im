@@ -82,7 +82,7 @@ export default class extends React.PureComponent {
             <PickList
                 navigation={navigation}
                 title={title}
-                firstTitleLine={firstTitleLine}
+                firstTitleLine={titleLine}
                 multilevel={true}
                 multiselect={multiple}
                 data={data}

@@ -29,7 +29,7 @@ export const GroupEvent = '__im_group__';
 export const SendMessageEvent = '__im_send_message__';
 export const ReceiveMessageEvent = '__im_receive_message__';
 export const RecallMessageEvent = '__im_recall_message__';
-export const StarUserChangeEvent = '__im_star_user_change__'
+export const StarUserChangeEvent = '__im_star_user_change__';
 
 export const SettingItemType = {
     Image: 'image',

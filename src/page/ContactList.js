@@ -27,7 +27,7 @@ export default class extends React.PureComponent {
 
     componentDidMount() {
         if (delegate.contact.loadStarUser) {
-            this.listener = Listener.register([Constant.BaseEvent, Constant.StarUserChangeEvent], this._onStarUserChange)
+            this.listener = Listener.register([Constant.BaseEvent, Constant.StarUserChangeEvent], this._onStarUserChange);
         }
         InteractionManager.runAfterInteractions(() => {
             this._loadData();
@@ -35,7 +35,7 @@ export default class extends React.PureComponent {
     }
 
     componentWillUnmount() {
-        this.listener && Listener.unregister([Constant.BaseEvent, Constant.StarUserChangeEvent], this.listener)
+        this.listener && Listener.unregister([Constant.BaseEvent, Constant.StarUserChangeEvent], this.listener);
     }
 
     render() {
@@ -135,7 +135,7 @@ export default class extends React.PureComponent {
             .then(([users, _, starUsers = []]) => {
                 const data = mapListToSection(users, delegate.config.pinyinField);
                 if (starUsers.length > 0) {
-                    data.unshift({key: '☆', title: '星标好友', data: starUsers})
+                    data.unshift({key: '☆', title: '星标好友', data: starUsers});
                 }
                 const {getHeaderConfig} = this.props;
                 const items = getHeaderConfig ? getHeaderConfig({users, sections: data}) : [];
@@ -156,16 +156,16 @@ export default class extends React.PureComponent {
                     const first = data[0];
                     if (first.key === '☆') {
                         if (starUsers.length === 0) {
-                            data.shift()
+                            data.shift();
                         } else {
                             first.data = starUsers;
                         }
                     } else {
-                        data.unshift({key: '☆', title: '星标好友', data: starUsers})
+                        data.unshift({key: '☆', title: '星标好友', data: starUsers});
                     }
-                    this.setState({data: [...data]})
+                    this.setState({data: [...data]});
                 }
-            })
+            });
     };
 
     _clickSearchBar = () => {
