@@ -17,15 +17,18 @@ export const name = 'im-group';
  * @param {boolean} forceUpdate 是否强制重载群组列表
  */
 export function init(forceUpdate) {
-    return AsyncStorage.getKeys(keys(), Constant.StoragePart)
+    const cachePromise = AsyncStorage.getKeys(keys(), Constant.StoragePart)
         .then((items) => {
             Object.values(items).forEach((item) => {
                 rootNode[item.groupId] = item;
             });
-            if (forceUpdate) {
-                return load();
-            }
         });
+    if (forceUpdate) {
+        return load()
+            .catch(() => cachePromise);
+    } else {
+        return cachePromise;
+    }
 }
 
 /**
@@ -54,9 +57,6 @@ export function load() {
                 return writeData(item.groupId);
             });
             return Promise.all(promises);
-        })
-        .catch(() => {
-            Toast.show('加载群列表失败');
         });
 }
 

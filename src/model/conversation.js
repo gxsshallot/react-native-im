@@ -26,15 +26,18 @@ export const defaultConfig = {
  * @param {boolean} forceUpdate 是否强制重载会话列表
  */
 export function init(forceUpdate) {
-    return AsyncStorage.getKeys(keys(), Constant.StoragePart)
+    const cachePromise = AsyncStorage.getKeys(keys(), Constant.StoragePart)
         .then((items) => {
             Object.values(items).forEach((item) => {
                 rootNode[item.imId] = item;
             });
-            if (forceUpdate) {
-                return load();
-            }
         });
+    if (forceUpdate) {
+        return load()
+            .catch(() => cachePromise);
+    } else {
+        return cachePromise;
+    }
 }
 
 /**
@@ -60,9 +63,6 @@ export function load() {
         .then((result) => {
             const promises = result.map((item) => loadItem(item.imId, item.chatType));
             return Promise.all(promises);
-        })
-        .catch(() => {
-            Toast.show('加载会话列表失败');
         });
 }
 

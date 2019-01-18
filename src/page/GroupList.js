@@ -28,7 +28,8 @@ export default class extends React.PureComponent {
             this._refresh
         );
         delegate.model.Group.load()
-            .then(this._refresh);
+            .then(this._refresh)
+            .catch(() => Toast.show('加载群列表失败'));
     }
 
     componentWillUnmount() {
