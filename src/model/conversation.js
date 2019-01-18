@@ -58,17 +58,7 @@ export function uninit(forceClear) {
 export function load() {
     return delegate.im.conversation.loadList()
         .then((result) => {
-            const promises = result.map((item) => {
-                rootNode[item.imId] = {
-                    ...item,
-                    config: {
-                        ...defaultConfig,
-                        ...item.config || {},
-                    },
-                    unreadMessagesCount: item.unreadMessagesCount || 0,
-                };
-                return loadItem(item.imId, item.chatType);
-            });
+            const promises = result.map((item) => loadItem(item.imId, item.chatType));
             return Promise.all(promises);
         })
         .catch(() => {
