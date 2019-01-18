@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import * as Model from '../model';
 import * as Constant from '../constant';
 import * as Types from '../proptype';
+import ImageCapInset from 'react-native-image-capinsets';
 
 export default class extends React.PureComponent {
     static propTypes = {
@@ -40,14 +41,14 @@ export default class extends React.PureComponent {
             >
                 <View ref={ref => this.bubble = ref}>
                     {this.state.enableBubble ? (
-                        <ImageBackground
-                            capInsets={{top: 30, left: 13, bottom: 30, right: 13}}
+                        <ImageCapInset
+                            capInsets={{top: 37, left: 13, bottom: 10, right: 13}}
                             resizeMode='stretch'
                             source={bubbleImage}
                             style={{maxWidth, paddingLeft, paddingRight}}
                         >
                             {this._renderMessage(innerMaxWidth)}
-                        </ImageBackground>
+                        </ImageCapInset>
                     ) : (
                         <View style={{maxWidth, paddingLeft, paddingRight}}>
                             {this._renderMessage(innerMaxWidth)}
