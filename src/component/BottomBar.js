@@ -146,7 +146,7 @@ export default class extends React.PureComponent {
         if (this.state.showEmojiView) {
             return (
                 <delegate.component.EmojiPickView
-                    style={{height: 240}}
+                    height={240}
                     onPickEmoji={this._onPickEmoji}
                 />
             );

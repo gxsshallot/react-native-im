@@ -32,9 +32,9 @@ export default class extends React.PureComponent {
         this.isGroup = props.chatType === Constant.ChatType.Group;
         this.pageCount = delegate.component.DetailListView.defaultProps.pageSize;
         this.events = [
-            [Constant.SendMessageEvent, this._onReceiveMessage],
-            [Constant.ReceiveMessageEvent, this._onReceiveMessage],
-            [Constant.RecallMessageEvent, this._onExchangeMessage],
+            [Constant.SendMessageEvent, this._onReceiveMessage.bind(this)],
+            [Constant.ReceiveMessageEvent, this._onReceiveMessage.bind(this)],
+            [Constant.RecallMessageEvent, this._onExchangeMessage.bind(this)],
         ];
         this.listeners = new Array(this.events.length);
         this.state = {

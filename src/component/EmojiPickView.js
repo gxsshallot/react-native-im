@@ -1,15 +1,16 @@
 import React from 'react';
 import { FlatList, Image, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
-import PropType from 'prop-types';
+import PropTypes from 'prop-types';
 import delegate from '../delegate';
 
 export default class extends React.PureComponent {
     static propTypes = {
-        key: PropType.string.isRequired,
-        onPickEmoji: PropType.func,
-        style: PropType.any,
-        itemSize: PropType.number,
-        tabViewHeight: PropType.number,
+        key: PropTypes.string.isRequired,
+        height: PropTypes.number.isRequired,
+        onPickEmoji: PropTypes.func,
+        style: PropTypes.any,
+        itemSize: PropTypes.number,
+        tabViewHeight: PropTypes.number,
     };
 
     static defaultProps = {
@@ -24,13 +25,12 @@ export default class extends React.PureComponent {
         super(props);
         this.state = {
             width: undefined,
-            height: undefined,
             curIndex: 0,
         };
     }
 
     render() {
-        const {style, tabViewHeight, key} = this.props;
+        const {style, tabViewHeight, key, height} = this.props;
         const tabStyle = {
             height: tabViewHeight,
             borderTopWidth: StyleSheet.hairlineWidth,
@@ -38,24 +38,28 @@ export default class extends React.PureComponent {
         };
         const emojis = delegate.model.Emoji.getPartEmojis(key);
         const collection = this._dataSource(emojis);
+        const isValid = this.state.width > 0;
         return (
-            <View onLayout={this._onLayout} style={[styles.view, style]}>
+            <View onLayout={this._onLayout} style={[styles.view, {height}, style]}>
                 {this._renderScrollView(collection)}
                 <View style={[styles.tabview, tabStyle]}>
-                    <delegate.component.SegmentControl
-                        length={collection.pages}
-                        currentIndex={this.state.curIndex}
-                    />
+                    {isValid && (
+                        <delegate.component.SegmentControl
+                            length={collection.pages}
+                            currentIndex={this.state.curIndex}
+                        />
+                    )}
                 </View>
             </View>
         );
     }
 
     _renderScrollView = (collection) => {
+        const {height} = this.props;
         return (
             <ScrollView
                 ref={v => this.scrollView = v}
-                style={styles.scrollview}
+                style={[styles.scrollview, {height}]}
                 automaticallyAdjustContentInsets={false}
                 horizontal={true}
                 pagingEnabled={true}
@@ -117,10 +121,9 @@ export default class extends React.PureComponent {
     };
 
     _onLayout = (event) => {
-        const {width, height} = event.nativeEvent.layout;
+        const {width} = event.nativeEvent.layout;
         this.setState({
             width: width,
-            height: height,
         });
     };
 
@@ -128,7 +131,7 @@ export default class extends React.PureComponent {
         const [numColumns, marginH] = this._columnCount();
         const [numRows, marginV] = this._rowCount();
         const pageSize = numColumns * numRows - 1;
-        const pages = (emojis.length - 1) / pageSize + 1;
+        const pages = Math.ceil(emojis.length / pageSize);
         const dataArr = [];
         for (let i = 0; i < pages; i++) {
             const arr = emojis.slice(i * pageSize, (i + 1) * pageSize);
@@ -156,7 +159,7 @@ export default class extends React.PureComponent {
     };
 
     _rowCount = () => {
-        const height = this.state.height - this.props.tabViewHeight;
+        const height = this.props.height - this.props.tabViewHeight;
         const minMarginV = 4;
         const numRows = Math.floor((height - minMarginV * 2) / this.props.itemSize);
         const marginV = (height - this.props.itemSize * numRows) / 2;
@@ -166,7 +169,6 @@ export default class extends React.PureComponent {
 
 const styles = StyleSheet.create({
     view: {
-        flex: 1,
     },
     scrollview: {
         flexDirection: 'row',

@@ -94,7 +94,13 @@ export function loadItem(imId, chatType) {
             result.latestMessage = message;
             result.unreadMessagesCount = result.unreadMessagesCount || 0;
             if (!rootNode[imId]) {
-                rootNode[imId] = {...result};
+                rootNode[imId] = {
+                    ...result,
+                    config: {
+                        ...defaultConfig,
+                        ...result.config || {},
+                    },
+                };
             } else {
                 rootNode[imId].unreadMessagesCount = result.unreadMessagesCount;
                 if (rootNode[imId].latestMessage) {
