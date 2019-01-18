@@ -1,6 +1,7 @@
 import React from 'react';
 import { Text, View, TouchableWithoutFeedback, StyleSheet } from 'react-native';
 import PropTypes from 'prop-types';
+import Popover from 'react-native-popover-view';
 import delegate from '../delegate';
 
 export default class extends React.PureComponent {
@@ -24,14 +25,16 @@ export default class extends React.PureComponent {
     render() {
         const {menuShow, menuRect, onClose} = this.props;
         return (
-            <delegate.component.Popover
+            <Popover
                 isVisible={menuShow}
                 fromRect={menuRect}
                 onClose={onClose}
                 placement={'top'}
+                showBackground={false}
+                popoverStyle={styles.popover}
             >
                 {this._renderContent()}
-            </delegate.component.Popover>
+            </Popover>
         );
     }
 
@@ -88,5 +91,8 @@ const styles = StyleSheet.create({
     btnTitle: {
         color: 'white',
         fontSize: 16,
+    },
+    popover: {
+        backgroundColor: 'black',
     },
 });

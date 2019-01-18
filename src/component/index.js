@@ -10,7 +10,6 @@ import ListCell from './ListCell';
 import MessageBubble from './MessageBubble';
 import MessageMenu from './MessageMenu';
 import MoreBoard from './MoreBoard';
-import Popover from './Popover';
 import Prompt from './Prompt';
 import SearchList from './SearchList';
 import SectionHeader from './SectionHeader';
@@ -32,7 +31,6 @@ export {
     MessageBubble,
     MessageMenu,
     MoreBoard,
-    Popover,
     Prompt,
     SearchList,
     SectionHeader,

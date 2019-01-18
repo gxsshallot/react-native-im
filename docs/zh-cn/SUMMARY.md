@@ -45,7 +45,6 @@
     * [消息展示单元格](zh-cn/component/BaseMessage)
     * [消息气泡框](zh-cn/component/MessageBubble)
     * [消息操作悬浮框](zh-cn/component/MessageMenu)
-    * [菜单操作弹出框](zh-cn/component/Popover)
     * [详情页底部输入栏](zh-cn/component/BottomBar)
     * [添加更多面板](zh-cn/component/MoreBoard)
     * [表情选择视图](zh-cn/component/EmojiPickView)
