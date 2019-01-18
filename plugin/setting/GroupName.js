@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, TextInput, StyleSheet, Dimensions } from 'react-native';
+import { View } from 'react-native';
 import Toast from 'react-native-root-toast';
 import * as IMStandard from '../../src';
 import Prompt from './Prompt';

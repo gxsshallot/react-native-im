@@ -1,4 +1,3 @@
-import Toast from 'react-native-root-toast';
 import AsyncStorage from 'react-native-general-storage';
 import Listener from 'react-native-general-listener';
 import * as Constant from '../constant';

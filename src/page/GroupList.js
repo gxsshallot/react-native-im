@@ -2,6 +2,7 @@ import React from 'react';
 import { StyleSheet, Text, View, FlatList, SafeAreaView } from 'react-native';
 import NaviBar, { forceInset } from 'react-native-pure-navigation-bar';
 import Listener from 'react-native-general-listener';
+import Toast from 'react-native-root-toast';
 import * as PageKeys from '../pagekey';
 import * as Constant from '../constant';
 import * as Types from '../proptype';

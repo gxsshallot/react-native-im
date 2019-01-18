@@ -2,7 +2,6 @@ import React from 'react';
 import { Text, View, TouchableWithoutFeedback, StyleSheet } from 'react-native';
 import PropTypes from 'prop-types';
 import Popover from 'react-native-popover-view';
-import delegate from '../delegate';
 
 export default class extends React.PureComponent {
     static propTypes = {

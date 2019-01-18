@@ -1,10 +1,10 @@
 import React from 'react';
-import { ImageBackground, TouchableWithoutFeedback, View, Dimensions } from 'react-native';
+import { TouchableWithoutFeedback, View, Dimensions } from 'react-native';
 import PropTypes from 'prop-types';
+import ImageCapInset from 'react-native-image-capinsets';
 import * as Model from '../model';
 import * as Constant from '../constant';
 import * as Types from '../proptype';
-import ImageCapInset from 'react-native-image-capinsets';
 
 export default class extends React.PureComponent {
     static propTypes = {
