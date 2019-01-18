@@ -44,6 +44,10 @@ export function onRecallMessage(imId, chatType, fromUserId, messageId, localTime
     return Promise.all([deletePromise, systemPromise]);
 }
 
+export function onGroupCreate(groupId, localTime, timestamp) {
+    return groupUpdateOperation(groupId, undefined, localTime, timestamp);
+}
+
 export function onUserJoin(groupId, invitorId, userJoinedIds, localTime, timestamp) {
     const invitor = getOperatorName(invitorId);
     const users = userJoinedIds
@@ -73,7 +77,7 @@ export function onUpdateOwner(groupId, newOwnerId, localTime, timestamp) {
     return Promise.all(groupUpdateOperation(groupId, text, localTime, timestamp));
 }
 
-export function onDelete(groupId, localTime, timestamp) {
+export function onGroupDelete(groupId, localTime, timestamp) {
     const text = '群主解散了群聊';
     const deletePromise = delegate.model.Conversation.deleteOne(groupId);
     return Promise.all([...groupUpdateOperation(groupId, text, localTime, timestamp), deletePromise]);

@@ -89,7 +89,7 @@ export default class extends React.PureComponent {
         if (this.props.canSearchGroup) {
             result.push(...this._searchFromGroup(text));
         }
-        return Promise.resolve(result);
+        return result;
     };
 
     _searchFromGroup = (text) => {
