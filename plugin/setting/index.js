@@ -9,6 +9,7 @@ import * as LeaveGroup from './LeaveGroup';
 import * as Top from './Top';
 import * as TransferOwner from './TransferOwner';
 import getGeneralButton from './GeneralButton';
+import Prompt from './Prompt';
 
 export function setup() {
     const actions = [
@@ -46,4 +47,5 @@ export {
     Top,
     TransferOwner,
     getGeneralButton,
+    Prompt,
 };

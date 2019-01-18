@@ -54,7 +54,6 @@
     * [会话单元格](zh-cn/component/ConversationCell)
     * [可点击的假搜索栏](zh-cn/component/FakeSearchBar)
     * [基本展示单元格](zh-cn/component/ListCell)
-    * [输入提示框](zh-cn/component/Prompt)
     * [列表的SectionHeader](zh-cn/component/SectionHeader)
     * [分区列表(带索引项)](zh-cn/component/SeekBarSectionList)
     * [可滑动索引列表](zh-cn/component/SelectList)

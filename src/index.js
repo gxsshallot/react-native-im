@@ -35,7 +35,6 @@ function setup_common_component() {
     Delegate.component.MessageBubble = Components.MessageBubble;
     Delegate.component.MessageMenu = Components.MessageMenu;
     Delegate.component.MoreBoard = Components.MoreBoard;
-    Delegate.component.Prompt = Components.Prompt;
     Delegate.component.SearchList = Components.SearchList;
     Delegate.component.SectionHeader = Components.SectionHeader;
     Delegate.component.SeekBarSectionList = Components.SeekBarSectionList;

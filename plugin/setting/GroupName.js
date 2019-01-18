@@ -1,7 +1,8 @@
 import React from 'react';
-import { View } from 'react-native';
+import { View, TextInput, StyleSheet, Dimensions } from 'react-native';
 import Toast from 'react-native-root-toast';
 import * as IMStandard from '../../src';
+import Prompt from './Prompt';
 import i18n from '../../language';
 
 export const name = 'IMSettingGroupName';
@@ -45,17 +46,17 @@ export class GroupNameCell extends React.PureComponent {
                     data={groupName}
                     onPressLine={showNameLineFunc}
                 />
-                <IMStandard.Delegate.component.Prompt
-                    title={i18n.t('IMSettingGroupNameChangeTips')}
-                    textInputProps={{secureTextEntry: false}}
+                <Prompt
                     visible={this.state.showPrompt}
+                    title={i18n.t('IMSettingGroupNameChangeTips')}
                     onCancel={this._changePromptStatus.bind(this, false)}
                     onSubmit={this._clickName.bind(this)}
+                    textInputProps={{secureTextEntry: false}}
                 />
             </View>
         );
     }
-
+    
     _changePromptStatus(status) {
         this.setState({showPrompt: status});
     }
