@@ -257,6 +257,7 @@ export default class extends React.PureComponent {
             routeName: PageKeys.ChooseConversation,
             params: {
                 onSelectData: this._onSelectConversation.bind(this, message),
+                excludedIds: [this.props.imId],
             },
         });
     }

@@ -2,7 +2,9 @@ import React from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import PropTypes from 'prop-types';
 import PickList, { PickListRowUtil } from 'react-native-picklist';
+import * as PageKeys from '../pagekey';
 import delegate from '../delegate';
+import i18n from '../../language';
 
 export default class extends React.PureComponent {
     static navigationOptions = PickList.navigationOptions;
@@ -11,19 +13,28 @@ export default class extends React.PureComponent {
         title: PropTypes.string,
         allowMulti: PropTypes.bool,
         selectedIds: PropTypes.arrayOf(PropTypes.string),
+        excludedIds: PropTypes.arrayOf(PropTypes.string),
         onSelectData: PropTypes.func,
     };
 
     static defaultProps = {
-        title: '选择聊天',
+        title: i18n.t('IMPageChooseConversationTitle'),
         allowMulti: true,
+        selectedIds: [],
+        excludedIds: [],
     };
 
     constructor(props) {
         super(props);
         this.selectedIndexs = Array.from(new Set(props.selectedIds));
+        const dataSource = delegate.model.Conversation.get()
+            .filter(item => props.excludedIds.indexOf(item.imId) < 0)
+            .map(item => ({
+                ...item,
+                label: delegate.model.Conversation.getName(item.imId),
+            }));
         this.state = {
-            dataSource: delegate.model.Conversation.get(),
+            dataSource: dataSource,
             multi: false,
         };
     }
@@ -32,10 +43,10 @@ export default class extends React.PureComponent {
         const {title} = this.props;
         const rights = {};
         if (this.state.multi) {
-            rights.rightTitle = '单选';
+            rights.rightTitle = i18n.t('IMCommonSingleSelect');
             rights.rightClick = this._clickChangeMulti.bind(this, false);
         } else if (this.props.allowMulti) {
-            rights.rightTitle = '多选';
+            rights.rightTitle = i18n.t('IMCommonMultiSelect');
             rights.rightClick = this._clickChangeMulti.bind(this, true);
         }
         return this.state.dataSource === undefined ? null : (
@@ -44,38 +55,39 @@ export default class extends React.PureComponent {
                 multilevel={false}
                 multiselect={this.state.multi}
                 data={this.state.dataSource}
-                renderRow={this._renderRow}
-                renderHeader={this._renderHeader}
-                onFinish={this._onFinish}
-                showBottomView={false}
+                renderRow={this._renderRow.bind(this)}
+                renderHeader={this._renderHeader.bind(this)}
+                onFinish={this._onFinish.bind(this)}
+                showBottomView={this.state.multi}
                 showSearchView={true}
                 selectedIds={this.selectedIndexs}
-                idKey='imId'
+                idKey={'imId'}
+                labelKey={'label'}
                 {...rights}
                 navigation={this.props.navigation}
             />
         );
     }
 
-    _renderHeader = () => {
+    _renderHeader() {
         const style = {
             borderBottomWidth: StyleSheet.hairlineWidth,
             borderBottomColor: delegate.style.separatorLineColor,
         };
         return (
             <View style={styles.row}>
-                <TouchableOpacity onPress={this._clickHeader}>
+                <TouchableOpacity onPress={this._clickHeader.bind(this)}>
                     <View style={[styles.container, style]}>
                         <Text style={styles.text}>
-                            {'创建新聊天'}
+                            {i18n.t('IMPageChooseConversationCreateNew')}
                         </Text>
                     </View>
                 </TouchableOpacity>
             </View>
         );
-    };
+    }
 
-    _renderRow = (treeNode) => {
+    _renderRow(treeNode) {
         const style = {
             borderBottomWidth: StyleSheet.hairlineWidth,
             borderBottomColor: delegate.style.separatorLineColor,
@@ -87,14 +99,14 @@ export default class extends React.PureComponent {
             if (isSelected) {
                 image = (
                     <Image
-                        source={PickListRowUtil.select_image}
+                        source={PickListRowUtil.select_image()}
                         style={styles.image}
                     />
                 );
             } else {
                 image = (
                     <Image
-                        source={PickListRowUtil.notselect_image}
+                        source={PickListRowUtil.notselect_image()}
                         style={styles.image}
                     />
                 );
@@ -106,25 +118,44 @@ export default class extends React.PureComponent {
                 avatar={{imId: info.imId, chatType: info.chatType}}
                 title={delegate.model.Conversation.getName(info.imId)}
                 right={image}
-                onClick={this._clickRow}
             />
         );
-    };
+    }
 
-    _onFinish = (selectedTreeNodes) => {
+    _onFinish(selectedTreeNodes) {
         const selectedInfos = selectedTreeNodes.map(treeNode => treeNode.getInfo());
         this.props.onSelectData && this.props.onSelectData(selectedInfos);
-    };
+    }
 
-    _clickChangeMulti = (status) => {
+    _clickChangeMulti(status) {
         this.setState({
             multi: status,
         });
-    };
+    }
 
-    _clickHeader = () => {
-        // TODO
-    };
+    _clickHeader() {
+        this.props.navigation.navigate({
+            routeName: PageKeys.ChooseUser,
+            params: {
+                title: i18n.t('IMPageChooseConversationCreateNew'),
+                multiple: true,
+                onSelectData: this._onCreateNew.bind(this),
+                selectedIds: [],
+            },
+        });
+    }
+
+    _onCreateNew(data) {
+        if (!data || data.length <= 0) {
+            return;
+        }
+        delegate.model.Conversation.createOne(data)
+            .then(({imId, chatType}) => {
+                const items = [{imId, chatType}];
+                this.props.onSelectData && this.props.onSelectData(items);
+                this.props.navigation.goBack();
+            });
+    }
 }
 
 const styles = StyleSheet.create({
