@@ -33,13 +33,14 @@ export default class extends React.PureComponent {
         const {visible, onCancel, onSubmit, textInputProps} = this.props;
         const {width, height} = Dimensions.get('window');
         const isLandscape = width > height;
-        const marginTop = isLandscape ? 15 : 150;
+        const marginTop = isLandscape ? 15 : height * 0.1;
+        const dialogWidth = Math.min(width - 15 * 2, 300);
         return (
             <Dialog
                 visible={visible}
                 onTouchOutside={onCancel}
                 dialogTitle={this._renderPromptTitle()}
-                width={300}
+                width={dialogWidth}
                 dialogStyle={[styles.dialog, {marginTop}]}
                 containerStyle={styles.container}
                 actionContainerStyle={styles.footer}

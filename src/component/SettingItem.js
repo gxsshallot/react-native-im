@@ -26,7 +26,7 @@ export default class extends React.PureComponent {
         ) : this._renderLine();
     }
 
-    _renderLabel = (title) => {
+    _renderLabel(title) {
         return (
             <View style={styles.titleview}>
                 <Text numberOfLines={1} style={styles.title}>
@@ -34,23 +34,25 @@ export default class extends React.PureComponent {
                 </Text>
             </View>
         );
-    };
+    }
 
-    _renderLine = () => {
+    _renderLine() {
         const {title, type, onPressLine} = this.props;
         const hasArrow = type !== Constant.SettingItemType.Switch && onPressLine;
         return (
             <View style={styles.container}>
                 <View style={styles.line}>
                     {this._renderLabel(title)}
-                    {this._renderContent()}
+                    <View style={styles.content}>
+                        {this._renderContent()}
+                    </View>
                     {hasArrow && <ArrowImage />}
                 </View>
             </View>
         );
-    };
+    }
 
-    _renderContent = () => {
+    _renderContent() {
         const {type, data, onPressSwitch} = this.props;
         if (type === Constant.SettingItemType.Text) {
             return (
@@ -75,7 +77,7 @@ export default class extends React.PureComponent {
         } else {
             return null;
         }
-    };
+    }
 }
 
 const styles = StyleSheet.create({
@@ -93,6 +95,12 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         paddingHorizontal: 16,
     },
+    content: {
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'flex-end',
+        alignItems: 'center',
+    },
     titleview: {
         height: 48,
         width: 100,
@@ -101,17 +109,16 @@ const styles = StyleSheet.create({
     },
     title: {
         fontSize: 16,
-        color: '#333',
+        color: '#333333',
     },
     subtitle: {
-        flex: 1,
         fontSize: 14,
         color: '#aaaaaa',
         marginHorizontal: 12,
-        textAlign: 'right',
     },
     image: {
         width: 30,
         height: 30,
+        marginHorizontal: 12,
     },
 });
