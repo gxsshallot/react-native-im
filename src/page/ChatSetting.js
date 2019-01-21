@@ -31,12 +31,17 @@ export default class extends React.PureComponent {
         const style = {
             backgroundColor: delegate.style.viewBackgroundColor,
         };
+        const bottomItems = this._renderItems(this.props.buttons, this._renderVerticalLine.bind(this));
+        const hasBottom = bottomItems.length > 0;
+        const marginBottom = hasBottom ? getSafeAreaInset().bottom + 50 : 0;
         return (
             <View style={[styles.view, style]}>
-                <ScrollView style={styles.scrollView}>
+                <ScrollView
+                    style={[styles.scrollView, {marginBottom}]}
+                >
                     {this._renderSections()}
                 </ScrollView>
-                {this._renderBottom()}
+                {hasBottom && this._renderBottom(bottomItems)}
             </View>
         );
     }
@@ -56,12 +61,11 @@ export default class extends React.PureComponent {
         return views;
     }
 
-    _renderBottom() {
+    _renderBottom(bottomItems) {
         const {bottom} = getSafeAreaInset();
-        const items = this._renderItems(this.props.buttons, this._renderVerticalLine.bind(this));
-        return items.length > 0 && (
+        return (
             <View style={[styles.bottom, {bottom}]}>
-                {items}
+                {bottomItems}
             </View>
         );
     }
