@@ -84,6 +84,8 @@ export default class extends React.PureComponent {
                         onChangeText={this._onChangeText}
                         onFocus={this._onFocus}
                         onKeyPress={this._onKeyPress}
+                        underlineColorAndroid={'transparent'}
+                        autoCorrect={false}
                     />
                 ) : (
                     <TouchableHighlight
@@ -425,7 +427,7 @@ const styles = StyleSheet.create({
     input: {
         fontSize: 16,
         ...Platform.select({
-            ios: {lineHeight: 16},
+            ios: {lineHeight: 20},
             android: {textAlignVertical: 'center'}
         }),
         height: 40,
