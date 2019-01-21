@@ -3,11 +3,12 @@ import { Image, Keyboard, PermissionsAndroid, Platform, SafeAreaView, StyleSheet
 import PropTypes from 'prop-types';
 import SoundRecorder from 'react-native-sound-recorder';
 import Toast from 'react-native-root-toast';
-import { getSafeAreaInset, forceInset } from 'react-native-pure-navigation-bar';
+import { getSafeAreaInset } from 'react-native-pure-navigation-bar';
 import * as Types from '../proptype';
 import * as Constant from '../constant';
 import * as PageKeys from '../pagekey';
 import delegate from '../delegate';
+import i18n from '../../language';
 
 export default class extends React.PureComponent {
     static propTypes = {
@@ -35,8 +36,8 @@ export default class extends React.PureComponent {
     }
 
     componentDidMount() {
-        this.show = Keyboard.addListener('keyboardWillShow', this._keyboardShow);
-        this.hide = Keyboard.addListener('keyboardWillHide', this._keyboardHide);
+        this.show = Keyboard.addListener('keyboardWillShow', this._keyboardShow.bind(this));
+        this.hide = Keyboard.addListener('keyboardWillHide', this._keyboardHide.bind(this));
     }
 
     componentWillUnmount() {
@@ -46,7 +47,7 @@ export default class extends React.PureComponent {
 
     render() {
         return (
-            <SafeAreaView style={styles.safeview} forceInset={forceInset(0, 1, 1, 1)}>
+            <SafeAreaView style={styles.safeview}>
                 <View style={styles.container}>
                     {this._renderLeftBtn()}
                     {this._renderInputView()}
@@ -57,21 +58,21 @@ export default class extends React.PureComponent {
         );
     }
 
-    _renderLeftBtn = () => {
+    _renderLeftBtn() {
         const icon = this.state.showSpeech ?
             require('./image/chat_keyboard.png') :
             require('./image/chat_sound.png');
         return (
             <TouchableOpacity
                 activeOpacity={0.5}
-                onPress={this._onSwitchSpeechKeyboard}
+                onPress={this._onSwitchSpeechKeyboard.bind(this)}
             >
                 <Image style={styles.icon} source={icon} />
             </TouchableOpacity>
         );
-    };
+    }
 
-    _renderInputView = () => {
+    _renderInputView() {
         return (
             <View style={styles.inputBorder} minHeight={36}>
                 {!this.state.showSpeech ? (
@@ -80,31 +81,31 @@ export default class extends React.PureComponent {
                         multiline={true}
                         style={styles.input}
                         value={this.state.message}
-                        onSelectionChange={this._onSelectionChange}
-                        onChangeText={this._onChangeText}
-                        onFocus={this._onFocus}
-                        onKeyPress={this._onKeyPress}
+                        onSelectionChange={this._onSelectionChange.bind(this)}
+                        onChangeText={this._onChangeText.bind(this)}
+                        onFocus={this._onFocus.bind(this)}
+                        onKeyPress={this._onKeyPress.bind(this)}
                         underlineColorAndroid={'transparent'}
                         autoCorrect={false}
                     />
                 ) : (
                     <TouchableHighlight
                         underlayColor={'#d7d8d8'}
-                        onPressIn={this._onStartRecording}
-                        onPressOut={this._onEndRecording}
+                        onPressIn={this._onStartRecording.bind(this)}
+                        onPressOut={this._onEndRecording.bind(this)}
                     >
                         <View style={styles.sound}>
                             <Text style={styles.soundText}>
-                                {this.state.isRecording ? '松开 结束' : '按住 说话'}
+                                {this.state.isRecording ? i18n.t('IMComponentBottomBarVoiceRelease') : i18n.t('IMComponentBottomBarVoicePress')}
                             </Text>
                         </View>
                     </TouchableHighlight>
                 )}
             </View>
         );
-    };
+    }
 
-    _renderRightBtn = () => {
+    _renderRightBtn() {
         const firstIcon = this.state.showEmojiView ?
             require('./image/chat_keyboard.png') :
             require('./image/chat_emoji.png');
@@ -116,40 +117,40 @@ export default class extends React.PureComponent {
             <View style={styles.left}>
                 <TouchableOpacity
                     activeOpacity={0.5}
-                    onPress={this._onSwitchEmojiKeyboard}
+                    onPress={this._onSwitchEmojiKeyboard.bind(this)}
                 >
                     <Image style={styles.emoji} source={firstIcon} />
                 </TouchableOpacity>
                 {isEmpty ? (
                     <TouchableOpacity
                         activeOpacity={0.5}
-                        onPress={this._onSwitchMoreKeyboard}
+                        onPress={this._onSwitchMoreKeyboard.bind(this)}
                     >
                         <Image style={styles.add} source={secondIcon} />
                     </TouchableOpacity>
                 ) : (
                     <TouchableOpacity
                         activeOpacity={0.5}
-                        onPress={this._onSendMessageText}
+                        onPress={this._onSendMessageText.bind(this)}
                         style={styles.sendtouch}
                     >
                         <View style={styles.sendView}>
                             <Text style={styles.sendText}>
-                                {'发送'}
+                                {i18n.t('IMCommonSend')}
                             </Text>
                         </View>
                     </TouchableOpacity>
                 )}
             </View>
         );
-    };
+    }
 
-    _renderBottomView = () => {
+    _renderBottomView() {
         if (this.state.showEmojiView) {
             return (
                 <delegate.component.EmojiPickView
                     height={240}
-                    onPickEmoji={this._onPickEmoji}
+                    onPickEmoji={this._onPickEmoji.bind(this)}
                 />
             );
         } else if (this.state.showMoreBoard) {
@@ -157,9 +158,17 @@ export default class extends React.PureComponent {
         } else {
             return <View style={{height: this.state.keyboardHeight}} />;
         }
-    };
+    }
 
-    _onSendMessageText = () => {
+    dismiss() {
+        Keyboard.dismiss();
+        this.setState({
+            showMoreBoard: false,
+            showEmojiView: false,
+        });
+    }
+
+    _onSendMessageText() {
         let atMemberList;
         const all = this.atMemberList.filter(item => item.imId === Constant.atAll);
         if (all.length > 0) {
@@ -187,9 +196,9 @@ export default class extends React.PureComponent {
         });
         // 如果有发送失败逻辑,需要在收到消息的时候清空
         this.atMemberList = [];
-    };
+    }
 
-    _onStartRecording = () => {
+    _onStartRecording() {
         this.setState({isRecording: true});
         const option = !this.isIos ? {
             format: SoundRecorder.FORMAT_AAC_ADTS,
@@ -201,9 +210,9 @@ export default class extends React.PureComponent {
             .then(() => {
                 console.log('started recording');
             });
-    };
+    }
 
-    _onEndRecording = () => {
+    _onEndRecording() {
         this.setState({isRecording: false});
         const {onSendMessage} = this.props;
         SoundRecorder.stop()
@@ -211,7 +220,7 @@ export default class extends React.PureComponent {
                 console.log('stopped recording, audio file saved at: ' + result.path);
                 const time = parseInt(result.duration / 1000);
                 if (time < 1) {
-                    Toast.show('录音时间太短');
+                    Toast.show(i18n.t('IMComponentBottomBarVoiceTooShort'));
                     return;
                 }
                 const message = {
@@ -223,9 +232,9 @@ export default class extends React.PureComponent {
                 };
                 onSendMessage(message);
             });
-    };
+    }
 
-    _onPickEmoji = (text, isDelete) => {
+    _onPickEmoji(text, isDelete) {
         let message;
         if (isDelete) {
             const str = this.state.message;
@@ -248,9 +257,9 @@ export default class extends React.PureComponent {
         this.setState({
             message: message,
         });
-    };
+    }
 
-    _onChangeText = (text) => {
+    _onChangeText(text) {
         const oldText = this.state.message;
         let newText = text;
         const isInput = oldText.length < newText.length;
@@ -275,28 +284,29 @@ export default class extends React.PureComponent {
         this.setState({
             message: newText,
         });
-    };
+    }
 
-    _onSelectData = (data) => {
+    _onSelectData(data) {
+        const item = delegate.user.getUser(data[0]);
         const text = this.state.message;
-        const newText = text.slice(0, this.textLocation) + data[0].name + ' ' + text.slice(this.textLocation);
+        const newText = text.slice(0, this.textLocation) + item.name + ' ' + text.slice(this.textLocation);
         this.setState({
             message: newText,
         });
         this.atMemberList.push(data[0]);
         this.textInput.focus();
-    };
+    }
 
-    _onSelectionChange = (event) => {
+    _onSelectionChange(event) {
         const {nativeEvent: {selection: {start, end}}} = event;
         if (start === end) {
             this.textLocation = start;
         }
-    };
+    }
 
-    _onKeyPress = (event) => {
+    _onKeyPress(event) {
         const {nativeEvent: {key}} = event;
-        if (key === '@' && this.props.isGroup) {
+        if (key === '@' && this.props.chatType === Constant.ChatType.Group) {
             const members = delegate.model.Group.getMembers(this.props.imId);
             const dataSource = members
                 .filter(userId => userId !== delegate.user.getMine().userId)
@@ -304,25 +314,25 @@ export default class extends React.PureComponent {
             this.props.navigation.navigate({
                 routeName: PageKeys.ChooseUser,
                 params: {
-                    title: '选择@的人',
+                    title: i18n.t('IMComponentBottomBarChooseAtPerson'),
                     multiple: false,
-                    onSelectData: this._onSelectData,
+                    onSelectData: this._onSelectData.bind(this),
                     selectedIds: [],
                     dataSource: dataSource,
                 },
             });
         }
-    };
+    }
 
-    _onFocus = () => {
+    _onFocus() {
         this.setState({
             showMoreBoard: false,
             showSpeech: false,
             showEmojiView: false,
         });
-    };
+    }
 
-    _onSwitchEmojiKeyboard = () => {
+    _onSwitchEmojiKeyboard() {
         if (!this.state.showEmojiView) {
             Keyboard.dismiss();
         } else {
@@ -333,9 +343,9 @@ export default class extends React.PureComponent {
             showSpeech: false,
             showMoreBoard: false,
         });
-    };
+    }
 
-    _onSwitchMoreKeyboard = () => {
+    _onSwitchMoreKeyboard() {
         if (!this.state.showMoreBoard) {
             Keyboard.dismiss();
         } else {
@@ -346,9 +356,9 @@ export default class extends React.PureComponent {
             showSpeech: false,
             showEmojiView: false,
         });
-    };
+    }
 
-    _onSwitchSpeechKeyboard = () => {
+    _onSwitchSpeechKeyboard() {
         if (!this.state.showSpeech) {
             Keyboard.dismiss();
         }
@@ -372,26 +382,26 @@ export default class extends React.PureComponent {
                     } else if (granted === PermissionsAndroid.RESULTS.DENIED) {
                         // do nothing
                     } else {
-                        Toast.show('您未设置录音权限，请去设置中打开');
+                        Toast.show(i18n.t('IMCommonNoRecordAuthority'));
                     }
                 });
         }
-    };
+    }
 
-    _keyboardShow = (e) => {
+    _keyboardShow(e) {
         const offset = getSafeAreaInset().bottom;
         this.setState({
             keyboardHeight: e.endCoordinates.height - offset,
         });
-    };
+    }
 
-    _keyboardHide = () => {
+    _keyboardHide() {
         this.setState({
             keyboardHeight: 0,
         });
-    };
+    }
 
-    changeInputText = (imId, text) => {
+    changeInputText(imId, text) {
         const user = delegate.user.getUser(imId);
         const newText = '@' + user.name + ' : "' + text + '"\n' + '-----\n' + delegate.user.getMine().name + ': ';
         this.setState({
@@ -399,7 +409,7 @@ export default class extends React.PureComponent {
         });
         this.atMemberList.push(user);
         this.textInput.focus();
-    };
+    }
 }
 
 const styles = StyleSheet.create({

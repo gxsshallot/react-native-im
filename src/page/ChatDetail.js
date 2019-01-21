@@ -85,7 +85,7 @@ export default class extends React.PureComponent {
                 >
                     <TouchableWithoutFeedback
                         style={styles.touch}
-                        onPress={() => Keyboard.dismiss()}
+                        onPress={() => this.bottomBar.dismiss()}
                     >
                         <View style={styles.container}>
                             <delegate.component.DetailListView
@@ -208,13 +208,13 @@ export default class extends React.PureComponent {
                     this._markAllRead();
                 } else {
                     Toast.show(i18n.t('IMToastSuccess', {
-                        action: i18n.t('IMSendMessage')
+                        action: i18n.t('IMCommonSendMessage')
                     }));
                 }
             })
             .catch(() => {
                 Toast.show(i18n.t('IMToastError', {
-                    action: i18n.t('IMSendMessage')
+                    action: i18n.t('IMCommonSendMessage')
                 }));
             });
     }
