@@ -67,7 +67,7 @@ export default class extends React.PureComponent {
                 sections={this.state.data}
                 renderItem={this._renderItem}
                 headerHeight={itemHeight * 3}
-                keyExtractor={item => item.code}
+                keyExtractor={item => item.userId}
                 separatorStyle={styles.separator}
                 ListHeaderComponent={this._renderHeader}
                 separatorHeight={StyleSheet.hairlineWidth}

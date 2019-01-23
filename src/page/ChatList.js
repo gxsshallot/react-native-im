@@ -42,19 +42,12 @@ export default class extends React.PureComponent {
     }
 
     render() {
-        const listStyle = {
-            flex: 1,
-            borderTopWidth: StyleSheet.hairlineWidth,
-            borderTopColor: delegate.style.separatorLineColor,
-            borderBottomWidth: StyleSheet.hairlineWidth,
-            borderBottomColor: delegate.style.separatorLineColor,
-        };
         return this.state.dataSource !== null && (
             <SwipeListView
                 useFlatList={true}
                 disableRightSwipe={true}
                 closeOnRowBeginSwipe={true}
-                style={listStyle}
+                style={styles.view}
                 data={this.state.dataSource}
                 renderItem={this._renderRow.bind(this)}
                 renderHiddenItem={this._renderHiddenItem.bind(this)}
@@ -156,6 +149,9 @@ export default class extends React.PureComponent {
 }
 
 const styles = StyleSheet.create({
+    view: {
+        flex: 1,
+    },
     hidden: {
         alignSelf: 'stretch',
         flexDirection: 'row',
