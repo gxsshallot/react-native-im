@@ -112,7 +112,10 @@ export function loadItem(imId, chatType) {
             if (isGroup && !group) {
                 return delegate.model.Group.loadItem(imId);
             }
-        });
+        })
+        .then(() => {
+            return rootNode[imId];
+        })
 }
 
 /**
@@ -269,22 +272,21 @@ export function createOne(members) {
     members = Array.isArray(members) ? members : [members];
     const isGroup = members.length > 1;
     const chatType = isGroup ? Constant.ChatType.Group : Constant.ChatType.Single;
-    let promise, resultImId;
+    let promise;
     if (isGroup) {
         promise = delegate.model.Group.createOne(members)
-            .then((result) => result.groupId);
+            .then((result) => {
+                const groupId = result.groupId;
+                return loadItem(result.groupId, chatType);
+            });
     } else {
-        promise = delegate.im.conversation.loadItem(members[0], Constant.ChatType.Single, true)
-            .then(() => members[0]);
+        if (getOne(members[0], false)) {
+            promise = Promise.resolve(getOne(members[0], true));
+        } else {
+            promise = loadItem(members[0], Constant.ChatType.Single);
+        }
     }
-    return promise
-        .then((imId) => {
-            resultImId = imId;
-            if (isGroup && !getOne(imId, false)) {
-                return loadItem(imId, chatType);
-            }
-        })
-        .then(() => ({imId: resultImId, chatType}));
+    return promise;
 }
 
 /**
