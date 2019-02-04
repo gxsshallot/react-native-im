@@ -1,5 +1,5 @@
 import React from 'react';
-import { Clipboard, Keyboard, SafeAreaView, StyleSheet, View, TouchableWithoutFeedback } from 'react-native';
+import { Clipboard, Keyboard, SafeAreaView, StyleSheet, TouchableWithoutFeedback, View } from 'react-native';
 import { HeaderButton } from 'react-navigation-header-buttons';
 import { ChatManager, IMConstant } from 'react-native-im-easemob';
 import Toast from 'react-native-root-toast';
@@ -7,7 +7,7 @@ import Listener from 'react-native-general-listener';
 import * as PageKeys from '../pagekey';
 import * as Types from '../proptype';
 import * as Constant from '../constant';
-import { guid, DateUtil } from '../util';
+import { DateUtil, guid } from '../util';
 import delegate from '../delegate';
 import i18n from '../../language';
 
@@ -36,6 +36,9 @@ export default class extends React.PureComponent {
             [Constant.ReceiveMessageEvent, this._onReceiveMessage.bind(this)],
             [Constant.RecallMessageEvent, this._onExchangeMessage.bind(this)],
         ];
+        if (this.isGroup) {
+            this.events.push([Constant.GroupEvent, this._setNaviBar.bind(this)]);
+        }
         this.listeners = new Array(this.events.length);
         this.state = {
             messages: [],

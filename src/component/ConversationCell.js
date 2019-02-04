@@ -1,8 +1,8 @@
 import React from 'react';
-import { StyleSheet, Text, View, SafeAreaView, Dimensions, Image } from 'react-native';
+import { Dimensions, Image, SafeAreaView, StyleSheet, Text, View } from 'react-native';
 import PropTypes from 'prop-types';
 import Listener from 'react-native-general-listener';
-import { getSafeAreaInset, forceInset } from 'react-native-pure-navigation-bar';
+import { forceInset, getSafeAreaInset } from 'react-native-pure-navigation-bar';
 import Badge from '@hecom/badge';
 import * as Types from '../proptype';
 import * as PageKeys from '../pagekey';
@@ -56,6 +56,7 @@ export default class extends React.PureComponent {
         const content = [];
         this.state.atMe && content.push(this._renderAtMeText());
         this._isSendingMessage() && content.push(this._renderSendMessageText());
+        this._isErrorMessage() && content.push(this._renderErrorMessageText());
         this.state.latestMessage && content.push(this._renderLatestMessageText());
         return (
             <SafeAreaView style={styles.view} forceInset={forceInset(0, 1, 0, 1)}>
@@ -130,6 +131,14 @@ export default class extends React.PureComponent {
         );
     };
 
+    _renderErrorMessageText = () => {
+        return (
+            <Text key={'error'} style={styles.errorMessageText}>
+                {'! '}
+            </Text>
+        );
+    };
+
     _renderLatestMessageText = () => {
         const {latestMessage} = this.state;
         const params = {
@@ -189,6 +198,11 @@ export default class extends React.PureComponent {
         );
     };
 
+    _isErrorMessage = () => {
+        const {latestMessage} = this.state;
+        return latestMessage && latestMessage.status === Constant.Status.Failed;
+    };
+
     _onUnreadCountChange = () => {
         const conversation = delegate.model.Conversation.getOne(this.props.imId, true);
         const count = conversation.unreadMessagesCount;
@@ -238,6 +252,10 @@ const styles = StyleSheet.create({
     },
     sendMessageText: {
         color: 'gray',
+    },
+    errorMessageText: {
+        color: 'red',
+        fontSize: 16,
     },
     right: {
         marginLeft: 13,

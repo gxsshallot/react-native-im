@@ -47,10 +47,10 @@ export default class extends React.Component {
             />
         );
     };
-    
+
     _toImage = (item, itemEdge) => {
-        if (item.custom) {
-            return {uri: item.custom};
+        if (item.avatar) {
+            return {uri: item.avatar};
         }
         const user = delegate.user.getUser(item.userId);
         let image;
@@ -90,7 +90,7 @@ export default class extends React.Component {
                 const item = this.groupLayout[lens - 1];
                 const layoutIds = item.layout.map((num, index) => {
                     const ids = index === 0 ?
-                        memberImIds.slice(0, num) : 
+                        memberImIds.slice(0, num) :
                         memberImIds.slice(item.layout[index - 1], num);
                     return ids.map(i => ({userId: i}));
                 });
