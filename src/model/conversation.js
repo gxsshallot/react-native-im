@@ -115,7 +115,7 @@ export function loadItem(imId, chatType) {
         })
         .then(() => {
             return rootNode[imId];
-        })
+        });
 }
 
 /**
@@ -276,7 +276,6 @@ export function createOne(members) {
     if (isGroup) {
         promise = delegate.model.Group.createOne(members)
             .then((result) => {
-                const groupId = result.groupId;
                 return loadItem(result.groupId, chatType);
             });
     } else {
