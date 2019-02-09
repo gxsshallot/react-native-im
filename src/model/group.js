@@ -169,7 +169,7 @@ export function getAvatar(groupId) {
  */
 export function getAllowAdd(groupId) {
     const group = findByGroupId(groupId, false);
-    return group ? group.allowInvite : undefined;
+    return group ? !!group.allowInvite : false;
 }
 
 /**
