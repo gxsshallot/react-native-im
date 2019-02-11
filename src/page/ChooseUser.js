@@ -41,6 +41,14 @@ export default class extends React.PureComponent {
         if (!this.state.users) {
             delegate.contact.loadAllUser(true)
                 .then((users) => {
+                    const {excludedUserIds, hasSelf} = this.props;
+                    if (Array.isArray(excludedUserIds) && excludedUserIds.length > 0) {
+                        users = users.filter(item => excludedUserIds.indexOf(item.userId) < 0);
+                    }
+                    if (!hasSelf) {
+                        const meUserId = delegate.user.getMine().userId;
+                        users = users.filter(item => item.userId !== meUserId);
+                    }
                     this.setState({users});
                 })
                 .catch(() => {
@@ -110,14 +118,6 @@ export default class extends React.PureComponent {
     }
 
     _splitSections(users) {
-        const {excludedUserIds, hasSelf} = this.props;
-        if (Array.isArray(excludedUserIds) && excludedUserIds.length > 0) {
-            users = users.filter(item => excludedUserIds.indexOf(item.getId()) < 0);
-        }
-        if (!hasSelf) {
-            const meUserId = delegate.user.getMine().userId;
-            users = users.filter(item => item.getId() !== meUserId);
-        }
         const flusers = users
             .reduce((prv, cur) => {
                 const value = cur.getInfo()[delegate.config.pinyinField];
