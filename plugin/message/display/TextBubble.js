@@ -53,7 +53,7 @@ export default class extends React.PureComponent {
                     key={index}
                     source={emojiImage}
                     style={styles.image}
-                    resizeMode={'center'}
+                    resizeMode={'contain'}
                 />
             );
         } else {
