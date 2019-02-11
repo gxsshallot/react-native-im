@@ -57,11 +57,12 @@ export function onUserJoin(groupId, invitorId, userJoinedIds, localTime, timesta
     return Promise.all(groupUpdateOperation(groupId, text, localTime, timestamp));
 }
 
-export function onUserLeave(groupId, userLeavedIds, localTime, timestamp) {
+export function onUserLeave(groupId, operatorId, userLeavedIds, localTime, timestamp) {
     const users = userLeavedIds
         .map(userId => getOperatorName(userId))
         .join(',');
-    const text = users + '退出了群聊';
+    const isUserQuit = userLeavedIds.length === 1 && userLeavedIds[0] === operatorId;
+    const text =  users + (isUserQuit ? '退出了群聊' : '被移出群聊');
     return Promise.all(groupUpdateOperation(groupId, text, localTime, timestamp));
 }
 
