@@ -31,12 +31,13 @@ export function init(forceUpdate) {
                 rootNode[item.imId] = item;
             });
         });
+    let promise;
     if (forceUpdate) {
-        return load()
-            .catch(() => cachePromise);
+        promise = load().catch(() => cachePromise);
     } else {
-        return cachePromise;
+        promise = cachePromise;
     }
+    return promise.then(() => onUnreadCountChanged());
 }
 
 /**
