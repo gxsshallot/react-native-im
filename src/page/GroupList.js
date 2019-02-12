@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, FlatList, SafeAreaView } from 'react-native';
+import { FlatList, SafeAreaView, StyleSheet, Text, View } from 'react-native';
 import NaviBar, { forceInset } from 'react-native-pure-navigation-bar';
 import Listener from 'react-native-general-listener';
 import Toast from 'react-native-root-toast';
@@ -15,7 +15,7 @@ export default class extends React.PureComponent {
     };
 
     static defaultProps = {};
-    
+
     constructor(props) {
         super(props);
         this.state = {
@@ -39,7 +39,7 @@ export default class extends React.PureComponent {
             this.listenGroupLoaded
         );
     }
-    
+
     render() {
         return (
             <View style={styles.view}>
@@ -112,9 +112,11 @@ export default class extends React.PureComponent {
                 keyExtractor: item => item.groupId,
                 showHistory: false,
                 searchHint: '搜索群名称、群成员',
+                historyKey: '',
                 maxSectionItemLength: 0,
                 doSearch: this._search,
                 renderItem: this._renderSearchItem,
+                searchOnTextChange: true,
             },
         });
     };
@@ -129,8 +131,14 @@ export default class extends React.PureComponent {
         const groups = delegate.model.Group.get()
             .sort((a, b) => a.createdOn < b.createdOn ? 1 : -1);
         groups.forEach(group => {
-            group.memberObjList = delegate.model.Group.getMembers(group.groupId, true)
-                .map(userId => delegate.user.getUser(userId));
+            const {groupId} = group;
+            if (!group.name) {
+                group.name = delegate.model.Group.getName(groupId);
+            }
+            if (!group.memberObjList) {
+                group.memberObjList = delegate.model.Group.getMembers(groupId)
+                    .map((userId) => delegate.user.getUser(userId));
+            }
         });
         return groups;
     };
