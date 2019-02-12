@@ -11,7 +11,7 @@ export function getUi(props) {
         return null;
     }
     const groupMembers = IMStandard.Delegate.model.Group.getMembers(imId);
-    const groupAllowAdd = IMStandard.Delegate.model.Group.getAllowAdd(imId);
+    const groupAllowAdd = IMStandard.Delegate.model.Group.getAllowInvites(imId);
     const groupOwner = IMStandard.Delegate.model.Group.getOwner(imId);
     const isOwner = isGroup && groupOwner === IMStandard.Delegate.user.getMine().userId;
     return (

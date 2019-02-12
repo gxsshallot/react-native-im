@@ -35,7 +35,7 @@ export default {
             changeName: unset('im.group.changeName'),
             changeAvatar: unset('im.group.changeAvatar'),
             changeOwner: unset('im.group.changeOwner'),
-            changeAllowInvite: null,
+            changeAllowInvites: null,
         },
     },
     func: {

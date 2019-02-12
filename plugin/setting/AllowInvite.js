@@ -43,14 +43,14 @@ export class AllowInviteCell extends React.PureComponent {
 
     _state() {
         const {imId} = this.props;
-        const allowInvite = IMStandard.Delegate.model.Group.getAllowAdd(imId);
+        const allowInvite = IMStandard.Delegate.model.Group.getAllowInvites(imId);
         return {allowInvite};
     }
 
     _clickConfig(allowInvite) {
         const {imId} = this.props;
         this.setState({allowInvite});
-        IMStandard.Delegate.model.Group.changeAllowInvite(imId, allowInvite)
+        IMStandard.Delegate.model.Group.changeAllowInvites(imId, allowInvite)
             .catch(() => {
                 Toast.show(i18n.t('IMToastError', {
                     action: i18n.t('IMSettingConfigChange'),
