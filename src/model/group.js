@@ -318,7 +318,7 @@ function deleteOne(groupId) {
     if (groupId) {
         delete rootNode[groupId];
     }
-    Listener.trigger([Constant.BaseEvent, Constant.GroupEvent, groupId]);
+    Listener.trigger([Constant.BaseEvent, Constant.GroupEvent]);
     return deleteData(groupId);
 }
 

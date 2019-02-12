@@ -79,9 +79,8 @@ export function onUpdateOwner(groupId, newOwnerId, localTime, timestamp) {
 }
 
 export function onGroupDelete(groupId, localTime, timestamp) {
-    const text = '群主解散了群聊';
     const deletePromise = delegate.model.Conversation.deleteOne(groupId);
-    return Promise.all([...groupUpdateOperation(groupId, text, localTime, timestamp), deletePromise]);
+    return Promise.all([...groupUpdateOperation(groupId, undefined, localTime, timestamp), deletePromise]);
 }
 
 export function getOperatorName(userId) {
