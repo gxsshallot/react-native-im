@@ -169,7 +169,7 @@ export function getAvatar(groupId) {
  */
 export function getAllowAdd(groupId) {
     const group = findByGroupId(groupId, false);
-    return group ? !!group.allowInvite : false;
+    return group ? !!group.allowInvites : false;
 }
 
 /**
@@ -272,7 +272,7 @@ export function changeAvatar(groupId, newAvatarUrl) {
 export function changeAllowInvite(groupId, allowInvite) {
     return delegate.im.group.changeAllowInvite(groupId, allowInvite)
         .then(() => {
-            return changeGroupInfo(groupId, {allowInvite}, allowInvite);
+            return changeGroupInfo(groupId, {allowInvites: allowInvite}, allowInvite);
         });
 }
 
