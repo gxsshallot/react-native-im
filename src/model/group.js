@@ -267,12 +267,12 @@ export function changeAvatar(groupId, newAvatarUrl) {
 /**
  * 更改是否允许其他人添加成员设置。
  * @param {string} groupId 群组ID
- * @param {string} allowInvite 是否允许添加成员
+ * @param {string} allowInvites 是否允许添加成员
  */
-export function changeAllowInvites(groupId, allowInvite) {
-    return delegate.im.group.changeAllowInvites(groupId, allowInvite)
+export function changeAllowInvites(groupId, allowInvites) {
+    return delegate.im.group.changeAllowInvites(groupId, allowInvites)
         .then(() => {
-            return changeGroupInfo(groupId, {allowInvites: allowInvite}, allowInvite);
+            return changeGroupInfo(groupId, {allowInvites}, allowInvites);
         });
 }
 

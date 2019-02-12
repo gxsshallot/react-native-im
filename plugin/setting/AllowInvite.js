@@ -35,7 +35,7 @@ export class AllowInviteCell extends React.PureComponent {
             <IMStandard.Delegate.component.SettingItem
                 type={IMStandard.Constant.SettingItemType.Switch}
                 title={i18n.t('IMSettingAllowInvite')}
-                data={this.state.allowInvite}
+                data={this.state.allowInvites}
                 onPressSwitch={this._clickConfig.bind(this)}
             />
         );
@@ -43,14 +43,14 @@ export class AllowInviteCell extends React.PureComponent {
 
     _state() {
         const {imId} = this.props;
-        const allowInvite = IMStandard.Delegate.model.Group.getAllowInvites(imId);
-        return {allowInvite};
+        const allowInvites = IMStandard.Delegate.model.Group.getAllowInvites(imId);
+        return {allowInvites};
     }
 
-    _clickConfig(allowInvite) {
+    _clickConfig(allowInvites) {
         const {imId} = this.props;
-        this.setState({allowInvite});
-        IMStandard.Delegate.model.Group.changeAllowInvites(imId, allowInvite)
+        this.setState({allowInvites});
+        IMStandard.Delegate.model.Group.changeAllowInvites(imId, allowInvites)
             .catch(() => {
                 Toast.show(i18n.t('IMToastError', {
                     action: i18n.t('IMSettingConfigChange'),
