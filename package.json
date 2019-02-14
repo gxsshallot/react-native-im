@@ -51,6 +51,6 @@
     "react-navigation": "*"
   },
   "optionalDependencies": {
-    "react-native-im-easemob": "^1.0.10"
+    "react-native-im-easemob": "*"
   }
 }
