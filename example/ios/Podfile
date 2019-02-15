@@ -31,7 +31,7 @@ def common_target
     pod 'react-native-camera', :path => '../node_modules/react-native-camera'
     pod 'react-native-video', :path => '../node_modules/react-native-video'
     pod 'RNFS', :path => '../node_modules/react-native-fs'
-    pod 'RNLanguages', :path => '../node_modules/react-native-languages'
+    pod 'RNLocalize', :path => '../node_modules/react-native-localize/ios'
     pod 'RNSound', :path => '../node_modules/react-native-sound'
     pod 'RNSoundRecorder', :path => '../node_modules/react-native-sound-recorder'
     pod 'ReactNativePermissions', :path => '../node_modules/react-native-permissions'

@@ -4,12 +4,12 @@ import { HeaderButton } from 'react-navigation-header-buttons';
 import { ChatManager, IMConstant } from 'react-native-im-easemob';
 import Toast from 'react-native-root-toast';
 import Listener from 'react-native-general-listener';
+import i18n from 'i18n-js';
 import * as PageKeys from '../pagekey';
 import * as Types from '../proptype';
 import * as Constant from '../constant';
 import { DateUtil, guid } from '../util';
 import delegate from '../delegate';
-import i18n from '../../language';
 
 export default class extends React.PureComponent {
     static navigationOptions = function ({navigation}) {

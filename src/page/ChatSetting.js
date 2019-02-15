@@ -2,10 +2,10 @@ import React from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import PropTypes from 'prop-types';
 import { getSafeAreaInset } from 'react-native-pure-navigation-bar';
+import i18n from 'i18n-js';
 import * as Constant from '../constant';
 import * as Types from '../proptype';
 import delegate from '../delegate';
-import i18n from '../../language';
 
 export default class extends React.PureComponent {
     static navigationOptions = function ({navigation}) {

@@ -3,9 +3,9 @@ import { View } from 'react-native';
 import PropTypes from 'prop-types';
 import Toast from 'react-native-root-toast';
 import PickList, { PickListRowUtil } from 'react-native-picklist';
+import i18n from 'i18n-js';
 import { deepExport } from '../util';
 import delegate from '../delegate';
-import i18n from '../../language';
 
 export default class extends React.PureComponent {
     static navigationOptions = function (options) {

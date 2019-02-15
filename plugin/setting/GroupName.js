@@ -1,9 +1,9 @@
 import React from 'react';
 import { View } from 'react-native';
 import Toast from 'react-native-root-toast';
+import i18n from 'i18n-js';
 import * as IMStandard from '../../src';
 import Prompt from './Prompt';
-import i18n from '../../language';
 
 export const name = 'IMSettingGroupName';
 

@@ -3,10 +3,10 @@ import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SwipeListView } from 'react-native-swipe-list-view';
 import Toast from 'react-native-root-toast';
 import Listener from 'react-native-general-listener';
+import i18n from 'i18n-js';
 import * as PageKeys from '../pagekey';
 import delegate from '../delegate';
 import * as Constant from '../constant';
-import i18n from '../../language';
 
 export default class extends React.PureComponent {
     static navigationOptions = function () {

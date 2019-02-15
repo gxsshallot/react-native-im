@@ -2,7 +2,7 @@ import React from 'react';
 import { TextInput, StyleSheet, Dimensions } from 'react-native';
 import PropTypes from 'prop-types';
 import Dialog, { DialogTitle, DialogButton, DialogContent } from 'react-native-popup-dialog';
-import i18n from '../../language';
+import i18n from 'i18n-js';
 
 export default class extends React.PureComponent {
     static propTypes = {

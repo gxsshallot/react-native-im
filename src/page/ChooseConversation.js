@@ -2,9 +2,9 @@ import React from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import PropTypes from 'prop-types';
 import PickList, { PickListRowUtil } from 'react-native-picklist';
+import i18n from 'i18n-js';
 import * as PageKeys from '../pagekey';
 import delegate from '../delegate';
-import i18n from '../../language';
 
 export default class extends React.PureComponent {
     static navigationOptions = PickList.navigationOptions;

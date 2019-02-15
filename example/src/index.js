@@ -6,6 +6,7 @@ import { IMStandard, IMPlugin } from 'react-native-im';
 import * as Constant from './Constant';
 import PageKeys from './PageKeys';
 import Home from './Home';
+import setI18nConfig from './i18n';
 
 export default function () {
     return App;
@@ -14,6 +15,7 @@ export default function () {
 class App extends React.PureComponent {
     constructor(props) {
         super(props);
+        setI18nConfig();
         this.state = {
             app: null,
         };

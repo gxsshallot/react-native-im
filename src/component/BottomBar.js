@@ -4,11 +4,11 @@ import PropTypes from 'prop-types';
 import SoundRecorder from 'react-native-sound-recorder';
 import Toast from 'react-native-root-toast';
 import { getSafeAreaInset } from 'react-native-pure-navigation-bar';
+import i18n from 'i18n-js';
 import * as Types from '../proptype';
 import * as Constant from '../constant';
 import * as PageKeys from '../pagekey';
 import delegate from '../delegate';
-import i18n from '../../language';
 
 export default class extends React.PureComponent {
     static propTypes = {

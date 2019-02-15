@@ -1,7 +1,7 @@
 import React from 'react';
+import i18n from 'i18n-js';
 import * as IMStandard from '../../src';
 import { onAddMembers, onRemoveMembers } from './GeneralUpdate';
-import i18n from '../../language';
 
 export const name = 'IMSettingAllMembers';
 
