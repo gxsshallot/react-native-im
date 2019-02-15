@@ -26,6 +26,7 @@
     "react-native": "0.57.2",
     "react-native-gesture-handler": "^1.0.12",
     "react-native-im": "../",
+    "react-native-im-easemob": "^1.0.14",
     "react-native-localize": "^1.0.2",
     "react-native-permissions": "^1.1.1",
     "react-native-push-notification": "^3.1.1",

@@ -1,7 +1,6 @@
 import React from 'react';
 import { Clipboard, Keyboard, SafeAreaView, StyleSheet, TouchableWithoutFeedback, View } from 'react-native';
 import { HeaderButton } from 'react-navigation-header-buttons';
-import { ChatManager, IMConstant } from 'react-native-im-easemob';
 import Toast from 'react-native-root-toast';
 import Listener from 'react-native-general-listener';
 import i18n from 'i18n-js';
@@ -270,44 +269,44 @@ export default class extends React.PureComponent {
         // if (Model.app.env() !== Constant.environment.test178) {
         //     global.standard.im.message.remove(message, chatType);
         // }
-        this._onExchangeMessage({text: '你撤回了一条消息', ext: {body: {message}}});
-        const appName = global.standard.im.constant.cmd_message.IM_MESSAGE;
-        ChatManager.sendCmd(imId, chatType, appName, {
-            appName,
-            body: {message, type: global.standard.im.constant.type.recall_message}
-        });
+        // this._onExchangeMessage({text: '你撤回了一条消息', ext: {body: {message}}});
+        // const appName = global.standard.im.constant.cmd_message.IM_MESSAGE;
+        // ChatManager.sendCmd(imId, chatType, appName, {
+        //     appName,
+        //     body: {message, type: global.standard.im.constant.type.recall_message}
+        // });
     }
 
     _onExchangeMessage(cmdMessage) {
-        const data = cmdMessage.ext.body.message;
-        const {chatType} = this.props;
-        delegate.im.conversation.deleteMessage(data.to, chatType, data.messageId);
-        const message = {
-            conversationId: data.to,
-            chatType,
-            ext: {
-                isSystem: true,
-                [global.standard.im.message.constant.inner_id]: guid()
-            },
-            from: data.from,
-            localTime: data.localTime,
-            status: IMConstant.MessageStatus.succeed,
-            timestamp: data.timestamp,
-            to: data.to,
-            body: {type: IMConstant.MessageType.text, text: cmdMessage.text},
-            messageId: data.messageId,
-        };
-        this.list.recallMessage(message, data.messageId);
-        ChatManager.insertSystemMessage(
-            data.to,
-            chatType,
-            cmdMessage.text,
-            data.timestamp,
-            data.localTime
-        )
-            .then((newMessage) => {
-                this.list.recallMessage(newMessage, data.messageId);
-            });
+        // const data = cmdMessage.ext.body.message;
+        // const {chatType} = this.props;
+        // delegate.im.conversation.deleteMessage(data.to, chatType, data.messageId);
+        // const message = {
+        //     conversationId: data.to,
+        //     chatType,
+        //     ext: {
+        //         isSystem: true,
+        //         [global.standard.im.message.constant.inner_id]: guid()
+        //     },
+        //     from: data.from,
+        //     localTime: data.localTime,
+        //     status: IMConstant.MessageStatus.succeed,
+        //     timestamp: data.timestamp,
+        //     to: data.to,
+        //     body: {type: IMConstant.MessageType.text, text: cmdMessage.text},
+        //     messageId: data.messageId,
+        // };
+        // this.list.recallMessage(message, data.messageId);
+        // ChatManager.insertSystemMessage(
+        //     data.to,
+        //     chatType,
+        //     cmdMessage.text,
+        //     data.timestamp,
+        //     data.localTime
+        // )
+        //     .then((newMessage) => {
+        //         this.list.recallMessage(newMessage, data.messageId);
+        //     });
     }
 
     _onQuote(item) {
