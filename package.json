@@ -2,7 +2,7 @@
   "name": "react-native-im",
   "version": "0.1.0",
   "private": false,
-  "description": "一个通用的IM视图框架(开发中)",
+  "description": "一个通用的IM视图框架",
   "main": "index.js",
   "scripts": {
   },

@@ -1,6 +1,6 @@
 * [简介](zh-cn/README)
-* [安装](zh-cn/Install)
-* [样例工程](zh-cn/Example)
+* [安装](zh-cn/instruction/Install)
+* [样例工程](zh-cn/instruction/Example)
 
 ---
 
