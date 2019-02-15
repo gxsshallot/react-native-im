@@ -27,10 +27,11 @@ def common_target
     pod 'Folly', :podspec => '../node_modules/react-native/third-party-podspecs/Folly.podspec'
     # react-navigation
     pod 'RNGestureHandler', :path => '../node_modules/react-native-gesture-handler'
-
+    # others
     pod 'react-native-camera', :path => '../node_modules/react-native-camera'
     pod 'react-native-video', :path => '../node_modules/react-native-video'
     pod 'RNFS', :path => '../node_modules/react-native-fs'
+    pod 'RNLanguages', :path => '../node_modules/react-native-languages'
     pod 'RNSound', :path => '../node_modules/react-native-sound'
     pod 'RNSoundRecorder', :path => '../node_modules/react-native-sound-recorder'
     pod 'ReactNativePermissions', :path => '../node_modules/react-native-permissions'

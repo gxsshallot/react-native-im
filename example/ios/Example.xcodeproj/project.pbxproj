@@ -8,22 +8,24 @@
 
 /* Begin PBXBuildFile section */
 		09AA1F6AC41B6A97A66F86E8 /* libPods-Easemob.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 33A693C826C682ED605FAB14 /* libPods-Easemob.a */; };
+		1FAAA7702217281C0070EABB /* main.jsbundle in Resources */ = {isa = PBXBuildFile; fileRef = 1FAAA76F2217281C0070EABB /* main.jsbundle */; };
+		1FAAA772221728250070EABB /* assets in Resources */ = {isa = PBXBuildFile; fileRef = 1FAAA771221728250070EABB /* assets */; };
 		1FF0846321E8D4A8005117F7 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1FF0845B21E8D4A8005117F7 /* LaunchScreen.xib */; };
 		1FF0846421E8D4A8005117F7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 1FF0845D21E8D4A8005117F7 /* main.m */; };
 		1FF0846521E8D4A8005117F7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1FF0845E21E8D4A8005117F7 /* Images.xcassets */; };
 		1FF0846621E8D4A8005117F7 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1FF0845F21E8D4A8005117F7 /* AppDelegate.m */; };
-		1FF0846721E8D4A8005117F7 /* main.jsbundle in Resources */ = {isa = PBXBuildFile; fileRef = 1FF0846121E8D4A8005117F7 /* main.jsbundle */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		0961895BD993E4D6E0DE4856 /* Pods-Easemob.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Easemob.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Easemob/Pods-Easemob.debug.xcconfig"; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* IMEasemob.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = IMEasemob.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		1FAAA76F2217281C0070EABB /* main.jsbundle */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = main.jsbundle; sourceTree = "<group>"; };
+		1FAAA771221728250070EABB /* assets */ = {isa = PBXFileReference; lastKnownFileType = folder; path = assets; sourceTree = "<group>"; };
 		1FF0845A21E8D4A8005117F7 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		1FF0845C21E8D4A8005117F7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		1FF0845D21E8D4A8005117F7 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		1FF0845E21E8D4A8005117F7 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		1FF0845F21E8D4A8005117F7 /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		1FF0846121E8D4A8005117F7 /* main.jsbundle */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = main.jsbundle; sourceTree = "<group>"; };
 		1FF0846221E8D4A8005117F7 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		33A693C826C682ED605FAB14 /* libPods-Easemob.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Easemob.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6FF560CA20C78BB3826B8B54 /* Pods-Easemob.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Easemob.release.xcconfig"; path = "Pods/Target Support Files/Pods-Easemob/Pods-Easemob.release.xcconfig"; sourceTree = "<group>"; };
@@ -44,23 +46,16 @@
 		1FF0845921E8D4A8005117F7 /* Example */ = {
 			isa = PBXGroup;
 			children = (
+				1FAAA771221728250070EABB /* assets */,
+				1FAAA76F2217281C0070EABB /* main.jsbundle */,
 				1FF0845A21E8D4A8005117F7 /* AppDelegate.h */,
 				1FF0845F21E8D4A8005117F7 /* AppDelegate.m */,
 				1FF0845D21E8D4A8005117F7 /* main.m */,
 				1FF0845B21E8D4A8005117F7 /* LaunchScreen.xib */,
 				1FF0845E21E8D4A8005117F7 /* Images.xcassets */,
 				1FF0846221E8D4A8005117F7 /* Info.plist */,
-				1FF0846021E8D4A8005117F7 /* Resource */,
 			);
 			path = Example;
-			sourceTree = "<group>";
-		};
-		1FF0846021E8D4A8005117F7 /* Resource */ = {
-			isa = PBXGroup;
-			children = (
-				1FF0846121E8D4A8005117F7 /* main.jsbundle */,
-			);
-			path = Resource;
 			sourceTree = "<group>";
 		};
 		4799F6E358706CEFED03BC7F /* Pods */ = {
@@ -155,7 +150,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1FF0846721E8D4A8005117F7 /* main.jsbundle in Resources */,
+				1FAAA7702217281C0070EABB /* main.jsbundle in Resources */,
+				1FAAA772221728250070EABB /* assets in Resources */,
 				1FF0846321E8D4A8005117F7 /* LaunchScreen.xib in Resources */,
 				1FF0846521E8D4A8005117F7 /* Images.xcassets in Resources */,
 			);
