@@ -3,15 +3,15 @@ node_js:
  - "10"
 os:
  - linux
+cache: yarn
 
 stages:
+ - test
  - name: deploy
+   if: tag = true
 
 jobs:
  include:
-   - stage: test
-     script:
-       - npm run lint
    - stage: deploy
      deploy:
        provider: npm

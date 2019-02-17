@@ -8,7 +8,7 @@
   "scripts": {
     "start": "tsc -w",
     "build": "tsc",
-    "lint": "./node_modules/.bin/eslint index.ts src/**/*.ts src/**/*.tsx plugin/**/*.ts plugin/**/*.tsx"
+    "test": "./node_modules/.bin/eslint index.ts src/**/*.ts src/**/*.tsx plugin/**/*.ts plugin/**/*.tsx"
   },
   "repository": {
     "type": "git",
