@@ -1,4 +1,4 @@
-export default function deepExport(obj) {
+export default function deepExport(obj: any): any {
     if (Array.isArray(obj)) {
         const res = [];
         for (const item of obj) {
@@ -6,7 +6,7 @@ export default function deepExport(obj) {
         }
         return res;
     } else if (Object.prototype.isPrototypeOf(obj)) {
-        const res = {};
+        const res: any = {};
         for (const key of Object.keys(obj)) {
             res[key] = obj[key];
         }

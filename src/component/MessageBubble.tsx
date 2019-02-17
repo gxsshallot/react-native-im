@@ -1,43 +1,44 @@
-import React from 'react';
-import { TouchableWithoutFeedback, View, Dimensions } from 'react-native';
-import PropTypes from 'prop-types';
+import * as React from 'react';
+import { TouchableWithoutFeedback, View, Dimensions, ImageSourcePropType } from 'react-native';
 import ImageCapInset from 'react-native-image-capinsets';
+import { Component } from '../typings';
 import * as Model from '../model';
 import * as Constant from '../constant';
-import * as Types from '../proptype';
 
-export default class extends React.PureComponent {
-    static propTypes = {
-        isSender: PropTypes.bool.isRequired,
-        message: PropTypes.shape(Types.BasicMessage),
-        onShowMenu: PropTypes.func,
-        leftBubble: PropTypes.any,
-        rightBubble: PropTypes.any,
-    }
+export interface Props extends Component.MessageBubbleProps {
+    leftBubble: ImageSourcePropType;
+    rightBubble: ImageSourcePropType;
+}
 
+export interface State {
+    enableBubble: boolean;
+}
+
+export default class extends React.PureComponent<Props, State> {
     static defaultProps = {
         leftBubble: require('./image/message_bubble_left.png'),
         rightBubble: require('./image/message_bubble_right.png'),
     };
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            enableBubble: false,
-        };
-    }
+    protected readonly paddingHorizontal = 7;
+    protected bubble: View | null = null;
+    protected innerView: View | null = null;
+    
+    state: State = {
+        enableBubble: false,
+    };
 
     render() {
-        const {isSender} = this.props;
-        const bubbleImage = isSender ? this.props.rightBubble : this.props.leftBubble;
+        const {isSender, leftBubble, rightBubble} = this.props;
+        const bubbleImage = isSender ? rightBubble : leftBubble;
         const maxWidth = Dimensions.get('window').width / 3 * 2;
-        const paddingLeft = isSender ? 0 : 7;
-        const paddingRight = isSender ? 7 : 0;
+        const paddingLeft = isSender ? 0 : this.paddingHorizontal;
+        const paddingRight = isSender ? this.paddingHorizontal : 0;
         const innerMaxWidth = maxWidth - paddingLeft - paddingRight;
         return (
             <TouchableWithoutFeedback
-                onPress={this._onPress}
-                onLongPress={this._onLongPress}
+                onPress={this._onPress.bind(this)}
+                onLongPress={this._onLongPress.bind(this)}
             >
                 <View ref={ref => this.bubble = ref}>
                     {this.state.enableBubble ? (
@@ -59,13 +60,13 @@ export default class extends React.PureComponent {
         );
     }
 
-    _renderMessage = (maxWidth) => {
+    protected _renderMessage(maxWidth: number) {
         const {message, isSender} = this.props;
         const params = {
-            ref: (ref) => {this.innerView = ref;},
+            ref: (ref: View | null) => {this.innerView = ref;},
             message: message,
             isSender: isSender,
-            enableBubble: this._enableBubble,
+            enableBubble: this._enableBubble.bind(this),
             maxWidth: maxWidth,
         };
         const displayItem = Model.Action.match(
@@ -75,27 +76,27 @@ export default class extends React.PureComponent {
             undefined,
         );
         return React.createElement(displayItem, params);
-    };
+    }
 
-    _enableBubble = (status) => {
+    protected _enableBubble(status: boolean) {
         this.setState({enableBubble: status});
-    };
+    }
 
-    _onPress = () => {
+    protected _onPress() {
         if (this.innerView && this.innerView.onPress) {
             this.innerView.onPress();
         }
-    };
+    }
 
-    _onLongPress = () => {
-        const {message, isSender} = this.props;
-        this.bubble.measure((ox, oy, width, height, px, py) => {
+    protected _onLongPress() {
+        const {message, isSender, onShowMenu} = this.props;
+        this.bubble && this.bubble.measure((width: number, height: number, px: number, py: number) => {
             const param = {
                 rect: {x: px, y: py, width: width, height: height},
                 isSender: isSender,
                 message: message,
             };
-            this.props.onShowMenu && this.props.onShowMenu(param);
+            onShowMenu(param);
         });
-    };
+    }
 }

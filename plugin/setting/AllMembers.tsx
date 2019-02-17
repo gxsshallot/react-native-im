@@ -1,39 +1,40 @@
-import React from 'react';
+import * as React from 'react';
 import i18n from 'i18n-js';
-import * as IMStandard from '../../src';
+import { Typings, Delegate, Constant, PageKeys } from '../../src';
 import { onAddMembers, onRemoveMembers } from './GeneralUpdate';
+import { UiParams, UiResult } from './typings';
 
 export const name = 'IMSettingAllMembers';
 
-export function getUi(props) {
+export function getUi(props: UiParams): UiResult {
     const {key, imId, chatType} = props;
-    const isGroup = chatType === IMStandard.Constant.ChatType.Group;
+    const isGroup = chatType === Typings.Conversation.Types.Group;
     if (!isGroup) {
         return null;
     }
-    const groupMembers = IMStandard.Delegate.model.Group.getMembers(imId);
+    const groupMembers = Delegate.model.Group.getMembers(imId);
     return (
-        <IMStandard.Delegate.component.SettingItem
+        <Delegate.component.SettingItem
             key={key}
-            type={IMStandard.Constant.SettingItemType.Text}
+            type={Constant.SettingItemType.Text}
             title={i18n.t('IMSettingAllMembers', {length: groupMembers.length})}
             onPressLine={_clickAllMembers.bind(this, props)}
         />
     );
 }
 
-function _clickAllMembers(props) {
+function _clickAllMembers(props: UiParams): void {
     const {imId, navigation} = props;
-    const groupMembers = IMStandard.Delegate.model.Group.getMembers(imId);
-    const groupOwner = IMStandard.Delegate.model.Group.getOwner(imId);
+    const groupMembers = Delegate.model.Group.getMembers(imId);
+    const groupOwner = Delegate.model.Group.getOwner(imId);
     navigation.navigate({
-        routeName: IMStandard.PageKeys.GroupMembers,
+        routeName: PageKeys.GroupMembers,
         params: {
             groupId: imId,
             members: groupMembers,
             admins: [groupOwner],
             canAdd: true,
-            canRemove: groupOwner === IMStandard.Delegate.user.getMine().userId,
+            canRemove: groupOwner === Delegate.user.getMine().userId,
             onAddMembers: (members) => onAddMembers(props, members),
             onRemoveMembers: (members) => onRemoveMembers(props, members),
         },

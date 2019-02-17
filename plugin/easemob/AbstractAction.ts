@@ -4,7 +4,7 @@ import * as StandardMessage from '../message';
 
 export default function () {
     const abstractActions = [
-        [undefined, (_) => ''],
+        [undefined, () => ''],
         [IMConstant.MessageType.text, StandardMessage.Abstract.TextAbstract],
         [IMConstant.MessageType.image, StandardMessage.Abstract.ImageAbstract],
         [IMConstant.MessageType.location, StandardMessage.Abstract.LocationAbstract],

@@ -1,9 +1,15 @@
+import { Contact } from '../typings';
+
 const reg = /[A-Z]/i;
 
-export default function (users, firstLetterKey, sortKey = 'name') {
+export default function (
+    users: Contact.User[],
+    firstLetterKey: string,
+    sortKey: string = 'name'
+) {
     const data = users
-        .sort(sort.bind(this, sortKey))
-        .reduce((pre, cur) => {
+        .sort(sort(sortKey))
+        .reduce((pre: any, cur: Contact.User) => {
             const letterField = cur[firstLetterKey] || '#';
             const firstField = letterField.substring(0, 1).toUpperCase();
             const firstLetter = reg.test(firstField) ? firstField : '#';
@@ -14,16 +20,18 @@ export default function (users, firstLetterKey, sortKey = 'name') {
             }
             return pre;
         }, {});
-    return Object.keys(data)
     // title用于展示ListSectionHeader，key用于展示右侧索引
+    return Object.keys(data)
         .map(key => ({key, title: key, data: data[key]}))
-        .sort(sort.bind(this, 'title'));
+        .sort(sort('title'));
 }
 
-const sort = (key, a, b) => {
-    if (a[key] === b[key]) {
-        return 0;
-    } else {
-        return a[key] > b[key] ? 1 : -1;
-    }
-};
+function sort(key: string) {
+    return function (a: any, b: any) {
+        if (a[key] === b[key]) {
+            return 0;
+        } else {
+            return a[key] > b[key] ? 1 : -1;
+        }
+    };
+}

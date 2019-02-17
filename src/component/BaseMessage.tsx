@@ -1,21 +1,22 @@
-import React from 'react';
-import { Image, StyleSheet, Text, View, TouchableWithoutFeedback, ActivityIndicator } from 'react-native';
-import PropTypes from 'prop-types';
-import Listener from 'react-native-general-listener';
+import * as React from 'react';
+import { Image, StyleSheet, Text, View, TouchableWithoutFeedback, ActivityIndicator, ImageStyle } from 'react-native';
+import Listener, { ListenerObjType } from 'react-native-general-listener';
 import Toast from 'react-native-root-toast';
-import * as Types from '../proptype';
+import { Component } from '../typings';
 import * as Constant from '../constant';
 import delegate from '../delegate';
 
-export default class extends React.PureComponent {
-    static propTypes = {
-        ...Types.BasicConversation,
-        position: PropTypes.number.isRequired,
-        message: PropTypes.shape(Types.BasicMessage).isRequired,
-        onShowMenu: PropTypes.func,
-    };
+export type Props = Component.BaseMessageProps;
 
-    constructor(props) {
+export interface State {
+    showMembersName: boolean;
+}
+
+export default class extends React.PureComponent<Props, State> {
+    protected updateEvent: string[];
+    protected listenUpdate: ListenerObjType | void = undefined;
+
+    constructor(props: Props) {
         super(props);
         this.updateEvent = [Constant.BaseEvent, Constant.ConversationEvent, props.imId];
         this.state = {
@@ -24,7 +25,7 @@ export default class extends React.PureComponent {
     }
 
     componentDidMount() {
-        this.listenUpdate = Listener.register(this.updateEvent, this._onUpdate);
+        this.listenUpdate = Listener.register(this.updateEvent, this._onUpdate.bind(this));
     }
 
     componentWillUnmount() {
@@ -48,21 +49,16 @@ export default class extends React.PureComponent {
         );
     }
 
-    _renderLeft = () => {
+    protected _renderLeft() {
         const {message, onShowMenu} = this.props;
         const user = delegate.user.getUser(message.from);
-        const username = user.name;
-        const leftAvatarStyle = {
-            marginLeft: 10,
-            marginRight: 3,
-        };
         return (
             <View style={styles.rowLeft}>
-                {this._renderAvatar(leftAvatarStyle)}
+                {this._renderAvatar(styles.avatarLeft)}
                 <View>
                     {this.state.showMembersName && (
                         <Text style={styles.userName}>
-                            {username}
+                            {user.name}
                         </Text>
                     )}
                     <delegate.component.MessageBubble
@@ -73,9 +69,9 @@ export default class extends React.PureComponent {
                 </View>
             </View>
         );
-    };
+    }
 
-    _renderRight = () => {
+    protected _renderRight() {
         const {message, onShowMenu} = this.props;
         const status = message.status;
         let leftItem = null;
@@ -89,7 +85,7 @@ export default class extends React.PureComponent {
             );
         } else if (status === Constant.Status.Failed) {
             leftItem = (
-                <TouchableWithoutFeedback onPress={this._resend}>
+                <TouchableWithoutFeedback onPress={this._resend.bind(this)}>
                     <Image
                         source={require('./image/send_fail.png')}
                         style={styles.messageStatusImage}
@@ -97,10 +93,6 @@ export default class extends React.PureComponent {
                 </TouchableWithoutFeedback>
             );
         }
-        const rightAvatarStyle = {
-            marginRight: 10,
-            marginLeft: 3,
-        };
         return (
             <View style={styles.rowRight}>
                 {leftItem}
@@ -109,21 +101,21 @@ export default class extends React.PureComponent {
                     message={message}
                     onShowMenu={onShowMenu}
                 />
-                {this._renderAvatar(rightAvatarStyle)}
+                {this._renderAvatar(styles.avatarRight)}
             </View>
         );
-    };
+    }
 
-    _renderCenter = () => {
+    protected _renderCenter() {
         const {message: {data: {text}}} = this.props;
         return (
             <Text style={styles.center}>
                 {text}
             </Text>
         );
-    };
+    }
 
-    _renderAvatar = (style) => {
+    protected _renderAvatar(style: ImageStyle) {
         const {position, message} = this.props;
         const user = position < 0 ?
             delegate.user.getUser(message.from) :
@@ -146,26 +138,26 @@ export default class extends React.PureComponent {
                 defaultSource={defaultImage}
             />
         );
-    };
+    }
 
-    _resend = () => {
+    protected _resend() {
         const {imId, chatType, message} = this.props;
         delegate.model.Message.sendMessage(imId, chatType, message, {})
             .then(() => {
                 Toast.show('发送成功');
             });
-    };
+    }
 
-    _showMembersName = () => {
+    protected _showMembersName() {
         const config = delegate.model.Conversation.getConfig(this.props.imId);
         return config.showMembersName;
-    };
+    }
 
-    _onUpdate = () => {
+    protected _onUpdate() {
         this.setState({
             showMembersName: this._showMembersName(),
         });
-    };
+    }
 }
 
 const styles = StyleSheet.create({
@@ -181,6 +173,14 @@ const styles = StyleSheet.create({
     rowLeft: {
         flex: 1,
         flexDirection: 'row',
+    },
+    avatarLeft: {
+        marginLeft: 10,
+        marginRight: 3,
+    },
+    avatarRight: {
+        marginRight: 10,
+        marginLeft: 3,
     },
     userImage: {
         marginTop: 2,

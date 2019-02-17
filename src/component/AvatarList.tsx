@@ -1,34 +1,24 @@
-import React from 'react';
+import * as React from 'react';
 import { View, StyleSheet, Text, Image, TouchableOpacity, Dimensions } from 'react-native';
-import PropTypes from 'prop-types';
 import { getSafeAreaInset } from 'react-native-pure-navigation-bar';
+import i18n from 'i18n-js';
+import { Component } from '../typings';
 import * as PageKeys from '../pagekey';
-import * as Types from '../proptype';
 import delegate from '../delegate';
 
-export default class extends React.PureComponent {
-    static propTypes = {
-        ...Types.Navigation,
-        owner: PropTypes.string,
-        data: PropTypes.arrayOf(PropTypes.string),
-        canAdd: PropTypes.bool,
-        canRemove: PropTypes.bool,
-        onAddMembers: PropTypes.func,
-        onRemoveMembers: PropTypes.func,
-        titleChooseGroupMember: PropTypes.string,
-    };
+export type Props = Component.AvatarListProps;
 
-    static defaultProps = {
-        canAdd: true,
-        canRemove: true,
-        titleChooseGroupMember: '选择群成员',
-    };
-
-    add = '__add__';
-    remove = '__remove__';
-    padding = 16;
-    itemEdge = 50;
-    itemMargin;
+export default class extends React.PureComponent<Props> {
+    protected readonly add = '__add__';
+    protected readonly remove = '__remove__';
+    protected readonly padding = 16;
+    protected readonly itemEdge = 50;
+    protected itemMargin = 0;
+    
+    constructor(props: Props) {
+        super(props);
+        this._onOrientationChange = this._onOrientationChange.bind(this);
+    }
 
     componentDidMount() {
         Dimensions.addEventListener('change', this._onOrientationChange);
@@ -42,23 +32,23 @@ export default class extends React.PureComponent {
         const dataSource = this._getDataSource();
         return (
             <View>
-                {dataSource.map(this._renderRow)}
+                {dataSource.map(this._renderRow.bind(this))}
             </View>
         );
     }
 
-    _renderRow = (rowData, rowIndex) => {
+    protected _renderRow(rowData: string[], rowIndex: number) {
         return (
             <View
                 key={rowIndex}
                 style={[styles.row, {paddingHorizontal: this.padding}]}
             >
-                {rowData.map(this._renderItem)}
+                {rowData.map(this._renderItem.bind(this))}
             </View>
         );
-    };
+    }
 
-    _renderItem = (item, index) => {
+    protected _renderItem(item: string, index: number) {
         const ownerImage = require('./image/group_owner.png');
         const {title, image, isOwner} = this._getItemStatus(item);
         const imageStyle = {
@@ -91,13 +81,13 @@ export default class extends React.PureComponent {
                 </View>
             </TouchableOpacity>
         );
-    };
+    }
 
-    _onOrientationChange = () => {
+    protected _onOrientationChange() {
         this.forceUpdate();
-    };
+    }
 
-    _calculateColumn = () => {
+    protected _calculateColumn(): number {
         const {width, height} = Dimensions.get('window');
         const safeInset = getSafeAreaInset();
         const innerWidth = width - safeInset.left - safeInset.right;
@@ -110,9 +100,9 @@ export default class extends React.PureComponent {
         }
         this.itemMargin = (innerWidth - column * this.itemEdge - this.padding * 2) * 1.0 / (column * 2);
         return column;
-    };
+    }
 
-    _getDataSource = () => {
+    protected _getDataSource(): string[][] {
         const column = this._calculateColumn();
         const maxRow = 3;
         const {canAdd, canRemove, data} = this.props;
@@ -130,9 +120,9 @@ export default class extends React.PureComponent {
             result.push(newData.slice(index, index += column));
         }
         return result;
-    };
+    }
 
-    _getItemStatus = (rowItem) => {
+    protected _getItemStatus(rowItem: string) {
         let title, isOwner, image;
         if (rowItem === this.add || rowItem === this.remove) {
             title = null;
@@ -151,16 +141,16 @@ export default class extends React.PureComponent {
             }
         }
         return {title, image, isOwner};
-    };
+    }
 
-    _onItemPress = (rowItem) => {
+    protected _onItemPress(rowItem: string) {
         if (rowItem === this.add) {
             this.props.navigation.navigate({
                 routeName: PageKeys.ChooseUser,
                 params: {
-                    title: this.props.titleChooseGroupMember,
+                    title: i18n.t('IMSettingChooseGroupMember'),
                     multiple: true,
-                    onSelectData: this._onAddData,
+                    onSelectData: this.props.onAddMembers,
                     selectedIds: [],
                     excludedUserIds: this.props.data,
                 },
@@ -172,9 +162,9 @@ export default class extends React.PureComponent {
             this.props.navigation.navigate({
                 routeName: PageKeys.ChooseUser,
                 params: {
-                    title: this.props.titleChooseGroupMember,
+                    title: i18n.t('IMSettingChooseGroupMember'),
                     multiple: true,
-                    onSelectData: this._onRemoveData,
+                    onSelectData: this.props.onRemoveMembers,
                     selectedIds: [],
                     dataSource: dataSource,
                 },
@@ -182,15 +172,7 @@ export default class extends React.PureComponent {
         } else {
             delegate.func.pushToUserDetailPage(rowItem);
         }
-    };
-
-    _onAddData = (data) => {
-        this.props.onAddMembers && this.props.onAddMembers(data);
-    };
-
-    _onRemoveData = (data) => {
-        this.props.onRemoveMembers && this.props.onRemoveMembers(data);
-    };
+    }
 }
 
 const styles = StyleSheet.create({

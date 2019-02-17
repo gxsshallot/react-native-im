@@ -9,20 +9,20 @@ module.exports = {
     },
     "extends": [
         "eslint:recommended",
+        "plugin:@typescript-eslint/recommended",
     ],
     "parserOptions": {
         "ecmaFeatures": {
-            "experimentalObjectRestSpread": true,
-            "jsx": true
+            "jsx": true,
         },
-        "sourceType": "module"
     },
     "plugins": [
         "import",
         "react",
         "react-native",
+        "@typescript-eslint",
     ],
-    "parser": "babel-eslint",
+    "parser": "@typescript-eslint/parser",
     "rules": {
         "array-callback-return": 2, // Enforces return statements in callbacks of array’s methods 
         "indent": [2, 4, {
@@ -132,6 +132,20 @@ module.exports = {
         "react-native/no-color-literals": 0,
         "react-native/no-inline-styles": 1,
         "react-native/no-unused-styles": 2,
+        // typescript：参照https://www.npmjs.com/package/@typescript-eslint/eslint-plugin
+        "@typescript-eslint/array-type": ["error", "array-simple"],
+        "@typescript-eslint/camelcase": 0,
+        "@typescript-eslint/explicit-function-return-type": 0,
+        "@typescript-eslint/explicit-member-accessibility": 0,
+        "@typescript-eslint/no-explicit-any": 0,
+        "@typescript-eslint/no-inferrable-types": [1, {
+            "ignoreProperties": true,
+            "ignoreParameters": true,
+        }],
+        "@typescript-eslint/no-object-literal-type-assertion": 0,
+        "@typescript-eslint/no-unused-vars": 2,
+        "@typescript-eslint/no-use-before-define": 0,
+        "@typescript-eslint/no-var-requires": 0,
     },
     "settings": {
         "react": {
@@ -139,7 +153,7 @@ module.exports = {
             "pragma": "React", 
             "version": "16.5.0",
         },
-        'import/resolver': {
+        "import/resolver": {
             "node": {
                 "extensions": [
                     ".js",

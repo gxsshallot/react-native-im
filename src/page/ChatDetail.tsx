@@ -159,7 +159,7 @@ export default class extends React.PureComponent {
         });
     }
 
-    _refresh(oldData, _) {
+    _refresh(oldData) {
         const isFirst = !oldData || oldData.length <= 0;
         const lastMessageId = isFirst ? undefined : this.lastMessageId;
         const loadPromise = delegate.im.conversation.loadMessage({
@@ -170,7 +170,7 @@ export default class extends React.PureComponent {
         });
         const markPromise = this._markAllRead();
         return Promise.all([loadPromise, markPromise])
-            .then(([result, _]) => {
+            .then(([result]) => {
                 result = result
                     .map(item => {
                         return delegate.model.Action.match(
@@ -264,8 +264,8 @@ export default class extends React.PureComponent {
         });
     }
 
-    _onRecall(message) {
-        const {imId, chatType} = this.props;
+    _onRecall() {
+        // const {imId, chatType} = this.props;
         // if (Model.app.env() !== Constant.environment.test178) {
         //     global.standard.im.message.remove(message, chatType);
         // }
@@ -277,7 +277,7 @@ export default class extends React.PureComponent {
         // });
     }
 
-    _onExchangeMessage(cmdMessage) {
+    _onExchangeMessage(/* cmdMessage */) {
         // const data = cmdMessage.ext.body.message;
         // const {chatType} = this.props;
         // delegate.im.conversation.deleteMessage(data.to, chatType, data.messageId);

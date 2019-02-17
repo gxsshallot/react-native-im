@@ -29,7 +29,7 @@
 | chatType | number | 是 | [会话类型](#会话类型) |
 | config | [Config](#会话配置) | 否 | 配置信息 |
 | latestMessage | [ImMessage](#消息) | 否 | 最新一条消息 |
-| unreadMessageCount | number | 否 | 未读消息数 |
+| unreadMessagesCount | number | 否 | 未读消息数 |
 | atMe | boolean | 否 | 当前会话中是否有@消息 |
 
 ## 消息

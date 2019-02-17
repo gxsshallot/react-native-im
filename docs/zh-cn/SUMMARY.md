@@ -5,8 +5,7 @@
 ---
 
 * 配置
-  * [选项](zh-cn/config/Option)
-  * [代理](zh-cn/config/Delegate)
+  * [代理](zh-cn/global/Delegate)
 
 ---
 
@@ -23,10 +22,8 @@
     * [工具](zh-cn/global/Util)
   * 模块
     * [操作](zh-cn/model/Action)
-    * [会话](zh-cn/model/Conversation)
     * [表情](zh-cn/model/Emoji)
     * [外部](zh-cn/model/External)
-    * [群组](zh-cn/model/Group)
     * [消息](zh-cn/model/Message)
   * 页面
     * [聊天列表](zh-cn/page/ChatList)

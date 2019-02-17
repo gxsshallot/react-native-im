@@ -1,15 +1,16 @@
-import React from 'react';
-import { Image, StyleSheet, View } from 'react-native';
-import PropTypes from 'prop-types';
+import * as React from 'react';
+import { Image, ImageSourcePropType, StyleSheet, View } from 'react-native';
 import delegate from '../delegate';
-import * as Types from '../proptype';
+import { Component } from '../typings';
 import * as Constant from '../constant';
 
-export default class extends React.Component {
-    static propTypes = {
-        ...Types.BasicConversation,
-        style: PropTypes.any,
-    };
+export default class extends React.Component<Component.AvatarImageProps> {
+    protected groupLayout: Layout[] = [
+        {layout: [1], lines: 1},
+        {layout: [2], lines: 1},
+        {layout: [1, 3], lines: 2},
+        {layout: [2, 4], lines: 2},
+    ];
 
     render() {
         const {lines, layout} = this._getLayout();
@@ -22,16 +23,16 @@ export default class extends React.Component {
         );
     }
 
-    _renderRow = (height, rowArr, index) => {
+    protected _renderRow(height: number, rowArr: Avatar[], index: number) {
         const marginTop = index > 0 ? internal : 0;
         return (
             <View key={index} style={[styles.row, {height, marginTop}]}>
                 {rowArr.map(this._renderItem.bind(this, height))}
             </View>
         );
-    };
+    }
 
-    _renderItem = (itemEdge, item, index) => {
+    protected _renderItem(itemEdge: number, item: Avatar, index: number) {
         const image = this._toImage(item, itemEdge);
         const marginLeft = index > 0 ? internal : 0;
         return (
@@ -46,38 +47,26 @@ export default class extends React.Component {
                 }]}
             />
         );
-    };
+    }
 
-    _toImage = (item, itemEdge) => {
-        if (item.avatar) {
-            return {uri: item.avatar};
-        }
-        const user = delegate.user.getUser(item.userId);
-        let image;
-        if (user && user.avatar) {
-            image = {uri: delegate.func.fitUrlForAvatarSize(user.avatar, itemEdge)};
+    protected _toImage(item: Avatar, itemEdge: number): ImageSourcePropType {
+        let image: ImageSourcePropType;
+        if (item.userId) {
+            const user = delegate.user.getUser(item.userId);
+            if (user.avatar) {
+                image = {uri: delegate.func.fitUrlForAvatarSize(user.avatar, itemEdge)};
+            } else {
+                image = delegate.func.getDefaultUserHeadImage(user.userId);
+            }
         } else {
-            const userId = user ? user.userId : null;
-            image = delegate.func.getDefaultUserHeadImage(userId);
+            image = {uri: item.avatar};
         }
         return image;
-    };
+    }
 
-    groupLayout = [
-        {layout: [1], lines: 1},
-        {layout: [2], lines: 1},
-        {layout: [1, 3], lines: 2},
-        {layout: [2, 4], lines: 2},
-    ];
-
-    _getLayout = () => {
+    protected _getLayout(): RenderLine {
         const {imId, chatType} = this.props;
-        if (chatType === Constant.ChatType.Single) {
-            return {
-                lines: 1,
-                layout: [[{userId: imId}]],
-            };
-        } else if (chatType === Constant.ChatType.Group) {
+        if (chatType === Constant.ChatType.Group) {
             const avatar = delegate.model.Group.getAvatar(imId);
             if (avatar) {
                 return {
@@ -99,8 +88,28 @@ export default class extends React.Component {
                     layout: layoutIds,
                 };
             }
+        } else {
+            return {
+                lines: 1,
+                layout: [[{userId: imId}]],
+            };
         }
-    };
+    }
+}
+
+export interface Layout {
+    layout: number[];
+    lines: number;
+}
+
+export interface Avatar {
+    userId?: string;
+    avatar?: string;
+}
+
+export interface RenderLine {
+    layout: Avatar[][];
+    lines: number;
 }
 
 const edge = 48.0;

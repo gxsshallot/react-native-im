@@ -11,8 +11,7 @@ jobs:
  include:
    - stage: test
      script:
-       - npm install -g eslint babel-eslint eslint-plugin-import eslint-plugin-react eslint-plugin-react-native
-       - eslint src plugin example/index.js example/src
+       - npm run lint
    - stage: deploy
      deploy:
        provider: npm

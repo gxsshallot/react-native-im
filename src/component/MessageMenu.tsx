@@ -1,24 +1,11 @@
-import React from 'react';
+import * as React from 'react';
 import { Text, View, TouchableWithoutFeedback, StyleSheet } from 'react-native';
-import PropTypes from 'prop-types';
+import { Component } from '../typings';
 import Popover from 'react-native-popover-view';
 
-export default class extends React.PureComponent {
-    static propTypes = {
-        menuShow: PropTypes.bool.isRequired,
-        menuRect: PropTypes.shape({
-            x: PropTypes.number,
-            y: PropTypes.number,
-            width: PropTypes.number,
-            height: PropTypes.number,
-        }).isRequired,
-        actionList: PropTypes.arrayOf(PropTypes.shape({
-            title: PropTypes.string,
-            action: PropTypes.func,
-        })).isRequired,
-        onClose: PropTypes.func,
-    };
+export type Props = Component.MessageMenuProps;
 
+export default class extends React.PureComponent<Props> {
     static defaultProps = {};
 
     render() {
@@ -37,7 +24,7 @@ export default class extends React.PureComponent {
         );
     }
 
-    _renderContent = () => {
+    protected _renderContent() {
         const {actionList} = this.props;
         return (
             <View style={styles.menuContainer}>
@@ -47,9 +34,10 @@ export default class extends React.PureComponent {
                 })}
             </View>
         );
-    };
+    }
 
-    _renderButton = ({title, action}, isLast) => {
+    protected _renderButton(item: Component.MenuAction, isLast: boolean) {
+        const {title, action} = item;
         return (
             <View key={title} style={styles.menuContainer}>
                 <TouchableWithoutFeedback onPress={this._onPress.bind(this, action)}>
@@ -62,12 +50,12 @@ export default class extends React.PureComponent {
                 {!isLast && <View style={styles.line} />}
             </View>
         );
-    };
+    }
 
-    _onPress = (action) => {
-        this.props.onClose && this.props.onClose();
-        action && action();
-    };
+    protected _onPress(action: () => void) {
+        this.props.onClose();
+        action();
+    }
 }
 
 const styles = StyleSheet.create({

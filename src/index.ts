@@ -1,7 +1,7 @@
 import AsyncStorage from 'react-native-general-storage';
+import * as Typings from './typings';
 import * as Constant from './constant';
 import * as Model from './model';
-import * as Types from './proptype';
 import * as Components from './component';
 import * as Pages from './page';
 import * as PageKeys from './pagekey';
@@ -71,7 +71,7 @@ function logout(forceClear) {
 export {
     Constant,
     Model,
-    Types,
+    Typings,
     Components,
     Pages,
     PageKeys,

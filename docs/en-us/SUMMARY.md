@@ -15,10 +15,8 @@
     * [工具](global/Util)
   * 模块
     * [操作](model/Action)
-    * [会话](model/Conversation)
     * [表情](model/Emoji)
     * [外部](model/External)
-    * [群组](model/Group)
     * [消息](model/Message)
   * 页面
     * [聊天列表](page/ChatList)

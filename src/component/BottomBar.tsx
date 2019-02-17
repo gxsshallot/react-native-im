@@ -1,48 +1,53 @@
 import React from 'react';
-import { Image, Keyboard, PermissionsAndroid, Platform, SafeAreaView, StyleSheet, Text, TextInput, TouchableHighlight, TouchableOpacity, View } from 'react-native';
-import PropTypes from 'prop-types';
+import { Image, Keyboard, PermissionsAndroid, Platform, SafeAreaView, StyleSheet, Text, TextInput, TouchableHighlight, TouchableOpacity, View, EmitterSubscription, TextStyle } from 'react-native';
 import SoundRecorder from 'react-native-sound-recorder';
 import Toast from 'react-native-root-toast';
 import { getSafeAreaInset } from 'react-native-pure-navigation-bar';
 import i18n from 'i18n-js';
-import * as Types from '../proptype';
+import { Component } from '../typings';
 import * as Constant from '../constant';
 import * as PageKeys from '../pagekey';
 import delegate from '../delegate';
 
-export default class extends React.PureComponent {
-    static propTypes = {
-        ...Types.BasicConversation,
-        ...Types.Navigation,
-        onSendMessage: PropTypes.func.isRequired,
-    };
+export type Props = Component.BottomBarProps;
 
+export interface State {
+    message: string;
+    keyboardHeight: number;
+    showEmojiView: boolean;
+    showMoreBoard: boolean;
+    showSpeech: boolean;
+    isRecording: boolean;
+}
+
+export default class extends React.PureComponent<Props, State> {
     static defaultProps = {};
 
-    constructor(props) {
-        super(props);
-        this.isIos = Platform.OS === 'ios';
-        this.selectedEmojiArr = [];
-        this.atMemberList = [];
-        this.textLocation = 0;
-        this.state = {
-            message: '',
-            keyboardHeight: 0,
-            showEmojiView: false,
-            showMoreBoard: false,
-            showSpeech: false,
-            isRecording: false,
-        };
-    }
+    protected readonly isIos = Platform.OS === 'ios';
+    protected selectedEmojiArr = [];
+    protected atMemberList = [];
+    protected textLocation = 0;
+    protected listenKeyboardShow: EmitterSubscription | void = undefined;
+    protected listenKeyboardHide: EmitterSubscription | void = undefined;
+    protected textInput: TextInput | null = null;
+    
+    state = {
+        message: '',
+        keyboardHeight: 0,
+        showEmojiView: false,
+        showMoreBoard: false,
+        showSpeech: false,
+        isRecording: false,
+    };
 
     componentDidMount() {
-        this.show = Keyboard.addListener('keyboardWillShow', this._keyboardShow.bind(this));
-        this.hide = Keyboard.addListener('keyboardWillHide', this._keyboardHide.bind(this));
+        this.listenKeyboardShow = Keyboard.addListener('keyboardWillShow', this._keyboardShow.bind(this));
+        this.listenKeyboardHide = Keyboard.addListener('keyboardWillHide', this._keyboardHide.bind(this));
     }
 
     componentWillUnmount() {
-        this.show && this.show.remove();
-        this.hide && this.hide.remove();
+        this.listenKeyboardShow && this.listenKeyboardShow.remove();
+        this.listenKeyboardHide && this.listenKeyboardHide.remove();
     }
 
     render() {
@@ -58,7 +63,25 @@ export default class extends React.PureComponent {
         );
     }
 
-    _renderLeftBtn() {
+    public dismiss() {
+        Keyboard.dismiss();
+        this.setState({
+            showMoreBoard: false,
+            showEmojiView: false,
+        });
+    }
+
+    public changeInputText(imId, text) {
+        const user = delegate.user.getUser(imId);
+        const newText = '@' + user.name + ' : "' + text + '"\n' + '-----\n' + delegate.user.getMine().name + ': ';
+        this.setState({
+            message: newText,
+        });
+        this.atMemberList.push(user);
+        this.textInput.focus();
+    }
+
+    protected _renderLeftBtn() {
         const icon = this.state.showSpeech ?
             require('./image/chat_keyboard.png') :
             require('./image/chat_sound.png');
@@ -72,9 +95,9 @@ export default class extends React.PureComponent {
         );
     }
 
-    _renderInputView() {
+    protected _renderInputView() {
         return (
-            <View style={styles.inputBorder} minHeight={36}>
+            <View style={styles.inputBorder}>
                 {!this.state.showSpeech ? (
                     <TextInput
                         ref={ref => this.textInput = ref}
@@ -105,7 +128,7 @@ export default class extends React.PureComponent {
         );
     }
 
-    _renderRightBtn() {
+    protected _renderRightBtn() {
         const firstIcon = this.state.showEmojiView ?
             require('./image/chat_keyboard.png') :
             require('./image/chat_emoji.png');
@@ -145,7 +168,7 @@ export default class extends React.PureComponent {
         );
     }
 
-    _renderBottomView() {
+    protected _renderBottomView() {
         if (this.state.showEmojiView) {
             return (
                 <delegate.component.EmojiPickView
@@ -160,15 +183,7 @@ export default class extends React.PureComponent {
         }
     }
 
-    dismiss() {
-        Keyboard.dismiss();
-        this.setState({
-            showMoreBoard: false,
-            showEmojiView: false,
-        });
-    }
-
-    _onSendMessageText() {
+    protected _onSendMessageText() {
         let atMemberList;
         const all = this.atMemberList.filter(item => item.imId === Constant.atAll);
         if (all.length > 0) {
@@ -194,11 +209,11 @@ export default class extends React.PureComponent {
         this.setState({
             message: '',
         });
-        // 如果有发送失败逻辑,需要在收到消息的时候清空
+        // 如果有发送失败逻辑，需要在收到消息的时候清空
         this.atMemberList = [];
     }
 
-    _onStartRecording() {
+    protected _onStartRecording() {
         this.setState({isRecording: true});
         const option = !this.isIos ? {
             format: SoundRecorder.FORMAT_AAC_ADTS,
@@ -212,7 +227,7 @@ export default class extends React.PureComponent {
             });
     }
 
-    _onEndRecording() {
+    protected _onEndRecording() {
         this.setState({isRecording: false});
         const {onSendMessage} = this.props;
         SoundRecorder.stop()
@@ -234,7 +249,7 @@ export default class extends React.PureComponent {
             });
     }
 
-    _onPickEmoji(text, isDelete) {
+    protected _onPickEmoji(text, isDelete) {
         let message;
         if (isDelete) {
             const str = this.state.message;
@@ -259,7 +274,7 @@ export default class extends React.PureComponent {
         });
     }
 
-    _onChangeText(text) {
+    protected _onChangeText(text) {
         const oldText = this.state.message;
         let newText = text;
         const isInput = oldText.length < newText.length;
@@ -286,7 +301,7 @@ export default class extends React.PureComponent {
         });
     }
 
-    _onSelectData(data) {
+    protected _onSelectData(data) {
         const item = delegate.user.getUser(data[0]);
         const text = this.state.message;
         const newText = text.slice(0, this.textLocation) + item.name + ' ' + text.slice(this.textLocation);
@@ -297,14 +312,14 @@ export default class extends React.PureComponent {
         this.textInput.focus();
     }
 
-    _onSelectionChange(event) {
+    protected _onSelectionChange(event) {
         const {nativeEvent: {selection: {start, end}}} = event;
         if (start === end) {
             this.textLocation = start;
         }
     }
 
-    _onKeyPress(event) {
+    protected _onKeyPress(event) {
         const {nativeEvent: {key}} = event;
         if (key === '@' && this.props.chatType === Constant.ChatType.Group) {
             const members = delegate.model.Group.getMembers(this.props.imId);
@@ -324,7 +339,7 @@ export default class extends React.PureComponent {
         }
     }
 
-    _onFocus() {
+    protected _onFocus() {
         this.setState({
             showMoreBoard: false,
             showSpeech: false,
@@ -332,7 +347,7 @@ export default class extends React.PureComponent {
         });
     }
 
-    _onSwitchEmojiKeyboard() {
+    protected _onSwitchEmojiKeyboard() {
         if (!this.state.showEmojiView) {
             Keyboard.dismiss();
         } else {
@@ -345,7 +360,7 @@ export default class extends React.PureComponent {
         });
     }
 
-    _onSwitchMoreKeyboard() {
+    protected _onSwitchMoreKeyboard() {
         if (!this.state.showMoreBoard) {
             Keyboard.dismiss();
         } else {
@@ -358,7 +373,7 @@ export default class extends React.PureComponent {
         });
     }
 
-    _onSwitchSpeechKeyboard() {
+    protected _onSwitchSpeechKeyboard() {
         if (!this.state.showSpeech) {
             Keyboard.dismiss();
         }
@@ -388,27 +403,17 @@ export default class extends React.PureComponent {
         }
     }
 
-    _keyboardShow(e) {
+    protected _keyboardShow(e) {
         const offset = getSafeAreaInset().bottom;
         this.setState({
             keyboardHeight: e.endCoordinates.height - offset,
         });
     }
 
-    _keyboardHide() {
+    protected _keyboardHide() {
         this.setState({
             keyboardHeight: 0,
         });
-    }
-
-    changeInputText(imId, text) {
-        const user = delegate.user.getUser(imId);
-        const newText = '@' + user.name + ' : "' + text + '"\n' + '-----\n' + delegate.user.getMine().name + ': ';
-        this.setState({
-            message: newText,
-        });
-        this.atMemberList.push(user);
-        this.textInput.focus();
     }
 }
 
@@ -442,7 +447,7 @@ const styles = StyleSheet.create({
         }),
         height: 40,
         marginHorizontal: 5,
-    },
+    } as TextStyle,
     icon: {
         width: 28,
         height: 28,

@@ -132,7 +132,7 @@ export default class extends React.PureComponent {
         const loadOrg = delegate.contact.loadAllOrg(false);
         const loadStarUser = delegate.contact.loadStarUser ? delegate.contact.loadStarUser() : [];
         return Promise.all([loadUser, loadOrg, loadStarUser])
-            .then(([users, _, starUsers = []]) => {
+            .then(([users, , starUsers = []]) => {
                 const data = mapListToSection(users, delegate.config.pinyinField);
                 if (starUsers.length > 0) {
                     data.unshift({key: '☆', title: '星标好友', data: starUsers});

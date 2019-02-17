@@ -3,7 +3,7 @@ import DateFormat from 'dateformat';
 const times = ['凌晨', '早上', '下午', '晚上'];
 const yesterdayStr = '昨天';
 
-export function showDate(timestamp, alwaysShowTime) {
+export function showDate(timestamp: number, alwaysShowTime: boolean) {
     if (typeof timestamp !== 'number') {
         return '';
     }
