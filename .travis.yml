@@ -12,6 +12,7 @@ stages:
 
 jobs:
  include:
+   - stage: test
    - stage: deploy
      deploy:
        provider: npm
