@@ -1,19 +1,12 @@
-import React from 'react';
-import { Image, StyleSheet, Switch, Text, View, TouchableHighlight } from 'react-native';
-import PropTypes from 'prop-types';
+import * as React from 'react';
+import { Image, StyleSheet, Switch, Text, View, TouchableHighlight, ImageURISource, ImageRequireSource } from 'react-native';
 import ArrowImage from '@hecom/image-arrow';
-import * as Constant from '../constant';
+import { Component } from '../typings';
 import delegate from '../delegate';
 
-export default class extends React.PureComponent {
-    static propTypes = {
-        title: PropTypes.string.isRequired,
-        type: PropTypes.oneOf(Object.values(Constant.SettingItemType)),
-        data: PropTypes.any,
-        onPressLine: PropTypes.func,
-        onPressSwitch: PropTypes.func,
-    };
+export type Props = Component.SettingItemProps;
 
+export default class extends React.PureComponent<Props> {
     render() {
         const {onPressLine} = this.props;
         return onPressLine ? (
@@ -26,19 +19,9 @@ export default class extends React.PureComponent {
         ) : this._renderLine();
     }
 
-    _renderLabel(title) {
-        return (
-            <View style={styles.titleview}>
-                <Text numberOfLines={1} style={styles.title}>
-                    {title}
-                </Text>
-            </View>
-        );
-    }
-
-    _renderLine() {
+    protected _renderLine() {
         const {title, type, onPressLine} = this.props;
-        const hasArrow = type !== Constant.SettingItemType.Switch && onPressLine;
+        const hasArrow = type !== Component.SettingItemType.Switch && onPressLine;
         return (
             <View style={styles.container}>
                 <View style={styles.line}>
@@ -52,26 +35,39 @@ export default class extends React.PureComponent {
         );
     }
 
-    _renderContent() {
-        const {type, data, onPressSwitch} = this.props;
-        if (type === Constant.SettingItemType.Text) {
+    protected _renderLabel(title: string) {
+        return (
+            <View style={styles.titleview}>
+                <Text numberOfLines={1} style={styles.title}>
+                    {title}
+                </Text>
+            </View>
+        );
+    }
+
+    protected _renderContent() {
+        const {type, onPressSwitch} = this.props;
+        if (type === Component.SettingItemType.Text) {
+            const {data = ''} = this.props;
             return (
                 <Text numberOfLines={1} style={styles.subtitle}>
-                    {data}
+                    {data as string}
                 </Text>
             );
-        } else if (type === Constant.SettingItemType.Image) {
-            return (
+        } else if (type === Component.SettingItemType.Image) {
+            const {data} = this.props;
+            return data ? (
                 <Image
                     style={styles.image}
-                    source={data}
+                    source={data as ImageURISource | ImageRequireSource}
                 />
-            );
-        } else if (type === Constant.SettingItemType.Switch) {
+            ) : null;
+        } else if (type === Component.SettingItemType.Switch) {
+            const {data = false} = this.props;
             return (
                 <Switch
                     onValueChange={onPressSwitch}
-                    value={data}
+                    value={data as boolean}
                 />
             );
         } else {

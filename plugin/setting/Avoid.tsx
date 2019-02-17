@@ -1,11 +1,12 @@
-import React from 'react';
+import * as React from 'react';
 import Toast from 'react-native-root-toast';
 import i18n from 'i18n-js';
-import * as IMStandard from '../../src';
+import { Typings, Delegate } from '../../src';
+import { UiParams, UiResult } from './typings';
 
 export const name = 'IMSettingAvoid';
 
-export function getUi(props) {
+export function getUi(props: UiParams): UiResult {
     const {key, imId} = props;
     return (
         <AvoidCell
@@ -15,16 +16,24 @@ export function getUi(props) {
     );
 }
 
-export class AvoidCell extends React.PureComponent {
-    constructor(props) {
+export interface Props {
+    imId: string;
+}
+
+export interface State {
+    avoid: boolean;
+}
+
+export class AvoidCell extends React.PureComponent<Props, State> {
+    constructor(props: Props) {
         super(props);
         this.state = this._state();
     }
 
     render() {
         return (
-            <IMStandard.Delegate.component.SettingItem
-                type={IMStandard.Constant.SettingItemType.Switch}
+            <Delegate.component.SettingItem
+                type={Typings.Component.SettingItemType.Switch}
                 title={i18n.t('IMSettingAvoid')}
                 data={this.state.avoid}
                 onPressSwitch={this._clickConfig.bind(this)}
@@ -32,16 +41,16 @@ export class AvoidCell extends React.PureComponent {
         );
     }
 
-    _state() {
+    protected _state() {
         const {imId} = this.props;
-        const {avoid} = IMStandard.Delegate.model.Conversation.getConfig(imId);
+        const {avoid} = Delegate.model.Conversation.getConfig(imId);
         return {avoid};
     }
 
-    _clickConfig(avoid) {
+    protected _clickConfig(avoid: boolean) {
         const {imId} = this.props;
         this.setState({avoid});
-        IMStandard.Delegate.model.Conversation.updateConfig(imId, {avoid})
+        Delegate.model.Conversation.updateConfig(imId, {avoid})
             .catch(() => {
                 Toast.show(i18n.t('IMToastError', {
                     action: i18n.t('IMSettingConfigChange'),

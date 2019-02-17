@@ -1,18 +1,19 @@
 import * as React from 'react';
 import Toast from 'react-native-root-toast';
 import i18n from 'i18n-js';
-import * as IMStandard from '../../src';
+import { UiParams, UiResult } from './typings';
+import { Typings, Delegate } from '../../src';
 
 export const name = 'IMSettingAllowInvite';
 
-export function getUi(props) {
+export function getUi(props: UiParams): UiResult {
     const {key, imId, chatType} = props;
-    const isGroup = chatType === IMStandard.Constant.ChatType.Group;
+    const isGroup = chatType === Typings.Conversation.ChatType.Group;
     if (!isGroup) {
         return null;
     }
-    const groupOwner = IMStandard.Delegate.model.Group.getOwner(imId);
-    const isOwner = isGroup && groupOwner === IMStandard.Delegate.user.getMine().userId;
+    const groupOwner = Delegate.model.Group.getOwner(imId);
+    const isOwner = groupOwner === Delegate.user.getMine().userId;
     if (!isOwner) {
         return null;
     }
@@ -24,16 +25,24 @@ export function getUi(props) {
     );
 }
 
-export class AllowInviteCell extends React.PureComponent {
-    constructor(props) {
+export interface Props {
+    imId: string;
+}
+
+export interface State {
+    allowInvites: boolean;
+}
+
+export class AllowInviteCell extends React.PureComponent<Props, State> {
+    constructor(props: Props) {
         super(props);
         this.state = this._state();
     }
 
     render() {
         return (
-            <IMStandard.Delegate.component.SettingItem
-                type={IMStandard.Constant.SettingItemType.Switch}
+            <Delegate.component.SettingItem
+                type={Typings.Component.SettingItemType.Switch}
                 title={i18n.t('IMSettingAllowInvite')}
                 data={this.state.allowInvites}
                 onPressSwitch={this._clickConfig.bind(this)}
@@ -41,16 +50,16 @@ export class AllowInviteCell extends React.PureComponent {
         );
     }
 
-    _state() {
+    protected _state() {
         const {imId} = this.props;
-        const allowInvites = IMStandard.Delegate.model.Group.getAllowInvites(imId);
+        const allowInvites = Delegate.model.Group.getAllowInvites(imId);
         return {allowInvites};
     }
 
-    _clickConfig(allowInvites) {
+    protected _clickConfig(allowInvites: boolean) {
         const {imId} = this.props;
         this.setState({allowInvites});
-        IMStandard.Delegate.model.Group.changeAllowInvites(imId, allowInvites)
+        Delegate.model.Group.changeAllowInvites(imId, allowInvites)
             .catch(() => {
                 Toast.show(i18n.t('IMToastError', {
                     action: i18n.t('IMSettingConfigChange'),

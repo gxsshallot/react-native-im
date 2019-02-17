@@ -33,6 +33,11 @@
   resolved "https://registry.npmjs.org/@types/i18n-js/-/i18n-js-3.0.1.tgz#e027d35513b2703e5d48b82771e7fcb3b664e2fb"
   integrity sha512-m7tWPh9zKpQoYenIpkmeREb2oMaZiZB8qfGv+2ucDg1LgFnETAxYIXkT8dASGyVRWZyEhNEPlfODP4+QfXI3KQ==
 
+"@types/promise.prototype.finally@^2.0.3":
+  version "2.0.3"
+  resolved "https://registry.npmjs.org/@types/promise.prototype.finally/-/promise.prototype.finally-2.0.3.tgz#e77b4911f4b0564ee9142bd7cb6ba34a5c7dccc3"
+  integrity sha512-hQfmCK9Hw8diRIa3KoIDY4aimdxckamHUcmaZeB9tBMyb/Shi1yCBIPfry+nqN4jILNVThY1tnTwdMhQeMjqrw==
+
 "@types/prop-types@*":
   version "15.5.9"
   resolved "https://registry.npmjs.org/@types/prop-types/-/prop-types-15.5.9.tgz#f2d14df87b0739041bc53a7d75e3d77d726a3ec0"

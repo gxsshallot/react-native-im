@@ -1,40 +1,41 @@
-import React from 'react';
+import * as React from 'react';
 import Toast from 'react-native-root-toast';
 import ActionSheet from 'react-native-general-actionsheet';
 import * as ImagePicker from 'react-native-full-image-picker';
 import i18n from 'i18n-js';
-import * as IMStandard from '../../src';
+import { Typings, Delegate } from '../../src';
+import { UiParams, UiResult } from './typings';
 
 export const name = 'IMSettingGroupAvatar';
 
-export function getUi(props) {
+export function getUi(props: UiParams): UiResult {
     const {key, imId, chatType} = props;
-    const isGroup = chatType === IMStandard.Constant.ChatType.Group;
+    const isGroup = chatType === Typings.Conversation.ChatType.Group;
     if (!isGroup) {
         return null;
     }
-    const groupAvatar = IMStandard.Delegate.model.Group.getAvatar(imId);
+    const groupAvatar = Delegate.model.Group.getAvatar(imId);
     const avatar = !groupAvatar ? undefined : {
-        uri: IMStandard.Delegate.func.fitUrlForAvatarSize(groupAvatar, 30),
+        uri: Delegate.func.fitUrlForAvatarSize(groupAvatar, 30),
     };
-    const groupOwner = IMStandard.Delegate.model.Group.getOwner(imId);
-    const isOwner = isGroup && groupOwner === IMStandard.Delegate.user.getMine().userId;
+    const groupOwner = Delegate.model.Group.getOwner(imId);
+    const isOwner = groupOwner === Delegate.user.getMine().userId;
     return (
-        <IMStandard.Delegate.component.SettingItem
+        <Delegate.component.SettingItem
             key={key}
-            type={IMStandard.Constant.SettingItemType.Image}
+            type={Typings.Component.SettingItemType.Image}
             title={i18n.t('IMSettingGroupAvatar')}
             data={avatar}
-            onPressLine={isOwner ? _clickGroupAvatar.bind(this, props) : undefined}
+            onPressLine={isOwner ? () => _clickGroupAvatar(props) : undefined}
         />
     );
 }
 
-function _clickGroupAvatar(props) {
+function _clickGroupAvatar(props: UiParams) {
     const options = {
         maxSize: 1,
         canEdit: true,
-        callback: _onImagePickerFinish.bind(this, props),
+        callback: (data: Array<{uri: string}>) => _onImagePickerFinish(props, data),
     };
     const actions = [
         i18n.t('IMCommonTakeCamera'),
@@ -56,15 +57,15 @@ function _clickGroupAvatar(props) {
     });
 }
 
-function _onImagePickerFinish(props, data) {
+function _onImagePickerFinish(props: UiParams, data: Array<{uri: string}>) {
     if (!data || data.length === 0) {
         return;
     }
     const {imId, onDataChange} = props;
-    IMStandard.Delegate.func.uploadImages(data.map(i => i.uri))
-        .then(([url]) => IMStandard.Delegate.model.Group.changeAvatar(imId, url))
+    Delegate.func.uploadImages(data.map(i => i.uri))
+        .then(([url]) => Delegate.model.Group.changeAvatar(imId, url))
         .then(() => {
-            onDataChange && onDataChange();
+            onDataChange();
         })
         .catch(() => {
             Toast.show(i18n.t('IMToastError', {

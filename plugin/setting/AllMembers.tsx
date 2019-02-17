@@ -1,6 +1,6 @@
 import * as React from 'react';
 import i18n from 'i18n-js';
-import { Typings, Delegate, Constant, PageKeys } from '../../src';
+import { Typings, Delegate, PageKeys } from '../../src';
 import { onAddMembers, onRemoveMembers } from './GeneralUpdate';
 import { UiParams, UiResult } from './typings';
 
@@ -8,7 +8,7 @@ export const name = 'IMSettingAllMembers';
 
 export function getUi(props: UiParams): UiResult {
     const {key, imId, chatType} = props;
-    const isGroup = chatType === Typings.Conversation.Types.Group;
+    const isGroup = chatType === Typings.Conversation.ChatType.Group;
     if (!isGroup) {
         return null;
     }
@@ -16,9 +16,9 @@ export function getUi(props: UiParams): UiResult {
     return (
         <Delegate.component.SettingItem
             key={key}
-            type={Constant.SettingItemType.Text}
+            type={Typings.Component.SettingItemType.Text}
             title={i18n.t('IMSettingAllMembers', {length: groupMembers.length})}
-            onPressLine={_clickAllMembers.bind(this, props)}
+            onPressLine={() => _clickAllMembers(props)}
         />
     );
 }
@@ -35,8 +35,8 @@ function _clickAllMembers(props: UiParams): void {
             admins: [groupOwner],
             canAdd: true,
             canRemove: groupOwner === Delegate.user.getMine().userId,
-            onAddMembers: (members) => onAddMembers(props, members),
-            onRemoveMembers: (members) => onRemoveMembers(props, members),
+            onAddMembers: (memberUserIds: string[]) => onAddMembers(props, memberUserIds),
+            onRemoveMembers: (memberUserIds: string[]) => onRemoveMembers(props, memberUserIds),
         },
     });
 }

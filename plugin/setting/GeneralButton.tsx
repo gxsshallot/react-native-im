@@ -1,7 +1,8 @@
-import React from 'react';
+import * as React from 'react';
 import { TouchableHighlight, View, Text, StyleSheet } from 'react-native';
+import { UiResult } from './typings';
 
-export default function (key, text, onPress) {
+export default function (key: number | string, text: string, onPress?: () => void): UiResult {
     return (
         <TouchableHighlight
             key={key}

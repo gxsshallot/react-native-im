@@ -65,9 +65,9 @@ export function findByGroupId(groupId: string, enableExport: boolean = true): Gr
     }
 }
 
-export function getOwner(groupId: string): string | void {
+export function getOwner(groupId: string): string {
     const group = findByGroupId(groupId, false);
-    return group ? group.owner : undefined;
+    return group ? group.owner : '';
 }
 
 export function getMembers(groupId: string, hasOwner: boolean = true): string[] {

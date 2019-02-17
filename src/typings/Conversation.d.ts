@@ -1,11 +1,9 @@
 import * as MessageTypes from './Message';
 
-export enum Types {
+export enum ChatType {
     Single = 0,
     Group = 1,
 }
-
-export type ChatType = Types.Single | Types.Group;
 
 export interface BasicItem {
     imId: string;

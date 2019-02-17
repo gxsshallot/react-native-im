@@ -16,6 +16,7 @@ export interface ComponentPart {
     BaseMessage: React.ComponentClass<Component.BaseMessageProps>;
     MessageBubble: React.ComponentClass<Component.MessageBubbleProps>;
     MessageMenu: React.ComponentClass<Component.MessageMenuProps>;
+    SettingItem: React.ComponentClass<Component.SettingItemProps>;
 }
 
 export interface ConversationModelPart {
@@ -28,7 +29,7 @@ export interface ConversationModelPart {
     isValid: (imId: string, chatType: Conversation.ChatType) => boolean;
     get: () => Conversation.List;
     getOne: (imId: string, enableExport?: boolean) => Conversation.Item | void;
-    getConfig: (imId: string) => Conversation.Config | void;
+    getConfig: (imId: string) => Conversation.Config;
     getName: (imId: string) => string | void;
     updateConfig: (imId: string, config: Conversation.ConfigUpdate) => Promise<void>;
     updateMessage: (imId: string, message: Message.General) => Promise<void>;
@@ -45,7 +46,7 @@ export interface GroupModelPart {
     loadItem: (groupId: string) => Promise<void>;
     get: () => Group.List;
     findByGroupId: (groupId: string, enableExport?: boolean) => Group.Item | void;
-    getOwner: (groupId: string) => string | void;
+    getOwner: (groupId: string) => string;
     getMembers: (groupId: string, hasOwner?: boolean) => string[];
     getName: (groupId: string, autoConj?: boolean) => string | void;
     getAvatar: (groupId: string) => string | void;

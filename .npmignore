@@ -2,3 +2,4 @@
 /example
 .eslintignore
 .eslintrc.js
+.travis.yml

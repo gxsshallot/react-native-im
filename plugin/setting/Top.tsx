@@ -1,11 +1,12 @@
-import React from 'react';
+import * as React from 'react';
 import Toast from 'react-native-root-toast';
 import i18n from 'i18n-js';
-import * as IMStandard from '../../src';
+import { Typings, Delegate } from '../../src';
+import { UiParams, UiResult } from './typings';
 
 export const name = 'IMSettingTop';
 
-export function getUi(props) {
+export function getUi(props: UiParams): UiResult {
     const {key, imId} = props;
     return (
         <TopCell
@@ -15,16 +16,24 @@ export function getUi(props) {
     );
 }
 
-export class TopCell extends React.PureComponent {
-    constructor(props) {
+export interface Props {
+    imId: string;
+}
+
+export interface State {
+    top: boolean;
+}
+
+export class TopCell extends React.PureComponent<Props, State> {
+    constructor(props: Props) {
         super(props);
         this.state = this._state();
     }
 
     render() {
         return (
-            <IMStandard.Delegate.component.SettingItem
-                type={IMStandard.Constant.SettingItemType.Switch}
+            <Delegate.component.SettingItem
+                type={Typings.Component.SettingItemType.Switch}
                 title={i18n.t('IMSettingTop')}
                 data={this.state.top}
                 onPressSwitch={this._clickConfig.bind(this)}
@@ -32,16 +41,16 @@ export class TopCell extends React.PureComponent {
         );
     }
 
-    _state() {
+    protected _state() {
         const {imId} = this.props;
-        const {top} = IMStandard.Delegate.model.Conversation.getConfig(imId);
+        const {top} = Delegate.model.Conversation.getConfig(imId);
         return {top};
     }
 
-    _clickConfig(top) {
+    protected _clickConfig(top: boolean) {
         const {imId} = this.props;
         this.setState({top});
-        IMStandard.Delegate.model.Conversation.updateConfig(imId, {top})
+        Delegate.model.Conversation.updateConfig(imId, {top})
             .catch(() => {
                 Toast.show(i18n.t('IMToastError', {
                     action: i18n.t('IMSettingConfigChange'),

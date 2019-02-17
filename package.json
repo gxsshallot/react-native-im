@@ -56,6 +56,7 @@
   },
   "devDependencies": {
     "@types/i18n-js": "^3.0.1",
+    "@types/promise.prototype.finally": "^2.0.3",
     "@types/react": "^16.8.3",
     "@types/react-native": "^0.57.36",
     "@types/react-navigation": "^3.0.2",

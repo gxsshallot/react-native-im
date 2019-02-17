@@ -1,32 +1,36 @@
-import React from 'react';
-import { TextInput, StyleSheet, Dimensions } from 'react-native';
-import PropTypes from 'prop-types';
+import * as React from 'react';
+import { TextInput, StyleSheet, Dimensions, TextInputProps } from 'react-native';
 import Dialog, { DialogTitle, DialogButton, DialogContent } from 'react-native-popup-dialog';
 import i18n from 'i18n-js';
 
-export default class extends React.PureComponent {
-    static propTypes = {
-        visible: PropTypes.bool.isRequired,
-        title: PropTypes.string.isRequired,
-        onCancel: PropTypes.func.isRequired,
-        onSubmit: PropTypes.func.isRequired,
-        textInputProps: PropTypes.object,
+export interface Props {
+    visible: boolean;
+    title: string;
+    onCancel: () => void;
+    onSubmit: (text: string) => void;
+    textInputProps: TextInputProps;
+}
+
+export interface State {
+    text: string;
+}
+
+export default class extends React.PureComponent<Props, State> {
+    state: State = {
+        text: '',
     };
 
-    constructor(props) {
+    constructor(props: Props) {
         super(props);
-        this.onOrientationChange = this._onOrientationChange.bind(this);
-        this.state = {
-            text: null,
-        };
+        this._onOrientationChange = this._onOrientationChange.bind(this);
     }
 
     componentDidMount() {
-        Dimensions.addEventListener('change', this.onOrientationChange);
+        Dimensions.addEventListener('change', this._onOrientationChange);
     }
 
     componentWillUnmount() {
-        Dimensions.removeEventListener('change', this.onOrientationChange);
+        Dimensions.removeEventListener('change', this._onOrientationChange);
     }
 
     render() {
@@ -73,7 +77,7 @@ export default class extends React.PureComponent {
         );
     }
     
-    _renderPromptTitle() {
+    protected _renderPromptTitle() {
         const {title} = this.props;
         return (
             <DialogTitle
@@ -84,7 +88,7 @@ export default class extends React.PureComponent {
         );
     }
 
-    _onOrientationChange() {
+    protected _onOrientationChange() {
         this.forceUpdate();
     }
 }

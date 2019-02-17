@@ -8,6 +8,6 @@ export interface UiParams extends Typings.Component.NavigationProps {
     onDataChange: () => void;
 }
 
-export type UiResult = React.ComponentElement;
+export type UiResult = React.ReactElement | null;
 
 export type Action = (props: UiParams) => UiResult;

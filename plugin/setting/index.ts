@@ -1,4 +1,4 @@
-import * as IMStandard from '../../src';
+import { Delegate, PageKeys } from '../../src';
 import * as AllMembers from './AllMembers';
 import * as AllowInvite from './AllowInvite';
 import * as AvatarList from './AvatarList';
@@ -24,13 +24,13 @@ export function setup() {
         [TransferOwner.name, TransferOwner.getUi],
     ];
     actions.forEach(function ([name, getUi]) {
-        IMStandard.Delegate.model.Setting.register(name, getUi);
+        Delegate.model.Setting.register(name, getUi);
     });
-    IMStandard.Delegate.page[IMStandard.PageKeys.ChatSetting].defaultProps.sections = [
+    Delegate.page[PageKeys.ChatSetting].defaultProps.sections = [
         [AvatarList.name, AllMembers.name],
         [GroupName.name, GroupAvatar.name, AllowInvite.name, Top.name, Avoid.name]
     ];
-    IMStandard.Delegate.page[IMStandard.PageKeys.ChatSetting].defaultProps.buttons = [
+    Delegate.page[PageKeys.ChatSetting].defaultProps.buttons = [
         LeaveGroup.name,
         TransferOwner.name,
     ];

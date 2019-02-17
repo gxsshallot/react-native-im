@@ -123,12 +123,12 @@ export function getOne(imId: string, enableExport: boolean = true): Conversation
     }
 }
 
-export function getConfig(imId: string): Conversation.Config | void {
+export function getConfig(imId: string): Conversation.Config {
     const item = getOne(imId, false);
     if (item) {
         return simpleExport(item.config);
     } else {
-        return undefined;
+        return defaultConfig;
     }
 }
 
@@ -194,7 +194,7 @@ export async function deleteOne(imId: string): Promise<void> {
 export async function createOne(memberUserIds: string | string[]): Promise<Conversation.Item> {
     const members = Array.isArray(memberUserIds) ? memberUserIds : [memberUserIds];
     const isGroup = members.length > 1;
-    const chatType: Conversation.ChatType = isGroup ? Conversation.Types.Group : Conversation.Types.Single;
+    const chatType: Conversation.ChatType = isGroup ? Conversation.ChatType.Group : Conversation.ChatType.Single;
     if (isGroup) {
         const result = await delegate.model.Group.createOne(members);
         return await loadItem(result.groupId, chatType);

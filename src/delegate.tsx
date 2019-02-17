@@ -14,8 +14,8 @@ function noDataDelegate(name: string) {
     };
 }
 
-function noComponentDelegate<T>(name: string) {
-    return class extends React.Component<T> {
+function noComponentDelegate<P>(name: string) {
+    return class extends React.Component<P> {
         render() {
             return (
                 <View>
@@ -35,6 +35,7 @@ const component: Delegate.ComponentPart = {
     BaseMessage: noComponentDelegate<Component.BaseMessageProps>('BaseMessage'),
     MessageBubble: noComponentDelegate<Component.MessageBubbleProps>('MessageBubble'),
     MessageMenu: noComponentDelegate<Component.MessageMenuProps>('MessageMenu'),
+    SettingItem: noComponentDelegate<Component.SettingItemProps>('SettingItem'),
 };
 const model: Delegate.ModelPart = {
     Conversation: {

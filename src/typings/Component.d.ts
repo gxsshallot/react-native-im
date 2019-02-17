@@ -1,4 +1,4 @@
-import { StyleProp, ViewStyle } from 'react-native';
+import { StyleProp, ViewStyle, ImageURISource, ImageRequireSource } from 'react-native';
 import { NavigationScreenProp, NavigationRoute } from 'react-navigation';
 import * as Conversation from './Conversation';
 import * as Message from './Message';
@@ -70,4 +70,18 @@ export interface MessageMenuProps {
     menuRect: ShowMenuRect;
     actionList: MenuAction[];
     onClose: () => void;
+}
+
+export enum SettingItemType {
+    Image = 0,
+    Text,
+    Switch,
+}
+
+export interface SettingItemProps {
+    title: string;
+    type: SettingItemType;
+    data?: string | ImageURISource | ImageRequireSource | boolean | void;
+    onPressLine?: () => void;
+    onPressSwitch?: (status: boolean) => void;
 }
