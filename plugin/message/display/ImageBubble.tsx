@@ -1,13 +1,17 @@
-import React from 'react';
-import { Image, StyleSheet, View, Platform } from 'react-native';
+import * as React from 'react';
+import { Image, StyleSheet, View, Platform, ImageURISource } from 'react-native';
 import RNFS from 'react-native-fs';
 import { showPhotoBrowserPage } from 'react-native-photo-browse';
-import { DisplayProps, ImageMessage } from '../proptype';
+import { Typings } from '../../../src';
 
-export default class extends React.PureComponent {
-    static propTypes = DisplayProps(ImageMessage);
+export type Props = Typings.Action.DisplayHandleParams<Typings.Message.Image>;
 
-    constructor(props) {
+export interface State {
+    source: ImageURISource | null;
+}
+
+export default class extends React.PureComponent<Props, State> {
+    constructor(props: Props) {
         super(props);
         const {message: {data}} = props;
         const {localPath, thumbnailLocalPath, remotePath, thumbnailRemotePath} = data;
@@ -29,8 +33,8 @@ export default class extends React.PureComponent {
     componentDidMount() {
         const {message: {data: {localPath, thumbnailLocalPath}}} = this.props;
         if (!this.state.source) {
-            RNFS.readFile(thumbnailLocalPath || localPath, 'base64')
-                .then(content => {
+            RNFS.readFile((thumbnailLocalPath || localPath) as string, 'base64')
+                .then((content: string) => {
                     this.setState({
                         source: {uri: 'data:image/png;base64,' + content}
                     });
@@ -56,13 +60,13 @@ export default class extends React.PureComponent {
         ) : null;
     }
 
-    onPress = () => {
+    public onPress() {
         const {message: {data: {remotePath}}} = this.props;
         showPhotoBrowserPage({
             images: [remotePath],
             canSave: true,
         });
-    };
+    }
 }
 
 const styles = StyleSheet.create({

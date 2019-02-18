@@ -1,23 +1,20 @@
-import React from 'react';
+import * as React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
-import { DisplayProps } from '../proptype';
+import i18n from 'i18n-js';
+import { Typings } from '../../../src';
 
-export default class extends React.PureComponent {
-    static propTypes = DisplayProps({});
+export type Props = Typings.Action.DisplayHandleParams;
 
-    static defaultProps = {
-        defaultMessage: '当前版本暂不支持该消息',
-    };
-
+export default class extends React.PureComponent<Props> {
     componentDidMount() {
-        this.props.enableBubble && this.props.enableBubble(true);
+        this.props.enableBubble(true);
     }
     
     render() {
         return (
             <View style={styles.view}>
                 <Text style={styles.text}>
-                    {this.props.defaultMessage}
+                    {i18n.t('IMToastMessageNotSupport')}
                 </Text>
             </View>
         );

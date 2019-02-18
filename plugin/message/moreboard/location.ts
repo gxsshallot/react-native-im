@@ -1,11 +1,17 @@
-import { Delegate } from '../../../src';
+import { Typings, Delegate } from '../../../src';
 
-export default {
+export type Result = Typings.Action.MoreBoardHandleGeneralResult<Typings.Message.LocationBody>;
+
+export type Params = Typings.Action.MoreBoardHandlePressParams<Typings.Message.LocationBody>;
+
+const obj: Result = {
     text: '位置',
     icon: require('./image/more_location.png'),
-    onPress: ({onDataChange, _}) => {
+    onPress: (params: Params) => {
         Delegate.func.pushToLocationChoosePage({
-            onChange: (poiInfo) => onDataChange && onDataChange(poiInfo),
+            onChange: params.onDataChange,
         });
     },
 };
+
+export default obj;

@@ -24,3 +24,58 @@ export interface Origin {
 }
 
 export type OriginList = Origin[];
+
+export interface TextBody {
+    atMemberList: string | string[];
+    text: string;
+    isSystem: boolean;
+}
+
+export type Text = General<TextBody>;
+
+export interface ImageBody {
+    thumbnailLocalPath?: string;
+    thumbnailRemotePath?: string;
+    localPath?: string;
+    remotePath?: string;
+    size?: {
+        width: number;
+        height: number;
+    };
+}
+
+export type Image = General<ImageBody>;
+
+export interface VoiceBody {
+    localPath: string;
+    remotePath: string;
+    duration: number;
+}
+
+export type Voice = General<VoiceBody>;
+
+export interface LocationBody {
+    latitude: number;
+    longitude: number;
+    address: string;
+    name: string;
+}
+
+export type Location = General<LocationBody>;
+
+export interface VideoBody {
+    localPath?: string;
+    remotePath?: string;
+    duration: number;
+}
+
+export type Video = General<VideoBody>;
+
+export interface FileBody {
+    localPath?: string;
+    remotePath?: string;
+    name: string;
+    size: number;
+}
+
+export type File = General<FileBody>;

@@ -1,12 +1,13 @@
 import React from 'react';
-import { Image, StyleSheet, View, Text, Platform } from 'react-native';
-import { DisplayProps, TextMessage } from '../proptype';
-import * as IMStandard from '../../../src';
+import { Image, StyleSheet, View, Text, Platform, TextStyle } from 'react-native';
+import { Typings, Delegate } from '../../../src';
 
-export default class extends React.PureComponent {
-    static propTypes = DisplayProps(TextMessage);
+export type Props = Typings.Action.DisplayHandleParams<Typings.Message.Text>;
 
-    constructor(props) {
+export default class extends React.PureComponent<Props> {
+    protected textArr: string[];
+
+    constructor(props: Props) {
         super(props);
         const {message: {data: {text}}} = props;
         this.textArr = [];
@@ -32,7 +33,7 @@ export default class extends React.PureComponent {
     }
 
     componentDidMount() {
-        this.props.enableBubble && this.props.enableBubble(true);
+        this.props.enableBubble(true);
     }
     
     render() {
@@ -44,9 +45,9 @@ export default class extends React.PureComponent {
         );
     }
 
-    _renderItem(text, index) {
+    _renderItem(text: string, index: number) {
         const isEmoji = text[0] === '[' && text[text.length - 1] === ']';
-        const emojiImage = IMStandard.Delegate.model.Emoji.getEmoji(text);
+        const emojiImage = Delegate.model.Emoji.getEmoji(text);
         if (isEmoji && emojiImage) {
             return (
                 <Image
@@ -84,7 +85,7 @@ const styles = StyleSheet.create({
             ios: {lineHeight: 18},
         }),
         overflow: 'hidden',
-    },
+    } as TextStyle,
     image: {
         width: 18,
         height: 18,

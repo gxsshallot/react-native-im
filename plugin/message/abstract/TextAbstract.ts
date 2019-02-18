@@ -1,9 +1,13 @@
-import { Constant, Delegate } from '../../../src';
+import { Typings, Delegate } from '../../../src';
 
-export default (params) => {
+export type Params = Typings.Action.AbstractHandleParams<Typings.Message.Text>;
+
+export type Result = Typings.Action.AbstractHandleResult;
+
+export default function (params: Params): Result {
     const {chatType, message} = params;
     let prefix = '';
-    if (chatType === Constant.ChatType.Group) {
+    if (chatType === Typings.Conversation.ChatType.Group) {
         const myUserId = Delegate.user.getMine().userId;
         if (message.from !== myUserId) {
             const user = Delegate.user.getUser(message.from);
@@ -15,4 +19,4 @@ export default (params) => {
     } else {
         return prefix;
     }
-};
+}

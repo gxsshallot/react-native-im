@@ -1,15 +1,10 @@
-import React from 'react';
+import * as React from 'react';
 import { Image, StyleSheet, View, Text } from 'react-native';
-import { DisplayProps, LocationMessage } from '../proptype';
-import * as IMStandard from '../../../src';
+import { Typings, Delegate } from '../../../src';
 
-export default class extends React.PureComponent {
-    static propTypes = DisplayProps(LocationMessage);
+export type Props = Typings.Action.DisplayHandleParams<Typings.Message.Location>;
 
-    onPress = () => {
-        IMStandard.Delegate.func.pushToLocationViewPage(this.props.message.data);
-    };
-
+export default class extends React.PureComponent<Props> {
     render() {
         const {message: {data: {address, name}}, maxWidth} = this.props;
         return (
@@ -30,6 +25,10 @@ export default class extends React.PureComponent {
                 </View>
             </View>
         );
+    }
+
+    public onPress() {
+        Delegate.func.pushToLocationViewPage(this.props.message.data);
     }
 }
 

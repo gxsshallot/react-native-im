@@ -1,20 +1,23 @@
-import React from 'react';
+import * as React from 'react';
 import { Image, StyleSheet, View, Text } from 'react-native';
 import Sound from 'react-native-sound';
-import { DisplayProps, VoiceMessage } from '../proptype';
+import { Typings } from '../../../src';
 
-export default class extends React.PureComponent {
-    static propTypes = DisplayProps(VoiceMessage);
+export type Props = Typings.Action.DisplayHandleParams<Typings.Message.Voice>;
 
-    constructor(props) {
+export interface State {
+    isPlaying: boolean;
+}
+
+export default class extends React.PureComponent<Props, State> {
+    protected sound: Sound;
+
+    state: State = {
+        isPlaying: false,
+    };
+
+    constructor(props: Props) {
         super(props);
-        this.state = {
-            isPlaying: false,
-        };
-    }
-
-    componentDidMount() {
-        this.props.enableBubble && this.props.enableBubble(true);
         const {message: {data: {localPath, remotePath}}} = this.props;
         this.sound = new Sound(localPath || remotePath, '', (error) => {
             if (error) {
@@ -23,30 +26,16 @@ export default class extends React.PureComponent {
         });
     }
 
-    componentWillUnmount() {
-        this.sound && this.sound.release();
+    componentDidMount() {
+        this.props.enableBubble(true);
     }
 
-    onPress = () => {
-        if (this.state.isPlaying) {
-            this.sound.stop();
-        } else {
-            setTimeout(() => {
-                this.sound.play((success) => {
-                    if (success) {
-                        console.log('successfully finished playing');
-                    } else {
-                        console.log('playback failed due to audio decoding errors');
-                    }
-                    this.setState({isPlaying: !this.state.isPlaying});
-                });
-            }, 100);
-        }
-        this.setState({isPlaying: !this.state.isPlaying});
-    };
+    componentWillUnmount() {
+        this.sound.release();
+    }
 
     render() {
-        let image = "";
+        let image;
         const {isSender} = this.props;
         if (this.state.isPlaying) {
             image = isSender ?
@@ -69,8 +58,26 @@ export default class extends React.PureComponent {
         );
     }
 
-    _renderTimeLabel = (isLeft) => {
-        const time = parseInt(this.props.message.data.duration / 1000);
+    public onPress() {
+        if (this.state.isPlaying) {
+            this.sound.stop();
+        } else {
+            setTimeout(() => {
+                this.sound.play((success) => {
+                    if (success) {
+                        console.log('successfully finished playing');
+                    } else {
+                        console.log('playback failed due to audio decoding errors');
+                    }
+                    this.setState({isPlaying: !this.state.isPlaying});
+                });
+            }, 100);
+        }
+        this.setState({isPlaying: !this.state.isPlaying});
+    }
+
+    _renderTimeLabel(isLeft: boolean) {
+        const time = Math.floor(this.props.message.data.duration / 1000);
         const margin = Math.min(this.props.maxWidth, time * 3) + 10;
         const style = isLeft ? {
             marginRight: margin,
@@ -84,7 +91,7 @@ export default class extends React.PureComponent {
                 {time + "\""}
             </Text>
         );
-    };
+    }
 }
 
 const styles = StyleSheet.create({

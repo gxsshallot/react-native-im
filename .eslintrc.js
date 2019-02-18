@@ -79,6 +79,16 @@ module.exports = {
         "import/no-dynamic-require": 2,
         "import/no-nodejs-modules": 2,
         "import/no-self-import": 2,
+        "import/no-unresolved": [2, {
+            "commonjs": true,
+            "amd": true,
+            "ignore": [
+                "^react$",
+                "^react-native$",
+                "^react-navigation$",
+                "^react-native-im-easemob$",
+            ],
+        }],
         // react：参照https://github.com/yannickcr/eslint-plugin-react
         "react/default-props-match-prop-types": 0, // TODO 暂时禁用
         "react/display-name": 0,
@@ -143,7 +153,9 @@ module.exports = {
             "ignoreParameters": true,
         }],
         "@typescript-eslint/no-object-literal-type-assertion": 0,
-        "@typescript-eslint/no-unused-vars": 2,
+        "@typescript-eslint/no-unused-vars": [2, {
+            "argsIgnorePattern": "^_",
+        }],
         "@typescript-eslint/no-use-before-define": 0,
         "@typescript-eslint/no-var-requires": 0,
     },
@@ -157,10 +169,15 @@ module.exports = {
             "node": {
                 "extensions": [
                     ".js",
-                    ".android.js",
-                    ".ios.js",
+                    ".ts",
+                    ".tsx",
                 ],
-            }
-        },      
+            },
+            "typescript": {},
+            "react-native": "both",
+        },
+        "import/parsers": {
+            "@typescript-eslint/parser": [".ts", ".tsx"]
+        },
     },
 };

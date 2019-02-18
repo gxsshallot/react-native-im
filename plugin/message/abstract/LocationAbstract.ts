@@ -1,6 +1,10 @@
-import { Delegate } from '../../../src';
+import { Typings, Delegate } from '../../../src';
 
-export default (params) => {
+export type Params = Typings.Action.AbstractHandleParams<Typings.Message.Location>;
+
+export type Result = Typings.Action.AbstractHandleResult;
+
+export default function (params: Params): Result {
     const myUserId = Delegate.user.getMine().userId;
     const { message } = params;
     const isSend = message.from === myUserId;
@@ -10,4 +14,4 @@ export default (params) => {
         const user = Delegate.user.getUser(message.from);
         return '[' + user.name + '的位置]';
     }
-};
+}
