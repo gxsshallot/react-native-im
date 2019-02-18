@@ -8,7 +8,7 @@
   "scripts": {
     "start": "tsc -w",
     "build": "tsc",
-    "test": "./node_modules/.bin/eslint index.ts src/**/*.ts src/**/*.tsx plugin/**/*.ts plugin/**/*.tsx"
+    "eslint": "./node_modules/.bin/eslint --ext .js,.ts,.tsx ."
   },
   "repository": {
     "type": "git",
@@ -25,7 +25,7 @@
     "@hecom/badge": "^1.0.0",
     "@hecom/image-arrow": "^1.0.0",
     "dateformat": "^3.0.3",
-    "i18n-js": "^3.1.0",
+    "i18n-js": "^3.2.1",
     "react-native-fs": "^2.13.3",
     "react-native-full-image-picker": "^1.2.8",
     "react-native-general-actionsheet": "^1.0.2",
@@ -49,7 +49,6 @@
     "specials": "^1.1.0"
   },
   "peerDependencies": {
-    "i18n-js": "*",
     "react": "*",
     "react-native": "*",
     "react-navigation": "*"

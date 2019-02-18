@@ -49,6 +49,7 @@ export default class extends React.PureComponent {
     }
 
     _register() {
+        // TODO
     }
 
     _login() {
