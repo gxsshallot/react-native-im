@@ -1,5 +1,5 @@
 import { IMConstant } from 'react-native-im-easemob';
-import * as IMStandard from '../../src';
+import { Delegate } from '../../src';
 import * as StandardMessage from '../message';
 
 export default function () {
@@ -12,12 +12,11 @@ export default function () {
         [IMConstant.MessageType.voice, StandardMessage.Display.VoiceBubble],
     ];
     displayActions.forEach(([messageType, handleFunc, priority]) => {
-        IMStandard.Model.Action.register(
-            IMStandard.Constant.Action.Display,
+        Delegate.model.Action.Display.register(
             messageType,
             undefined,
             handleFunc,
-            priority,
+            priority
         );
     });
 }

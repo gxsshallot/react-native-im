@@ -7,7 +7,6 @@ import Badge from '@hecom/badge';
 import * as Types from '../proptype';
 import * as PageKeys from '../pagekey';
 import * as Constant from '../constant';
-import * as Model from '../model';
 import { DateUtil } from '../util';
 import delegate from '../delegate';
 
@@ -146,11 +145,10 @@ export default class extends React.PureComponent {
             chatType: this.props.chatType,
             message: latestMessage
         };
-        return Model.Action.match(
-            Constant.Action.Abstract,
+        return delegate.model.Action.Abstract.match(
             latestMessage.type,
-            latestMessage,
             params,
+            params
         );
     };
 

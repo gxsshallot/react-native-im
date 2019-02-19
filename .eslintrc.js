@@ -86,7 +86,6 @@ module.exports = {
                 "^react$",
                 "^react-native$",
                 "^react-navigation$",
-                "^react-native-im-easemob$",
             ],
         }],
         // react：参照https://github.com/yannickcr/eslint-plugin-react
@@ -147,6 +146,7 @@ module.exports = {
         "@typescript-eslint/camelcase": 0,
         "@typescript-eslint/explicit-function-return-type": 0,
         "@typescript-eslint/explicit-member-accessibility": 0,
+        "@typescript-eslint/no-empty-interface": 0,
         "@typescript-eslint/no-explicit-any": 0,
         "@typescript-eslint/no-inferrable-types": [1, {
             "ignoreProperties": true,

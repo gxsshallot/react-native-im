@@ -10,7 +10,7 @@ script: echo "yarn test temporarily disabled"
 stages:
  - test
  - name: deploy
-   if: tag = true
+   if: tag IS present
 
 jobs:
  include:

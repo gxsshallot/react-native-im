@@ -7,11 +7,10 @@ import delegate from '../delegate';
  * @param {object} originMessage 原始消息体
  */
 export function onMessageReceived(originMessage) {
-    const message = delegate.model.Action.match(
-        Constant.Action.Parse,
+    const message = delegate.model.Action.Parse.match(
         undefined,
         originMessage,
-        originMessage,
+        originMessage
     );
     if (!message) {
         return Promise.reject('无法处理该消息');

@@ -1356,6 +1356,11 @@ react-native-general-storage@^1.0.2:
   resolved "https://registry.npmjs.org/react-native-general-storage/-/react-native-general-storage-1.0.4.tgz#d3fee7d7f144448d8ea6458c1d0540a43733a57d"
   integrity sha512-pFtulZBjVD4W1XY+XhHZyOu9gXiHu6D+GUlFEYWwM4XkMNRJsKvbmLFYYwHsdSrcJEHcpSB69Auqm0GGrE4nEw==
 
+react-native-im-easemob@^1.0.14:
+  version "1.0.14"
+  resolved "https://registry.npmjs.org/react-native-im-easemob/-/react-native-im-easemob-1.0.14.tgz#458e67fd0a10606dc028ecadb1ae0f0783a7579b"
+  integrity sha512-Gd1suIErGxoB+Ntdj9dMt9+1ynrVw/pLXv1a7DcYVZQq+Pbl8s3SN0iMZAKedqRc2Kp57RDrC1Lb6B6Te4bIMg==
+
 react-native-image-capinsets@^0.5.0:
   version "0.5.0"
   resolved "https://registry.npmjs.org/react-native-image-capinsets/-/react-native-image-capinsets-0.5.0.tgz#577385772779f71b0ff1d7a96996a29add024b5d"
@@ -1665,10 +1670,10 @@ spdx-license-ids@^3.0.0:
   resolved "https://registry.npmjs.org/spdx-license-ids/-/spdx-license-ids-3.0.3.tgz#81c0ce8f21474756148bbb5f3bfc0f36bf15d76e"
   integrity sha512-uBIcIl3Ih6Phe3XHK1NqboJLdGfwr1UN3k6wSD1dZpmPsIkb8AGNbZYJ1fOBk834+Gxy8rpfDxrS6XLEMZMY2g==
 
-specials@^1.1.0:
-  version "1.1.0"
-  resolved "https://registry.npmjs.org/specials/-/specials-1.1.0.tgz#450d6ab04877a6db60a7c54594d7d80d06d02543"
-  integrity sha512-WWJI3WgoMCDp/uGwn/VfNq2ELXJV74KhqYSGw7x7zdr9+TG/qbPjblP0NynpYr33enplgm4kK4mVb963XoxGrg==
+specials@^1.2.1:
+  version "1.2.1"
+  resolved "https://registry.npmjs.org/specials/-/specials-1.2.1.tgz#c00af9ef3036dcbb8d315537d3fa246d08fda4fc"
+  integrity sha512-lG5ZEzpsTHjqZF50LrFxF6Rn47um3qAhgLrsyXBHeMIFeyZRMX05sR/qjPskkv/CnwxaX7wb0edhNXLoyG93cw==
 
 sprintf-js@~1.0.2:
   version "1.0.3"

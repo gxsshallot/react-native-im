@@ -62,9 +62,12 @@ export default class extends React.PureComponent<Props, State> {
                         </Text>
                     )}
                     <delegate.component.MessageBubble
+                        imId={this.props.imId}
+                        chatType={this.props.chatType}
                         isSender={false}
                         message={message}
                         onShowMenu={onShowMenu}
+                        navigation={this.props.navigation}
                     />
                 </View>
             </View>

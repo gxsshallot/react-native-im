@@ -4,7 +4,7 @@ import RNFS from 'react-native-fs';
 import { showPhotoBrowserPage } from 'react-native-photo-browse';
 import { Typings } from '../../../src';
 
-export type Props = Typings.Action.DisplayHandleParams<Typings.Message.Image>;
+export type Props = Typings.Action.DisplayHandleParams<Typings.Message.ImageBody>;
 
 export interface State {
     source: ImageURISource | null;

@@ -2,8 +2,7 @@ import * as React from 'react';
 import { TouchableWithoutFeedback, View, Dimensions, ImageSourcePropType } from 'react-native';
 import ImageCapInset from 'react-native-image-capinsets';
 import { Component } from '../typings';
-import * as Model from '../model';
-import * as Constant from '../constant';
+import delegate from '../delegate';
 
 export interface Props extends Component.MessageBubbleProps {
     leftBubble: ImageSourcePropType;
@@ -62,20 +61,26 @@ export default class extends React.PureComponent<Props, State> {
 
     protected _renderMessage(maxWidth: number) {
         const {message, isSender} = this.props;
+        const state = {
+            imId: this.props.imId,
+            chatType: this.props.chatType,
+            message: message,
+            isSender: isSender,
+        };
         const params = {
             ref: (ref: View | null) => {this.innerView = ref;},
             message: message,
             isSender: isSender,
             enableBubble: this._enableBubble.bind(this),
             maxWidth: maxWidth,
+            style: {},
         };
-        const displayItem = Model.Action.match(
-            Constant.Action.Display,
+        const displayView = delegate.model.Action.Display.match(
             message.type,
-            params,
+            state,
             undefined,
         );
-        return React.createElement(displayItem, params);
+        return React.createElement(displayView, params);
     }
 
     protected _enableBubble(status: boolean) {

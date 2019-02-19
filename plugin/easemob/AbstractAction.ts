@@ -1,5 +1,5 @@
 import { IMConstant } from 'react-native-im-easemob';
-import * as IMStandard from '../../src';
+import { Delegate } from '../../src';
 import * as StandardMessage from '../message';
 
 export default function () {
@@ -13,12 +13,11 @@ export default function () {
         [IMConstant.MessageType.file, StandardMessage.Abstract.FileAbstract],
     ];
     abstractActions.forEach(([messageType, abstractFunc, priority]) => {
-        IMStandard.Model.Action.register(
-            IMStandard.Constant.Action.Abstract,
+        Delegate.model.Action.Abstract.register(
             messageType,
             undefined,
             abstractFunc,
-            priority,
+            priority
         );
     });
 }

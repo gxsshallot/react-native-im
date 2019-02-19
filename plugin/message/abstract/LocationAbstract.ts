@@ -1,6 +1,6 @@
 import { Typings, Delegate } from '../../../src';
 
-export type Params = Typings.Action.AbstractHandleParams<Typings.Message.Location>;
+export type Params = Typings.Action.AbstractHandleParams<Typings.Message.LocationBody>;
 
 export type Result = Typings.Action.AbstractHandleResult;
 

@@ -29,20 +29,18 @@ export function sendMessage(imId, chatType, message, ext = {}, isSystem = false)
         .then(() => {
             // 事件发送之前，先触发通知，加入详情列表中，发送后再更新状态
             !isSystem && Listener.trigger(sendEventName, message);
-            const promise = delegate.model.Action.match(
-                Constant.Action.Send,
+            const promise = delegate.model.Action.Send.match(
                 message.type,
                 {imId, chatType, message, ext},
-                {imId, chatType, message, ext},
+                {imId, chatType, message, ext}
             );
             return promise || Promise.reject('暂不支持发送该消息类型');
         })
         .then((newOriginMessage) => {
-            const newMessage = delegate.model.Action.match(
-                Constant.Action.Parse,
+            const newMessage = delegate.model.Action.Parse.match(
                 undefined,
                 newOriginMessage,
-                newOriginMessage,
+                newOriginMessage
             );
             Listener.trigger(sendEventName, newMessage);
             return delegate.model.Conversation.updateMessage(imId, newMessage);
@@ -89,19 +87,17 @@ export function insertTimeMessage(imId, chatType, message) {
             isSystem: true,
         },
     };
-    const promise = delegate.model.Action.match(
-        Constant.Action.Send,
+    const promise = delegate.model.Action.Send.match(
         timeMessage.type,
         {imId, chatType, message: timeMessage, ext: {}},
         {imId, chatType, message: timeMessage, ext: {}},
     );
     return promise
         .then((newOriginMessage) => {
-            const newMessage = delegate.model.Action.match(
-                Constant.Action.Parse,
+            const newMessage = delegate.model.Action.Parse.match(
                 undefined,
                 newOriginMessage,
-                newOriginMessage,
+                newOriginMessage
             );
             return newMessage;
         });

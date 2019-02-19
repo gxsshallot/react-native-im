@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { ImageURISource, ImageRequireSource } from 'react-native';
+import * as Action from './Action';
 import * as Component from './Component';
 import * as Contact from './Contact';
 import * as Conversation from './Conversation';
@@ -7,7 +8,6 @@ import * as Group from './Group';
 import * as Message from './Message';
 
 export interface PagePart {
-    Temp?: null;
 }
 
 export interface ComponentPart {
@@ -62,7 +62,54 @@ export interface GroupModelPart {
     changeOwner: (groupId: string, newOwnerId: string) => Promise<{owner: string; members: string[]}>;
 }
 
+interface ActionSet<S, P, R> {
+    register(
+        messageType?: number | string,
+        specialFunc?: (state: S) => boolean,
+        handleFunc?: R | ((params: P) => R),
+        priority?: number
+    ): string | void;
+    unregister(
+        messageType?: number | string,
+        handleId?: string
+    ): boolean;
+    match(
+        messageType?: number | string,
+        state?: S,
+        params?: P
+    ): R;
+}
+
+export interface ActionModelPart {
+    Display: ActionSet<
+        Action.DisplayState,
+        Action.DisplayHandleParams,
+        Action.DisplayHandleResult
+    >;
+    Parse: ActionSet<
+        Action.ParseState,
+        Action.ParseHandleParams,
+        Action.ParseHandleResult
+    >;
+    Send: ActionSet<
+        Action.SendState,
+        Action.SendHandleParams,
+        Action.SendHandleResult
+    >;
+    Abstract: ActionSet<
+        Action.AbstractState,
+        Action.AbstractHandleParams,
+        Action.AbstractHandleResult
+    >;
+    MoreBoard: ActionSet<
+        Action.MoreBoardState,
+        void,
+        Action.MoreBoardHandleResult
+    >;
+}
+
 export interface ModelPart {
+    Action: ActionModelPart;
     Conversation: ConversationModelPart;
     Group: GroupModelPart;
 }

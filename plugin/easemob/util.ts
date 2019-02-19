@@ -1,12 +1,20 @@
-export function convertBasicMessage(message) {
-    const newMessage = {};
-    newMessage.conversationId = message.conversationId;
-    newMessage.messageId = message.messageId;
-    newMessage.innerId = message.ext ? message.ext.innerId : undefined;
-    newMessage.status = message.status;
-    newMessage.from = message.from;
-    newMessage.to = message.to;
-    newMessage.localTime = message.localTime;
-    newMessage.timestamp = message.timestamp;
-    return newMessage;
+import { Typings } from '../../src';
+
+export function convertBasicMessage<T extends Typings.Message.Body = Typings.Message.GeneralBody>(
+    message: Typings.Message.Origin,
+    type: number,
+    data: T
+): Typings.Message.General<T> {
+    return {
+        type: type,
+        conversationId: message.conversationId,
+        messageId: message.messageId,
+        innerId: message.ext ? message.ext.innerId : undefined,
+        status: message.status,
+        from: message.from,
+        to: message.to,
+        localTime: message.localTime,
+        timestamp: message.timestamp,
+        data: data,
+    };
 }

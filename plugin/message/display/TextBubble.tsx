@@ -2,7 +2,7 @@ import React from 'react';
 import { Image, StyleSheet, View, Text, Platform, TextStyle } from 'react-native';
 import { Typings, Delegate } from '../../../src';
 
-export type Props = Typings.Action.DisplayHandleParams<Typings.Message.Text>;
+export type Props = Typings.Action.DisplayHandleParams<Typings.Message.TextBody>;
 
 export default class extends React.PureComponent<Props> {
     protected textArr: string[];

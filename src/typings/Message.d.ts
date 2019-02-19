@@ -1,10 +1,12 @@
 export type DeliverStatus = 0 | 1 | 2 | 3;
 
-export interface Body {
+export interface Body {}
+
+export interface GeneralBody extends Body {
     [key: string]: any;
 }
 
-export interface General<T = Body> {
+export interface General<T extends Body = GeneralBody> {
     conversationId: string;
     messageId?: string;
     innerId?: string;
@@ -25,7 +27,7 @@ export interface Origin {
 
 export type OriginList = Origin[];
 
-export interface TextBody {
+export interface TextBody extends Body {
     atMemberList: string | string[];
     text: string;
     isSystem: boolean;
@@ -33,7 +35,7 @@ export interface TextBody {
 
 export type Text = General<TextBody>;
 
-export interface ImageBody {
+export interface ImageBody extends Body {
     thumbnailLocalPath?: string;
     thumbnailRemotePath?: string;
     localPath?: string;
@@ -46,7 +48,7 @@ export interface ImageBody {
 
 export type Image = General<ImageBody>;
 
-export interface VoiceBody {
+export interface VoiceBody extends Body {
     localPath: string;
     remotePath: string;
     duration: number;
@@ -54,7 +56,7 @@ export interface VoiceBody {
 
 export type Voice = General<VoiceBody>;
 
-export interface LocationBody {
+export interface LocationBody extends Body {
     latitude: number;
     longitude: number;
     address: string;
@@ -63,7 +65,7 @@ export interface LocationBody {
 
 export type Location = General<LocationBody>;
 
-export interface VideoBody {
+export interface VideoBody extends Body {
     localPath?: string;
     remotePath?: string;
     duration: number;
@@ -71,7 +73,7 @@ export interface VideoBody {
 
 export type Video = General<VideoBody>;
 
-export interface FileBody {
+export interface FileBody extends Body {
     localPath?: string;
     remotePath?: string;
     name: string;

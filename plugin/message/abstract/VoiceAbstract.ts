@@ -1,6 +1,6 @@
 import { Typings } from '../../../src';
 
-export type Params = Typings.Action.AbstractHandleParams<Typings.Message.Voice>;
+export type Params = Typings.Action.AbstractHandleParams<Typings.Message.VoiceBody>;
 
 export type Result = Typings.Action.AbstractHandleResult;
 

@@ -1,24 +1,23 @@
 import { IMConstant } from 'react-native-im-easemob';
-import * as IMStandard from '../../src';
+import { Delegate } from '../../src';
 import * as StandardMessage from '../message';
 
 export default function () {
     const moreboardActions = [
-        ['photo', StandardMessage.MoreBoard.takePhoto, IMConstant.MessageType.image],
-        ['camera', StandardMessage.MoreBoard.takeCamera, IMConstant.MessageType.image],
-        ['video', StandardMessage.MoreBoard.takeVideo, IMConstant.MessageType.video],
-        ['location', StandardMessage.MoreBoard.chooseLocation, IMConstant.MessageType.location],
+        {action: 'photo', handle: StandardMessage.MoreBoard.takePhoto, type: IMConstant.MessageType.image, priority: undefined},
+        {action: 'camera', handle: StandardMessage.MoreBoard.takeCamera, type: IMConstant.MessageType.image, priority: undefined},
+        {action: 'video', handle: StandardMessage.MoreBoard.takeVideo, type: IMConstant.MessageType.video, priority: undefined},
+        {action: 'location', handle: StandardMessage.MoreBoard.chooseLocation, type: IMConstant.MessageType.location, priority: undefined},
     ];
-    moreboardActions.forEach(([action, handleFunc, messageType, priority]) => {
-        IMStandard.Model.Action.register(
-            IMStandard.Constant.Action.MoreBoard,
+    moreboardActions.forEach(({action, handle, type, priority}) => {
+        Delegate.model.Action.MoreBoard.register(
             action,
             undefined,
-            {...handleFunc, messageType},
-            priority,
+            {...handle, messageType: type},
+            priority
         );
     });
     // 默认值设置
-    IMStandard.Delegate.component.MoreBoard.defaultProps.getItems = () =>
+    Delegate.component.MoreBoard.defaultProps.getItems = () =>
         ['photo', 'camera', 'video', 'location'];
 }

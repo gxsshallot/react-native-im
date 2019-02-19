@@ -1,92 +1,97 @@
 import { IMConstant } from 'react-native-im-easemob';
-import * as IMStandard from '../../src';
+import { Delegate, Typings } from '../../src';
 import { convertBasicMessage } from './util';
 
 export default function () {
     const parseActions = [
-        [isText, convertText],
-        [isImage, convertImage],
-        [isLocation, convertLocation],
-        [isVideo, convertVideo],
-        [isVoice, convertVoice],
+        {special: isText, handle: convertText, priority: undefined},
+        {special: isImage, handle: convertImage, priority: undefined},
+        {special: isLocation, handle: convertLocation, priority: undefined},
+        {special: isVideo, handle: convertVideo, priority: undefined},
+        {special: isVoice, handle: convertVoice, priority: undefined},
     ];
-    parseActions.forEach(([specialFunc, handleFunc, priority]) => {
-        IMStandard.Model.Action.register(
-            IMStandard.Constant.Action.Parse,
+    parseActions.forEach(({special, handle, priority}) => {
+        Delegate.model.Action.Parse.register(
             undefined,
-            (message) => specialFunc(message),
-            (message) => handleFunc(message),
-            priority,
+            special,
+            handle,
+            priority
         );
     });
 }
 
-const isText = (message) => isFunc(message, IMConstant.MessageType.text);
-const isImage = (message) => isFunc(message, IMConstant.MessageType.image);
-const isLocation = (message) => isFunc(message, IMConstant.MessageType.location);
-const isVideo = (message) => isFunc(message, IMConstant.MessageType.video);
-const isVoice = (message) => isFunc(message, IMConstant.MessageType.voice);
+const isText = (message: Typings.Message.Origin) => isFunc(message, IMConstant.MessageType.text);
+const isImage = (message: Typings.Message.Origin) => isFunc(message, IMConstant.MessageType.image);
+const isLocation = (message: Typings.Message.Origin) => isFunc(message, IMConstant.MessageType.location);
+const isVideo = (message: Typings.Message.Origin) => isFunc(message, IMConstant.MessageType.video);
+const isVoice = (message: Typings.Message.Origin) => isFunc(message, IMConstant.MessageType.voice);
 
-function isFunc(message, messageType) {
+function isFunc(message: Typings.Message.Origin, messageType: number): boolean {
     return message.body.type === messageType;
 }
 
-function convertText(message) {
-    const newMessage = convertBasicMessage(message);
-    newMessage.type = IMConstant.MessageType.text;
-    newMessage.data = {
-        text: message.body.text,
-        atMemberList: message.ext ? message.ext.atMemberList : undefined,
-        isSystem: message.ext ? message.ext.isSystemMessage : false,
-    };
-    return newMessage;
+function convertText(message: Typings.Message.Origin) {
+    return convertBasicMessage<Typings.Message.TextBody>(
+        message,
+        IMConstant.MessageType.text,
+        {
+            text: message.body.text,
+            atMemberList: message.ext ? message.ext.atMemberList : undefined,
+            isSystem: message.ext ? message.ext.isSystemMessage : false,
+        }
+    );
 }
 
-function convertImage(message) {
-    const newMessage = convertBasicMessage(message);
-    newMessage.type = IMConstant.MessageType.image;
-    newMessage.data = {
-        localPath: null,
-        remotePath: message.body.remotePath,
-        thumbnailLocalPath: null,
-        thumbnailRemotePath: null,
-        size: {
-            width: message.body.size && message.body.size.width,
-            height: message.body.size && message.body.size.height,
-        },
-    };
-    return newMessage;
+function convertImage(message: Typings.Message.Origin) {
+    return convertBasicMessage<Typings.Message.ImageBody>(
+        message,
+        IMConstant.MessageType.image,
+        {
+            localPath: undefined,
+            remotePath: message.body.remotePath,
+            thumbnailLocalPath: undefined,
+            thumbnailRemotePath: undefined,
+            size: {
+                width: message.body.size && message.body.size.width,
+                height: message.body.size && message.body.size.height,
+            },
+        }
+    );
 }
 
-function convertLocation(message) {
-    const newMessage = convertBasicMessage(message);
-    newMessage.type = IMConstant.MessageType.location;
-    newMessage.data = {
-        latitude: message.body.latitude,
-        longitude: message.body.longitude,
-        address: message.body.address,
-        name: message.ext ? message.ext.name : '',
-    };
-    return newMessage;
+function convertLocation(message: Typings.Message.Origin) {
+    return convertBasicMessage<Typings.Message.LocationBody>(
+        message,
+        IMConstant.MessageType.location,
+        {
+            latitude: message.body.latitude,
+            longitude: message.body.longitude,
+            address: message.body.address,
+            name: message.ext ? message.ext.name : '',
+        }
+    );
 }
 
-function convertVideo(message) {
-    const newMessage = convertBasicMessage(message);
-    newMessage.type = IMConstant.MessageType.video;
-    newMessage.data = {
-        localPath: message.body.localPath,
-        remotePath: message.body.remotePath,
-    };
-    return newMessage;
+function convertVideo(message: Typings.Message.Origin) {
+    return convertBasicMessage<Typings.Message.VideoBody>(
+        message,
+        IMConstant.MessageType.video,
+        {
+            localPath: message.body.localPath,
+            remotePath: message.body.remotePath,
+            duration: 0, // TODO duration
+        }
+    );
 }
 
-function convertVoice(message) {
-    const newMessage = convertBasicMessage(message);
-    newMessage.type = IMConstant.MessageType.voice;
-    newMessage.data = {
-        localPath: message.body.localPath,
-        remotePath: message.body.remotePath,
-        duration: message.body.duration,
-    };
-    return newMessage;
+function convertVoice(message: Typings.Message.Origin) {
+    return convertBasicMessage<Typings.Message.VoiceBody>(
+        message,
+        IMConstant.MessageType.voice,
+        {
+            localPath: message.body.localPath,
+            remotePath: message.body.remotePath,
+            duration: message.body.duration,
+        }
+    );
 }

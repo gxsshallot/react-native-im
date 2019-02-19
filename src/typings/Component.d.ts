@@ -39,7 +39,7 @@ export interface ShowMenuParams {
     message: Message.General;
 }
 
-export interface BaseMessageProps extends ConversationProps {
+export interface BaseMessageProps extends NavigationProps, ConversationProps {
     position: number;
     message: Message.General;
     onShowMenu: (params: ShowMenuParams) => void;
@@ -54,7 +54,7 @@ export interface BottomBarProps extends NavigationProps, ConversationProps {
     onSendMessage: (message: SendMessageParams) => void;
 }
 
-export interface MessageBubbleProps {
+export interface MessageBubbleProps extends NavigationProps, ConversationProps {
     isSender: boolean;
     message: Message.General;
     onShowMenu: (params: ShowMenuParams) => void;

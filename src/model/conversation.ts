@@ -46,11 +46,10 @@ export async function load(): Promise<void> {
 export async function loadItem(imId: string, chatType: Conversation.ChatType): Promise<Conversation.Item> {
     const result = await delegate.im.conversation.loadItem(imId, chatType, true);
     const message = !result.latestMessage ? undefined : 
-        delegate.model.Action.match(
-            Constant.Action.Parse,
+        delegate.model.Action.Parse.match(
             undefined,
             result.latestMessage,
-            result.latestMessage,
+            result.latestMessage
         );
     if (!rootNode[imId]) {
         rootNode[imId] = {

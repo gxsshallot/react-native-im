@@ -1,6 +1,6 @@
 import { Typings } from '../../../src';
 
-export type Params = Typings.Action.AbstractHandleParams<Typings.Message.Video>;
+export type Params = Typings.Action.AbstractHandleParams<Typings.Message.VideoBody>;
 
 export type Result = Typings.Action.AbstractHandleResult;
 

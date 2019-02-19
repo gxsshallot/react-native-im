@@ -3,7 +3,7 @@ import { Image, StyleSheet, View, Text } from 'react-native';
 import Sound from 'react-native-sound';
 import { Typings } from '../../../src';
 
-export type Props = Typings.Action.DisplayHandleParams<Typings.Message.Voice>;
+export type Props = Typings.Action.DisplayHandleParams<Typings.Message.VoiceBody>;
 
 export interface State {
     isPlaying: boolean;

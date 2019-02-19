@@ -172,14 +172,7 @@ export default class extends React.PureComponent {
         return Promise.all([loadPromise, markPromise])
             .then(([result]) => {
                 result = result
-                    .map(item => {
-                        return delegate.model.Action.match(
-                            Constant.Action.Parse,
-                            undefined,
-                            item,
-                            item,
-                        );
-                    })
+                    .map(item => delegate.model.Action.Parse.match(undefined, item, item))
                     .sort((a, b) => a.localTime >= b.localTime ? -1 : 1);
                 if (result && result.length > 0) {
                     this.lastMessageId = result[result.length - 1].messageId;
@@ -339,6 +332,7 @@ export default class extends React.PureComponent {
                 position={position}
                 message={item}
                 onShowMenu={this._onShowMenu.bind(this)}
+                navigation={this.props.navigation}
             />
         );
     }

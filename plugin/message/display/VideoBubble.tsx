@@ -3,7 +3,7 @@ import { Image, StyleSheet, View } from 'react-native';
 import Video from 'react-native-video';
 import { Typings } from '../../../src';
 
-export type Props = Typings.Action.DisplayHandleParams<Typings.Message.Video>;
+export type Props = Typings.Action.DisplayHandleParams<Typings.Message.VideoBody>;
 
 export interface State {
     paused: boolean;
