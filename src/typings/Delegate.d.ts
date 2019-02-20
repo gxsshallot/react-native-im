@@ -172,7 +172,9 @@ export interface ApiPart {
 
 export interface FuncPart {
     // pushToLocationViewPage: unset('func.pushToLocationViewPage'),
-    // pushToLocationChoosePage: unset('func.pushToLocationChoosePage'),
+    pushToLocationChoosePage: (params: {
+        onChange: (data: Message.LocationBody) => void;
+    }) => void;
     pushToUserDetailPage: (userId: string) => void;
     fitUrlForAvatarSize: (avatar: string, size?: number) => string;
     getDefaultUserHeadImage: (userId?: string) => ImageURISource | ImageRequireSource;

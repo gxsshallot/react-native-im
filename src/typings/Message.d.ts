@@ -27,8 +27,12 @@ export interface Origin {
 
 export type OriginList = Origin[];
 
+export const AtAll = '__at_all_message__';
+
+export type AtList = '__at_all_message__' | string[];
+
 export interface TextBody extends Body {
-    atMemberList: string | string[];
+    atMemberList: AtList;
     text: string;
     isSystem: boolean;
 }

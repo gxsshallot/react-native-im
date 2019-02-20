@@ -1,10 +1,10 @@
-import React from 'react';
-import { Image, Keyboard, PermissionsAndroid, Platform, SafeAreaView, StyleSheet, Text, TextInput, TouchableHighlight, TouchableOpacity, View, EmitterSubscription, TextStyle } from 'react-native';
+import * as React from 'react';
+import { Image, Keyboard, PermissionsAndroid, Platform, SafeAreaView, StyleSheet, Text, TextInput, TouchableHighlight, TouchableOpacity, View, EmitterSubscription, TextStyle, NativeSyntheticEvent, TextInputSelectionChangeEventData, TextInputKeyPressEventData, KeyboardEvent } from 'react-native';
 import SoundRecorder from 'react-native-sound-recorder';
 import Toast from 'react-native-root-toast';
 import { getSafeAreaInset } from 'react-native-pure-navigation-bar';
 import i18n from 'i18n-js';
-import { Component } from '../typings';
+import { Component, Contact, Message } from '../typings';
 import * as Constant from '../constant';
 import * as PageKeys from '../pagekey';
 import delegate from '../delegate';
@@ -24,8 +24,8 @@ export default class extends React.PureComponent<Props, State> {
     static defaultProps = {};
 
     protected readonly isIos = Platform.OS === 'ios';
-    protected selectedEmojiArr = [];
-    protected atMemberList = [];
+    protected selectedEmojiArr: string[] = [];
+    protected atMemberList: Contact.UserList = [];
     protected textLocation = 0;
     protected listenKeyboardShow: EmitterSubscription | void = undefined;
     protected listenKeyboardHide: EmitterSubscription | void = undefined;
@@ -71,14 +71,14 @@ export default class extends React.PureComponent<Props, State> {
         });
     }
 
-    public changeInputText(imId, text) {
+    public changeInputText(imId: string, text: string) {
         const user = delegate.user.getUser(imId);
         const newText = '@' + user.name + ' : "' + text + '"\n' + '-----\n' + delegate.user.getMine().name + ': ';
         this.setState({
             message: newText,
         });
         this.atMemberList.push(user);
-        this.textInput.focus();
+        this.textInput && this.textInput.focus();
     }
 
     protected _renderLeftBtn() {
@@ -184,13 +184,13 @@ export default class extends React.PureComponent<Props, State> {
     }
 
     protected _onSendMessageText() {
-        let atMemberList;
-        const all = this.atMemberList.filter(item => item.imId === Constant.atAll);
+        let atMemberList: Message.AtList;
+        const all = this.atMemberList.filter(item => item.imId === Message.AtAll);
         if (all.length > 0) {
-            atMemberList = Constant.atAll;
+            atMemberList = Message.AtAll;
         } else {
             const memberMap = this.atMemberList
-                .reduce((prv, cur) => {
+                .reduce((prv: {[key: string]: Contact.User}, cur: Contact.User) => {
                     if (!prv[cur.userId]) {
                         prv[cur.userId] = cur;
                     }
@@ -206,10 +206,7 @@ export default class extends React.PureComponent<Props, State> {
             },
         };
         this.props.onSendMessage(message);
-        this.setState({
-            message: '',
-        });
-        // 如果有发送失败逻辑，需要在收到消息的时候清空
+        this.setState({message: ''});
         this.atMemberList = [];
     }
 
@@ -233,7 +230,7 @@ export default class extends React.PureComponent<Props, State> {
         SoundRecorder.stop()
             .then((result) => {
                 console.log('stopped recording, audio file saved at: ' + result.path);
-                const time = parseInt(result.duration / 1000);
+                const time = Math.floor(result.duration / 1000);
                 if (time < 1) {
                     Toast.show(i18n.t('IMComponentBottomBarVoiceTooShort'));
                     return;
@@ -249,7 +246,7 @@ export default class extends React.PureComponent<Props, State> {
             });
     }
 
-    protected _onPickEmoji(text, isDelete) {
+    protected _onPickEmoji(text: string, isDelete: boolean) {
         let message;
         if (isDelete) {
             const str = this.state.message;
@@ -269,17 +266,15 @@ export default class extends React.PureComponent<Props, State> {
             this.selectedEmojiArr.push(text);
             message = this.state.message + text;
         }
-        this.setState({
-            message: message,
-        });
+        this.setState({message});
     }
 
-    protected _onChangeText(text) {
+    protected _onChangeText(text: string) {
         const oldText = this.state.message;
         let newText = text;
         const isInput = oldText.length < newText.length;
         if (!isInput) {
-            // Android上 onChangeText和onSelectionChange方法的调用顺序与iOS不同
+            // 'onChangeText' and 'onSelectionChange' sequence is different between iOS and Android
             const textLocation = this.isIos ? this.textLocation : this.textLocation - 1;
             const lastChar = oldText.charAt(textLocation);
             if (lastChar === ' ') {
@@ -296,30 +291,26 @@ export default class extends React.PureComponent<Props, State> {
                 }
             }
         }
-        this.setState({
-            message: newText,
-        });
+        this.setState({message: newText});
     }
 
-    protected _onSelectData(data) {
+    protected _onSelectData(data: string[]) {
         const item = delegate.user.getUser(data[0]);
         const text = this.state.message;
         const newText = text.slice(0, this.textLocation) + item.name + ' ' + text.slice(this.textLocation);
-        this.setState({
-            message: newText,
-        });
-        this.atMemberList.push(data[0]);
-        this.textInput.focus();
+        this.setState({message: newText});
+        this.atMemberList.push(item);
+        this.textInput && this.textInput.focus();
     }
 
-    protected _onSelectionChange(event) {
+    protected _onSelectionChange(event: NativeSyntheticEvent<TextInputSelectionChangeEventData>) {
         const {nativeEvent: {selection: {start, end}}} = event;
         if (start === end) {
             this.textLocation = start;
         }
     }
 
-    protected _onKeyPress(event) {
+    protected _onKeyPress(event: NativeSyntheticEvent<TextInputKeyPressEventData>) {
         const {nativeEvent: {key}} = event;
         if (key === '@' && this.props.chatType === Constant.ChatType.Group) {
             const members = delegate.model.Group.getMembers(this.props.imId);
@@ -403,10 +394,10 @@ export default class extends React.PureComponent<Props, State> {
         }
     }
 
-    protected _keyboardShow(e) {
+    protected _keyboardShow(event: KeyboardEvent) {
         const offset = getSafeAreaInset().bottom;
         this.setState({
-            keyboardHeight: e.endCoordinates.height - offset,
+            keyboardHeight: event.endCoordinates.height - offset,
         });
     }
 

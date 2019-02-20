@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { View, ViewStyle, StyleProp, ImageURISource, ImageRequireSource } from 'react-native';
+import { ViewStyle, StyleProp, ImageURISource, ImageRequireSource } from 'react-native';
 import { General, GeneralBody, Body, Origin } from './Message';
 import { ChatType } from './Conversation';
 
@@ -11,7 +11,7 @@ export interface DisplayState<T extends Body = GeneralBody> {
 }
 
 export interface DisplayHandleParams<T extends Body = GeneralBody> {
-    ref: (ref: View | null) => void;
+    ref: (ref: DisplayHandleResult | null) => void;
     message: General<T>;
     isSender: boolean;
     maxWidth: number;

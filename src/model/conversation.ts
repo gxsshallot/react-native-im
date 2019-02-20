@@ -166,7 +166,7 @@ export async function updateMessage(imId: string, message: Message.General): Pro
     let hasAtMe = false;
     if (item.chatType === Constant.ChatType.Group && !isFromMe) {
         if (message.data && message.data.atMemberList) {
-            if (message.data.atMemberList === Constant.atAll) {
+            if (message.data.atMemberList === Message.AtAll) {
                 hasAtMe = true;
             } else {
                 hasAtMe = message.data.atMemberList.indexOf(myUserId) >= 0;

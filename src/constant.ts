@@ -1,11 +1,3 @@
-export const Action = {
-    Display: 'display',
-    Parse: 'Parse',
-    Send: 'send',
-    Abstract: 'abstract',
-    MoreBoard: 'moreboard',
-};
-
 export const Status = {
     Pending: 0,
     Delivering: 1,
@@ -19,8 +11,6 @@ export const ChatType = {
 };
 
 export const StoragePart = 'im_storage_part';
-
-export const atAll = '__at_all_message__';
 
 export const BaseEvent = '__im_inner_event__';
 export const ConversationEvent = '__im_conversation__';

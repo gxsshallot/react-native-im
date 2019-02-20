@@ -135,6 +135,7 @@ const im: Delegate.ApiPart = {
     },
 };
 const func: Delegate.FuncPart = {
+    pushToLocationChoosePage: noDataDelegate('func.pushToLocationChoosePage'),
     pushToUserDetailPage: noDataDelegate('func.pushToUserDetailPage'),
     fitUrlForAvatarSize: noDataDelegate('func.fitUrlForAvatarSize'),
     getDefaultUserHeadImage: noDataDelegate('func.getDefaultUserHeadImage'),

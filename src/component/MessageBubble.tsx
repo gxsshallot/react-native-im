@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { TouchableWithoutFeedback, View, Dimensions, ImageSourcePropType } from 'react-native';
 import ImageCapInset from 'react-native-image-capinsets';
-import { Component } from '../typings';
+import { Component, Action } from '../typings';
 import delegate from '../delegate';
 
 export interface Props extends Component.MessageBubbleProps {
@@ -21,7 +21,7 @@ export default class extends React.PureComponent<Props, State> {
 
     protected readonly paddingHorizontal = 7;
     protected bubble: View | null = null;
-    protected innerView: View | null = null;
+    protected innerView: Action.DisplayHandleResult | null = null;
     
     state: State = {
         enableBubble: false,
@@ -68,7 +68,7 @@ export default class extends React.PureComponent<Props, State> {
             isSender: isSender,
         };
         const params = {
-            ref: (ref: View | null) => {this.innerView = ref;},
+            ref: (ref: Action.DisplayHandleResult | null) => {this.innerView = ref;},
             message: message,
             isSender: isSender,
             enableBubble: this._enableBubble.bind(this),
