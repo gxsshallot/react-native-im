@@ -1,3 +1,6 @@
+/**
+ * Group item.
+ */
 export interface Item {
     groupId: string;
     owner: string;
@@ -8,5 +11,3 @@ export interface Item {
     createdOn?: number;
     allowInvites?: boolean;
 }
-
-export type List = Item[];

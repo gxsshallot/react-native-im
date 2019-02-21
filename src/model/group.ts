@@ -52,7 +52,7 @@ export async function loadItem(groupId: string): Promise<void> {
     }
 }
 
-export function get(): Group.List {
+export function get(): Group.Item[] {
     const items = Object.values(rootNode);
     return simpleExport(items);
 }

@@ -49,25 +49,25 @@
   integrity sha512-Nha5b+jmBI271jdTMwrHiNXM+DvThjHOfyZtMX9kj/c/LUj2xiLHsG/1L3tJ8DjAoQN48cHwUwtqBotjyXaSdQ==
 
 "@types/react-native@*", "@types/react-native@^0.57.36":
-  version "0.57.36"
-  resolved "https://registry.npmjs.org/@types/react-native/-/react-native-0.57.36.tgz#b8e8c2c119fd0f9227f32ee260b7abf223f47960"
-  integrity sha512-6u2WWupQ+mVRsICZqiy3BCGi9vivluhut/+Z1dbjXKn9ms9MrCVvnyQ0jyooqhtmtRzquH6mYYNYArGYdEajjg==
+  version "0.57.37"
+  resolved "https://registry.npmjs.org/@types/react-native/-/react-native-0.57.37.tgz#8cc9d142d5c6a2b7580fec9673984edfbd125194"
+  integrity sha512-huAmdfInEHK34hsJmEpU+Gj1L/WwIGVpSMdFl4oGClIgUB+y71tWx0fCiFWGSb4JYL/OkSEIa49fGFO1BgmUlw==
   dependencies:
     "@types/prop-types" "*"
     "@types/react" "*"
 
 "@types/react-navigation@^3.0.2":
-  version "3.0.2"
-  resolved "https://registry.npmjs.org/@types/react-navigation/-/react-navigation-3.0.2.tgz#5c1ae0bc6388e4ba67f411d3e02f7d44a8fdfc7d"
-  integrity sha512-ambXHekrmQ7mPhJ7tFumZ8puFtUrV9xYEbo3sAkHCIs/tBe4WjivVywp0cPYSAI1lN7Pl+LgFgla/xoWSN7ZwQ==
+  version "3.0.3"
+  resolved "https://registry.npmjs.org/@types/react-navigation/-/react-navigation-3.0.3.tgz#6b38741df130e992c91466c123540e53f189eaad"
+  integrity sha512-jIr3sMvAV0zJ+cuhm0rHrnsmMw8Eurx8LJrLtfkAmeYowM3woLJqSvEyWtQHLa+CiiHajJ6scS+W5mK7fVxeIw==
   dependencies:
     "@types/react" "*"
     "@types/react-native" "*"
 
 "@types/react@*", "@types/react@^16.8.3":
-  version "16.8.3"
-  resolved "https://registry.npmjs.org/@types/react/-/react-16.8.3.tgz#7b67956f682bea30a5a09b3242c0784ff196c848"
-  integrity sha512-PjPocAxL9SNLjYMP4dfOShW/rj9FDBJGu3JFRt0zEYf77xfihB6fq8zfDpMrV6s82KnAi7F1OEe5OsQX25Ybdw==
+  version "16.8.4"
+  resolved "https://registry.npmjs.org/@types/react/-/react-16.8.4.tgz#134307f5266e866d5e7c25e47f31f9abd5b2ea34"
+  integrity sha512-Mpz1NNMJvrjf0GcDqiK8+YeOydXfD8Mgag3UtqQ5lXYTsMnOiHcKmO48LiSWMb1rSHB9MV/jlgyNzeAVxWMZRQ==
   dependencies:
     "@types/prop-types" "*"
     csstype "^2.2.0"
@@ -412,8 +412,8 @@ cross-spawn@^6.0.5:
 
 csstype@^2.2.0:
   version "2.6.2"
-  resolved "https://registry.npmjs.org/csstype/-/csstype-2.6.2.tgz#3043d5e065454579afc7478a18de41909c8a2f01"
-  integrity sha512-Rl7PvTae0pflc1YtxtKbiSqq20Ts6vpIYOD5WBafl4y123DyHUeLrRdQP66sQW8/6gmX8jrYJLXwNeMqYVJcow==
+  resolved "http://registry.npm.taobao.org/csstype/download/csstype-2.6.2.tgz#3043d5e065454579afc7478a18de41909c8a2f01"
+  integrity sha1-MEPV4GVFRXmvx0eKGN5BkJyKLwE=
 
 dateformat@^3.0.3:
   version "3.0.3"

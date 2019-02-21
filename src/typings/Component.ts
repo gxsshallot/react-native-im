@@ -1,23 +1,12 @@
 import { StyleProp, ViewStyle, ImageURISource, ImageRequireSource } from 'react-native';
-import { NavigationScreenProp, NavigationRoute } from 'react-navigation';
-import * as Conversation from './Conversation';
+import * as Props from './Props';
 import * as Message from './Message';
 
-export interface NavigationProps {
-    navigation: NavigationScreenProp<NavigationRoute>;
-}
-
-export interface RefreshProps {
-    apiRefresh?: (status: boolean) => void;
-}
-
-export type ConversationProps = Conversation.BasicItem;
-
-export interface AvatarImageProps extends ConversationProps {
+export interface AvatarImageProps extends Props.Conversation {
     style?: StyleProp<ViewStyle>;
 }
 
-export interface AvatarListProps extends NavigationProps {
+export interface AvatarListProps extends Props.Navigation {
     owner: string;
     data: string[];
     canAdd: boolean;
@@ -39,7 +28,7 @@ export interface ShowMenuParams {
     message: Message.General;
 }
 
-export interface BaseMessageProps extends NavigationProps, ConversationProps {
+export interface BaseMessageProps extends Props.Navigation, Props.Conversation {
     position: number;
     message: Message.General;
     onShowMenu: (params: ShowMenuParams) => void;
@@ -50,11 +39,15 @@ export interface SendMessageParams<T = any> {
     body: T;
 }
 
-export interface BottomBarProps extends NavigationProps, ConversationProps {
+export interface BottomBarProps extends Props.Navigation, Props.Conversation {
     onSendMessage: (message: SendMessageParams) => void;
 }
 
-export interface MessageBubbleProps extends NavigationProps, ConversationProps {
+export interface ConversationCellProps extends Props.Navigation, Props.Conversation {
+    separatorLeft: number;
+}
+
+export interface MessageBubbleProps extends Props.Navigation, Props.Conversation {
     isSender: boolean;
     message: Message.General;
     onShowMenu: (params: ShowMenuParams) => void;

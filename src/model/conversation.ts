@@ -93,7 +93,7 @@ export function isValid(imId: string, chatType: Conversation.ChatType): boolean 
     return !!item && !!getOne(imId, false);
 }
 
-export function get(): Conversation.List {
+export function get(): Conversation.Item[] {
     const originItems = Object.values(rootNode);
     const validItems = originItems.filter(item => isValid(item.imId, item.chatType));
     const sortedItems = validItems

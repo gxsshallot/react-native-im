@@ -5,6 +5,7 @@ import * as Conversation from './Conversation';
 import * as Delegate from './Delegate';
 import * as Group from './Group';
 import * as Message from './Message';
+import * as Props from './Props';
 
 export {
     Action,
@@ -14,4 +15,5 @@ export {
     Delegate,
     Group,
     Message,
+    Props,
 };

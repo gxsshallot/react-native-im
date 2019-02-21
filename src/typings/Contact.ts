@@ -1,3 +1,6 @@
+/**
+ * Department with multi user.
+ */
 export interface Org {
     orgId: string;
     name?: string;
@@ -6,8 +9,9 @@ export interface Org {
     [key: string]: any;
 }
 
-export type OrgList = Org[];
-
+/**
+ * User information.
+ */
 export interface User {
     userId: string;
     name?: string;
@@ -19,14 +23,21 @@ export interface User {
     [key: string]: any;
 }
 
-export type UserList = User[];
-
+/**
+ * Organization tree node.
+ */
 export interface OrgTreeNode extends Org {
     children?: Array<User | OrgTreeNode>;
 }
 
+/**
+ * A whole organization tree.
+ */
 export type Tree = OrgTreeNode | OrgTreeNode[];
 
+/**
+ * Current login user information.
+ */
 export interface CurrentUser extends User {
     entName?: string;
 }

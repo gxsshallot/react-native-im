@@ -27,7 +27,7 @@ export interface ConversationModelPart {
     load: () => Promise<void>;
     loadItem: (imId: string, chatType: Conversation.ChatType) => Promise<Conversation.Item>;
     isValid: (imId: string, chatType: Conversation.ChatType) => boolean;
-    get: () => Conversation.List;
+    get: () => Conversation.Item[];
     getOne: (imId: string, enableExport?: boolean) => Conversation.Item | void;
     getConfig: (imId: string) => Conversation.Config;
     getName: (imId: string) => string | void;
@@ -44,7 +44,7 @@ export interface GroupModelPart {
     uninit: (forceClear: boolean) => Promise<void>;
     load: () => Promise<void>;
     loadItem: (groupId: string) => Promise<void>;
-    get: () => Group.List;
+    get: () => Group.Item[];
     findByGroupId: (groupId: string, enableExport?: boolean) => Group.Item | void;
     getOwner: (groupId: string) => string;
     getMembers: (groupId: string, hasOwner?: boolean) => string[];
@@ -115,10 +115,10 @@ export interface ModelPart {
 }
 
 export interface ContactPart {
-    loadAllUser: (returnValue: boolean) => Promise<Contact.UserList | void>;
-    loadAllOrg: (returnValue: boolean) => Promise<Contact.OrgList | void>;
+    loadAllUser: (returnValue: boolean) => Promise<Contact.User[] | void>;
+    loadAllOrg: (returnValue: boolean) => Promise<Contact.Org[] | void>;
     loadUserOrgTree: (hasSelf: boolean, parentOrgId: string | void, excludedUserIds: string[]) => Promise<Contact.Tree>;
-    loadStarUser: () => Promise<Contact.UserList>;
+    loadStarUser: () => Promise<Contact.User[]>;
 }
 
 export interface UserPart {
@@ -127,8 +127,8 @@ export interface UserPart {
 }
 
 export interface ConversationApiPart {
-    loadList: () => Promise<Conversation.BasicItem[]>;
-    loadItem: (imId: string, chatType: Conversation.ChatType, autoCreate: boolean) => Promise<Conversation.OriginItem>;
+    loadList: () => Promise<Conversation.Base[]>;
+    loadItem: (imId: string, chatType: Conversation.ChatType, autoCreate: boolean) => Promise<Conversation.Origin>;
     deleteOne: (imId: string) => Promise<void>;
     updateConfig: (imId: string, config: Conversation.ConfigUpdate) => Promise<Conversation.Config>;
     markAllRead: (imId: string, chatType: Conversation.ChatType) => Promise<void>;
@@ -138,7 +138,7 @@ export interface ConversationApiPart {
         chatType: Conversation.ChatType;
         lastMessageId: string;
         count: number;
-    }) => Promise<Message.OriginList>;
+    }) => Promise<Message.Origin[]>;
     deleteMessage: (params: {
         imId: string;
         chatType: Conversation.ChatType;
@@ -152,7 +152,7 @@ export interface ConversationApiPart {
 }
 
 export interface GroupApiPart {
-    loadList: () => Promise<Group.List>;
+    loadList: () => Promise<Group.Item[]>;
     loadItem: (groupId: string) => Promise<Group.Item>;
     createOne: (memberUserIds: string[]) => Promise<Group.Item>;
     destroyOne: (groupId: string) => Promise<void>;

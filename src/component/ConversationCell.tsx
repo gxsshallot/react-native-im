@@ -1,35 +1,32 @@
 import * as React from 'react';
 import { Dimensions, Image, SafeAreaView, StyleSheet, Text, View } from 'react-native';
-import PropTypes from 'prop-types';
 import Listener from 'react-native-general-listener';
 import { forceInset, getSafeAreaInset } from 'react-native-pure-navigation-bar';
 import Badge from '@hecom/badge';
-import * as Types from '../proptype';
 import * as PageKeys from '../pagekey';
 import * as Constant from '../constant';
 import { DateUtil } from '../util';
+import { Component, Message } from '../typings';
 import delegate from '../delegate';
 
-export default class extends React.PureComponent {
-    static propTypes = {
-        ...Types.BasicConversation,
-        ...Types.Navigation,
-        separatorLeft: PropTypes.number.isRequired,
-    };
+export type Props = Component.ConversationCellProps;
 
+export default class extends React.PureComponent<Props> {
     static defaultProps = {};
 
-    constructor(props) {
+    protected events: Array<{type: string; func: (message?: Message.General) => void}>;
+
+    constructor(props: Props) {
         super(props);
         const {imId, chatType} = props;
         this.events = [
-            [Constant.ReceiveMessageEvent, this._onMessageReceive],
-            [Constant.SendMessageEvent, this._onMessageSend],
-            [Constant.ConversationEvent, this._refresh],
-            [Constant.UnreadCountEvent, this._onUnreadCountChange],
+            {type: Constant.ReceiveMessageEvent, func: this._onMessageReceive},
+            {type: Constant.SendMessageEvent, func: this._onMessageSend},
+            {type: Constant.ConversationEvent, func: this._refresh},
+            {type: Constant.UnreadCountEvent, func: this._onUnreadCountChange},
         ];
         if (chatType === Constant.ChatType.Group) {
-            this.events.push([Constant.GroupEvent, this._refresh]);
+            this.events.push({type: Constant.GroupEvent, func: this._refresh});
         }
         this.state = {
             ...this._stateWithProps(imId),

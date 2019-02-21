@@ -25,7 +25,7 @@ export default class extends React.PureComponent<Props, State> {
 
     protected readonly isIos = Platform.OS === 'ios';
     protected selectedEmojiArr: string[] = [];
-    protected atMemberList: Contact.UserList = [];
+    protected atMemberList: Contact.User[] = [];
     protected textLocation = 0;
     protected listenKeyboardShow: EmitterSubscription | void = undefined;
     protected listenKeyboardHide: EmitterSubscription | void = undefined;
