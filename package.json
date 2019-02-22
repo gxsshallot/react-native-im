@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "private": false,
   "description": "一个通用的IM视图框架",
-  "main": "lib/index.js",
-  "types": "lib/index.d.ts",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
     "start": "tsc -w",
     "build": "tsc",

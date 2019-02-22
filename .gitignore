@@ -2,7 +2,7 @@
 node_modules
 main.jsbundle
 assets
-/lib
+dist
 
 # iOS
 Podfile.lock
