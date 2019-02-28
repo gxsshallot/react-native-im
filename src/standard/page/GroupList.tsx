@@ -4,15 +4,14 @@ import NaviBar, { forceInset } from 'react-native-pure-navigation-bar';
 import Listener from 'react-native-general-listener';
 import Toast from 'react-native-root-toast';
 import * as PageKeys from '../pagekey';
-import * as Constant from '../constant';
-import * as Types from '../proptype';
 import { DateUtil } from '../util';
+import { Conversation, Event } from '../typings';
 import delegate from '../delegate';
 
 export default class extends React.PureComponent {
-    static propTypes = {
-        ...Types.Navigation,
-    };
+    // static propTypes = {
+    //     ...Types.Navigation,
+    // };
 
     static defaultProps = {};
 
@@ -25,7 +24,7 @@ export default class extends React.PureComponent {
 
     componentDidMount() {
         this.listenGroupLoaded = Listener.registerWithSubEvent(
-            [Constant.BaseEvent, Constant.GroupEvent],
+            [Event.Base, Event.Group],
             this._refresh
         );
         delegate.model.Group.load()
@@ -35,7 +34,7 @@ export default class extends React.PureComponent {
 
     componentWillUnmount() {
         Listener.unregister(
-            [Constant.BaseEvent, Constant.GroupEvent],
+            [Event.Base, Event.Group],
             this.listenGroupLoaded
         );
     }
@@ -67,7 +66,7 @@ export default class extends React.PureComponent {
     _renderItem = ({item}) => {
         return (
             <delegate.component.ListCell
-                avatar={{imId: item.groupId, chatType: Constant.ChatType.Group}}
+                avatar={{imId: item.groupId, chatType: Conversation.ChatType.Group}}
                 title={delegate.model.Group.getName(item.groupId)}
                 subTitle={'' + item.memberObjList.length + '人'}
                 right={this._renderItemRight(item)}
@@ -100,7 +99,7 @@ export default class extends React.PureComponent {
             routeName: PageKeys.ChatDetail,
             params: {
                 imId: item.groupId,
-                chatType: Constant.ChatType.Group,
+                chatType: Conversation.ChatType.Group,
             },
         });
     };
@@ -206,7 +205,7 @@ export default class extends React.PureComponent {
         }
         return (
             <delegate.component.ListCell
-                avatar={{imId: item.groupId, chatType: Constant.ChatType.Group}}
+                avatar={{imId: item.groupId, chatType: Conversation.ChatType.Group}}
                 title={title}
                 subTitle={subTitle}
             />

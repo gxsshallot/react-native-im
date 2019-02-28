@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { Text, View, TouchableWithoutFeedback, StyleSheet } from 'react-native';
 import { Component } from '../typings';
 import Popover from 'react-native-popover-view';

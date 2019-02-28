@@ -1,8 +1,8 @@
-import * as React from 'react';
+import React from 'react';
 import { Image, StyleSheet, View, Text } from 'react-native';
 import { Typings, Delegate } from '../../../standard';
 
-export type Props = Typings.Action.DisplayHandleParams<Typings.Message.LocationBody>;
+export type Props = Typings.Action.Display.Params<Typings.Message.LocationBody>;
 
 export default class extends React.PureComponent<Props> {
     render() {
@@ -19,7 +19,7 @@ export default class extends React.PureComponent<Props> {
                 </View>
                 <View style={styles.container}>
                     <Image
-                        source={require('../../../../image/location.png')}
+                        source={require('./image/location.png')}
                         style={[styles.image, {width: maxWidth}]}
                     />
                 </View>

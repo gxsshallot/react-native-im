@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { View, Text } from 'react-native';
 import { Delegate, Component } from './typings';
 
@@ -37,21 +37,7 @@ const component: Delegate.ComponentPart = {
     MessageMenu: noComponentDelegate<Component.MessageMenuProps>('MessageMenu'),
     SettingItem: noComponentDelegate<Component.SettingItemProps>('SettingItem'),
 };
-function getActionSet(name: string) {
-    return {
-        register: noDataDelegate(name),
-        unregister: noDataDelegate(name),
-        match: noDataDelegate(name),
-    };
-}
 const model: Delegate.ModelPart = {
-    Action: {
-        Display: getActionSet('Action.Display'),
-        Parse: getActionSet('Action.Parse'),
-        Send: getActionSet('Action.Send'),
-        Abstract: getActionSet('Action.Abstract'),
-        MoreBoard: getActionSet('Action.MoreBoard'),
-    },
     Conversation: {
         name: '',
         defaultConfig: {

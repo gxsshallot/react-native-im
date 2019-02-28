@@ -3,11 +3,10 @@ import Toast from 'react-native-root-toast';
 import i18n from 'i18n-js';
 import { Typings, Delegate } from '../../standard';
 import getGeneralButton from './GeneralButton';
-import { UiParams, UiResult } from './typings';
 
 export const name = 'IMSettingLeaveGroup';
 
-export function getUi(props: UiParams): UiResult {
+export function getUi(props: Typings.Action.Setting.Params): Typings.Action.Setting.Result {
     const {key, imId, chatType} = props;
     const isGroup = chatType === Typings.Conversation.ChatType.Group;
     if (!isGroup) {
@@ -19,7 +18,11 @@ export function getUi(props: UiParams): UiResult {
     return getGeneralButton(key, text, () => _clickLeave(props, text, isOwner));
 }
 
-async function _clickLeave(props: UiParams, text: string, isOwner: boolean): Promise<void> {
+async function _clickLeave(
+    props: Typings.Action.Setting.Params,
+    text: string,
+    isOwner: boolean
+): Promise<void> {
     const {imId, navigation} = props;
     try {
         if (isOwner) {

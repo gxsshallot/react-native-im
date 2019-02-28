@@ -1,22 +1,17 @@
 import { IMConstant } from 'react-native-im-easemob';
-import { Delegate } from '../../standard';
+import { Model } from '../../standard';
 import * as StandardMessage from '../message';
 
 export default function () {
     const displayActions = [
-        [undefined, StandardMessage.Display.GeneralBubble],
+        [[], StandardMessage.Display.GeneralBubble],
         [IMConstant.MessageType.text, StandardMessage.Display.TextBubble],
         [IMConstant.MessageType.image, StandardMessage.Display.ImageBubble],
         [IMConstant.MessageType.location, StandardMessage.Display.LocationBubble],
         [IMConstant.MessageType.video, StandardMessage.Display.VideoBubble],
         [IMConstant.MessageType.voice, StandardMessage.Display.VoiceBubble],
     ];
-    displayActions.forEach(([messageType, handleFunc, priority]) => {
-        Delegate.model.Action.Display.register(
-            messageType,
-            undefined,
-            handleFunc,
-            priority
-        );
+    displayActions.forEach(function ([messageType, handleFunc]) {
+        Model.Action.Display.registerDefault(messageType, handleFunc);
     });
 }

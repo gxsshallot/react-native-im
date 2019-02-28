@@ -1,9 +1,9 @@
-import * as React from 'react';
+import React from 'react';
 import { Image, StyleSheet, View, Text } from 'react-native';
 import Sound from 'react-native-sound';
 import { Typings } from '../../../standard';
 
-export type Props = Typings.Action.DisplayHandleParams<Typings.Message.VoiceBody>;
+export type Props = Typings.Action.Display.Params<Typings.Message.VoiceBody>;
 
 export interface State {
     isPlaying: boolean;
@@ -35,16 +35,16 @@ export default class extends React.PureComponent<Props, State> {
     }
 
     render() {
-        let image;
+        let image = null;
         const {isSender} = this.props;
         if (this.state.isPlaying) {
             image = isSender ?
-                require('../../../../image/senderVoicePlaying.gif') :
-                require('../../../../image/receiverVoicePlaying.gif');
+                require('./image/senderVoicePlaying.gif') :
+                require('./image/receiverVoicePlaying.gif');
         } else {
             image = isSender ?
-                require('../../../../image/senderVoice.png') :
-                require('../../../../image/receiverVoice.png');
+                require('./image/senderVoice.png') :
+                require('./image/receiverVoice.png');
         }
         return (
             <View style={[styles.container]}>

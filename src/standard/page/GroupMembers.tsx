@@ -5,8 +5,8 @@ import NaviBar from 'react-native-pure-navigation-bar';
 import SearchBar from 'react-native-general-searchbar';
 import ActionSheet from 'react-native-general-actionsheet';
 import * as PageKeys from '../pagekey';
-import * as Constant from '../constant';
 import { mapListToSection } from '../util';
+import { Conversation } from '../typings';
 import delegate from '../delegate';
 
 export default class extends React.PureComponent {
@@ -77,7 +77,7 @@ export default class extends React.PureComponent {
                 title={title}
                 subTitle={subTitle}
                 labels={item.label}
-                avatar={{imId: item.imId, chatType: Constant.ChatType.Single}}
+                avatar={{imId: item.imId, chatType: Conversation.ChatType.Single}}
                 {...longPresses}
             />
         );

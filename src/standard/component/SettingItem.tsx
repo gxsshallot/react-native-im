@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { Image, StyleSheet, Switch, Text, View, TouchableHighlight, ImageURISource, ImageRequireSource } from 'react-native';
 import ArrowImage from '@hecom/image-arrow';
 import { Component } from '../typings';

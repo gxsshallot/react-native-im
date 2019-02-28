@@ -1,0 +1,1 @@
+export const Part = 'im_storage_part';

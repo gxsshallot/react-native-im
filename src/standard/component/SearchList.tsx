@@ -5,7 +5,7 @@ import NaviBar from 'react-native-pure-navigation-bar';
 import SearchBar from 'react-native-general-searchbar';
 import AsyncStorage from 'react-native-general-storage';
 import { KeyboardAwareFlatList, KeyboardAwareSectionList } from 'react-native-keyboard-aware-scroll-view';
-import * as Constant from '../constant';
+import { Storage } from '../typings';
 import delegate from '../delegate';
 
 export default class extends React.PureComponent {
@@ -105,7 +105,7 @@ export default class extends React.PureComponent {
                     >
                         <Image
                             style={styles.clearHistoryImage}
-                            source={require('../../../image/delete.png')}
+                            source={require('./image/delete.png')}
                         />
                     </TouchableOpacity>
                 </View>
@@ -144,7 +144,7 @@ export default class extends React.PureComponent {
                     <View style={styles.footer}>
                         <Image
                             style={styles.footerImage}
-                            source={require('../../../image/search.png')}
+                            source={require('./image/search.png')}
                         />
                         <Text style={styles.footerText}>
                             {'更多' + title}
@@ -176,7 +176,7 @@ export default class extends React.PureComponent {
             <View style={styles.emptyContainer}>
                 <Image
                     style={styles.emptyImage}
-                    source={require('../../../image/empty_search.png')}
+                    source={require('./image/empty_search.png')}
                 />
                 <Text style={styles.emptyText}>
                     {text}
@@ -210,7 +210,7 @@ export default class extends React.PureComponent {
 
     _initHistory = () => {
         const myUserId = delegate.user.getMine().userId;
-        return AsyncStorage.get([myUserId, this.props.historyKey], Constant.StoragePart)
+        return AsyncStorage.get([myUserId, this.props.historyKey], Storage.Part)
             .then((result) => {
                 this.setState({searchHistory: result || []});
             })
@@ -233,7 +233,7 @@ export default class extends React.PureComponent {
         if (this.props.historyKey) {
             const myUserId = delegate.user.getMine().userId;
             const history = getNewHistory();
-            AsyncStorage.set([myUserId, this.props.historyKey], history, Constant.StoragePart)
+            AsyncStorage.set([myUserId, this.props.historyKey], history, Storage.Part)
                 .then(() => {
                     this.setState({searchHistory: history});
                 });
@@ -246,7 +246,7 @@ export default class extends React.PureComponent {
     _clearHistory = () => {
         if (this.props.historyKey) {
             const myUserId = delegate.user.getMine().userId;
-            AsyncStorage.set([myUserId, this.props.historyKey], [], Constant.StoragePart)
+            AsyncStorage.set([myUserId, this.props.historyKey], [], Storage.Part)
                 .then(() => {
                     this.setState({searchHistory: []});
                 });

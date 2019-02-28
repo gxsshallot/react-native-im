@@ -1,15 +1,10 @@
 import * as Specials from 'specials';
+import { Action } from '../typings';
 
-const rootNode = {};
+const instance = Specials.getInstance<
+    Action.Setting.State,
+    Action.Setting.Params,
+    Action.Setting.Result
+>();
 
-export function register(action, handleFunc) {
-    return Specials.register(rootNode, [action], undefined, handleFunc);
-}
-
-export function unregister(action) {
-    return Specials.unregister(rootNode, [action]);
-}
-
-export function match(action, params) {
-    return Specials.get(rootNode, [action], undefined, params);
-}
+export default instance;

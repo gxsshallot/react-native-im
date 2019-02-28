@@ -1,12 +1,11 @@
-import * as React from 'react';
+import React from 'react';
 import Toast from 'react-native-root-toast';
 import i18n from 'i18n-js';
-import { UiParams, UiResult } from './typings';
 import { Typings, Delegate } from '../../standard';
 
 export const name = 'IMSettingAllowInvite';
 
-export function getUi(props: UiParams): UiResult {
+export function getUi(props: Typings.Action.Setting.Params): Typings.Action.Setting.Result {
     const {key, imId, chatType} = props;
     const isGroup = chatType === Typings.Conversation.ChatType.Group;
     if (!isGroup) {

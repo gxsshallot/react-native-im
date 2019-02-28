@@ -1,12 +1,11 @@
-import * as React from 'react';
+import React from 'react';
 import i18n from 'i18n-js';
 import { Typings, Delegate, PageKeys } from '../../standard';
 import { onAddMembers, onRemoveMembers } from './GeneralUpdate';
-import { UiParams, UiResult } from './typings';
 
 export const name = 'IMSettingAllMembers';
 
-export function getUi(props: UiParams): UiResult {
+export function getUi(props: Typings.Action.Setting.Params): Typings.Action.Setting.Result {
     const {key, imId, chatType} = props;
     const isGroup = chatType === Typings.Conversation.ChatType.Group;
     if (!isGroup) {
@@ -23,7 +22,7 @@ export function getUi(props: UiParams): UiResult {
     );
 }
 
-function _clickAllMembers(props: UiParams): void {
+function _clickAllMembers(props: Typings.Action.Setting.Params): void {
     const {imId, navigation} = props;
     const groupMembers = Delegate.model.Group.getMembers(imId);
     const groupOwner = Delegate.model.Group.getOwner(imId);

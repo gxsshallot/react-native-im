@@ -1,10 +1,10 @@
-import * as React from 'react';
+import React from 'react';
 import { Image, StyleSheet, View, Platform, ImageURISource } from 'react-native';
 import RNFS from 'react-native-fs';
 import { showPhotoBrowserPage } from 'react-native-photo-browse';
 import { Typings } from '../../../standard';
 
-export type Props = Typings.Action.DisplayHandleParams<Typings.Message.ImageBody>;
+export type Props = Typings.Action.Display.Params<Typings.Message.ImageBody>;
 
 export interface State {
     source: ImageURISource | null;

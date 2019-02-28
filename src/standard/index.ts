@@ -1,6 +1,5 @@
 import AsyncStorage from 'react-native-general-storage';
 import * as Typings from './typings';
-import * as Constant from './constant';
 import * as Model from './model';
 import * as Components from './component';
 import * as Pages from './page';
@@ -44,14 +43,12 @@ function setup_common_component() {
 }
 
 function setup_common_model() {
-    AsyncStorage.setPrefix(Constant.StoragePart, Constant.StoragePart);
-    Delegate.model.Action = Model.Action;
+    AsyncStorage.setPrefix(Typings.Storage.Part, Typings.Storage.Part);
     Delegate.model.Conversation = Model.Conversation;
     Delegate.model.Emoji = Model.Emoji;
     Delegate.model.External = Model.External;
     Delegate.model.Group = Model.Group;
     Delegate.model.Message = Model.Message;
-    Delegate.model.Setting = Model.Setting;
 }
 
 function login(forceUpdate) {
@@ -69,7 +66,6 @@ function logout(forceClear) {
 }
 
 export {
-    Constant,
     Model,
     Typings,
     Components,

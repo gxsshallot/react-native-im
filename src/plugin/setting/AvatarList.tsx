@@ -1,11 +1,10 @@
-import * as React from 'react';
+import React from 'react';
 import { Typings, Delegate } from '../../standard';
-import { UiParams, UiResult } from './typings';
 import { onAddMembers, onRemoveMembers } from './GeneralUpdate';
 
 export const name = 'IMSettingAvatarList';
 
-export function getUi(props: UiParams): UiResult {
+export function getUi(props: Typings.Action.Setting.Params): Typings.Action.Setting.Result {
     const {key, imId, chatType, navigation} = props;
     const isGroup = chatType === Typings.Conversation.ChatType.Group;
     if (!isGroup) {

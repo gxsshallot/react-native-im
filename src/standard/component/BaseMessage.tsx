@@ -1,9 +1,8 @@
-import * as React from 'react';
+import React from 'react';
 import { Image, StyleSheet, Text, View, TouchableWithoutFeedback, ActivityIndicator, ImageStyle } from 'react-native';
 import Listener, { ListenerObjType } from 'react-native-general-listener';
 import Toast from 'react-native-root-toast';
-import { Component } from '../typings';
-import * as Constant from '../constant';
+import { Component, Event, Message } from '../typings';
 import delegate from '../delegate';
 
 export type Props = Component.BaseMessageProps;
@@ -14,11 +13,11 @@ export interface State {
 
 export default class extends React.PureComponent<Props, State> {
     protected updateEvent: string[];
-    protected listenUpdate: ListenerObjType | void = undefined;
+    protected listenUpdate: ListenerObjType | void = null;
 
     constructor(props: Props) {
         super(props);
-        this.updateEvent = [Constant.BaseEvent, Constant.ConversationEvent, props.imId];
+        this.updateEvent = [Event.Base, Event.Conversation, props.imId];
         this.state = {
             showMembersName: this._showMembersName(),
         };
@@ -34,7 +33,7 @@ export default class extends React.PureComponent<Props, State> {
 
     render() {
         const {position} = this.props;
-        let msgContent;
+        let msgContent = null;
         if (position < 0) {
             msgContent = this._renderLeft();
         } else if (position > 0) {
@@ -78,19 +77,19 @@ export default class extends React.PureComponent<Props, State> {
         const {message, onShowMenu} = this.props;
         const status = message.status;
         let leftItem = null;
-        if (status === Constant.Status.Delivering ||
-            status === Constant.Status.Pending) {
+        if (status === Message.Status.Delivering ||
+            status === Message.Status.Pending) {
             leftItem = (
                 <ActivityIndicator
                     size='small'
                     color='#999999'
                 />
             );
-        } else if (status === Constant.Status.Failed) {
+        } else if (status === Message.Status.Failed) {
             leftItem = (
                 <TouchableWithoutFeedback onPress={this._resend.bind(this)}>
                     <Image
-                        source={require('../../../image/send_fail.png')}
+                        source={require('./image/send_fail.png')}
                         style={styles.messageStatusImage}
                     />
                 </TouchableWithoutFeedback>

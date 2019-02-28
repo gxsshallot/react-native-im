@@ -41,7 +41,7 @@ export interface Item extends Base {
     unreadMessagesCount: number;
     config: Config;
     atMe: boolean;
-    latestMessage?: Message.General;
+    latestMessage: Message.General | void;
 }
 
 /**

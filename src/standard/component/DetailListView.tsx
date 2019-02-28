@@ -107,9 +107,9 @@ export default class extends React.PureComponent {
         for (let i = 0; i < newMessages.length; i++) {
             const item = newMessages[i];
             const {messageId, innerId} = item;
-            if (oldIdMap[messageId] !== undefined) {
+            if (oldIdMap[messageId]) {
                 data[oldIdMap[messageId]] = item;
-            } else if (oldInnerIdMap[innerId] !== undefined) {
+            } else if (oldInnerIdMap[innerId]) {
                 data[oldInnerIdMap[innerId]] = item;
             } else {
                 data.push(item);

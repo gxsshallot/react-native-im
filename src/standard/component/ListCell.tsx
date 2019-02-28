@@ -1,42 +1,40 @@
 import React from 'react';
 import { Image, StyleSheet, Text, TouchableHighlight, View } from 'react-native';
-import PropTypes from 'prop-types';
-import * as Types from '../proptype';
 import delegate from '../delegate';
 
 export default class extends React.PureComponent {
-    static propTypes = {
-        avatar: PropTypes.oneOfType([
-            PropTypes.string,
-            PropTypes.number,
-            PropTypes.shape(Types.BasicConversation),
-            PropTypes.shape({
-                uri: PropTypes.string,
-            })
-        ]),
-        title: PropTypes.oneOfType([
-            PropTypes.string,
-            PropTypes.element,
-            PropTypes.arrayOf(PropTypes.element),
-        ]),
-        labels: PropTypes.arrayOf(PropTypes.shape({
-            name: PropTypes.string,
-            color: PropTypes.string,
-        })),
-        subTitle: PropTypes.oneOfType([
-            PropTypes.string,
-            PropTypes.element,
-            PropTypes.array
-        ]),
-        onClick: PropTypes.func,
-        onLongPress: PropTypes.func,
-        right: PropTypes.oneOfType([
-            PropTypes.element,
-            PropTypes.arrayOf(PropTypes.element),
-            PropTypes.func,
-        ]),
-        style: PropTypes.any,
-    };
+    // static propTypes = {
+    //     avatar: PropTypes.oneOfType([
+    //         PropTypes.string,
+    //         PropTypes.number,
+    //         PropTypes.shape(Types.BasicConversation),
+    //         PropTypes.shape({
+    //             uri: PropTypes.string,
+    //         })
+    //     ]),
+    //     title: PropTypes.oneOfType([
+    //         PropTypes.string,
+    //         PropTypes.element,
+    //         PropTypes.arrayOf(PropTypes.element),
+    //     ]),
+    //     labels: PropTypes.arrayOf(PropTypes.shape({
+    //         name: PropTypes.string,
+    //         color: PropTypes.string,
+    //     })),
+    //     subTitle: PropTypes.oneOfType([
+    //         PropTypes.string,
+    //         PropTypes.element,
+    //         PropTypes.array
+    //     ]),
+    //     onClick: PropTypes.func,
+    //     onLongPress: PropTypes.func,
+    //     right: PropTypes.oneOfType([
+    //         PropTypes.element,
+    //         PropTypes.arrayOf(PropTypes.element),
+    //         PropTypes.func,
+    //     ]),
+    //     style: PropTypes.any,
+    // };
 
     static defaultProps = {
         labels: [],

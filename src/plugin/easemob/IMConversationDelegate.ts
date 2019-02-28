@@ -1,11 +1,10 @@
 import { ChatManager, IMConstant } from 'react-native-im-easemob';
-import * as IMStandard from '../../standard';
+import { Delegate, Typings } from '../../standard';
 
 export default function () {
-    IMStandard.Delegate.im.conversation.loadList = () => {
+    Delegate.im.conversation.loadList = () => {
         return ChatManager.getAllConversations()
-            .then((result) => {
-                console.log(result);
+            .then((result: Typings.Message.Origin) => {
                 result = result.map((item) => ({
                     ...item,
                     imId: item.conversationId,
@@ -14,7 +13,7 @@ export default function () {
                 return result;
             });
     };
-    IMStandard.Delegate.im.conversation.loadItem = (imId, chatType, autoCreate) => {
+    Delegate.im.conversation.loadItem = (imId, chatType, autoCreate) => {
         return ChatManager.getConversation(imId, chatType, autoCreate)
             .then((result) => {
                 return {
@@ -24,15 +23,15 @@ export default function () {
                 };
             });
     };
-    IMStandard.Delegate.im.conversation.deleteOne = (imId) => {
+    Delegate.im.conversation.deleteOne = (imId) => {
         return ChatManager.deleteConversation(imId);
     };
     // TODO updateConfig
-    IMStandard.Delegate.im.conversation.markAllRead = (imId, chatType) => {
+    Delegate.im.conversation.markAllRead = (imId, chatType) => {
         return ChatManager.markAllMessagesAsRead(imId, chatType);
     };
     // TODO markLatestUnread
-    IMStandard.Delegate.im.conversation.loadMessage = (params) => {
+    Delegate.im.conversation.loadMessage = (params) => {
         const {imId, chatType, lastMessageId, count} = params;
         return ChatManager.loadMessages(
             imId,
@@ -42,7 +41,7 @@ export default function () {
             IMConstant.MessageSearchDirection.up
         );
     };
-    IMStandard.Delegate.im.conversation.deleteMessage = (params) => {
+    Delegate.im.conversation.deleteMessage = (params) => {
         const {imId, chatType, message: {messageId}} = params;
         return ChatManager.deleteMessage(imId, chatType, messageId);
     };

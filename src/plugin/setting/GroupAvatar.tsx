@@ -1,14 +1,13 @@
-import * as React from 'react';
+import React from 'react';
 import Toast from 'react-native-root-toast';
 import ActionSheet from 'react-native-general-actionsheet';
 import * as ImagePicker from 'react-native-full-image-picker';
 import i18n from 'i18n-js';
 import { Typings, Delegate } from '../../standard';
-import { UiParams, UiResult } from './typings';
 
 export const name = 'IMSettingGroupAvatar';
 
-export function getUi(props: UiParams): UiResult {
+export function getUi(props: Typings.Action.Setting.Params): Typings.Action.Setting.Result {
     const {key, imId, chatType} = props;
     const isGroup = chatType === Typings.Conversation.ChatType.Group;
     if (!isGroup) {
@@ -31,7 +30,7 @@ export function getUi(props: UiParams): UiResult {
     );
 }
 
-function _clickGroupAvatar(props: UiParams) {
+function _clickGroupAvatar(props: Typings.Action.Setting.Params) {
     const options = {
         maxSize: 1,
         canEdit: true,

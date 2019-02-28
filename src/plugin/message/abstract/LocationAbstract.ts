@@ -1,8 +1,8 @@
 import { Typings, Delegate } from '../../../standard';
 
-export type Params = Typings.Action.AbstractHandleParams<Typings.Message.LocationBody>;
+export type Params = Typings.Action.Abstract.Params<Typings.Message.LocationBody>;
 
-export type Result = Typings.Action.AbstractHandleResult;
+export type Result = Typings.Action.Abstract.Result;
 
 export default function (params: Params): Result {
     const myUserId = Delegate.user.getMine().userId;

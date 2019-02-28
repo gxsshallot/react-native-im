@@ -5,8 +5,8 @@ import Toast from 'react-native-root-toast';
 import Listener from 'react-native-general-listener';
 import i18n from 'i18n-js';
 import * as PageKeys from '../pagekey';
+import { Event } from '../typings';
 import delegate from '../delegate';
-import * as Constant from '../constant';
 
 export default class extends React.PureComponent {
     static navigationOptions = function () {
@@ -29,14 +29,14 @@ export default class extends React.PureComponent {
     componentDidMount() {
         this._refresh();
         this.listenListUpdate = Listener.registerWithSubEvent(
-            [Constant.BaseEvent, Constant.ConversationEvent],
+            [Event.Base, Event.Conversation],
             this._refresh.bind(this)
         );
     }
 
     componentWillUnmount() {
         Listener.unregister(
-            [Constant.BaseEvent, Constant.ConversationEvent],
+            [Event.Base, Event.Conversation],
             this.listenListUpdate
         );
     }

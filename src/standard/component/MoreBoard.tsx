@@ -1,6 +1,7 @@
 import React from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View, Dimensions } from 'react-native';
 import { getSafeAreaInset } from 'react-native-pure-navigation-bar';
+import * as Model from '../model';
 import delegate from '../delegate';
 import BottomBar from './BottomBar';
 
@@ -77,7 +78,7 @@ export default class extends React.PureComponent {
     };
 
     _renderItem = (action, index) => {
-        const item = delegate.model.Action.MoreBoard.match(
+        const item = Model.Action.MoreBoard.get(
             action,
             {imId: this.props.imId, chatType: this.props.chatType, action},
             undefined

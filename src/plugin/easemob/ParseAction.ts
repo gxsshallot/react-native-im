@@ -1,22 +1,21 @@
 import { IMConstant } from 'react-native-im-easemob';
-import { Delegate, Typings } from '../../standard';
+import { Model, Typings } from '../../standard';
 import { convertBasicMessage } from './util';
 
 export default function () {
-    const parseActions = [
-        {special: isText, handle: convertText, priority: undefined},
-        {special: isImage, handle: convertImage, priority: undefined},
-        {special: isLocation, handle: convertLocation, priority: undefined},
-        {special: isVideo, handle: convertVideo, priority: undefined},
-        {special: isVoice, handle: convertVoice, priority: undefined},
+    type ActionItem = [
+        (message: Typings.Message.Origin) => boolean,
+        (message: Typings.Message.Origin) => Typings.Message.General
     ];
-    parseActions.forEach(({special, handle, priority}) => {
-        Delegate.model.Action.Parse.register(
-            undefined,
-            special,
-            handle,
-            priority
-        );
+    const parseActions: ActionItem[] = [
+        [isText, convertText],
+        [isImage, convertImage],
+        [isLocation, convertLocation],
+        [isVideo, convertVideo],
+        [isVoice, convertVoice],
+    ];
+    parseActions.forEach(([special, handle]) => {
+        Model.Action.Parse.registerSpecial([], special, handle);
     });
 }
 
@@ -36,7 +35,7 @@ function convertText(message: Typings.Message.Origin) {
         IMConstant.MessageType.text,
         {
             text: message.body.text,
-            atMemberList: message.ext ? message.ext.atMemberList : undefined,
+            atMemberList: message.ext ? message.ext.atMemberList : [],
             isSystem: message.ext ? message.ext.isSystemMessage : false,
         }
     );
@@ -47,10 +46,10 @@ function convertImage(message: Typings.Message.Origin) {
         message,
         IMConstant.MessageType.image,
         {
-            localPath: undefined,
+            localPath: null,
             remotePath: message.body.remotePath,
-            thumbnailLocalPath: undefined,
-            thumbnailRemotePath: undefined,
+            thumbnailLocalPath: null,
+            thumbnailRemotePath: null,
             size: {
                 width: message.body.size && message.body.size.width,
                 height: message.body.size && message.body.size.height,

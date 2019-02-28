@@ -1,6 +1,7 @@
-import * as React from 'react';
+import React from 'react';
 import { TouchableWithoutFeedback, View, Dimensions, ImageSourcePropType } from 'react-native';
 import ImageCapInset from 'react-native-image-capinsets';
+import * as Model from '../model';
 import { Component, Action } from '../typings';
 import delegate from '../delegate';
 
@@ -15,13 +16,13 @@ export interface State {
 
 export default class extends React.PureComponent<Props, State> {
     static defaultProps = {
-        leftBubble: require('../../../image/message_bubble_left.png'),
-        rightBubble: require('../../../image/message_bubble_right.png'),
+        leftBubble: require('./image/message_bubble_left.png'),
+        rightBubble: require('./image/message_bubble_right.png'),
     };
 
     protected readonly paddingHorizontal = 7;
     protected bubble: View | null = null;
-    protected innerView: Action.DisplayHandleResult | null = null;
+    protected innerView: Action.Display.Result | null = null;
     
     state: State = {
         enableBubble: false,
@@ -68,14 +69,14 @@ export default class extends React.PureComponent<Props, State> {
             isSender: isSender,
         };
         const params = {
-            ref: (ref: Action.DisplayHandleResult | null) => {this.innerView = ref;},
+            ref: (ref: Action.Display.Result | null) => {this.innerView = ref;},
             message: message,
             isSender: isSender,
             enableBubble: this._enableBubble.bind(this),
             maxWidth: maxWidth,
             style: {},
         };
-        const displayView = delegate.model.Action.Display.match(
+        const displayView = Model.Action.Display.get(
             message.type,
             state,
             undefined,

@@ -9,7 +9,7 @@ export function convertBasicMessage<T extends Typings.Message.Body = Typings.Mes
         type: type,
         conversationId: message.conversationId,
         messageId: message.messageId,
-        innerId: message.ext ? message.ext.innerId : undefined,
+        innerId: message.ext ? message.ext.innerId : null,
         status: message.status,
         from: message.from,
         to: message.to,

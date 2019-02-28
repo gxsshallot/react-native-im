@@ -1,7 +1,7 @@
 import AsyncStorage from 'react-native-general-storage';
 import Listener from 'react-native-general-listener';
-import { Conversation, Message } from '../typings';
-import * as Constant from '../constant';
+import { Conversation, Message, Event, Storage } from '../typings';
+import * as Action from './action';
 import { simpleExport } from '../util';
 import delegate from '../delegate';
 
@@ -17,7 +17,7 @@ export const defaultConfig: Conversation.Config = {
 
 export async function init(forceUpdate: boolean): Promise<void> {
     const getCache = async function (): Promise<void> {
-        const items = await AsyncStorage.getKeys(keys(), Constant.StoragePart);
+        const items = await AsyncStorage.getKeys(keys(), Storage.Part);
         Object.values(items).forEach((item) => {
             rootNode[item.imId] = item;
         });
@@ -31,10 +31,10 @@ export async function init(forceUpdate: boolean): Promise<void> {
 }
 
 export async function uninit(forceClear: boolean): Promise<void> {
-    const keys = Object.keys(rootNode);
-    keys.forEach(imId => delete rootNode[imId]);
+    const imIds = Object.keys(rootNode);
+    imIds.forEach(imId => delete rootNode[imId]);
     if (forceClear) {
-        await Promise.all(keys.map(imId => deleteData(imId)));
+        await Promise.all(imIds.map(imId => deleteData(imId)));
     }
 }
 
@@ -45,12 +45,8 @@ export async function load(): Promise<void> {
 
 export async function loadItem(imId: string, chatType: Conversation.ChatType): Promise<Conversation.Item> {
     const result = await delegate.im.conversation.loadItem(imId, chatType, true);
-    const message = !result.latestMessage ? undefined : 
-        delegate.model.Action.Parse.match(
-            undefined,
-            result.latestMessage,
-            result.latestMessage
-        );
+    const message = !result.latestMessage ? null : 
+        Action.Parse.get([], result.latestMessage, result.latestMessage);
     if (!rootNode[imId]) {
         rootNode[imId] = {
             ...result,
@@ -76,7 +72,7 @@ export async function loadItem(imId: string, chatType: Conversation.ChatType): P
         }
     }
     await writeData(imId);
-    const isGroup = chatType === Constant.ChatType.Group;
+    const isGroup = chatType === Conversation.ChatType.Group;
     if (isGroup && !delegate.model.Group.findByGroupId(imId)) {
         await delegate.model.Group.loadItem(imId);
     }
@@ -84,10 +80,10 @@ export async function loadItem(imId: string, chatType: Conversation.ChatType): P
 }
 
 export function isValid(imId: string, chatType: Conversation.ChatType): boolean {
-    let item;
-    if (chatType === Constant.ChatType.Single) {
+    let item = null;
+    if (chatType === Conversation.ChatType.Single) {
         item = delegate.user.getUser(imId);
-    } else if (chatType === Constant.ChatType.Group) {
+    } else if (chatType === Conversation.ChatType.Group) {
         item = delegate.model.Group.findByGroupId(imId, false);
     }
     return !!item && !!getOne(imId, false);
@@ -134,13 +130,13 @@ export function getConfig(imId: string): Conversation.Config {
 export function getName(imId: string): string | void {
     const item = getOne(imId, false);
     if (item) {
-        if (item.chatType === Constant.ChatType.Group) {
+        if (item.chatType === Conversation.ChatType.Group) {
             return delegate.model.Group.getName(imId, true);
-        } else if (item.chatType === Constant.ChatType.Single) {
+        } else if (item.chatType === Conversation.ChatType.Single) {
             return delegate.user.getUser(imId).name;
         }
     }
-    return undefined;
+    return null;
 }
 
 export async function updateConfig(imId: string, config: Conversation.ConfigUpdate): Promise<void> {
@@ -150,7 +146,7 @@ export async function updateConfig(imId: string, config: Conversation.ConfigUpda
     };
     const result = await delegate.im.conversation.updateConfig(imId, newConfig);
     rootNode[imId].config = result;
-    Listener.trigger([Constant.BaseEvent, Constant.ConversationEvent, imId]);
+    Listener.trigger([Event.Base, Event.Conversation, imId]);
     await writeData(imId);
 }
 
@@ -164,7 +160,7 @@ export async function updateMessage(imId: string, message: Message.General): Pro
     const myUserId = delegate.user.getMine().userId;
     const isFromMe = message.from === myUserId;
     let hasAtMe = false;
-    if (item.chatType === Constant.ChatType.Group && !isFromMe) {
+    if (item.chatType === Conversation.ChatType.Group && !isFromMe) {
         if (message.data && message.data.atMemberList) {
             if (message.data.atMemberList === Message.AtAll) {
                 hasAtMe = true;
@@ -174,9 +170,9 @@ export async function updateMessage(imId: string, message: Message.General): Pro
         }
     }
     rootNode[imId].atMe = rootNode[imId].atMe || hasAtMe;
-    Listener.trigger([Constant.BaseEvent, Constant.ConversationEvent, imId]);
+    Listener.trigger([Event.Base, Event.Conversation, imId]);
     await loadItem(imId, item.chatType);
-    Listener.trigger([Constant.BaseEvent, Constant.UnreadCountEvent, imId]);
+    Listener.trigger([Event.Base, Event.UnreadCount, imId]);
     onUnreadCountChanged();
 }
 
@@ -186,7 +182,7 @@ export async function deleteOne(imId: string): Promise<void> {
     }
     await delegate.im.conversation.deleteOne(imId);
     delete rootNode[imId];
-    Listener.trigger([Constant.BaseEvent, Constant.ConversationEvent]);
+    Listener.trigger([Event.Base, Event.Conversation]);
     await deleteData(imId);
 }
 
@@ -221,7 +217,7 @@ export async function markReadStatus(imId: string, chatType: Conversation.ChatTy
     if (status) {
         rootNode[imId].atMe = false;
     }
-    Listener.trigger([Constant.BaseEvent, Constant.UnreadCountEvent, imId]);
+    Listener.trigger([Event.Base, Event.UnreadCount, imId]);
     onUnreadCountChanged();
     await writeData(imId);
 }
@@ -235,15 +231,15 @@ function onUnreadCountChanged(): void {
             }
             return prv;
         }, 0);
-    Listener.trigger([Constant.BaseEvent, Constant.UnreadCountEvent], count);
+    Listener.trigger([Event.Base, Event.UnreadCount], count);
 }
 
 async function writeData(imId: string): Promise<void> {
-    await AsyncStorage.set(keys(imId), rootNode[imId], Constant.StoragePart);
+    await AsyncStorage.set(keys(imId), rootNode[imId], Storage.Part);
 }
 
 async function deleteData(imId: string): Promise<void> {
-    await AsyncStorage.remove(keys(imId), Constant.StoragePart);
+    await AsyncStorage.remove(keys(imId), Storage.Part);
 }
 
 function keys(imId?: string): string[] {

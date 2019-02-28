@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { View, StyleSheet, Text, Image, TouchableOpacity, Dimensions } from 'react-native';
 import { getSafeAreaInset } from 'react-native-pure-navigation-bar';
 import i18n from 'i18n-js';
@@ -49,7 +49,7 @@ export default class extends React.PureComponent<Props> {
     }
 
     protected _renderItem(item: string, index: number) {
-        const ownerImage = require('../../../image/group_owner.png');
+        const ownerImage = require('./image/group_owner.png');
         const {title, image, isOwner} = this._getItemStatus(item);
         const imageStyle = {
             width: this.itemEdge,
@@ -91,7 +91,7 @@ export default class extends React.PureComponent<Props> {
         const {width, height} = Dimensions.get('window');
         const safeInset = getSafeAreaInset();
         const innerWidth = width - safeInset.left - safeInset.right;
-        let column;
+        let column = 0;
         if (width > height) {
             const preInternal = 30;
             column = Math.floor((innerWidth + preInternal) * 1.0 / (this.itemEdge + preInternal));
@@ -123,13 +123,13 @@ export default class extends React.PureComponent<Props> {
     }
 
     protected _getItemStatus(rowItem: string) {
-        let title, isOwner, image;
+        let title = '', isOwner = false, image = null;
         if (rowItem === this.add || rowItem === this.remove) {
             title = null;
             isOwner = false;
             image = rowItem === this.add ?
-                require('../../../image/groupset_add.png') :
-                require('../../../image/groupset_lost.png');
+                require('./image/groupset_add.png') :
+                require('./image/groupset_lost.png');
         } else {
             const item = delegate.user.getUser(rowItem);
             title = item.name;

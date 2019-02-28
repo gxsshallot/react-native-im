@@ -5,9 +5,9 @@ import Toast from 'react-native-root-toast';
 import NaviBar, { forceInset } from 'react-native-pure-navigation-bar';
 import ArrowImage from '@hecom/image-arrow';
 import Listener from 'react-native-general-listener';
-import * as Constant from '../constant';
 import * as PageKeys from '../pagekey';
 import { mapListToSection } from '../util';
+import { Event, Conversation } from '../typings';
 import delegate from '../delegate';
 
 export default class extends React.PureComponent {
@@ -27,7 +27,7 @@ export default class extends React.PureComponent {
 
     componentDidMount() {
         if (delegate.contact.loadStarUser) {
-            this.listener = Listener.register([Constant.BaseEvent, Constant.StarUserChangeEvent], this._onStarUserChange);
+            this.listener = Listener.register([Event.Base, Event.StarUserChange], this._onStarUserChange);
         }
         InteractionManager.runAfterInteractions(() => {
             this._loadData();
@@ -35,7 +35,7 @@ export default class extends React.PureComponent {
     }
 
     componentWillUnmount() {
-        this.listener && Listener.unregister([Constant.BaseEvent, Constant.StarUserChangeEvent], this.listener);
+        this.listener && Listener.unregister([Event.Base, Event.StarUserChange], this.listener);
     }
 
     render() {
@@ -103,7 +103,7 @@ export default class extends React.PureComponent {
         return (
             <delegate.component.ListCell
                 style={this._itemStyle()}
-                avatar={{imId: item.userId, chatType: Constant.ChatType.Single}}
+                avatar={{imId: item.userId, chatType: Conversation.ChatType.Single}}
                 title={item.name}
                 subTitle={item.dept && item.dept.name}
                 right={this._renderRight(item)}
@@ -120,7 +120,7 @@ export default class extends React.PureComponent {
                 onPress={this._clickPhone.bind(this, phone)}
             >
                 <Image
-                    source={require('./phone.png')}
+                    source={require('./image/phone.png')}
                     style={styles.phone}
                 />
             </TouchableOpacity>

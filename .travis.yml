@@ -3,9 +3,6 @@ node_js:
  - "10"
 os:
  - linux
-cache: yarn
-
-script: echo "yarn test temporarily disabled"
 
 stages:
  - test
@@ -15,14 +12,10 @@ stages:
 jobs:
  include:
    - stage: test
-     name: eslint
-     script: yarn run eslint
    - stage: deploy
-     script: yarn run build
      deploy:
        provider: npm
        email: gaoxiaosong06@gmail.com
        api_key: "$NPM_TOKEN"
-       skip_cleanup: true
        on:
          tags: true

@@ -1,17 +1,15 @@
 import React from 'react';
 import { StyleSheet, Text } from 'react-native';
-import PropTypes from 'prop-types';
 import * as PageKeys from '../pagekey';
-import * as Constant from '../constant';
-import * as Types from '../proptype';
+import { Conversation } from '../typings';
 import delegate from '../delegate';
 
 export default class extends React.PureComponent {
-    static propTypes = {
-        ...Types.Navigation,
-        canSearchContact: PropTypes.bool,
-        canSearchGroup: PropTypes.bool,
-    };
+    // static propTypes = {
+    //     ...Types.Navigation,
+    //     canSearchContact: PropTypes.bool,
+    //     canSearchGroup: PropTypes.bool,
+    // };
 
     static defaultProps = {
         canSearchContact: true,
@@ -178,7 +176,7 @@ export default class extends React.PureComponent {
         }
         return (
             <delegate.component.ListCell
-                avatar={{imId: item.groupId, chatType: Constant.ChatType.Group}}
+                avatar={{imId: item.groupId, chatType: Conversation.ChatType.Group}}
                 title={title}
                 subTitle={subTitle}
             />
@@ -217,7 +215,7 @@ export default class extends React.PureComponent {
         }
         return (
             <delegate.component.ListCell
-                avatar={{imId: item.userId, chatType: Constant.ChatType.Single}}
+                avatar={{imId: item.userId, chatType: Conversation.ChatType.Single}}
                 title={title}
                 subTitle={subTitle}
             />
@@ -233,7 +231,7 @@ export default class extends React.PureComponent {
     };
 
     _onItemClick = ({item}) => {
-        const type = item.groupId ? Constant.ChatType.Group : Constant.ChatType.Single;
+        const type = item.groupId ? Conversation.ChatType.Group : Conversation.ChatType.Single;
         this.props.navigation.navigate({
             routeName: PageKeys.ChatDetail,
             params: {

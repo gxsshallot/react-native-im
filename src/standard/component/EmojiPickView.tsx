@@ -24,7 +24,7 @@ export default class extends React.PureComponent {
     constructor(props) {
         super(props);
         this.state = {
-            width: undefined,
+            width: 0,
             curIndex: 0,
         };
     }
@@ -143,7 +143,7 @@ export default class extends React.PureComponent {
             }
             arr.push({
                 text: this.DeleteItem,
-                image: require('../../../image/emoji_delete.png'),
+                image: require('./image/emoji_delete.png'),
             });
             dataArr.push(arr);
         }

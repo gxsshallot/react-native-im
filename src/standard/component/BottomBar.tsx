@@ -1,11 +1,10 @@
-import * as React from 'react';
+import React from 'react';
 import { Image, Keyboard, PermissionsAndroid, Platform, SafeAreaView, StyleSheet, Text, TextInput, TouchableHighlight, TouchableOpacity, View, EmitterSubscription, TextStyle, NativeSyntheticEvent, TextInputSelectionChangeEventData, TextInputKeyPressEventData, KeyboardEvent } from 'react-native';
 import SoundRecorder from 'react-native-sound-recorder';
 import Toast from 'react-native-root-toast';
 import { getSafeAreaInset } from 'react-native-pure-navigation-bar';
 import i18n from 'i18n-js';
-import { Component, Contact, Message } from '../typings';
-import * as Constant from '../constant';
+import { Component, Contact, Message, Conversation } from '../typings';
 import * as PageKeys from '../pagekey';
 import delegate from '../delegate';
 
@@ -27,8 +26,8 @@ export default class extends React.PureComponent<Props, State> {
     protected selectedEmojiArr: string[] = [];
     protected atMemberList: Contact.User[] = [];
     protected textLocation = 0;
-    protected listenKeyboardShow: EmitterSubscription | void = undefined;
-    protected listenKeyboardHide: EmitterSubscription | void = undefined;
+    protected listenKeyboardShow: EmitterSubscription | void = null;
+    protected listenKeyboardHide: EmitterSubscription | void = null;
     protected textInput: TextInput | null = null;
     
     state = {
@@ -83,8 +82,8 @@ export default class extends React.PureComponent<Props, State> {
 
     protected _renderLeftBtn() {
         const icon = this.state.showSpeech ?
-            require('../../../image/chat_keyboard.png') :
-            require('../../../image/chat_sound.png');
+            require('./image/chat_keyboard.png') :
+            require('./image/chat_sound.png');
         return (
             <TouchableOpacity
                 activeOpacity={0.5}
@@ -130,11 +129,11 @@ export default class extends React.PureComponent<Props, State> {
 
     protected _renderRightBtn() {
         const firstIcon = this.state.showEmojiView ?
-            require('../../../image/chat_keyboard.png') :
-            require('../../../image/chat_emoji.png');
+            require('./image/chat_keyboard.png') :
+            require('./image/chat_emoji.png');
         const secondIcon = this.state.showMoreBoard ?
-            require('../../../image/chat_keyboard.png') :
-            require('../../../image/chat_add.png');
+            require('./image/chat_keyboard.png') :
+            require('./image/chat_add.png');
         const isEmpty = !this.state.message || this.state.message.length === 0;
         return (
             <View style={styles.left}>
@@ -184,7 +183,7 @@ export default class extends React.PureComponent<Props, State> {
     }
 
     protected _onSendMessageText() {
-        let atMemberList: Message.AtList;
+        let atMemberList: Message.AtList = [];
         const all = this.atMemberList.filter(item => item.imId === Message.AtAll);
         if (all.length > 0) {
             atMemberList = Message.AtAll;
@@ -218,10 +217,7 @@ export default class extends React.PureComponent<Props, State> {
         } : {};
         const time = new Date().getTime();
         const filepath = SoundRecorder.PATH_CACHE + '/test_' + time + '.aac';
-        SoundRecorder.start(filepath, option)
-            .then(() => {
-                console.log('started recording');
-            });
+        SoundRecorder.start(filepath, option);
     }
 
     protected _onEndRecording() {
@@ -229,7 +225,6 @@ export default class extends React.PureComponent<Props, State> {
         const {onSendMessage} = this.props;
         SoundRecorder.stop()
             .then((result) => {
-                console.log('stopped recording, audio file saved at: ' + result.path);
                 const time = Math.floor(result.duration / 1000);
                 if (time < 1) {
                     Toast.show(i18n.t('IMComponentBottomBarVoiceTooShort'));
@@ -247,7 +242,7 @@ export default class extends React.PureComponent<Props, State> {
     }
 
     protected _onPickEmoji(text: string, isDelete: boolean) {
-        let message;
+        let message = '';
         if (isDelete) {
             const str = this.state.message;
             const lastCharacter = str.substring(str.length - 1);
@@ -312,7 +307,7 @@ export default class extends React.PureComponent<Props, State> {
 
     protected _onKeyPress(event: NativeSyntheticEvent<TextInputKeyPressEventData>) {
         const {nativeEvent: {key}} = event;
-        if (key === '@' && this.props.chatType === Constant.ChatType.Group) {
+        if (key === '@' && this.props.chatType === Conversation.ChatType.Group) {
             const members = delegate.model.Group.getMembers(this.props.imId);
             const dataSource = members
                 .filter(userId => userId !== delegate.user.getMine().userId)

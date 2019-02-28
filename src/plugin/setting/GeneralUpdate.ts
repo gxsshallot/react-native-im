@@ -1,10 +1,12 @@
 import { InteractionManager } from 'react-native';
 import Toast from 'react-native-root-toast';
 import i18n from 'i18n-js';
-import { UiParams } from './typings';
 import { Typings, Delegate, PageKeys } from '../../standard';
 
-export async function onAddMembers(props: UiParams, memberUserIds: string[]): Promise<void> {
+export async function onAddMembers(
+    props: Typings.Action.Setting.Params,
+    memberUserIds: string[]
+): Promise<void> {
     const {imId, chatType, onDataChange, navigation} = props;
     const isGroup = chatType === Typings.Conversation.ChatType.Group;
     if (isGroup) {
@@ -19,7 +21,7 @@ export async function onAddMembers(props: UiParams, memberUserIds: string[]): Pr
     } else {
         const newMembers = [imId, ...memberUserIds];
         try {
-            const {imId, chatType} = await Delegate.model.Conversation.createOne(newMembers);
+            const result = await Delegate.model.Conversation.createOne(newMembers);
             navigation.navigate({
                 routeName: PageKeys.ChatList,
                 params: {},
@@ -28,8 +30,8 @@ export async function onAddMembers(props: UiParams, memberUserIds: string[]): Pr
                 navigation.navigate({
                     routeName: PageKeys.ChatDetail,
                     params: {
-                        imId: imId,
-                        chatType: chatType,
+                        imId: result.imId,
+                        chatType: result.chatType,
                     },
                 });
             });
@@ -41,7 +43,10 @@ export async function onAddMembers(props: UiParams, memberUserIds: string[]): Pr
     }
 }
 
-export async function onRemoveMembers(props: UiParams, memberUserIds: string[]): Promise<void> {
+export async function onRemoveMembers(
+    props: Typings.Action.Setting.Params,
+    memberUserIds: string[]
+): Promise<void> {
     const {imId, onDataChange} = props;
     try {
         await Delegate.model.Group.removeMembers(imId, memberUserIds);

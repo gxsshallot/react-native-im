@@ -45,7 +45,7 @@ export function deleteEmoji(key, text) {
 }
 
 export function getAllParts() {
-    return rootNode.map(item => ({...item, [dataKey]: undefined}));
+    return rootNode.map(item => ({...item, [dataKey]: null}));
 }
 
 export function getPartEmojis(key) {
@@ -53,8 +53,8 @@ export function getPartEmojis(key) {
     return index >= 0 ? deepExport(rootNode[index][dataKey]) : null;
 }
 
-export function getEmoji(text, key = undefined) {
-    let parts;
+export function getEmoji(text: string, key?: string) {
+    let parts = null;
     if (key) {
         const index = rootNode.findIndex(item => item.key === key);
         if (index < 0) {

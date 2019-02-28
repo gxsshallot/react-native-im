@@ -1,26 +1,25 @@
 import React from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
-import PropTypes from 'prop-types';
 import { getSafeAreaInset } from 'react-native-pure-navigation-bar';
 import i18n from 'i18n-js';
-import * as Constant from '../constant';
-import * as Types from '../proptype';
+import * as Model from '../model';
+import { Conversation } from '../typings';
 import delegate from '../delegate';
 
 export default class extends React.PureComponent {
     static navigationOptions = function ({navigation}) {
         const {chatType} = navigation.state.params;
-        const isGroup = chatType === Constant.ChatType.Group;
+        const isGroup = chatType === Conversation.ChatType.Group;
         const title = isGroup ? i18n.t('IMPageChatSettingTitleGroup') : i18n.t('IMPageChatSettingTitleSingle');
         return {title};
     };
 
-    static propTypes = {
-        ...Types.BasicConversation,
-        ...Types.Navigation,
-        sections: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string)),
-        buttons: PropTypes.arrayOf(PropTypes.string),
-    };
+    // static propTypes = {
+    //     ...Types.BasicConversation,
+    //     ...Types.Navigation,
+    //     sections: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string)),
+    //     buttons: PropTypes.arrayOf(PropTypes.string),
+    // };
 
     static defaultProps = {
         sections: [],
@@ -73,7 +72,11 @@ export default class extends React.PureComponent {
     _renderItems(items, renderSeperator) {
         const buttons = [];
         items.forEach((button, index) => {
-            const view = delegate.model.Setting.match(button, {
+            const view = Model.Setting.get(button, {
+                name: button,
+                imId: this.props.imId,
+                chatType: this.props.chatType,
+            }, {
                 ...this.props,
                 key: index,
                 onDataChange: this._onDataChange.bind(this),

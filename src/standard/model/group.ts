@@ -1,7 +1,6 @@
 import AsyncStorage from 'react-native-general-storage';
 import Listener from 'react-native-general-listener';
-import { Group } from '../typings';
-import * as Constant from '../constant';
+import { Group, Event, Storage } from '../typings';
 import { simpleExport } from '../util';
 import delegate from '../delegate';
 
@@ -11,7 +10,7 @@ export const name = 'im-group';
 
 export async function init(forceUpdate: boolean): Promise<void> {
     const getCache = async function (): Promise<void> {
-        const items = await AsyncStorage.getKeys(keys(), Constant.StoragePart);
+        const items = await AsyncStorage.getKeys(keys(), Storage.Part);
         Object.values(items).forEach((item) => {
             rootNode[item.groupId] = item;
         });
@@ -24,10 +23,10 @@ export async function init(forceUpdate: boolean): Promise<void> {
 }
 
 export async function uninit(forceClear: boolean): Promise<void> {
-    const keys = Object.keys(rootNode);
-    keys.forEach(groupId => delete rootNode[groupId]);
+    const groupIds = Object.keys(rootNode);
+    groupIds.forEach(groupId => delete rootNode[groupId]);
     if (forceClear) {
-        const promises = keys.map(groupId => deleteData(groupId));
+        const promises = groupIds.map(groupId => deleteData(groupId));
         await Promise.all(promises);
     }
 }
@@ -45,7 +44,7 @@ export async function loadItem(groupId: string): Promise<void> {
     const result = await delegate.im.group.loadItem(groupId);
     if (result) {
         rootNode[groupId] = groupHandle(result);
-        Listener.trigger([Constant.BaseEvent, Constant.GroupEvent, groupId]);
+        Listener.trigger([Event.Base, Event.Group, groupId]);
         await writeData(groupId);
     } else {
         await deleteOne(groupId);
@@ -96,13 +95,13 @@ export function getName(groupId: string, autoConj: boolean = true): string | voi
             return '';
         }
     } else {
-        return undefined;
+        return null;
     }
 }
 
 export function getAvatar(groupId: string): string | void {
     const group = findByGroupId(groupId, false);
-    return group ? group.avatar : undefined;
+    return group ? group.avatar : null;
 }
 
 export function getAllowInvites(groupId: string): boolean {
@@ -183,7 +182,7 @@ async function changeGroupInfo<T>(
         ...rootNode[groupId],
         ...newGroupInfo,
     };
-    Listener.trigger([Constant.BaseEvent, Constant.GroupEvent, groupId]);
+    Listener.trigger([Event.Base, Event.Group, groupId]);
     await writeData(groupId);
     return promiseResult;
 }
@@ -192,7 +191,7 @@ async function deleteOne(groupId: string): Promise<void> {
     if (groupId) {
         delete rootNode[groupId];
     }
-    Listener.trigger([Constant.BaseEvent, Constant.GroupEvent]);
+    Listener.trigger([Event.Base, Event.Group]);
     await deleteData(groupId);
 }
 
@@ -204,11 +203,11 @@ function groupHandle(group: Group.Item): Group.Item {
 }
 
 async function writeData(groupId: string): Promise<void> {
-    await AsyncStorage.set(keys(groupId), rootNode[groupId], Constant.StoragePart);
+    await AsyncStorage.set(keys(groupId), rootNode[groupId], Storage.Part);
 }
 
 async function deleteData(groupId: string): Promise<void> {
-    await AsyncStorage.remove(keys(groupId), Constant.StoragePart);
+    await AsyncStorage.remove(keys(groupId), Storage.Part);
 }
 
 function keys(groupId?: string): string[] {

@@ -1,4 +1,4 @@
-import { Delegate, PageKeys } from '../../standard';
+import { Delegate, Model, Typings, PageKeys } from '../../standard';
 import * as AllMembers from './AllMembers';
 import * as AllowInvite from './AllowInvite';
 import * as AvatarList from './AvatarList';
@@ -12,7 +12,11 @@ import getGeneralButton from './GeneralButton';
 import Prompt from './Prompt';
 
 export function setup() {
-    const actions = [
+    type ActionItem = [
+        string,
+        (props: Typings.Action.Setting.Params) => Typings.Action.Setting.Result
+    ];
+    const actions: ActionItem[] = [
         [AllMembers.name, AllMembers.getUi],
         [AllowInvite.name, AllowInvite.getUi],
         [AvatarList.name, AvatarList.getUi],
@@ -24,7 +28,7 @@ export function setup() {
         [TransferOwner.name, TransferOwner.getUi],
     ];
     actions.forEach(function ([name, getUi]) {
-        Delegate.model.Setting.register(name, getUi);
+        Model.Setting.registerDefault(name, getUi);
     });
     Delegate.page[PageKeys.ChatSetting].defaultProps.sections = [
         [AvatarList.name, AllMembers.name],

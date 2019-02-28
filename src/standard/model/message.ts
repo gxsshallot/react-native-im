@@ -1,82 +1,64 @@
 import Listener from 'react-native-general-listener';
-import * as Constant from '../constant';
+import * as Action from './action';
+import { Message, Conversation, Event } from '../typings';
 import { guid } from '../util';
 import delegate from '../delegate';
 
-/**
- * 发送消息。
- * @param {string} imId 会话ID
- * @param {number} chatType 会话类型
- * @param {object} message 消息体
- * @param {object} ext 扩展信息
- * @param {boolean} isSystem 是否是系统消息
- */
-export function sendMessage(imId, chatType, message, ext = {}, isSystem = false) {
+export async function sendMessage(
+    imId: string,
+    chatType: Conversation.ChatType,
+    message: Message.General,
+    ext: Object = {},
+    isSystem: boolean = false
+): Promise<void> {
     ext = {...ext, innerId: message.innerId};
-    const sendEventName = [Constant.BaseEvent, Constant.SendMessageEvent, imId];
-    let promise;
-    if (delegate.model.Conversation.getOne(imId, false)) {
-        promise = Promise.resolve();
-    } else {
-        promise = delegate.model.Conversation.loadItem(imId, chatType);
+    const sendEventName = [Event.Base, Event.SendMessage, imId];
+    if (!delegate.model.Conversation.getOne(imId, false)) {
+        await delegate.model.Conversation.loadItem(imId, chatType);
     }
-    return promise
-        .then(() => insertTimeMessage(imId, chatType, message))
-        .then((timeMessage) => {
-            timeMessage && Listener.trigger(sendEventName, timeMessage);
-            return delegate.model.Conversation.updateMessage(imId, message);
-        })
-        .then(() => {
-            // 事件发送之前，先触发通知，加入详情列表中，发送后再更新状态
-            !isSystem && Listener.trigger(sendEventName, message);
-            const promise = delegate.model.Action.Send.match(
-                message.type,
-                {imId, chatType, message, ext},
-                {imId, chatType, message, ext}
-            );
-            return promise || Promise.reject('暂不支持发送该消息类型');
-        })
-        .then((newOriginMessage) => {
-            const newMessage = delegate.model.Action.Parse.match(
-                undefined,
-                newOriginMessage,
-                newOriginMessage
-            );
-            Listener.trigger(sendEventName, newMessage);
-            return delegate.model.Conversation.updateMessage(imId, newMessage);
-        });
+    const timeMessage = await insertTimeMessage(imId, chatType, message);
+    timeMessage && Listener.trigger(sendEventName, timeMessage);
+    await delegate.model.Conversation.updateMessage(imId, message);
+    // 事件发送之前，先触发通知，加入详情列表中，发送后再更新状态
+    !isSystem && Listener.trigger(sendEventName, message);
+    const promise = Action.Send.get(
+        message.type,
+        {imId, chatType, message, ext},
+        {imId, chatType, message, ext}
+    );
+    if (!promise) {
+        throw new Error('暂不支持发送该消息类型');
+    }
+    const newOriginMessage = await promise;
+    const newMessage = Action.Parse.get([], newOriginMessage, newOriginMessage);
+    Listener.trigger(sendEventName, newMessage);
+    await delegate.model.Conversation.updateMessage(imId, newMessage);
 }
 
-/**
- * 插入时间标签或不插入(会话一定存在)。
- * @param {string} imId 会话ID
- * @param {number} chatType 会话类型
- * @param {object} message 待判断的消息体
- */
-export function insertTimeMessage(imId, chatType, message) {
+export async function insertTimeMessage(
+    imId: string,
+    chatType: Conversation.ChatType,
+    message: Message.General
+): Promise<Message.General> {
     const conversation = delegate.model.Conversation.getOne(imId, false);
-    let insertTime = true;
     if (conversation.latestMessage) {
         const oldMessage = conversation.latestMessage;
         const delta = message.localTime - oldMessage.localTime;
         if (delta <= 0) {
-            insertTime = false;
+            return;
         } else if (delta < 3 * 60 * 1000) {
             const oldTime = new Date(oldMessage.localTime).getMinutes();
             const newTime = new Date(message.localTime).getMinutes();
             if (Math.floor(oldTime / 3) === Math.floor(newTime / 3)) {
-                insertTime = false;
+                return;
             }
         }
     }
-    if (!insertTime) {
-        return Promise.resolve();
-    }
     const timeMessage = {
         conversationId: imId,
-        messageId: undefined,
+        messageId: null,
         innerId: guid(),
-        status: Constant.Status.Succeed,
+        status: Message.Status.Succeed,
         type: delegate.config.messageType.text,
         from: delegate.user.getMine().userId,
         to: imId,
@@ -87,36 +69,31 @@ export function insertTimeMessage(imId, chatType, message) {
             isSystem: true,
         },
     };
-    const promise = delegate.model.Action.Send.match(
+    const promise = Action.Send.get(
         timeMessage.type,
         {imId, chatType, message: timeMessage, ext: {}},
         {imId, chatType, message: timeMessage, ext: {}},
     );
-    return promise
-        .then((newOriginMessage) => {
-            const newMessage = delegate.model.Action.Parse.match(
-                undefined,
-                newOriginMessage,
-                newOriginMessage
-            );
-            return newMessage;
-        });
+    if (!promise) {
+        throw new Error('暂不支持发送该消息类型');
+    }
+    const newOriginMessage = await promise;
+    const newMessage = Action.Parse.get([], newOriginMessage, newOriginMessage);
+    return newMessage;
 }
 
-/**
- * 插入系统消息。
- * @param {string} imId 会话ID
- * @param {number} chatType 会话类型
- * @param {string} text 文本内容
- * @param {number} localTime 本地时间戳
- * @param {number} timestamp 服务器时间戳
- */
-export function insertSystemMessage(imId, chatType, text, localTime, timestamp) {
+export async function insertSystemMessage(
+    imId: string,
+    chatType: Conversation.ChatType,
+    text: string,
+    localTime: number,
+    timestamp: number
+): Promise<void> {
     const systemMessage = {
         conversationId: imId,
-        messageId: undefined,
+        messageId: null,
         innerId: guid(),
-        status: Constant.Status.Succeed,
+        status: Message.Status.Succeed,
         type: delegate.config.messageType.text,
         from: delegate.user.getMine().userId,
         to: imId,
@@ -127,5 +104,5 @@ export function insertSystemMessage(imId, chatType, text, localTime, timestamp) 
             isSystem: true,
         },
     };
-    return sendMessage(imId, chatType, systemMessage, {}, true);
+    await sendMessage(imId, chatType, systemMessage, {}, true);
 }

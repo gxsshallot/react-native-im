@@ -1,8 +1,7 @@
-import * as React from 'react';
+import React from 'react';
 import { Image, ImageSourcePropType, StyleSheet, View } from 'react-native';
 import delegate from '../delegate';
-import { Component } from '../typings';
-import * as Constant from '../constant';
+import { Component, Conversation } from '../typings';
 
 export default class extends React.Component<Component.AvatarImageProps> {
     protected groupLayout: Layout[] = [
@@ -50,7 +49,7 @@ export default class extends React.Component<Component.AvatarImageProps> {
     }
 
     protected _toImage(item: Avatar, itemEdge: number): ImageSourcePropType {
-        let image: ImageSourcePropType;
+        let image: ImageSourcePropType = null;
         if (item.userId) {
             const user = delegate.user.getUser(item.userId);
             if (user.avatar) {
@@ -66,7 +65,7 @@ export default class extends React.Component<Component.AvatarImageProps> {
 
     protected _getLayout(): RenderLine {
         const {imId, chatType} = this.props;
-        if (chatType === Constant.ChatType.Group) {
+        if (chatType === Conversation.ChatType.Group) {
             const avatar = delegate.model.Group.getAvatar(imId);
             if (avatar) {
                 return {

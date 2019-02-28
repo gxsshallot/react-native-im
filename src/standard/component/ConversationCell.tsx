@@ -1,12 +1,12 @@
-import * as React from 'react';
+import React from 'react';
 import { Dimensions, Image, SafeAreaView, StyleSheet, Text, View } from 'react-native';
 import Listener from 'react-native-general-listener';
 import { forceInset, getSafeAreaInset } from 'react-native-pure-navigation-bar';
 import Badge from '@hecom/badge';
 import * as PageKeys from '../pagekey';
-import * as Constant from '../constant';
+import * as Model from '../model';
 import { DateUtil } from '../util';
-import { Component, Message } from '../typings';
+import { Component, Message, Event, Conversation } from '../typings';
 import delegate from '../delegate';
 
 export type Props = Component.ConversationCellProps;
@@ -14,19 +14,19 @@ export type Props = Component.ConversationCellProps;
 export default class extends React.PureComponent<Props> {
     static defaultProps = {};
 
-    protected events: Array<{type: string; func: (message?: Message.General) => void}>;
+    protected events: Array<[string, (message?: Message.General) => void]>;
 
     constructor(props: Props) {
         super(props);
         const {imId, chatType} = props;
         this.events = [
-            {type: Constant.ReceiveMessageEvent, func: this._onMessageReceive},
-            {type: Constant.SendMessageEvent, func: this._onMessageSend},
-            {type: Constant.ConversationEvent, func: this._refresh},
-            {type: Constant.UnreadCountEvent, func: this._onUnreadCountChange},
+            [Event.ReceiveMessage, this._onMessageReceive],
+            [Event.SendMessage, this._onMessageSend],
+            [Event.Conversation, this._refresh],
+            [Event.UnreadCount, this._onUnreadCountChange],
         ];
-        if (chatType === Constant.ChatType.Group) {
-            this.events.push({type: Constant.GroupEvent, func: this._refresh});
+        if (chatType === Conversation.ChatType.Group) {
+            this.events.push([Event.Group, this._refresh]);
         }
         this.state = {
             ...this._stateWithProps(imId),
@@ -36,13 +36,13 @@ export default class extends React.PureComponent<Props> {
     componentDidMount() {
         this.listenEvents = this.events
             .map(([eventType, func]) => Listener.register(
-                [Constant.BaseEvent, eventType, this.props.imId], func
+                [Event.Base, eventType, this.props.imId], func
             ));
     }
 
     componentWillUnmount() {
         this.events.forEach(([eventType], index) => Listener.unregister(
-            [Constant.BaseEvent, eventType, this.props.imId], this.listenEvents[index]
+            [Event.Base, eventType, this.props.imId], this.listenEvents[index]
         ));
     }
 
@@ -83,7 +83,7 @@ export default class extends React.PureComponent<Props> {
         };
         return (
             <Badge
-                count={avoid ? undefined : unreadMessagesCount}
+                count={avoid ? null : unreadMessagesCount}
                 maxCount={99}
                 radius={avoid ? 3 : 8}
                 outSpace={2}
@@ -102,7 +102,7 @@ export default class extends React.PureComponent<Props> {
                 {avoid && (
                     <View style={styles.silent}>
                         <Image
-                            source={require('../../../image/no_disturb.png')}
+                            source={require('./image/no_disturb.png')}
                             style={styles.silentIcon}
                         />
                     </View>
@@ -142,7 +142,7 @@ export default class extends React.PureComponent<Props> {
             chatType: this.props.chatType,
             message: latestMessage
         };
-        return delegate.model.Action.Abstract.match(
+        return Model.Action.Abstract.get(
             latestMessage.type,
             params,
             params
@@ -188,14 +188,14 @@ export default class extends React.PureComponent<Props> {
     _isSendingMessage = () => {
         const {latestMessage} = this.state;
         return latestMessage && (
-            latestMessage.status === Constant.Status.Pending ||
-            latestMessage.status === Constant.Status.Delivering
+            latestMessage.status === Message.Status.Pending ||
+            latestMessage.status === Message.Status.Delivering
         );
     };
 
     _isErrorMessage = () => {
         const {latestMessage} = this.state;
-        return latestMessage && latestMessage.status === Constant.Status.Failed;
+        return latestMessage && latestMessage.status === Message.Status.Failed;
     };
 
     _onUnreadCountChange = () => {

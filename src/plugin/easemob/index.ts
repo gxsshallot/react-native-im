@@ -1,5 +1,5 @@
 import * as EMSDK from 'react-native-im-easemob';
-import * as IMStandard from '../../standard';
+import { Delegate } from '../../standard';
 import * as EMUtil from './util';
 import setup_parse_action from './ParseAction';
 import setup_display_action from './DisplayAction';
@@ -18,9 +18,9 @@ export function setup() {
     setup_im_conversation_delegate();
     setup_im_group_delegate();
     // 代理设置
-    IMStandard.Delegate.config.messageType.text = EMSDK.IMConstant.MessageType.text;
-    IMStandard.Delegate.config.messageType.voice = EMSDK.IMConstant.MessageType.voice;
-    IMStandard.Delegate.config.messageType.system = EMSDK.IMConstant.MessageType.command;
+    Delegate.config.messageType.text = EMSDK.IMConstant.MessageType.text;
+    Delegate.config.messageType.voice = EMSDK.IMConstant.MessageType.voice;
+    Delegate.config.messageType.system = EMSDK.IMConstant.MessageType.command;
 }
 
 export {

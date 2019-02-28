@@ -1,26 +1,31 @@
+import * as Specials from 'specials';
 import { IMConstant, ChatManager } from 'react-native-im-easemob';
-import { Delegate, Typings } from '../../standard';
+import { Model, Typings } from '../../standard';
 
 export default function () {
-    const sendActions = [
-        {type: IMConstant.MessageType.text, func: sendText, priority: undefined},
-        {type: IMConstant.MessageType.image, func: sendImage, priority: undefined},
-        {type: IMConstant.MessageType.location, func: sendLocation, priority: undefined},
-        {type: IMConstant.MessageType.video, func: sendVideo, priority: undefined},
-        {type: IMConstant.MessageType.voice, func: sendVoice, priority: undefined},
-        {type: IMConstant.MessageType.file, func: sendFile, priority: undefined},
+    type ActionItem = [
+        number,
+        (params: Typings.Action.Send.Params) => Typings.Action.Send.Result
     ];
-    sendActions.forEach(({type, func, priority}) => {
-        Delegate.model.Action.Send.register(
+    const sendActions: ActionItem[] = [
+        [IMConstant.MessageType.text, sendText],
+        [IMConstant.MessageType.image, sendImage],
+        [IMConstant.MessageType.location, sendLocation],
+        [IMConstant.MessageType.video, sendVideo],
+        [IMConstant.MessageType.voice, sendVoice],
+        [IMConstant.MessageType.file, sendFile],
+    ];
+    sendActions.forEach(([type, func]) => {
+        Model.Action.Send.registerSpecial(
             type,
-            undefined,
+            (_?: Typings.Action.Send.State) => true,
             func,
-            priority
+            Specials.PRIORITY.LOW
         );
     });
 }
 
-function sendText(params: Typings.Action.SendHandleParams) {
+function sendText(params: Typings.Action.Send.Params<Typings.Message.TextBody>) {
     const {imId, chatType, message, ext} = params;
     if (message.data.isSystem) {
         return ChatManager.insertSystemMessage(
@@ -43,7 +48,7 @@ function sendText(params: Typings.Action.SendHandleParams) {
     }
 }
 
-function sendImage(params: Typings.Action.SendHandleParams) {
+function sendImage(params: Typings.Action.Send.Params<Typings.Message.ImageBody>) {
     const {imId, chatType, message, ext} = params;
     return ChatManager.sendImage(
         imId,
@@ -53,7 +58,7 @@ function sendImage(params: Typings.Action.SendHandleParams) {
     );
 }
 
-function sendVoice(params: Typings.Action.SendHandleParams) {
+function sendVoice(params: Typings.Action.Send.Params<Typings.Message.VoiceBody>) {
     const {imId, chatType, message, ext} = params;
     return ChatManager.sendVoice(
         imId,
@@ -64,19 +69,19 @@ function sendVoice(params: Typings.Action.SendHandleParams) {
     );
 }
 
-function sendVideo(params: Typings.Action.SendHandleParams) {
+function sendVideo(params: Typings.Action.Send.Params<Typings.Message.VideoBody>) {
     const {imId, chatType, message, ext} = params;
     return ChatManager.sendVideo(
         imId,
         chatType,
         message.data.localPath,
-        undefined,
-        undefined,
+        message.data.remotePath,
+        message.data.duration,
         ext,
     );
 }
 
-function sendFile(params: Typings.Action.SendHandleParams) {
+function sendFile(params: Typings.Action.Send.Params<Typings.Message.FileBody>) {
     const {imId, chatType, message, ext} = params;
     return ChatManager.sendFile(
         imId,
@@ -86,7 +91,7 @@ function sendFile(params: Typings.Action.SendHandleParams) {
     );
 }
 
-function sendLocation(params: Typings.Action.SendHandleParams) {
+function sendLocation(params: Typings.Action.Send.Params<Typings.Message.LocationBody>) {
     const {imId, chatType, message, ext} = params;
     return ChatManager.sendLocation(
         imId,

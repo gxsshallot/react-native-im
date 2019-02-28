@@ -1,9 +1,9 @@
-import * as React from 'react';
+import React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import i18n from 'i18n-js';
 import { Typings } from '../../../standard';
 
-export type Props = Typings.Action.DisplayHandleParams;
+export type Props = Typings.Action.Display.Params;
 
 export default class extends React.PureComponent<Props> {
     componentDidMount() {

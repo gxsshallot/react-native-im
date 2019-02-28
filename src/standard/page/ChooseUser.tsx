@@ -21,10 +21,10 @@ export default class extends React.PureComponent {
         }
     };
 
-    static propTypes = {
-        ...ChooseUserFromOrgPage.propTypes,
-        dataSource: PropTypes.arrayOf(PropTypes.shape(Types.ImUser)),
-    };
+    // static propTypes = {
+    //     ...ChooseUserFromOrgPage.propTypes,
+    //     dataSource: PropTypes.arrayOf(PropTypes.shape(Types.ImUser)),
+    // };
 
     static defaultProps = {
         ...ChooseUserFromOrgPage.defaultProps,

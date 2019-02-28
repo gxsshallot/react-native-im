@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { TextInput, StyleSheet, Dimensions, TextInputProps } from 'react-native';
 import Dialog, { DialogTitle, DialogButton, DialogContent } from 'react-native-popup-dialog';
 import i18n from 'i18n-js';

@@ -5,9 +5,9 @@ import Toast from 'react-native-root-toast';
 import Listener from 'react-native-general-listener';
 import i18n from 'i18n-js';
 import * as PageKeys from '../pagekey';
-import * as Types from '../proptype';
-import * as Constant from '../constant';
+import * as Model from '../model';
 import { DateUtil, guid } from '../util';
+import { Conversation, Event, Message } from '../typings';
 import delegate from '../delegate';
 
 export default class extends React.PureComponent {
@@ -19,24 +19,24 @@ export default class extends React.PureComponent {
         };
     };
 
-    static propTypes = {
-        ...Types.BasicConversation,
-        ...Types.Navigation,
-    };
+    // static propTypes = {
+    //     ...Types.BasicConversation,
+    //     ...Types.Navigation,
+    // };
 
     static defaultProps = {};
 
     constructor(props) {
         super(props);
-        this.isGroup = props.chatType === Constant.ChatType.Group;
+        this.isGroup = props.chatType === Conversation.ChatType.Group;
         this.pageCount = delegate.component.DetailListView.defaultProps.pageSize;
         this.events = [
-            [Constant.SendMessageEvent, this._onReceiveMessage.bind(this)],
-            [Constant.ReceiveMessageEvent, this._onReceiveMessage.bind(this)],
-            [Constant.RecallMessageEvent, this._onExchangeMessage.bind(this)],
+            [Event.SendMessage, this._onReceiveMessage.bind(this)],
+            [Event.ReceiveMessage, this._onReceiveMessage.bind(this)],
+            [Event.RecallMessage, this._onExchangeMessage.bind(this)],
         ];
         if (this.isGroup) {
-            this.events.push([Constant.GroupEvent, this._setNaviBar.bind(this)]);
+            this.events.push([Event.Group, this._setNaviBar.bind(this)]);
         }
         this.listeners = new Array(this.events.length);
         this.state = {
@@ -60,7 +60,7 @@ export default class extends React.PureComponent {
         );
         this.events.forEach(([eventType, func], index) => {
             this.listeners[index] = Listener.register(
-                [Constant.BaseEvent, eventType, this.props.imId],
+                [Event.Base, eventType, this.props.imId],
                 func
             );
         });
@@ -72,7 +72,7 @@ export default class extends React.PureComponent {
         this.events.forEach(([eventType], index) => {
             const listener = this.listeners[index];
             listener && Listener.unregister(
-                [Constant.BaseEvent, eventType, this.props.imId],
+                [Event.Base, eventType, this.props.imId],
                 listener
             );
         });
@@ -86,18 +86,11 @@ export default class extends React.PureComponent {
                     style={styles.innerview}
                 >
                     <TouchableWithoutFeedback
+                        disabled={!this.state.keyboardShow}
                         style={styles.touch}
                         onPress={() => this.bottomBar.dismiss()}
                     >
-                        <View style={styles.container}>
-                            <delegate.component.DetailListView
-                                ref={ref => this.list = ref}
-                                style={styles.fixedList}
-                                renderItem={this._renderItem.bind(this)}
-                                onLoadPage={this._refresh.bind(this)}
-                            />
-                            <View style={styles.flexList} />
-                        </View>
+                        {this._renderContent()}
                     </TouchableWithoutFeedback>
                 </SafeAreaView>
                 <delegate.component.BottomBar
@@ -130,6 +123,20 @@ export default class extends React.PureComponent {
             _title_: title,
             _right_: this._renderRightElement(),
         });
+    }
+
+    _renderContent() {
+        return (
+            <View style={styles.container}>
+                <delegate.component.DetailListView
+                    ref={ref => this.list = ref}
+                    style={styles.fixedList}
+                    renderItem={this._renderItem.bind(this)}
+                    onLoadPage={this._refresh.bind(this)}
+                />
+                <View style={styles.flexList} />
+            </View>
+        );
     }
 
     _renderRightElement() {
@@ -172,7 +179,7 @@ export default class extends React.PureComponent {
         return Promise.all([loadPromise, markPromise])
             .then(([result]) => {
                 result = result
-                    .map(item => delegate.model.Action.Parse.match(undefined, item, item))
+                    .map(item => Model.Action.Parse.get(undefined, item, item))
                     .sort((a, b) => a.localTime >= b.localTime ? -1 : 1);
                 if (result && result.length > 0) {
                     this.lastMessageId = result[result.length - 1].messageId;
@@ -342,7 +349,7 @@ export default class extends React.PureComponent {
             conversationId: this.props.imId,
             messageId: undefined,
             innerId: guid(),
-            status: Constant.Status.Pending,
+            status: Message.Status.Pending,
             type: type,
             from: delegate.user.getMine().userId,
             to: this.props.imId,

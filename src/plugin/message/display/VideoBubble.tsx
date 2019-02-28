@@ -1,9 +1,9 @@
-import * as React from 'react';
+import React from 'react';
 import { Image, StyleSheet, View } from 'react-native';
 import Video from 'react-native-video';
 import { Typings } from '../../../standard';
 
-export type Props = Typings.Action.DisplayHandleParams<Typings.Message.VideoBody>;
+export type Props = Typings.Action.Display.Params<Typings.Message.VideoBody>;
 
 export interface State {
     paused: boolean;
@@ -34,7 +34,7 @@ export default class extends React.PureComponent<Props, State> {
                 <Image
                     style={[styles.image, {width, height}]}
                     resizeMode='center'
-                    source={require('../../../../image/video_play.png')}
+                    source={require('./image/video_play.png')}
                 />
             </View>
         );
