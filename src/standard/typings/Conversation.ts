@@ -28,16 +28,12 @@ export interface Config {
 /**
  * Conversation update params.
  */
-export interface ConfigUpdate {
-    showMembersName?: boolean;
-    top?: boolean;
-    avoid?: boolean;
-}
+export type ConfigUpdate = Partial<Config>;
 
 /**
- * Conversation item with a converted latest message.
+ * Conversation item part with a converted latest message.
  */
-export interface Item extends Base {
+export interface ItemPart {
     unreadMessagesCount: number;
     config: Config;
     atMe: boolean;
@@ -45,11 +41,13 @@ export interface Item extends Base {
 }
 
 /**
+ * Conversation item with a converted latest message.
+ */
+export interface Item extends ItemPart, Base {
+}
+
+/**
  * Conversation item with an origin message.
  */
-export interface Origin extends Base {
-    unreadMessagesCount?: number;
-    config?: Config;
-    atMe?: boolean;
-    latestMessage?: Message.Origin;
+export interface Origin extends Partial<ItemPart>, Base {
 }
