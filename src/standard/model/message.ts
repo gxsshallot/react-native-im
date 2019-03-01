@@ -8,7 +8,7 @@ export async function sendMessage(
     imId: string,
     chatType: Conversation.ChatType,
     message: Message.General,
-    ext: Object = {},
+    ext: object = {},
     isSystem: boolean = false
 ): Promise<void> {
     ext = {...ext, innerId: message.innerId};
