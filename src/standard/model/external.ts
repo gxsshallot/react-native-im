@@ -35,12 +35,13 @@ export async function onRecallMessage(
     fromUserId: string,
     messageId: string,
     localTime: number,
-    timestamp: number
+    timestamp: number,
+    innerId: string,
 ): Promise<void> {
     const user = getOperatorName(fromUserId);
     const text = user + '撤回了一条消息';
     await delegate.im.conversation.deleteMessage({imId, chatType, message: {messageId}});
-    await delegate.model.Message.insertSystemMessage(imId, Conversation.ChatType.Group, text, localTime, timestamp);
+    await delegate.model.Message.insertSystemMessage(imId, Conversation.ChatType.Group, text, localTime, timestamp, innerId);
 }
 
 export async function onGroupCreate(

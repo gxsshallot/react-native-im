@@ -87,12 +87,13 @@ export async function insertSystemMessage(
     chatType: Conversation.ChatType,
     text: string,
     localTime: number,
-    timestamp: number
+    timestamp: number,
+    innerId?: string,
 ): Promise<void> {
     const systemMessage = {
         conversationId: imId,
         messageId: null,
-        innerId: guid(),
+        innerId: innerId || guid(),
         status: Message.Status.Succeed,
         type: delegate.config.messageType.text,
         from: delegate.user.getMine().userId,

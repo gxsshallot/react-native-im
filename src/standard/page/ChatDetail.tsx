@@ -33,7 +33,6 @@ export default class extends React.PureComponent {
         this.events = [
             [Event.SendMessage, this._onReceiveMessage.bind(this)],
             [Event.ReceiveMessage, this._onReceiveMessage.bind(this)],
-            [Event.RecallMessage, this._onExchangeMessage.bind(this)],
         ];
         if (this.isGroup) {
             this.events.push([Event.Group, this._setNaviBar.bind(this)]);
@@ -43,7 +42,7 @@ export default class extends React.PureComponent {
             messages: [],
             keyboardShow: false,
             menuShow: false,
-            menuRect: {},
+            menuRef: null,
             actionList: [],
         };
     }
@@ -102,7 +101,7 @@ export default class extends React.PureComponent {
                 />
                 <delegate.component.MessageMenu
                     menuShow={this.state.menuShow}
-                    menuRect={this.state.menuRect}
+                    menuRef={this.state.menuRef}
                     onClose={this._onCloseMenu.bind(this)}
                     actionList={this.state.actionList}
                 />
@@ -221,12 +220,12 @@ export default class extends React.PureComponent {
             });
     }
 
-    _onShowMenu(param) {
-        const {rect, isSender, message} = param;
+    _onShowMenu(params) {
+        const {ref, isSender, message} = params;
         const messageType = message.type;
         const actionList = [];
-        // const interval = (new Date().getTime() - originMessage.timestamp) / 1000;
-        // const canRecall = interval < 5 * 60;
+        const interval = (new Date().getTime() - message.timestamp) / 1000;
+        const canRecall = interval < 5 * 60;
         if (messageType === delegate.config.messageType.text) {
             actionList.push({title: '复制', action: this._onCopy.bind(this, message)});
             this.isGroup && !isSender && actionList.push({
@@ -235,12 +234,12 @@ export default class extends React.PureComponent {
             });
         }
         actionList.push({title: '转发', action: this._onForward.bind(this, message)});
-        // if (isSender && canRecall) {
-        //     actionList.push({title: '撤回', action: this._onRecall.bind(this, originMessage)});
-        // }
+        if (isSender && canRecall) {
+            actionList.push({title: '撤回', action: this._onRecall.bind(this, message)});
+        }
         this.setState({
             menuShow: true,
-            menuRect: rect,
+            menuRef: ref,
             actionList: actionList,
         });
     }
@@ -264,49 +263,18 @@ export default class extends React.PureComponent {
         });
     }
 
-    _onRecall() {
-        // const {imId, chatType} = this.props;
-        // if (Model.app.env() !== Constant.environment.test178) {
-        //     global.standard.im.message.remove(message, chatType);
-        // }
-        // this._onExchangeMessage({text: '你撤回了一条消息', ext: {body: {message}}});
-        // const appName = global.standard.im.constant.cmd_message.IM_MESSAGE;
-        // ChatManager.sendCmd(imId, chatType, appName, {
-        //     appName,
-        //     body: {message, type: global.standard.im.constant.type.recall_message}
-        // });
-    }
-
-    _onExchangeMessage(/* cmdMessage */) {
-        // const data = cmdMessage.ext.body.message;
-        // const {chatType} = this.props;
-        // delegate.im.conversation.deleteMessage(data.to, chatType, data.messageId);
-        // const message = {
-        //     conversationId: data.to,
-        //     chatType,
-        //     ext: {
-        //         isSystem: true,
-        //         [global.standard.im.message.constant.inner_id]: guid()
-        //     },
-        //     from: data.from,
-        //     localTime: data.localTime,
-        //     status: IMConstant.MessageStatus.succeed,
-        //     timestamp: data.timestamp,
-        //     to: data.to,
-        //     body: {type: IMConstant.MessageType.text, text: cmdMessage.text},
-        //     messageId: data.messageId,
-        // };
-        // this.list.recallMessage(message, data.messageId);
-        // ChatManager.insertSystemMessage(
-        //     data.to,
-        //     chatType,
-        //     cmdMessage.text,
-        //     data.timestamp,
-        //     data.localTime
-        // )
-        //     .then((newMessage) => {
-        //         this.list.recallMessage(newMessage, data.messageId);
-        //     });
+    async _onRecall(message) {
+        const {imId, chatType} = this.props;
+        await delegate.model.External.onRecallMessage(
+            imId,
+            chatType,
+            delegate.user.getMine().userId,
+            message.messageId,
+            message.localTime,
+            message.timestamp,
+            message.innerId
+        );
+        await delegate.im.conversation.recallMessage({imId, chatType, message});
     }
 
     _onQuote(item) {

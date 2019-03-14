@@ -45,5 +45,8 @@ export default function () {
         const {imId, chatType, message: {messageId}} = params;
         return ChatManager.deleteMessage(imId, chatType, messageId);
     };
-    // TODO recallMessage
+    Delegate.im.conversation.recallMessage = (params) => {
+        const {imId, chatType, message: {messageId}} = params;
+        return ChatManager.recallMessage(imId, chatType, messageId);
+    };
 }

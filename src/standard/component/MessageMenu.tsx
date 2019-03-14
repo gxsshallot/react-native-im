@@ -1,6 +1,7 @@
 import React from 'react';
-import { Text, View, TouchableWithoutFeedback, StyleSheet } from 'react-native';
+import { Text, View, TouchableWithoutFeedback, StyleSheet, Dimensions, Platform } from 'react-native';
 import { Component } from '../typings';
+import { getSafeAreaInset, DEFAULT_NAVBAR_HEIGHT } from 'react-native-pure-navigation-bar';
 import Popover from 'react-native-popover-view';
 
 export type Props = Component.MessageMenuProps;
@@ -9,14 +10,17 @@ export default class extends React.PureComponent<Props> {
     static defaultProps = {};
 
     render() {
-        const {menuShow, menuRect, onClose} = this.props;
+        const verticalOffset = this._getOffset();
+        const {menuShow, menuRef, onClose} = this.props;
         return (
             <Popover
                 isVisible={menuShow}
-                fromRect={menuRect}
+                fromView={menuRef}
                 onClose={onClose}
                 placement={'top'}
+                showInModal={false}
                 showBackground={false}
+                verticalOffset={-verticalOffset}
                 popoverStyle={styles.popover}
             >
                 {this._renderContent()}
@@ -50,6 +54,14 @@ export default class extends React.PureComponent<Props> {
                 {!isLast && <View style={styles.line} />}
             </View>
         );
+    }
+
+    protected _getOffset() {
+        const offset = getSafeAreaInset(undefined, true).top;
+        const {width, height} = Dimensions.get('window');
+        const isLandscape = width > height;
+        const isIos = Platform.OS === 'ios';
+        return isLandscape && isIos ? 30 : offset + DEFAULT_NAVBAR_HEIGHT;
     }
 
     protected _onPress(action: () => void) {

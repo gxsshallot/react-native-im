@@ -1,6 +1,8 @@
 import React from 'react';
 import { FlatList, StyleSheet } from 'react-native';
 import PropTypes from 'prop-types';
+import { Message } from '../typings';
+import delegate from '../delegate';
 
 export default class extends React.PureComponent {
     static propTypes = {
@@ -78,19 +80,6 @@ export default class extends React.PureComponent {
     insert = (newMessages) => {
         const data = this._mergeMessages(newMessages);
         this.setState({data: [...data]}, this.scrollToTop);
-    };
-
-    recallMessage = (recallMessage, messageId) => {
-        const recallIndex = this.state.data
-            .findIndex(item => item.messageId === messageId);
-        if (recallIndex < 0) {
-            return;
-        }
-        const data = [...this.state.data];
-        data[recallIndex] = recallMessage;
-        this.setState({
-            data: data,
-        });
     };
 
     _mergeMessages = (newMessages) => {

@@ -26,7 +26,7 @@ export default class extends React.PureComponent {
     }
 
     componentDidMount() {
-        if (delegate.contact.loadStarUser) {
+        if (delegate.config.useStarUser) {
             this.listener = Listener.register([Event.Base, Event.StarUserChange], this._onStarUserChange);
         }
         InteractionManager.runAfterInteractions(() => {
@@ -130,7 +130,7 @@ export default class extends React.PureComponent {
     _loadData = () => {
         const loadUser = delegate.contact.loadAllUser(true);
         const loadOrg = delegate.contact.loadAllOrg(false);
-        const loadStarUser = delegate.contact.loadStarUser ? delegate.contact.loadStarUser() : [];
+        const loadStarUser = delegate.config.useStarUser ? delegate.contact.loadStarUser() : Promise.resolve();
         return Promise.all([loadUser, loadOrg, loadStarUser])
             .then(([users, , starUsers = []]) => {
                 const data = mapListToSection(users, delegate.config.pinyinField);

@@ -9,5 +9,4 @@ export const UnreadCount = '__im_unread_count__';
 export const Group = '__im_group__';
 export const SendMessage = '__im_send_message__';
 export const ReceiveMessage = '__im_receive_message__';
-export const RecallMessage = '__im_recall_message__';
 export const StarUserChange = '__im_star_user_change__';

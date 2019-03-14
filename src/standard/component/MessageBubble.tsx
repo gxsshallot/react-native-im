@@ -98,7 +98,7 @@ export default class extends React.PureComponent<Props, State> {
         const {message, isSender, onShowMenu} = this.props;
         this.bubble && this.bubble.measure((width: number, height: number, px: number, py: number) => {
             const param = {
-                rect: {x: px, y: py, width: width, height: height},
+                ref: this.bubble,
                 isSender: isSender,
                 message: message,
             };

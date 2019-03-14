@@ -33,7 +33,8 @@ function sendText(params: Typings.Action.Send.Params<Typings.Message.TextBody>) 
             chatType,
             message.data.text,
             message.timestamp,
-            message.localTime
+            message.localTime,
+            ext
         );
     } else {
         return ChatManager.sendText(
