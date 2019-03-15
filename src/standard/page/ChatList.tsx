@@ -126,7 +126,7 @@ export default class extends React.PureComponent {
 
     _clickTop(item, config) {
         const top = !config.top;
-        delegate.model.Conversation.updateConfig(item.imId, {top})
+        delegate.model.Conversation.updateConfig(item.imId, item.chatType, {top})
             .catch(function () {
                 Toast.show('置顶失败，请稍后重试');
             });

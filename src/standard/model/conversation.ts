@@ -142,7 +142,12 @@ export function getName(imId: string): string | void {
     return null;
 }
 
-export async function updateConfig(imId: string, config: Conversation.ConfigUpdate): Promise<void> {
+export async function updateConfig(
+    imId: string,
+    chatType: Conversation.ChatType,
+    config: Conversation.ConfigUpdate
+): Promise<void> {
+    await loadItem(imId, chatType);
     const newConfig = {
         ...getConfig(imId),
         ...config,

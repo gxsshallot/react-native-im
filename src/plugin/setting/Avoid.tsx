@@ -6,17 +6,19 @@ import { Typings, Delegate } from '../../standard';
 export const name = 'IMSettingAvoid';
 
 export function getUi(props: Typings.Action.Setting.Params): Typings.Action.Setting.Result {
-    const {key, imId} = props;
+    const {key, imId, chatType} = props;
     return (
         <AvoidCell
             key={key}
             imId={imId}
+            chatType={chatType}
         />
     );
 }
 
 export interface Props {
     imId: string;
+    chatType: Typings.Conversation.ChatType;
 }
 
 export interface State {
@@ -47,9 +49,9 @@ export class AvoidCell extends React.PureComponent<Props, State> {
     }
 
     protected _clickConfig(avoid: boolean) {
-        const {imId} = this.props;
+        const {imId, chatType} = this.props;
         this.setState({avoid});
-        Delegate.model.Conversation.updateConfig(imId, {avoid})
+        Delegate.model.Conversation.updateConfig(imId, chatType, {avoid})
             .catch(() => {
                 Toast.show(i18n.t('IMToastError', {
                     action: i18n.t('IMSettingConfigChange'),
