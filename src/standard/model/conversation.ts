@@ -40,7 +40,10 @@ export async function uninit(forceClear: boolean): Promise<void> {
 
 export async function load(): Promise<void> {
     const result = await delegate.im.conversation.loadList();
-    await Promise.all(result.map((item) => loadItem(item.imId, item.chatType)));
+    await Promise.all(result.map((item) => {
+        rootNode[item.imId] = {...item};
+        return loadItem(item.imId, item.chatType);
+    }));
 }
 
 export async function loadItem(imId: string, chatType: Conversation.ChatType): Promise<Conversation.Item> {
