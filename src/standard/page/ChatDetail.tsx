@@ -167,11 +167,11 @@ export default class extends React.PureComponent {
 
     _refresh(oldData) {
         const isFirst = !oldData || oldData.length <= 0;
-        const lastMessageId = isFirst ? undefined : this.lastMessageId;
+        const lastMessage = isFirst ? undefined : this.lastMessage;
         const loadPromise = delegate.im.conversation.loadMessage({
             imId: this.props.imId,
             chatType: this.props.chatType,
-            lastMessageId: lastMessageId,
+            lastMessage: lastMessage,
             count: this.pageCount,
         });
         const markPromise = this._markAllRead();
@@ -181,7 +181,7 @@ export default class extends React.PureComponent {
                     .map(item => Model.Action.Parse.get(undefined, item, item))
                     .sort((a, b) => a.localTime >= b.localTime ? -1 : 1);
                 if (result && result.length > 0) {
-                    this.lastMessageId = result[result.length - 1].messageId;
+                    this.lastMessage = result[result.length - 1];
                 }
                 return {
                     data: result,

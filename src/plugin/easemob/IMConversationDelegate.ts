@@ -32,11 +32,11 @@ export default function () {
     };
     // TODO markLatestUnread
     Delegate.im.conversation.loadMessage = (params) => {
-        const {imId, chatType, lastMessageId, count} = params;
+        const {imId, chatType, lastMessage, count} = params;
         return ChatManager.loadMessages(
             imId,
             chatType,
-            lastMessageId,
+            lastMessage ? lastMessage.messageId : undefined,
             count,
             IMConstant.MessageSearchDirection.up
         );

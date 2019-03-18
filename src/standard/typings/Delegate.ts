@@ -89,7 +89,7 @@ export interface ConversationApiPart {
     loadMessage: (params: {
         imId: string;
         chatType: Conversation.ChatType;
-        lastMessageId: string;
+        lastMessage: Message.General;
         count: number;
     }) => Promise<Message.Origin[]>;
     deleteMessage: (params: {

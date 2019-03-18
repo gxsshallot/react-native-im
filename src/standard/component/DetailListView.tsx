@@ -14,8 +14,13 @@ export default class extends React.PureComponent {
         pageSize: 20,
     };
 
+    ids: Set<string>;
+    innerIds: Set<string>;
+
     constructor(props) {
         super(props);
+        this.ids = new Set();
+        this.innerIds = new Set();
         this.state = {
             data: [],
             isEnd: false,
@@ -53,6 +58,18 @@ export default class extends React.PureComponent {
         this.setState({isLoading: true});
         return this.props.onLoadPage(this.state.data, this.props.pageSize)
             .then(({data, isEnd, isAllData}) => {
+                data = data.reduce((prv, cur) => {
+                    const {messageId, innerId} = cur;
+                    if (messageId && this.ids.has(messageId) || 
+                        innerId && this.innerIds.has(innerId)) {
+                        return prv;
+                    } else {
+                        messageId && this.ids.add(messageId);
+                        innerId && this.innerIds.add(innerId);
+                        prv.push(cur);
+                        return prv;
+                    }
+                }, []);
                 if (isAllData) {
                     data = [...data];
                 } else {
@@ -78,33 +95,26 @@ export default class extends React.PureComponent {
     };
 
     insert = (newMessages) => {
-        const data = this._mergeMessages(newMessages);
-        this.setState({data: [...data]}, this.scrollToTop);
-    };
-
-    _mergeMessages = (newMessages) => {
-        const data = this.state.data.reverse();
-        const oldIdMap = {}, oldInnerIdMap = {};
-        data.forEach((item, index) => {
-            if (item.messageId) {
-                oldIdMap[item.messageId] = index;
-            }
-            if (item.innerId) {
-                oldInnerIdMap[item.innerId] = index;
-            }
-        });
-        for (let i = 0; i < newMessages.length; i++) {
-            const item = newMessages[i];
-            const {messageId, innerId} = item;
-            if (oldIdMap[messageId]) {
-                data[oldIdMap[messageId]] = item;
-            } else if (oldInnerIdMap[innerId]) {
-                data[oldInnerIdMap[innerId]] = item;
+        const data = [...this.state.data];
+        const toInsert = newMessages.reduce((prv, cur) => {
+            const {messageId, innerId} = cur;
+            if (messageId && this.ids.has(messageId) ||
+                innerId && this.innerIds.has(innerId)) {
+                const index = data.findIndex((i) => {
+                    return messageId && i.messageId === messageId ||
+                        innerId && i.innerId === innerId;
+                });
+                data[index] = cur;
+                return prv;
             } else {
-                data.push(item);
+                this.ids.add(messageId);
+                this.innerIds.add(innerId);
+                prv.push(cur);
+                return prv;
             }
-        }
-        return data.reverse();
+        }, []);
+        const result = [...toInsert.reverse(), ...data];
+        this.setState({data: result}, this.scrollToTop);
     };
 }
 
