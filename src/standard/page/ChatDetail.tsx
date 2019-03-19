@@ -165,7 +165,7 @@ export default class extends React.PureComponent {
         });
     }
 
-    _refresh(oldData) {
+    protected async _refresh(oldData) {
         const isFirst = !oldData || oldData.length <= 0;
         const lastMessage = isFirst ? undefined : this.lastMessage;
         const loadPromise = delegate.im.conversation.loadMessage({
@@ -175,19 +175,17 @@ export default class extends React.PureComponent {
             count: this.pageCount,
         });
         const markPromise = this._markAllRead();
-        return Promise.all([loadPromise, markPromise])
-            .then(([result]) => {
-                result = result
-                    .map(item => Model.Action.Parse.get(undefined, item, item))
-                    .sort((a, b) => a.localTime >= b.localTime ? -1 : 1);
-                if (result && result.length > 0) {
-                    this.lastMessage = result[result.length - 1];
-                }
-                return {
-                    data: result,
-                    isEnd: result.length < this.pageCount,
-                };
-            });
+        let [result] = await Promise.all([loadPromise, markPromise]);
+        result = result
+            .map(item => Model.Action.Parse.get(undefined, item, item))
+            .sort((a, b) => a.localTime >= b.localTime ? -1 : 1);
+        if (result && result.length > 0) {
+            this.lastMessage = result[result.length - 1];
+        }
+        return {
+            data: result,
+            isEnd: result.length < this.pageCount,
+        };
     }
 
     _insertMessageToList(message) {
@@ -289,9 +287,9 @@ export default class extends React.PureComponent {
         );
     }
 
-    _markAllRead() {
+    protected async _markAllRead() {
         const {imId, chatType} = this.props;
-        return delegate.model.Conversation.markReadStatus(imId, chatType, true);
+        return await delegate.model.Conversation.markReadStatus(imId, chatType, true);
     }
 
     _renderItem({item}) {
