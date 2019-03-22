@@ -127,7 +127,7 @@ export default class extends React.PureComponent<Props, State> {
             delegate.user.getMine();
         const {userId, avatar} = user;
         const defaultImage = delegate.func.getDefaultUserHeadImage(userId);
-        const size = 36;
+        const size = 41;
         const innerStyle = {
             width: size,
             height: size,
@@ -167,8 +167,7 @@ export default class extends React.PureComponent<Props, State> {
 
 const styles = StyleSheet.create({
     message: {
-        marginTop: 10,
-        marginBottom: 10,
+        marginVertical: 9,
     },
     rowRight: {
         flex: 1,
@@ -180,35 +179,28 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
     },
     avatarLeft: {
-        marginLeft: 10,
-        marginRight: 3,
+        marginLeft: 12,
+        marginRight: 4,
     },
     avatarRight: {
-        marginRight: 10,
-        marginLeft: 3,
+        marginRight: 12,
+        marginLeft: 7,
     },
     userImage: {
-        marginTop: 2,
         overflow: 'hidden',
     },
     userName: {
         color: 'gray',
-        marginLeft: 10,
-        marginTop: 2,
-        marginBottom: 5,
+        fontSize: 12,
+        marginLeft: 9,
+        marginBottom: 4,
     },
     center: {
         alignSelf: 'center',
-        backgroundColor: '#D4D4D4',
-        paddingLeft: 6,
-        paddingRight: 6,
-        paddingTop: 4,
-        paddingBottom: 4,
-        borderRadius: 4,
-        overflow: 'hidden',
-        color: '#FFFFFF',
-        marginBottom: 10,
-        fontSize: 11,
+        marginTop: 12,
+        marginBottom: 4,
+        color: '#999999',
+        fontSize: 13,
     },
     messageStatusImage: {
         width: 20,

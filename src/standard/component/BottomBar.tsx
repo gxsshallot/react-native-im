@@ -84,10 +84,14 @@ export default class extends React.PureComponent<Props, State> {
         const icon = this.state.showSpeech ?
             require('./image/chat_keyboard.png') :
             require('./image/chat_sound.png');
+        const touchStyle = {
+            marginHorizontal: 4,
+        };
         return (
             <TouchableOpacity
                 activeOpacity={0.5}
                 onPress={this._onSwitchSpeechKeyboard.bind(this)}
+                style={[styles.iconTouch, touchStyle]}
             >
                 <Image style={styles.icon} source={icon} />
             </TouchableOpacity>
@@ -135,26 +139,31 @@ export default class extends React.PureComponent<Props, State> {
             require('./image/chat_keyboard.png') :
             require('./image/chat_add.png');
         const isEmpty = !this.state.message || this.state.message.length === 0;
+        const touchStyle = {
+            marginHorizontal: 2,
+        };
         return (
-            <View style={styles.left}>
+            <View style={styles.right}>
                 <TouchableOpacity
                     activeOpacity={0.5}
                     onPress={this._onSwitchEmojiKeyboard.bind(this)}
+                    style={[styles.iconTouch, touchStyle]}
                 >
-                    <Image style={styles.emoji} source={firstIcon} />
+                    <Image style={styles.icon} source={firstIcon} />
                 </TouchableOpacity>
                 {isEmpty ? (
                     <TouchableOpacity
                         activeOpacity={0.5}
                         onPress={this._onSwitchMoreKeyboard.bind(this)}
+                        style={[styles.iconTouch, touchStyle]}
                     >
-                        <Image style={styles.add} source={secondIcon} />
+                        <Image style={styles.icon} source={secondIcon} />
                     </TouchableOpacity>
                 ) : (
                     <TouchableOpacity
                         activeOpacity={0.5}
                         onPress={this._onSendMessageText.bind(this)}
-                        style={styles.sendtouch}
+                        style={styles.sendTouch}
                     >
                         <View style={styles.sendView}>
                             <Text style={styles.sendText}>
@@ -413,17 +422,16 @@ const styles = StyleSheet.create({
     container: {
         flexDirection: 'row',
         alignItems: 'flex-end',
-        maxHeight: 150,
+        maxHeight: 150, // TODO
     },
     inputBorder: {
         flex: 1,
-        marginVertical: 7,
+        marginTop: 9,
+        marginBottom: 7,
         backgroundColor: '#fcfcfc',
         overflow: 'hidden',
         alignSelf: 'center',
-        borderColor: '#d7d8d8',
         borderRadius: 4,
-        borderWidth: StyleSheet.hairlineWidth,
     },
     input: {
         fontSize: 16,
@@ -434,43 +442,37 @@ const styles = StyleSheet.create({
         height: 40,
         marginHorizontal: 5,
     } as TextStyle,
+    iconTouch: {
+        width: 40,
+        height: 40,
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginBottom: 8,
+    },
     icon: {
-        width: 28,
-        height: 28,
-        marginHorizontal: 10,
-        marginVertical: 11,
+        width: 26,
+        height: 26,
     },
-    emoji: {
-        width: 28,
-        height: 28,
-        marginLeft: 10,
-        marginVertical: 11,
-    },
-    add: {
-        width: 28,
-        height: 28,
-        marginHorizontal: 10,
-        marginVertical: 11,
-    },
-    left: {
+    right: {
         flexDirection: 'row',
+        alignItems: 'flex-end',
     },
-    sendtouch: {
-        paddingVertical: 7,
-        paddingHorizontal: 10,
+    sendTouch: {
+        marginRight: 4,
+        marginBottom: 12,
     },
     sendView: {
-        height: 36,
+        height: 32,
+        width: 40,
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
-        paddingHorizontal: 6,
-        backgroundColor: '#fc3b39',
+        backgroundColor: '#07c160',
         borderRadius: 4,
         overflow: 'hidden',
     },
     sendText: {
-        fontSize: 16,
+        fontSize: 15,
         color: 'white',
     },
     sound: {

@@ -70,19 +70,19 @@ export default class extends React.PureComponent<Props> {
 const styles = StyleSheet.create({
     view: {
         backgroundColor: 'transparent',
-        paddingHorizontal: 10,
-        paddingVertical: 12,
+        paddingHorizontal: 12,
+        paddingVertical: 10,
         flexDirection: 'row',
         justifyContent: 'flex-start',
         alignItems: 'center',
         flexWrap: 'wrap',
     },
     text: {
-        fontSize: 16,
+        fontSize: 17,
         backgroundColor: 'transparent',
         ...Platform.select({
             android: {textAlignVertical: 'center'},
-            ios: {lineHeight: 18},
+            ios: {lineHeight: 21},
         }),
         overflow: 'hidden',
     } as TextStyle,

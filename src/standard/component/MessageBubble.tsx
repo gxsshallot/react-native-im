@@ -20,7 +20,7 @@ export default class extends React.PureComponent<Props, State> {
         rightBubble: require('./image/message_bubble_right.png'),
     };
 
-    protected readonly paddingHorizontal = 7;
+    protected readonly paddingHorizontal = 5;
     protected bubble: View | null = null;
     protected innerView: Action.Display.Result | null = null;
     
