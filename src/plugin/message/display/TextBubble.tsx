@@ -46,14 +46,17 @@ export default class extends React.PureComponent<Props> {
     }
 
     _renderItem(text: string, index: number) {
-        const isEmoji = text[0] === '[' && text[text.length - 1] === ']';
         const emojiImage = Delegate.model.Emoji.getEmoji(text);
-        if (isEmoji && emojiImage) {
+        if (this._isEmoji(text) && emojiImage) {
+            const isEmoji = index > 0 ? this._isEmoji(this.textArr[index - 1]) : false;
+            const style = isEmoji ? {
+                marginLeft: 3,
+            } : {};
             return (
                 <Image
                     key={index}
                     source={emojiImage}
-                    style={styles.image}
+                    style={[styles.image, style]}
                     resizeMode={'contain'}
                 />
             );
@@ -65,12 +68,16 @@ export default class extends React.PureComponent<Props> {
             );
         }
     }
+
+    protected _isEmoji(text: string) {
+        return text[0] === '[' && text[text.length - 1] === ']';
+    }
 }
 
 const styles = StyleSheet.create({
     view: {
         backgroundColor: 'transparent',
-        paddingHorizontal: 12,
+        paddingHorizontal: 13,
         paddingVertical: 10,
         flexDirection: 'row',
         justifyContent: 'flex-start',
@@ -89,7 +96,8 @@ const styles = StyleSheet.create({
     image: {
         width: 18,
         height: 18,
-        margin: 1,
+        marginVertical: 1,
+        marginRight: 3,
         backgroundColor: 'transparent',
     },
 });

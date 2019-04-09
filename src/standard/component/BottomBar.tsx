@@ -91,7 +91,7 @@ export default class extends React.PureComponent<Props, State> {
             <TouchableOpacity
                 activeOpacity={0.5}
                 onPress={this._onSwitchSpeechKeyboard.bind(this)}
-                style={[styles.iconTouch, touchStyle]}
+                style={[styles.leftIconTouch, touchStyle]}
             >
                 <Image style={styles.icon} source={icon} />
             </TouchableOpacity>
@@ -439,9 +439,17 @@ const styles = StyleSheet.create({
             ios: {lineHeight: 20},
             android: {textAlignVertical: 'center'}
         }),
-        height: 40,
+        minHeight: 40,
+        maxHeight: 120,
         marginHorizontal: 5,
     } as TextStyle,
+    leftIconTouch: {
+        width: 40,
+        height: 40,
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginBottom: 8,
+    },
     iconTouch: {
         width: 40,
         height: 40,
@@ -481,6 +489,8 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     soundText: {
-        fontSize: 16,
+        fontSize: 17,
+        fontWeight: 'bold',
+        color: '#565656',
     },
 });

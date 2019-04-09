@@ -7,7 +7,19 @@ import i18n from 'i18n-js';
 import { deepExport } from '../util';
 import delegate from '../delegate';
 
-export default class extends React.PureComponent {
+export interface Props {
+    title: string;
+    firstTitleLine: string;
+    multiple: boolean;
+    hasSelf: boolean;
+    parentOrgId: string;
+    excludedUserIds: string[];
+    selectedIds: string[];
+    onSelectData: (node: object[]) => void;
+    spaceHeight: number;
+}
+
+export default class extends React.PureComponent<Props> {
     static navigationOptions = function (options) {
         if (PickList.initialized(options)) {
             return PickList.navigationOptions(options);

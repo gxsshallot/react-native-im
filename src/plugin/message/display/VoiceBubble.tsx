@@ -109,7 +109,7 @@ const styles = StyleSheet.create({
         height: 20
     },
     time: {
-        color: 'gray',
+        color: '#333333',
         backgroundColor: 'transparent',
     },
 });
