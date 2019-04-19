@@ -19,7 +19,7 @@
   },
   "homepage": "https://github.com/gaoxiaosong/react-native-im#readme",
   "dependencies": {
-    "@hecom/badge": "^1.0.0",
+    "@hecom/badge": "^1.0.2",
     "@hecom/image-arrow": "^1.0.3",
     "@hecom/react-native-image-capinsets": "^0.5.1",
     "dateformat": "^3.0.3",
@@ -43,7 +43,7 @@
     "react-native-swipe-list-view": "^1.5.0",
     "react-native-video": "^4.3.0",
     "react-navigation-header-buttons": "^2.1.1",
-    "specials": "^2.0.3"
+    "specials": "^2.0.4"
   },
   "peerDependencies": {
     "react": "*",
