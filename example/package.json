@@ -20,17 +20,17 @@
     "metro-react-native-babel-preset": "0.48.1"
   },
   "dependencies": {
-    "prop-types": "15.6.2",
-    "react": "16.5.0",
-    "react-dom": "16.5.0",
-    "react-native": "0.57.2",
-    "react-native-gesture-handler": "^1.0.12",
+    "prop-types": "15.7.2",
+    "react": "16.8.3",
+    "react-dom": "16.8.3",
+    "react-native": "0.59.5",
+    "react-native-gesture-handler": "^1.1.0",
     "react-native-im": "../",
-    "react-native-im-easemob": "^1.0.14",
-    "react-native-localize": "^1.0.2",
+    "react-native-im-easemob": "^1.0.22",
+    "react-native-localize": "^1.1.2",
     "react-native-permissions": "^1.1.1",
-    "react-native-push-notification": "^3.1.1",
-    "react-native-screens": "^1.0.0-alpha.21",
-    "react-navigation": "^3.0.9"
+    "react-native-push-notification": "^3.1.3",
+    "react-native-screens": "^1.0.0-alpha.22",
+    "react-navigation": "^3.8.1"
   }
 }

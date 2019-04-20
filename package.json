@@ -53,10 +53,10 @@
   "devDependencies": {
     "@types/i18n-js": "^3.0.1",
     "@types/promise.prototype.finally": "^2.0.3",
-    "@types/react": "^16.8.3",
-    "@types/react-native": "^0.57.36",
-    "@types/react-navigation": "^3.0.2",
+    "@types/react": "^16.8.14",
+    "@types/react-native": "^0.57.46",
+    "@types/react-navigation": "^3.0.6",
     "eslint-plugin-automatic": "latest",
-    "react-native-im-easemob": "^1.0.18"
+    "react-native-im-easemob": "^1.0.22"
   }
 }

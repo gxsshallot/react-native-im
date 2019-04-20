@@ -41,7 +41,7 @@ class App extends React.PureComponent {
         const app = createAppContainer(AppNavigator);
         const {plugin} = this.props;
         if (plugin === 'easemob') {
-            const Easemob = require('react-native-im/plugin/easemob');
+            const Easemob = require('react-native-im/src/plugin/easemob');
             Easemob.setup();
             Client.initWithAppKey(Constant.AppKey)
                 .then(() => this.setState({app}))
