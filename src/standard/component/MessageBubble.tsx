@@ -43,7 +43,7 @@ export default class extends React.PureComponent<Props, State> {
                 <View ref={ref => this.bubble = ref}>
                     {this.state.enableBubble ? (
                         <ImageCapInset
-                            capInsets={{top: 37, left: 13, bottom: 10, right: 13}}
+                            capInsets={{top: 28, left: 13, bottom: 10, right: 13}}
                             resizeMode='stretch'
                             source={bubbleImage}
                             style={{maxWidth, paddingLeft, paddingRight}}
