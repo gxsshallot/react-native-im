@@ -97,7 +97,7 @@ export default class extends React.PureComponent<Props> {
         return (
             <View style={styles.right}>
                 <Text style={styles.time}>
-                    {latestMessage && DateUtil.showDate(latestMessage.timestamp, false)}
+                    {latestMessage && DateUtil.showDateTime(latestMessage.timestamp, false)}
                 </Text>
                 {avoid && (
                     <View style={styles.silent}>

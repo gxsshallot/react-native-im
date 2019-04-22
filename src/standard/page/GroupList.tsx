@@ -76,7 +76,7 @@ export default class extends React.PureComponent {
     };
 
     _renderItemRight = (item) => {
-        const text = DateUtil.showDate(item.createdOn, false);
+        const text = DateUtil.showDateTime(item.createdOn, false);
         return (
             <Text style={styles.right}>
                 {text}

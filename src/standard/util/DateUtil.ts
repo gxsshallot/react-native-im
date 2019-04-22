@@ -1,40 +1,45 @@
+import * as RNLocalize from 'react-native-localize';
 import DateFormat from 'dateformat';
+import i18n from 'i18n-js';
 
-const times = ['凌晨', '早上', '下午', '晚上'];
-const yesterdayStr = '昨天';
-
-export function showDate(timestamp: number, alwaysShowTime: boolean) {
-    if (typeof timestamp !== 'number') {
+export function showDateTime(
+    timestamp: number,
+    showTime: boolean
+) {
+    if (isNaN(timestamp)) {
         return '';
     }
     const now = new Date();
     const that = new Date(timestamp);
-    const timeStr = times[Math.floor(that.getHours() / 6)] + DateFormat(that, 'h:MM');
-    const timeOption = alwaysShowTime ? ' ' + timeStr : '';
-    if (sameDay(now, that)) {
-        return timeStr;
-    } else if (yesterday(now, that)) {
-        return yesterdayStr + timeOption;
-    } else if (sameYear(now, that)) {
-        return DateFormat(that, 'm月d日') + timeOption;
-    } else {
-        return DateFormat(that, 'yyyy年m月d日') + timeOption;
-    }
+    const locale = i18n.locale;
+    const options: Intl.DateTimeFormatOptions = {
+    };
+    const isSameDay = sameDay(now, that);
+    const isSameWeek = sameWeek(now, that);
+    const timeStr = (isSameDay || showTime) ? that.toLocaleTimeString(locale, {
+        hour: 'numeric',
+        minute: 'numeric',
+        hour12: RNLocalize.uses24HourClock(),
+    }) : '';
+    const dayStr = isSameDay ? '' : isSameWeek ? that.toLocaleDateString(locale, {
+        weekday: 'long',
+    }) : that.toLocaleDateString(locale, {
+        year: 'numeric',
+        month: showTime ? 'short' : 'numeric',
+        day: 'numeric',
+    });
+    return [dayStr, timeStr].filter(i => i.length > 0).join(' ');
 }
 
-function sameYear(now, that) {
-    return now.getYear() === that.getYear();
+function sameWeek(now: Date, that: Date) {
+    return isInNDay(now, that, 7);
 }
 
-function sameDay(now, that) {
+function sameDay(now: Date, that: Date) {
     return now.getYear() === that.getYear() && now.getMonth() === that.getMonth() && now.getDate() === that.getDate();
 }
 
-function yesterday(now, that) {
-    return isInNDay(now, that, 1);
-}
-
-function isInNDay(now, that, number) {
+function isInNDay(now: Date, that: Date, number: number) {
     const today = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
     const before = new Date(today - 24 * 3600 * 1000 * number).getTime();
     return that.getTime() < today && before <= that.getTime();

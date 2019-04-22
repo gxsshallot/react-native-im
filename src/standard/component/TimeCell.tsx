@@ -8,42 +8,13 @@ export default class extends React.PureComponent {
         time: PropTypes.number.isRequired,
     };
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            text: this._timeText(),
-        };
-    }
-    
-    componentDidMount() {
-        const { time } = this.props;
-        const now = new Date().getTime();
-        if (now - time < 60 * 60 * 1000) {
-            this.timer = setInterval(
-                () => {
-                    this.setState({
-                        text: this._timeText(),
-                    });
-                }, 1000 * 60
-            );
-        }
-    }
-
-    componentWillUnmount() {
-        this.timer && clearInterval(this.timer);
-    }
-
     render() {
         return (
             <Text style={styles.text} numberOfLines={1}>
-                {this.state.text}
+                {DateUtil.showDateTime(this.props.time, true)}
             </Text>
         );
     }
-
-    _timeText = () => {
-        return DateUtil.showDate(this.props.time, true);
-    };
 }
 
 const styles = StyleSheet.create({

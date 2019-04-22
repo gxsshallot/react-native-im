@@ -296,7 +296,7 @@ export default class extends React.PureComponent {
         const isMe = item.from === delegate.user.getMine().userId;
         const position = item.data.isSystem ? 0 : isMe ? 1 : -1;
         if (item.data.isSystem && item.data.text.length <= 0) {
-            item.data.text = DateUtil.showDate(item.localTime, true);
+            item.data.text = DateUtil.showDateTime(item.localTime, true);
         }
         return (
             <delegate.component.BaseMessage
