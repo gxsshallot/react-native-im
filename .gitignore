@@ -3,6 +3,7 @@ node_modules
 main.jsbundle
 assets
 package-lock.json
+.idea
 
 # iOS
 Podfile.lock

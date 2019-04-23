@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": false,
   "description": "一个通用的IM视图框架",
-  "main": "src/index.ts",
+  "main": "index.ts",
   "scripts": {
     "test": "./node_modules/.bin/eslint --ext .js,.ts,.tsx ."
   },
