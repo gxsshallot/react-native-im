@@ -204,7 +204,7 @@ export default class extends React.PureComponent<Props, State> {
                     }
                     return prv;
                 }, {});
-            atMemberList = Object.values(memberMap);
+            atMemberList = Object.keys(memberMap);
         }
         const message = {
             type: delegate.config.messageType.text,
