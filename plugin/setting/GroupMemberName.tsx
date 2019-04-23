@@ -7,6 +7,10 @@ export const name = 'IMSettingGroupMemberName';
 
 export function getUi(props: Typings.Action.Setting.Params): Typings.Action.Setting.Result {
     const {key, imId, chatType} = props;
+    const isGroup = chatType === Typings.Conversation.ChatType.Group;
+    if (!isGroup) {
+        return null;
+    }
     return (
         <GroupMemberNameCell
             key={key}
