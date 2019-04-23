@@ -192,6 +192,7 @@ export async function deleteOne(imId: string): Promise<void> {
     delete rootNode[imId];
     Listener.trigger([Event.Base, Event.Conversation]);
     await deleteData(imId);
+    onUnreadCountChanged();
 }
 
 export async function createOne(memberUserIds: string | string[]): Promise<Conversation.Item> {
