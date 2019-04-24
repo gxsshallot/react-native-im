@@ -1,9 +1,27 @@
 import { ImageURISource, ImageRequireSource } from 'react-native';
 
 /**
+ * 群组的配置项。
+ */
+export interface Config {
+    /**
+     * 免打扰。
+     */
+    avoid: boolean;
+    /**
+     * 显示群成员昵称。
+     */
+    showMembersName: boolean;
+    /**
+     * 允许成员邀请他人。
+     */
+    allowInvite: boolean;
+}
+
+/**
  * 群组基础信息项。
  */
-export interface Item {
+export interface Item extends Config {
     /**
      * 群组ID。
      */
@@ -35,13 +53,6 @@ export interface Item {
 }
 
 /**
- * 群组扩展信息项。
- */
-type Extension = {
-    [key: string]: any;
-};
-
-/**
  * 单个群组的抽象基类。
  */
 export abstract class Base {
@@ -51,18 +62,11 @@ export abstract class Base {
     protected group: Item;
 
     /**
-     * 群组扩展信息项。
-     */
-    protected ext: Extension;
-
-    /**
      * 构造函数。
      * @param group 外部传入的基础信息。
-     * @param ext 外部传入的扩展信息。
      */
-    protected constructor(group: Item, ext: Extension = {}) {
+    protected constructor(group: Item) {
         this.group = group;
-        this.ext = ext;
     }
 
     /**
@@ -127,15 +131,37 @@ export abstract class Base {
     public abstract get createdOn(): number;
 
     /**
-     * 获取扩展信息项。
+     * 获取是否免打扰。
      */
-    public abstract get extension(): Extension;
+    public abstract get avoid(): boolean;
 
     /**
-     * 设置扩展信息项。
-     * @param newExt 新的扩展信息。
+     * 设置是否免打扰。
+     * @param isAvoid 新的免打扰状态。
      */
-    public abstract async setExtension(newExt: Partial<Extension>): Promise<void>;
+    public abstract async setAvoid(isAvoid: boolean): Promise<boolean>;
+
+    /**
+     * 获取是否显示群成员昵称。
+     */
+    public abstract get showMembersName(): boolean;
+
+    /**
+     * 设置是否显示群成员昵称。
+     * @param isShow 新的显示状态。
+     */
+    public abstract async setShowMembersName(isShow: boolean): Promise<boolean>;
+
+    /**
+     * 获取是否允许成员邀请他人。
+     */
+    public abstract get allowInvite(): boolean;
+
+    /**
+     * 设置是否允许成员邀请他人。
+     * @param isAllowInvite 新的允许状态。
+     */
+    public abstract async setAllowInvite(isAllowInvite: boolean): Promise<boolean>;
 
     /**
      * 从外界收到有用户被邀请进入群组的通知。

@@ -29,20 +29,31 @@ export interface Props {
 }
 
 /**
+ * 会话的配置信息。
+ */
+export interface Config {
+    /**
+     * 是否置顶。
+     */
+    top: boolean;
+}
+
+/**
  * 会话的基础信息。
  */
-export interface Item extends Props {
+export interface Item extends Props, Config {
     /**
      * 最新消息，如不存在则表示是空会话。
      */
     latestMessage: Message.General | null;
-}
-
-/**
- * 会话的扩展项。
- */
-export interface Extension {
-    [key: string]: any;
+    /**
+     * 未读消息数。
+     */
+    unreadMessageCount: number;
+    /**
+     * 是否@我。
+     */
+    atMe: boolean;
 }
 
 /**
@@ -55,18 +66,11 @@ export abstract class Base {
     protected item: Item;
 
     /**
-     * 会话的扩展项。
-     */
-    protected ext: Extension;
-
-    /**
      * 构造函数。
      * @param conversation 传入的会话基本信息。
-     * @param ext 传入的会话扩展项。
      */
-    protected constructor(conversation: Item, ext: Extension = {}) {
+    protected constructor(conversation: Item) {
         this.item = conversation;
-        this.ext = ext;
     }
 
     /**
@@ -95,15 +99,31 @@ export abstract class Base {
     public abstract get name(): string;
 
     /**
-     * 获取会话扩展信息。
+     * 获取未读消息数。
      */
-    public abstract get extension(): Extension;
+    public abstract get unreadMessageCount(): number;
 
     /**
-     * 设置会话扩展信息。
-     * @param newConfig 新的扩展信息。
+     * 获取是否@我。
      */
-    public abstract async setExtension(newConfig: Partial<Extension>): Promise<void>;
+    public abstract get atMe(): boolean;
+
+    /**
+     * 设置是否@我。
+     * @param newAtMe 新的状态。
+     */
+    public abstract set atMe(newAtMe: boolean);
+
+    /**
+     * 获取是否置顶。
+     */
+    public abstract get top(): boolean;
+
+    /**
+     * 设置是否置顶。
+     * @param isTop 新的置顶状态。
+     */
+    public abstract async setTop(isTop: boolean): Promise<boolean>;
 
     /**
      * 更新最新消息。
