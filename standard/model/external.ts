@@ -18,9 +18,13 @@ export async function onMessageReceived(
     const imId = message.conversationId;
     const isSingle = !!delegate.user.getUser(imId);
     const chatType = isSingle ? Conversation.ChatType.Single : Conversation.ChatType.Group;
+    let force = false;
     if (!delegate.model.Conversation.getOne(imId, false)) {
         await delegate.model.Conversation.loadItem(imId, chatType);
+        force = true;
     }
+    const timeMessage = await delegate.model.Message.insertTimeMessage(imId, chatType, message, force);
+    timeMessage && Listener.trigger([Event.Base, Event.SendMessage, imId], timeMessage);
     await delegate.model.Conversation.updateMessage(imId, message);
     Listener.trigger(
         [Event.Base, Event.ReceiveMessage, imId],

@@ -38,10 +38,11 @@ export async function sendMessage(
 export async function insertTimeMessage(
     imId: string,
     chatType: Conversation.ChatType,
-    message: Message.General
+    message: Message.General,
+    force?: boolean = false
 ): Promise<Message.General> {
     const conversation = delegate.model.Conversation.getOne(imId, false);
-    if (conversation.latestMessage) {
+    if (conversation.latestMessage && !force) {
         const oldMessage = conversation.latestMessage;
         const delta = message.localTime - oldMessage.localTime;
         if (delta <= 0) {
