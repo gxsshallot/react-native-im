@@ -54,4 +54,28 @@ export abstract class Base {
      * @param groupId 待退出的群组ID。
      */
     public abstract async quitOne(groupId: string): Promise<void>;
+
+    /**
+     * 从外界收到创建群组的通知信息。
+     * @param groupId 创建的群组ID。
+     * @param localTime 本地时间戳。
+     * @param timestamp 远程时间戳。
+     */
+    public abstract async onGroupCreate(
+        groupId: string,
+        localTime: number,
+        timestamp: number
+    ): Promise<void>;
+
+    /**
+     * 从外界收到删除群组的通知信息。
+     * @param groupId 删除的群组ID。
+     * @param localTime 本地时间戳。
+     * @param timestamp 远程时间戳。
+     */
+    public abstract async onGroupDelete(
+        groupId: string,
+        localTime: number,
+        timestamp: number
+    ): Promise<void>;
 }

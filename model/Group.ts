@@ -84,7 +84,7 @@ export abstract class Base {
      * 更换群主ID。
      * @param newOwner 新群主ID。
      */
-    public abstract set owner(newOwner: string);
+    public abstract async setOwner(newOwner: string): Promise<void>;
 
     /**
      * 获取群成员ID列表。
@@ -97,7 +97,7 @@ export abstract class Base {
      * @param toAdd 待添加的列表。
      * @param toRemove 待删除的列表。
      */
-    public abstract setMembers(toAdd?: string[], toRemove?: string[]): void;
+    public abstract async setMembers(toAdd?: string[], toRemove?: string[]): Promise<void>;
 
     /**
      * 获取群名称。
@@ -108,7 +108,7 @@ export abstract class Base {
      * 设置群名称。
      * @param newName 新的自定义群名称。
      */
-    public abstract set name(newName: string);
+    public abstract async setName(newName: string): Promise<void>;
 
     /**
      * 获取群名称的拼音项。
@@ -119,7 +119,7 @@ export abstract class Base {
      * 设置自定义群名称的拼音。
      * @param newNamePinyin 新的自定义群名称拼音。
      */
-    public abstract set namePinyin(newNamePinyin: string | void);
+    public abstract async setNamePinyin(newNamePinyin: string | void): Promise<void>;
 
     /**
      * 获取创建时间，单位毫秒。
@@ -133,8 +133,61 @@ export abstract class Base {
 
     /**
      * 设置扩展信息项。
-     * @param key 信息项的键。
-     * @param value 信息项的值。
+     * @param newExt 新的扩展信息。
      */
-    public abstract setExtension(key: string, value: any): boolean;
+    public abstract async setExtension(newExt: Partial<Extension>): Promise<void>;
+
+    /**
+     * 从外界收到有用户被邀请进入群组的通知。
+     * @param invitor 邀请人ID。
+     * @param joinedMembers 被邀请加入的用户ID列表。
+     * @param localTime 本地时间戳。
+     * @param timestamp 远程时间戳。
+     */
+    public abstract async onMemberJoin(
+        invitor: string,
+        joinedMembers: string[],
+        localTime: number,
+        timestamp: number
+    ): Promise<void>;
+
+    /**
+     * 从外界收到有用户被移除出群组的通知。
+     * @param operator 操作人ID。
+     * @param leaveMembers 被移除的用户ID列表。
+     * @param localTime 本地时间戳。
+     * @param timestamp 远程时间戳。
+     */
+    public abstract async onMemberLeave(
+        operator: string,
+        leaveMembers: string[],
+        localTime: number,
+        timestamp: number
+    ): Promise<void>;
+
+    /**
+     * 从外界收到更改群名称的通知。
+     * @param operator 操作人ID。
+     * @param newGroupName 新的群名称。
+     * @param localTime 本地时间戳。
+     * @param timestamp 远程时间戳。
+     */
+    public abstract async onUpdateName(
+        operator: string,
+        newGroupName: string,
+        localTime: number,
+        timestamp: number
+    ): Promise<void>;
+
+    /**
+     * 从外界收到更改群主的通知。
+     * @param newOwner 新的群主ID。
+     * @param localTime 本地时间戳。
+     * @param timestamp 远程时间戳。
+     */
+    public abstract async onUpdateOwner(
+        newOwner: string,
+        localTime: number,
+        timestamp: number
+    ): Promise<void>;
 }
