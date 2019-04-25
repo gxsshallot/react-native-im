@@ -232,9 +232,9 @@ export default class extends React.PureComponent {
             });
         }
         actionList.push({title: '转发', action: this._onForward.bind(this, message)});
-        if (isSender && canRecall) {
-            actionList.push({title: '撤回', action: this._onRecall.bind(this, message)});
-        }
+        // if (isSender && canRecall) {
+        //     actionList.push({title: '撤回', action: this._onRecall.bind(this, message)});
+        // }
         this.setState({
             menuShow: true,
             menuRef: ref,
