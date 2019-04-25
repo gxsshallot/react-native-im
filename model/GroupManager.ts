@@ -27,7 +27,13 @@ export interface Interface {
     get(): Group.Interface[];
 
     /**
-     * 根据群组ID查找群组。
+     * 根据群组ID查找群组，确定存在，如不存在抛出异常。
+     * @param groupId 待查找的群组ID。
+     */
+    getOne(groupId: string): Group.Interface;
+
+    /**
+     * 根据群组ID查找群组，不确定是否存在。
      * @param groupId 待查找的群组ID。
      */
     findByGroupId(groupId: string): Group.Interface | void;

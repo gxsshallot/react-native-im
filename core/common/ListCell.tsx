@@ -1,41 +1,54 @@
 import React from 'react';
-import { Image, StyleSheet, Text, TouchableHighlight, View } from 'react-native';
-import delegate from '../delegate';
+import { GestureResponderEvent, Image, ImageRequireSource, ImageURISource, StyleProp, StyleSheet, Text, TouchableHighlight, View, ViewStyle } from 'react-native';
+import { Conversation } from '../../model';
+import delegate from '../../delegate';
 
-export default class extends React.PureComponent {
-    // static propTypes = {
-    //     avatar: PropTypes.oneOfType([
-    //         PropTypes.string,
-    //         PropTypes.number,
-    //         PropTypes.shape(Types.BasicConversation),
-    //         PropTypes.shape({
-    //             uri: PropTypes.string,
-    //         })
-    //     ]),
-    //     title: PropTypes.oneOfType([
-    //         PropTypes.string,
-    //         PropTypes.element,
-    //         PropTypes.arrayOf(PropTypes.element),
-    //     ]),
-    //     labels: PropTypes.arrayOf(PropTypes.shape({
-    //         name: PropTypes.string,
-    //         color: PropTypes.string,
-    //     })),
-    //     subTitle: PropTypes.oneOfType([
-    //         PropTypes.string,
-    //         PropTypes.element,
-    //         PropTypes.array
-    //     ]),
-    //     onClick: PropTypes.func,
-    //     onLongPress: PropTypes.func,
-    //     right: PropTypes.oneOfType([
-    //         PropTypes.element,
-    //         PropTypes.arrayOf(PropTypes.element),
-    //         PropTypes.func,
-    //     ]),
-    //     style: PropTypes.any,
-    // };
+export interface Props {
+    /**
+     * 头像，可以是图片信息，也可以是人员/群组信息。
+     */
+    avatar: ImageRequireSource | ImageURISource | Conversation.Props;
+    /**
+     * 主标题，可以是字符串，也可以是一个或多个视图。
+     */
+    title: string | React.ReactElement | React.ReactElement[];
+    /**
+     * 一组标签，位于主标题右侧，包括标签名称和颜色。
+     */
+    labels: Array<{
+        name: string;
+        color: string;
+        backgroundColor: string;
+    }>;
+    /**
+     * 副标题，可以是字符串，也可以是一个或多个视图。
+     */
+    subTitle: string | React.ReactElement | React.ReactElement[];
+    /**
+     * 右侧视图，可以是一个或多个视图，也可以是函数动态生成视图。
+     */
+    right: React.ReactElement | React.ReactElement[] |
+        (() => React.ReactElement | React.ReactElement[]),
+    /**
+     * 点击单元格的回调事件。
+     * @param event 手势响应事件。
+     */
+    onClick(event: GestureResponderEvent): void;
+    /**
+     * 长按单元格的回调事件。
+     * @param event 手势响应事件。
+     */
+    onLongPress(event: GestureResponderEvent): void;
+    /**
+     * 自定义外部样式。
+     */
+    style?: StyleProp<ViewStyle>;
+}
 
+/**
+ * 会话单元格视图。
+ */
+export default class extends React.PureComponent<Props> {
     static defaultProps = {
         labels: [],
     };

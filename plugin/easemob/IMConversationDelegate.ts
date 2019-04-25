@@ -8,7 +8,7 @@ export default function () {
                 result = result.map((item) => ({
                     ...item,
                     imId: item.conversationId,
-                    chatType: item.type,
+                    chatType: item.CommonType,
                 }));
                 return result;
             });
@@ -19,7 +19,7 @@ export default function () {
                 return {
                     ...result,
                     imId: result.conversationId,
-                    chatType: result.type,
+                    chatType: result.CommonType,
                 };
             });
     };

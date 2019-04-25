@@ -1,4 +1,4 @@
-import { ImageURISource, ImageRequireSource } from 'react-native';
+import { ImageRequireSource, ImageURISource } from 'react-native';
 
 /**
  * 群组的配置项。
@@ -45,7 +45,7 @@ export interface Item extends Config {
     /**
      * 自定义群头像。
      */
-    avatar?: ImageURISource | ImageRequireSource;
+    avatar?: ImageRequireSource | ImageURISource;
     /**
      * 创建时间的时间戳，单位是毫秒。
      */
@@ -86,7 +86,7 @@ export interface Interface {
      * 获取群成员ID列表。
      * @param hasOwner 是否包含群主。
      */
-    members(hasOwner: boolean): string;
+    members(hasOwner: boolean): string[];
 
     /**
      * 添加/删除群成员ID。
@@ -116,6 +116,17 @@ export interface Interface {
      * @param newNamePinyin 新的自定义群名称拼音。
      */
     setNamePinyin(newNamePinyin: string | void): Promise<void>;
+
+    /**
+     * 获取自定义头像。
+     */
+    avatar(): ImageRequireSource | ImageURISource | void;
+
+    /**
+     * 设置自定义头像。
+     * @param newAvatar 新的头像。
+     */
+    setAvatar(newAvatar: ImageRequireSource | ImageURISource): Promise<void>;
 
     /**
      * 获取创建时间，单位毫秒。

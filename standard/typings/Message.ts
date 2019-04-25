@@ -1,49 +1,4 @@
 /**
- * Message send status.
- */
-export enum Status {
-    Pending = 0,
-    Delivering = 1,
-    Succeed = 2,
-    Failed = 3,
-}
-
-/**
- * Super message body api as an empty object.
- */
-export interface Body {}
-
-/**
- * General message body with an indexed key.
- */
-export interface GeneralBody extends Body {
-    [key: string]: any;
-}
-
-/**
- * General message with a body which uses general body as default.
- */
-export interface General<T extends Body = GeneralBody> {
-    conversationId: string;
-    messageId?: string;
-    innerId?: string;
-    status: Status;
-    type: number;
-    from: string;
-    to: string;
-    localTime: number;
-    timestamp: number;
-    data: T;
-}
-
-/**
- * Origin message which we don't know its structure.
- */
-export interface Origin {
-    [key: string]: any;
-}
-
-/**
  * Identity for '@all'.
  */
 export const AtAll = '__at_all_message__';

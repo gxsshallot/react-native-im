@@ -28,6 +28,18 @@ export interface Interface {
     get(): Conversation.Interface[];
 
     /**
+     * 根据会话ID查找会话，确定存在，如不存在，则抛出异常。
+     * @param imId 会话ID。
+     */
+    getOne(imId: string): Conversation.Interface;
+
+    /**
+     * 根据会话ID查找会话，不确定是否存在。
+     * @param imId 会话ID。
+     */
+    findByImId(imId: string): Conversation.Interface | void;
+
+    /**
      * 创建一个会话。
      * @param members 人员ID列表，为字符串或单元素数组时为单聊，为数组且长度大于2的时候为群聊。
      */

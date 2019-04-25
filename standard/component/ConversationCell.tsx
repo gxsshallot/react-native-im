@@ -143,7 +143,7 @@ export default class extends React.PureComponent<Props> {
             message: latestMessage
         };
         return Model.Action.Abstract.get(
-            latestMessage.type,
+            latestMessage.CommonType,
             params,
             params
         );

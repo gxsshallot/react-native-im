@@ -66,6 +66,11 @@ export interface Interface {
     getItem(): Item;
 
     /**
+     * 获取用于传递信息的基本属性。
+     */
+    getProps(): Props;
+
+    /**
      * 更新会话信息。
      */
     update(): Promise<void>;

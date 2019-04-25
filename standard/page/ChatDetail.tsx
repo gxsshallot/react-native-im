@@ -220,7 +220,7 @@ export default class extends React.PureComponent {
 
     _onShowMenu(params) {
         const {ref, isSender, message} = params;
-        const messageType = message.type;
+        const messageType = message.CommonType;
         const actionList = [];
         const interval = (new Date().getTime() - message.timestamp) / 1000;
         const canRecall = interval < 5 * 60;
@@ -283,7 +283,7 @@ export default class extends React.PureComponent {
         this._onSendMessage(
             conversations[0].imId,
             conversations[0].chatType,
-            {type: message.type, body: message.data}
+            {type: message.CommonType, body: message.data}
         );
     }
 

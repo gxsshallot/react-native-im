@@ -22,7 +22,7 @@ export async function sendMessage(
     // 事件发送之前，先触发通知，加入详情列表中，发送后再更新状态
     !isSystem && Listener.trigger(sendEventName, message);
     const promise = Action.Send.get(
-        message.type,
+        message.CommonType,
         {imId, chatType, message, ext},
         {imId, chatType, message, ext}
     );

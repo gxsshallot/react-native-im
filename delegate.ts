@@ -1,27 +1,29 @@
+/* eslint-disable */
 import Config from './config';
 import * as API from './api';
 import * as Model from './model';
 
-interface Delegate {
-    Config: typeof Config;
+// @ts-ignore 外部初始化，这里不设置接口
+const ConversationAPI: API.Conversation.Interface = {};
+// @ts-ignore 外部初始化，这里不设置接口
+const GroupAPI: API.Group.Interface = {};
+// @ts-ignore 外部初始化，这里不设置接口
+const UserAPI: API.User.Interface = {};
+
+// @ts-ignore 外部初始化，这里不设置接口
+const ConversationManager: Model.ConversationManager.Interface = {};
+// @ts-ignore 外部初始化，这里不设置接口
+const GroupManager: Model.GroupManager.Interface = {};
+
+export default {
+    Config: Config,
     API: {
-        Conversation: API.Conversation.Interface;
-        Group: API.Group.Interface;
-    };
+        Conversation: ConversationAPI,
+        Group: GroupAPI,
+        User: UserAPI,
+    },
     Manager: {
-        Conversation: Model.ConversationManager.Interface;
-        Group: Model.GroupManager.Interface;
-    };
-}
-
-let delegate: Delegate | null = null;
-
-export default delegate;
-
-/**
- * 设置新的代理。
- * @param d 新的代理实例。
- */
-export function setDelegate(d: Delegate) {
-    delegate = d;
+        Conversation: ConversationManager,
+        Group: GroupManager,
+    },
 }

@@ -1,8 +1,5 @@
 import React from 'react';
-import { ImageURISource, ImageRequireSource } from 'react-native';
-import * as Action from './Action';
 import * as Component from './Component';
-import * as Contact from './Contact';
 import * as Conversation from './Conversation';
 import * as Group from './Group';
 import * as Message from './Message';
@@ -73,11 +70,6 @@ export interface FuncPart {
         onChange: (data: Message.LocationBody) => void;
     }) => void;
     // uploadImages: unset('func.uploadImages'),
-}
-
-export interface StylePart {
-    viewBackgroundColor: string;
-    separatorLineColor: string;
 }
 
 export interface ConfigPart {

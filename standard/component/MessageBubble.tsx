@@ -77,7 +77,7 @@ export default class extends React.PureComponent<Props, State> {
             style: {},
         };
         const displayView = Model.Action.Display.get(
-            message.type,
+            message.CommonType,
             state,
             undefined,
         );

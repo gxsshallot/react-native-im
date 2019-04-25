@@ -1,4 +1,4 @@
-import { ImageSourcePropType } from 'react-native';
+import {ImageRequireSource, ImageURISource} from 'react-native';
 import { User } from '../model';
 
 export interface Interface {
@@ -44,7 +44,7 @@ export interface Interface {
      * 获取用户的默认头像。
      * @param userId 用户ID。
      */
-    getDefaultUserHeadImage(userId: string): ImageSourcePropType;
+    getDefaultUserHeadImage(userId: string): ImageRequireSource | ImageURISource;
 
     /**
      * 跳转到用户详情页面。
@@ -57,5 +57,5 @@ export interface Interface {
      * @param avatar 头像URL地址。
      * @param size 头像大小。
      */
-    fitUrlForAvatarSize?(avatar: string, size: number): string;
+    fitAvatarForSize?(avatar: ImageRequireSource | ImageURISource, size: number): ImageRequireSource | ImageURISource;
 }

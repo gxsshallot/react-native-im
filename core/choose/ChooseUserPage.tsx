@@ -1,14 +1,10 @@
 import React from 'react';
 import { InteractionManager, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import PropTypes from 'prop-types';
 import Toast from 'react-native-root-toast';
 import PickList from 'react-native-picklist';
 import i18n from 'i18n-js';
 import ArrowImage from '@hecom/image-arrow';
-import ChooseUserFromOrgPage from './ChooseUserFromOrg';
-import delegate from '../delegate';
-import * as Types from '../proptype';
-import * as PageKeys from '../pagekey';
+import ChooseUserFromOrgPage from './ChooseUserFromOrgPage';
 
 export default class extends React.PureComponent {
     static navigationOptions = function (options) {

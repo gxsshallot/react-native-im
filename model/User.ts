@@ -1,4 +1,4 @@
-import { ImageSourcePropType } from 'react-native';
+import { ImageURISource, ImageRequireSource } from 'react-native';
 
 /**
  * 部门信息。
@@ -45,7 +45,7 @@ export interface Item {
     /**
      * 用户头像。
      */
-    avatar?: ImageSourcePropType;
+    avatar?: ImageRequireSource | ImageURISource;
     /**
      * 电话。
      */

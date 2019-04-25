@@ -11,6 +11,7 @@ module.exports = {
         "automatic",
     ],
     "rules": {
+        "init-declarations": 0,
         "import/no-unresolved": [2, {
             "commonjs": true,
             "amd": true,
