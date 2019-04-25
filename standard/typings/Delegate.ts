@@ -67,70 +67,11 @@ export interface ModelPart {
     Group: GroupModelPart;
 }
 
-export interface ContactPart {
-    loadAllUser: (returnValue: boolean) => Promise<Contact.User[] | void>;
-    loadAllOrg: (returnValue: boolean) => Promise<Contact.Org[] | void>;
-    loadUserOrgTree: (hasSelf: boolean, parentOrgId: string | void, excludedUserIds: string[]) => Promise<Contact.Tree>;
-    loadStarUser: () => Promise<Contact.User[]>;
-}
-
-export interface UserPart {
-    getMine: () => Contact.CurrentUser;
-    getUser: (userId: string) => Contact.User;
-}
-
-export interface ConversationApiPart {
-    loadList: () => Promise<Conversation.Base[]>;
-    loadItem: (imId: string, chatType: Conversation.ChatType, autoCreate: boolean) => Promise<Conversation.Origin>;
-    deleteOne: (imId: string) => Promise<void>;
-    updateConfig: (imId: string, config: Conversation.ConfigUpdate) => Promise<Conversation.Config>;
-    markAllRead: (imId: string, chatType: Conversation.ChatType) => Promise<void>;
-    markLatestUnread: (imId: string, chatType: Conversation.ChatType) => Promise<void>;
-    loadMessage: (params: {
-        imId: string;
-        chatType: Conversation.ChatType;
-        lastMessage: Message.General;
-        count: number;
-    }) => Promise<Message.Origin[]>;
-    deleteMessage: (params: {
-        imId: string;
-        chatType: Conversation.ChatType;
-        message: Message.General;
-    }) => Promise<void>;
-    recallMessage: (params: {
-        imId: string;
-        chatType: Conversation.ChatType;
-        message: Message.General;
-    }) => Promise<void>;
-}
-
-export interface GroupApiPart {
-    loadList: () => Promise<Group.Item[]>;
-    loadItem: (groupId: string) => Promise<Group.Item>;
-    createOne: (memberUserIds: string[]) => Promise<Group.Item>;
-    destroyOne: (groupId: string) => Promise<void>;
-    quitOne: (groupId: string) => Promise<void>;
-    addMembers: (groupId: string, memberUserIds: string[]) => Promise<void>;
-    removeMembers: (groupId: string, memberUserIds: string[]) => Promise<void>;
-    changeName: (groupId: string, newName: string) => Promise<void>;
-    changeAvatar: (groupId: string, newAvatarUrl: string) => Promise<void>;
-    changeAllowInvites: (groupId: string, newAllowInvites: boolean) => Promise<void>;
-    changeOwner: (groupId: string, newOwnerId: string) => Promise<void>;
-}
-
-export interface ApiPart {
-    conversation: ConversationApiPart;
-    group: GroupApiPart;
-}
-
 export interface FuncPart {
     // pushToLocationViewPage: unset('func.pushToLocationViewPage'),
     pushToLocationChoosePage: (params: {
         onChange: (data: Message.LocationBody) => void;
     }) => void;
-    pushToUserDetailPage: (userId: string) => void;
-    fitUrlForAvatarSize: (avatar: string, size?: number) => string;
-    getDefaultUserHeadImage: (userId?: string) => ImageURISource | ImageRequireSource;
     // uploadImages: unset('func.uploadImages'),
 }
 

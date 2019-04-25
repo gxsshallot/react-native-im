@@ -1,9 +1,39 @@
 import React from 'react';
-import { Image, ImageSourcePropType, StyleSheet, View } from 'react-native';
-import delegate from '../delegate';
-import { Component, Conversation } from '../typings';
+import { Image, ImageSourcePropType, StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
+import { Conversation } from '../../model';
+import delegate from '../../delegate';
 
-export default class extends React.Component<Component.AvatarImageProps> {
+/**
+ * 组件的属性。
+ */
+export interface Props extends Conversation.Props {
+    /**
+     * 自定义外部视图样式。
+     */
+    style?: StyleProp<ViewStyle>;
+    /**
+     * 视图的边长，这里是正方形头像，仅用于defaultProps。
+     */
+    edge: number;
+    /**
+     * 内部小头像的间距，仅用于defaultProps。
+     */
+    internal: number;
+}
+
+/**
+ * 头像组件，可以根据聊天类型，展示单聊和群聊的头像。
+ * 其中单聊头像为人员头像，群聊头像为多个人员头像组合。
+ */
+export default class extends React.Component<Props> {
+    static defaultProps = {
+        edge: 48.0,
+        internal: 2,
+    };
+
+    /**
+     * 群聊时的头像布局行数和每行人员头像数量信息。
+     */
     protected groupLayout: Layout[] = [
         {layout: [1], lines: 1},
         {layout: [2], lines: 1},
@@ -12,11 +42,12 @@ export default class extends React.Component<Component.AvatarImageProps> {
     ];
 
     render() {
+        const {edge, internal, style} = this.props;
         const {lines, layout} = this._getLayout();
         const len = layout.reduce((prv, cur) => Math.max(prv, cur.length), lines);
         const itemEdge = (edge - internal * (len - 1)) / len;
         return (
-            <View style={[styles.view, this.props.style]}>
+            <View style={[styles.view, {width: edge, height: edge}, style]}>
                 {layout.map(this._renderRow.bind(this, itemEdge))}
             </View>
         );
@@ -110,9 +141,6 @@ export interface RenderLine {
     layout: Avatar[][];
     lines: number;
 }
-
-const edge = 48.0;
-const internal = 2;
 
 const styles = StyleSheet.create({
     view: {

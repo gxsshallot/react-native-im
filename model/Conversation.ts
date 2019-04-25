@@ -57,103 +57,95 @@ export interface Item extends Props, Config {
 }
 
 /**
- * 会话的抽象基类。
+ * 会话的公共接口。
  */
-export abstract class Base {
+export interface Interface {
     /**
-     * 会话的基础信息。
+     * 获取数据对象。
      */
-    protected item: Item;
-
-    /**
-     * 构造函数。
-     * @param conversation 传入的会话基本信息。
-     */
-    protected constructor(conversation: Item) {
-        this.item = conversation;
-    }
+    getItem(): Item;
 
     /**
      * 更新会话信息。
      */
-    public abstract async update(): Promise<void>;
+    update(): Promise<void>;
 
     /**
      * 判断会话是否有效。
      */
-    public abstract isValid(): boolean;
+    isValid(): boolean;
 
     /**
      * 获取会话ID。
      */
-    public abstract get imId(): string;
+    imId(): string;
 
     /**
      * 获取会话类型。
      */
-    public abstract get chatType(): ChatType;
+    chatType(): ChatType;
 
     /**
      * 获取会话名称。
      */
-    public abstract get name(): string;
+    name(): string;
 
     /**
      * 获取未读消息数。
      */
-    public abstract get unreadMessageCount(): number;
+    unreadMessageCount(): number;
 
     /**
      * 获取是否@我。
      */
-    public abstract get atMe(): boolean;
+    atMe(): boolean;
 
     /**
      * 设置是否@我。
      * @param newAtMe 新的状态。
      */
-    public abstract set atMe(newAtMe: boolean);
+    setAtMe(newAtMe: boolean): void;
 
     /**
      * 获取是否置顶。
      */
-    public abstract get top(): boolean;
+    top(): boolean;
 
     /**
      * 设置是否置顶。
      * @param isTop 新的置顶状态。
      */
-    public abstract async setTop(isTop: boolean): Promise<boolean>;
+    setTop(isTop: boolean): Promise<boolean>;
 
     /**
      * 更新最新消息。
      * @param latestMessage 会话的最新消息。
      */
-    public abstract async updateLatestMessage(latestMessage: Message.General): Promise<void>;
+    updateLatestMessage(latestMessage: Message.General): Promise<void>;
 
     /**
      * 发送普通消息。
      * @param message 消息对象。
      */
-    public abstract async sendMessage(message: Message.General): Promise<Message.General>;
+    sendMessage(message: Message.General): Promise<Message.General>;
 
     /**
      * 根据已有消息，选择是否插入时间消息，如果插入，返回插入后的时间消息对象。
      * @param message 已有消息。
      */
-    public abstract async insertTimeMessage(message: Message.General): Promise<Message.General | void>;
+    insertTimeMessage(message: Message.General): Promise<Message.General | void>;
 
     /**
      * 插入系统消息。
      * @param message 系统消息对象。
      */
-    public abstract async insertSystemMessage(message: Message.General): Promise<Message.General>;
+    insertSystemMessage(message: Message.General): Promise<Message.General>;
 
     /**
      * 从外界收到普通消息的处理方法。
      * @param originMessage 外界IM的SDK收到的原始消息。
      */
-    public abstract async onMessageReceived(originMessage: Message.Origin): Promise<Message.General>;
+    onMessageReceived(originMessage: Message.Origin): Promise<Message.General>;
 }
 
 /**

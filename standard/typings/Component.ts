@@ -2,10 +2,6 @@ import { StyleProp, ViewStyle, ImageURISource, ImageRequireSource } from 'react-
 import * as Props from './Props';
 import * as Message from './Message';
 
-export interface AvatarImageProps extends Props.Conversation {
-    style?: StyleProp<ViewStyle>;
-}
-
 export interface AvatarListProps extends Props.Navigation {
     owner: string;
     data: string[];

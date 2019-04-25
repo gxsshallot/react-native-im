@@ -94,32 +94,6 @@ const user: Delegate.UserPart = {
     getMine: noDataDelegate('user.getMine'),
     getUser: noDataDelegate('user.getUser'),
 };
-const im: Delegate.ApiPart = {
-    conversation: {
-        loadList: noPromiseDelegate('im.conversation.loadList'),
-        loadItem: noPromiseDelegate('im.conversation.loadItem'),
-        deleteOne: noPromiseDelegate('im.conversation.deleteOne'),
-        updateConfig: noPromiseDelegate('im.conversation.updateConfig'),
-        markAllRead: noPromiseDelegate('im.conversation.markAllRead'),
-        markLatestUnread: noPromiseDelegate('im.conversation.markLatestUnread'),
-        loadMessage: noPromiseDelegate('im.conversation.loadMessage'),
-        deleteMessage: noPromiseDelegate('im.conversation.deleteMessage'),
-        recallMessage: noPromiseDelegate('im.conversation.recallMessage'),
-    },
-    group: {
-        loadList: noPromiseDelegate('im.group.loadList'),
-        loadItem: noPromiseDelegate('im.group.loadItem'),
-        createOne: noPromiseDelegate('im.group.createOne'),
-        destroyOne: noPromiseDelegate('im.group.destroyOne'),
-        quitOne: noPromiseDelegate('im.group.quitOne'),
-        addMembers: noPromiseDelegate('im.group.addMembers'),
-        removeMembers: noPromiseDelegate('im.group.removeMembers'),
-        changeName: noPromiseDelegate('im.group.changeName'),
-        changeAvatar: noPromiseDelegate('im.group.changeAvatar'),
-        changeAllowInvites: noPromiseDelegate('im.group.changeAllowInvites'),
-        changeOwner: noPromiseDelegate('im.group.changeOwner'),
-    },
-};
 const func: Delegate.FuncPart = {
     pushToLocationChoosePage: noDataDelegate('func.pushToLocationChoosePage'),
     pushToUserDetailPage: noDataDelegate('func.pushToUserDetailPage'),

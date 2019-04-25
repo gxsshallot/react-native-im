@@ -1,13 +1,13 @@
 import { Conversation, Message } from '../model';
 
 /**
- * 会话相关接口的抽象基类。
+ * 会话相关的外部公共接口。
  */
-export abstract class Base {
+export interface Interface {
     /**
      * 获取会话列表。
      */
-    public abstract async loadList(): Promise<Conversation.Item[]>;
+    loadList(): Promise<Conversation.Item[]>;
 
     /**
      * 获取指定会话的信息。
@@ -15,7 +15,7 @@ export abstract class Base {
      * @param chatType 会话聊天类型。
      * @param autoCreate 是否自动创建会话。
      */
-    public abstract async loadItem(
+    loadItem(
         imId: string,
         chatType: Conversation.ChatType,
         autoCreate: boolean
@@ -25,14 +25,14 @@ export abstract class Base {
      * 删除指定会话。
      * @param imId 待删除的会话ID。
      */
-    public abstract async deleteOne(imId: string): Promise<void>;
+    deleteOne(imId: string): Promise<void>;
 
     /**
      * 更新会话配置信息。
      * @param imId 会话ID。
      * @param config 新的配置信息。
      */
-    public abstract async updateConfig(
+    updateConfig(
         imId: string,
         config: Partial<Conversation.Config>
     ): Promise<Partial<Conversation.Config>>;
@@ -42,7 +42,7 @@ export abstract class Base {
      * @param imId 会话ID。
      * @param chatType 会话聊天类型。
      */
-    public abstract async markAllRead(
+    markAllRead(
         imId: string,
         chatType: Conversation.ChatType
     ): Promise<void>;
@@ -52,7 +52,7 @@ export abstract class Base {
      * @param imId 会话ID。
      * @param chatType 会话聊天类型。
      */
-    public abstract async markLatestUnread(
+    markLatestUnread(
         imId: string,
         chatType: Conversation.ChatType
     ): Promise<void>;
@@ -64,7 +64,7 @@ export abstract class Base {
      * @param lastMessage 最后一条消息。
      * @param count 加载数量。
      */
-    public abstract async loadMessage(
+    loadMessage(
         imId: string,
         chatType: Conversation.ChatType,
         lastMessage: Message.General,
@@ -77,7 +77,7 @@ export abstract class Base {
      * @param chatType 会话聊天类型。
      * @param message 待删除的消息。
      */
-    public abstract async deleteMessage(
+    deleteMessage(
         imId: string,
         chatType: Conversation.ChatType,
         message: Message.General
@@ -89,7 +89,7 @@ export abstract class Base {
      * @param chatType 会话聊天类型。
      * @param message 待撤回的消息。
      */
-    public abstract async recallMessage(
+    recallMessage(
         imId: string,
         chatType: Conversation.ChatType,
         message: Message.General

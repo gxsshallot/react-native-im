@@ -3,6 +3,7 @@ import * as ConversationManager from './ConversationManager';
 import * as Group from './Group';
 import * as GroupManager from './GroupManager';
 import * as Message from './Message';
+import * as User from './User';
 
 export {
     Conversation,
@@ -10,4 +11,5 @@ export {
     Group,
     GroupManager,
     Message,
+    User,
 }

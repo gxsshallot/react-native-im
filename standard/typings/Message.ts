@@ -9,7 +9,7 @@ export enum Status {
 }
 
 /**
- * Super message body interface as an empty object.
+ * Super message body api as an empty object.
  */
 export interface Body {}
 
