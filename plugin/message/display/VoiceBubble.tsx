@@ -52,6 +52,7 @@ export default class extends React.PureComponent<Props, State> {
                 <Image
                     style={styles.image}
                     source={image}
+                    resizeMode={'contain'}
                 />
                 {!isSender && this._renderTimeLabel(true)}
             </View>
