@@ -236,7 +236,7 @@ function onUnreadCountChanged(): void {
     const count = Object.values(rootNode)
         .reduce((prv, cur) => {
             const isAvoid = cur.config.avoid;
-            if (!isAvoid) {
+            if (!isAvoid && isValid(cur.imId, cur.chatType)) {
                 prv += cur.unreadMessagesCount;
             }
             return prv;
