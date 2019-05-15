@@ -21,7 +21,7 @@ iOS的`Podfile`中，需要添加如下设置：
 ```ruby
 pod 'react-native-im-easemob', :podspec => '../node_modules/react-native-im-easemob/react-native-im-easemob.podspec'
 pod 'Hyphenate', '= 3.5.1'
-pod 'MJExtension', :git => 'https://github.com/RNCommon/MJExtension.git', :commit => 'cd3de71c4955935a762a46e59d90160991f5fa92'
+pod 'MJExtension', :git => 'https://github.com/hecom-rn/MJExtension.git', :commit => 'cd3de71c4955935a762a46e59d90160991f5fa92'
 ```
 
 在工程中的适当位置，导入环信插件的设置接口：
