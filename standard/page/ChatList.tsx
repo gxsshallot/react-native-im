@@ -52,7 +52,7 @@ export default class extends React.PureComponent {
                 renderItem={this._renderRow.bind(this)}
                 renderHiddenItem={this._renderHiddenItem.bind(this)}
                 ListHeaderComponent={this._renderFakeSearchBar()}
-                rightOpenValue={-225}
+                rightOpenValue={-281}
                 keyExtractor={item => item.imId}
             />
         );
@@ -79,15 +79,24 @@ export default class extends React.PureComponent {
             <View style={styles.hidden}>
                 {this._renderButton(rowMap, item,
                     config.top ? '取消置顶' : '置顶',
-                    {backgroundColor: 'blue'},
+                    {
+                        backgroundColor: '#d9d8de',
+                        width: 69,
+                    },
                     this._clickTop.bind(this, item, config),
                 )}
                 {this._renderButton(rowMap, item, markTitle,
-                    {backgroundColor: 'green'},
+                    {
+                        backgroundColor: '#c7cccc',
+                        width: 106,
+                    },
                     this._clickMarkReadStatus.bind(this, item, !isRead),
                 )}
                 {this._renderButton(rowMap, item, '删除',
-                    {backgroundColor: '#e15151'},
+                    {
+                        backgroundColor: '#fc3b39',
+                        width: 106,
+                    },
                     this._clickDelete.bind(this, item),
                 )}
             </View>
@@ -161,11 +170,10 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignSelf: 'stretch',
         alignItems: 'center',
-        width: 75,
         height: 64,
     },
     btnText: {
         color: 'white',
-        fontSize: 16,
+        fontSize: 17,
     }
 });
