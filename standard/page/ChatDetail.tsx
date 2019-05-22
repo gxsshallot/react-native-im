@@ -196,6 +196,7 @@ export default class extends React.PureComponent {
 
     _onReceiveMessage(message) {
         this._insertMessageToList(message);
+        this._markAllRead()
     }
 
     _onSendMessage(imId, chatType, {type, body}) {
