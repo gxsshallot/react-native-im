@@ -1,8 +1,8 @@
 import React from 'react';
-import { Image, StyleSheet, View, Platform, ImageURISource } from 'react-native';
+import {Image, ImageURISource, Platform, StyleSheet, View} from 'react-native';
 import RNFS from 'react-native-fs';
-import { showPhotoBrowserPage } from 'react-native-photo-browse';
-import { Typings } from '../../../standard';
+import {showPhotoBrowserPage} from 'react-native-photo-browse';
+import {Typings} from '../../../standard';
 
 export type Props = Typings.Action.Display.Params<Typings.Message.ImageBody>;
 
@@ -18,7 +18,11 @@ export default class extends React.PureComponent<Props, State> {
         let source = null;
         if (thumbnailLocalPath || localPath) {
             if (Platform.OS === 'android') {
-                source = {uri: thumbnailLocalPath || localPath};
+                let path = thumbnailLocalPath || localPath || '';
+                if (!path.startsWith('file') && !path.startsWith('content')) {
+                    path = 'file://' + path;
+                }
+                source = {uri: path};
             } else {
                 // empty
             }

@@ -1,12 +1,13 @@
 import * as Specials from 'specials';
-import { IMConstant, ChatManager } from 'react-native-im-easemob';
-import { Model, Typings } from '../../standard';
+import {ChatManager, IMConstant} from 'react-native-im-easemob';
+import {Model, Typings} from '../../standard';
+import RNFS from 'react-native-fs';
 
 export default function () {
     type ActionItem = [
         number,
         (params: Typings.Action.Send.Params) => Typings.Action.Send.Result
-    ];
+        ];
     const sendActions: ActionItem[] = [
         [IMConstant.MessageType.text, sendText],
         [IMConstant.MessageType.image, sendImage],
@@ -51,12 +52,11 @@ function sendText(params: Typings.Action.Send.Params<Typings.Message.TextBody>) 
 
 function sendImage(params: Typings.Action.Send.Params<Typings.Message.ImageBody>) {
     const {imId, chatType, message, ext} = params;
-    return ChatManager.sendImage(
-        imId,
-        chatType,
-        message.data.localPath,
-        ext,
-    );
+    const {data: {localPath, thumbnailLocalPath}} = message;
+    const send = (path: any) => ChatManager.sendImage(imId, chatType, path, ext);
+    return RNFS.exists(localPath).then((exist: boolean) => {
+        return exist ? send(localPath) : send(thumbnailLocalPath)
+    });
 }
 
 function sendVoice(params: Typings.Action.Send.Params<Typings.Message.VoiceBody>) {

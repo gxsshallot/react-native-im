@@ -140,7 +140,6 @@ export default class extends React.PureComponent<Props, State> {
             <Image
                 style={[styles.userImage, innerStyle, style]}
                 source={image}
-                defaultSource={defaultImage}
             />
         );
     }

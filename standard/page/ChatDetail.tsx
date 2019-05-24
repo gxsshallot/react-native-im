@@ -1,13 +1,13 @@
 import React from 'react';
-import { Clipboard, Keyboard, SafeAreaView, StyleSheet, TouchableWithoutFeedback, View } from 'react-native';
-import { HeaderButton } from 'react-navigation-header-buttons';
+import {Clipboard, Keyboard, SafeAreaView, StyleSheet, TouchableWithoutFeedback, View} from 'react-native';
+import {HeaderButton} from 'react-navigation-header-buttons';
 import Toast from 'react-native-root-toast';
 import Listener from 'react-native-general-listener';
 import i18n from 'i18n-js';
 import * as PageKeys from '../pagekey';
 import * as Model from '../model';
-import { DateUtil, guid } from '../util';
-import { Conversation, Event, Message } from '../typings';
+import {DateUtil, guid} from '../util';
+import {Conversation, Event, Message} from '../typings';
 import delegate from '../delegate';
 
 export default class extends React.PureComponent {
@@ -196,6 +196,7 @@ export default class extends React.PureComponent {
 
     _onReceiveMessage(message) {
         this._insertMessageToList(message);
+        this._markAllRead()
     }
 
     _onSendMessage(imId, chatType, {type, body}) {
@@ -255,6 +256,7 @@ export default class extends React.PureComponent {
         this.props.navigation.navigate({
             routeName: PageKeys.ChooseConversation,
             params: {
+                title: i18n.t('IMPageChooseConversationTitle'),
                 onSelectData: this._onSelectConversation.bind(this, message),
                 excludedIds: [this.props.imId],
             },
