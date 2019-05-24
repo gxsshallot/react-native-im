@@ -58,7 +58,7 @@
     "@types/react-native": "^0.57.46",
     "@types/react-navigation": "^3.0.6",
     "eslint-plugin-automatic": "latest",
-    "react-native-im-easemob": "^1.0.22",
+    "react-native-im-easemob": "^1.0.24",
     "tslib": "^1.9.3"
   }
 }

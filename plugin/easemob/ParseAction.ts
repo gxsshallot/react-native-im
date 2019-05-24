@@ -46,10 +46,10 @@ function convertImage(message: Typings.Message.Origin) {
         message,
         IMConstant.MessageType.image,
         {
-            localPath: null,
+            localPath: message.body.localPath,
             remotePath: message.body.remotePath,
-            thumbnailLocalPath: null,
-            thumbnailRemotePath: null,
+            thumbnailLocalPath: message.body.thumbnailLocalPath,
+            thumbnailRemotePath: message.body.thumbnailRemotePath,
             size: {
                 width: message.body.size && message.body.size.width,
                 height: message.body.size && message.body.size.height,
