@@ -1,12 +1,12 @@
 import React from 'react';
-import { Dimensions, Image, SafeAreaView, StyleSheet, Text, View } from 'react-native';
+import {Dimensions, Image, SafeAreaView, StyleSheet, Text, View} from 'react-native';
 import Listener from 'react-native-general-listener';
-import { forceInset, getSafeAreaInset } from 'react-native-pure-navigation-bar';
+import {forceInset, getSafeAreaInset} from 'react-native-pure-navigation-bar';
 import Badge from '@hecom/badge';
 import * as PageKeys from '../pagekey';
 import * as Model from '../model';
-import { DateUtil } from '../util';
-import { Component, Message, Event, Conversation } from '../typings';
+import {DateUtil} from '../util';
+import {Component, Conversation, Event, Message} from '../typings';
 import delegate from '../delegate';
 
 export type Props = Component.ConversationCellProps;
@@ -208,7 +208,7 @@ export default class extends React.PureComponent<Props> {
 
     _onMessageReceive = (message) => {
         const {latestMessage} = this.state;
-        if (!latestMessage || message.localTime >= latestMessage.localTime) {
+        if (!latestMessage || message.timestamp >= latestMessage.timestamp) {
             const conversation = delegate.model.Conversation.getOne(this.props.imId, false);
             this.setState({
                 latestMessage: message,
@@ -219,7 +219,7 @@ export default class extends React.PureComponent<Props> {
 
     _onMessageSend = (message) => {
         const {latestMessage} = this.state;
-        if (!latestMessage || message.localTime >= latestMessage.localTime) {
+        if (!latestMessage || message.timestamp >= latestMessage.timestamp) {
             this.setState({
                 latestMessage: message,
                 atMe: false,

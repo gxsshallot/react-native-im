@@ -4,6 +4,9 @@ import { Message, Conversation, Event } from '../typings';
 import { guid } from '../util';
 import delegate from '../delegate';
 
+export const name = 'im-message';
+const interval = 3 * 60 * 1000;
+
 export async function sendMessage(
     imId: string,
     chatType: Conversation.ChatType,
@@ -39,15 +42,17 @@ export async function insertTimeMessage(
     imId: string,
     chatType: Conversation.ChatType,
     message: Message.General,
-    force?: boolean = false
-): Promise<Message.General> {
+): Promise<Message.General | void> {
     const conversation = delegate.model.Conversation.getOne(imId, false);
-    if (conversation.latestMessage && !force) {
+    if (conversation && conversation.latestMessage) {
         const oldMessage = conversation.latestMessage;
         const delta = message.timestamp - oldMessage.timestamp;
-        if (delta <= 0) {
-            return;
-        } else if (delta < 3 * 60 * 1000) {
+        if (delta < 0) {
+            const [forwardMessage] = await delegate.im.conversation.loadMessage({imId, chatType, lastMessage:message, count:1});
+            if (forwardMessage && message.timestamp - forwardMessage.timestamp < interval){
+                return;
+            }
+        } else if (delta < interval) {
             const oldTime = new Date(oldMessage.timestamp).getMinutes();
             const newTime = new Date(message.timestamp).getMinutes();
             if (Math.floor(oldTime / 3) === Math.floor(newTime / 3)) {
@@ -55,6 +60,18 @@ export async function insertTimeMessage(
             }
         }
     }
+    const promise = _insertTimeMessage(imId, chatType, message);
+    if (!promise) {
+        throw new Error('暂不支持发送该消息类型');
+    }
+    const newOriginMessage = await promise;
+    return Action.Parse.get([], newOriginMessage, newOriginMessage);
+}
+
+async function _insertTimeMessage(
+    imId: string,
+    chatType: Conversation.ChatType,
+    message: Message.General){
     const timeMessage = {
         conversationId: imId,
         messageId: null,
@@ -63,24 +80,18 @@ export async function insertTimeMessage(
         type: delegate.config.messageType.text,
         from: delegate.user.getMine().userId,
         to: imId,
-        localTime: message.timestamp - 1,
+        localTime: Date.now(),
         timestamp: message.timestamp - 1,
         data: {
             text: '',
             isSystem: true,
         },
     };
-    const promise = Action.Send.get(
+    return Action.Send.get(
         timeMessage.type,
         {imId, chatType, message: timeMessage, ext: {}},
         {imId, chatType, message: timeMessage, ext: {}},
     );
-    if (!promise) {
-        throw new Error('暂不支持发送该消息类型');
-    }
-    const newOriginMessage = await promise;
-    const newMessage = Action.Parse.get([], newOriginMessage, newOriginMessage);
-    return newMessage;
 }
 
 export async function insertSystemMessage(
@@ -91,9 +102,8 @@ export async function insertSystemMessage(
     timestamp: number,
     innerId?: string,
 ): Promise<void> {
-    const systemMessage = {
+    const systemMessage: Message.General = {
         conversationId: imId,
-        messageId: null,
         innerId: innerId || guid(),
         status: Message.Status.Succeed,
         type: delegate.config.messageType.text,
