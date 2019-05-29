@@ -44,12 +44,12 @@ export async function insertTimeMessage(
     const conversation = delegate.model.Conversation.getOne(imId, false);
     if (conversation.latestMessage && !force) {
         const oldMessage = conversation.latestMessage;
-        const delta = message.localTime - oldMessage.localTime;
+        const delta = message.timestamp - oldMessage.timestamp;
         if (delta <= 0) {
             return;
         } else if (delta < 3 * 60 * 1000) {
-            const oldTime = new Date(oldMessage.localTime).getMinutes();
-            const newTime = new Date(message.localTime).getMinutes();
+            const oldTime = new Date(oldMessage.timestamp).getMinutes();
+            const newTime = new Date(message.timestamp).getMinutes();
             if (Math.floor(oldTime / 3) === Math.floor(newTime / 3)) {
                 return;
             }
@@ -63,8 +63,8 @@ export async function insertTimeMessage(
         type: delegate.config.messageType.text,
         from: delegate.user.getMine().userId,
         to: imId,
-        localTime: message.localTime - 1,
-        timestamp: message.localTime - 1,
+        localTime: message.timestamp - 1,
+        timestamp: message.timestamp - 1,
         data: {
             text: '',
             isSystem: true,
