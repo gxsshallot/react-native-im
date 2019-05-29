@@ -1,6 +1,5 @@
 import React from 'react';
-import { ImageURISource, ImageRequireSource } from 'react-native';
-import * as Action from './Action';
+import {ImageRequireSource, ImageURISource} from 'react-native';
 import * as Component from './Component';
 import * as Contact from './Contact';
 import * as Conversation from './Conversation';
@@ -8,6 +7,7 @@ import * as Group from './Group';
 import * as Message from './Message';
 
 export interface PagePart {
+    [key: string]: React.ComponentClass
 }
 
 export interface ComponentPart {
@@ -59,12 +59,30 @@ export interface GroupModelPart {
     changeName: (groupId: string, newName: string) => Promise<string>;
     changeAvatar: (groupId: string, newAvatarUrl: string) => Promise<string>;
     changeAllowInvites: (groupId: string, allowInvites: boolean) => Promise<boolean>;
-    changeOwner: (groupId: string, newOwnerId: string) => Promise<{owner: string; members: string[]}>;
+    changeOwner: (groupId: string, newOwnerId: string) => Promise<{ owner: string; members: string[] }>;
+}
+
+export interface MessageModelPart {
+    name: string,
+    sendMessage: (imId: string, chatType: Conversation.ChatType, message: Message.General, ext: object, isSystem: boolean) => Promise<void>
+    insertTimeMessage: (imId: string, chatType: Conversation.ChatType, message: Message.General) => Promise<Message.General | void>
+    insertSystemMessage: (imId: string, chatType: Conversation.ChatType, text: string, localTime: number, timestamp: number, innerId?: string) => Promise<void>
+}
+
+export interface EmojiModelPart {
+    name: string,
+}
+
+export interface ExternalModelPart {
+
 }
 
 export interface ModelPart {
     Conversation: ConversationModelPart;
     Group: GroupModelPart;
+    Message: MessageModelPart;
+    Emoji: EmojiModelPart;
+    External: ExternalModelPart;
 }
 
 export interface ContactPart {

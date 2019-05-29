@@ -1,5 +1,6 @@
 import { deepExport } from '../util';
 
+export const name = 'im-emoji';
 const rootNode = [];
 const dataKey = '__inner_emojis__';
 

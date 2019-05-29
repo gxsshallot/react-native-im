@@ -51,14 +51,14 @@ function setup_common_model() {
     Delegate.model.Message = Model.Message;
 }
 
-function login(forceUpdate) {
+function login(forceUpdate: boolean) {
     return Promise.all([
         Delegate.model.Conversation.init(forceUpdate),
         Delegate.model.Group.init(forceUpdate)
     ]);
 }
 
-function logout(forceClear) {
+function logout(forceClear: boolean) {
     return Promise.all([
         Delegate.model.Conversation.uninit(forceClear),
         Delegate.model.Group.uninit(forceClear)
