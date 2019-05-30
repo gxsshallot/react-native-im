@@ -1,6 +1,6 @@
 import React from 'react';
-import { View, Text } from 'react-native';
-import { Delegate, Component } from './typings';
+import {Text, View} from 'react-native';
+import {Component, Delegate} from './typings';
 
 function noPromiseDelegate(name: string) {
     return function () {
@@ -134,6 +134,7 @@ const config: Delegate.ConfigPart = {
     pinyinField: 'pinyin',
     titleLoading: '加载中',
     buttonOK: '确定',
+    maxContactLimitNumber: 5000,
     messageType: {
         text: -1,
         voice: -1,

@@ -2,12 +2,12 @@ import React from 'react';
 import { Alert, InteractionManager, LayoutAnimation, Linking, StyleSheet, TouchableOpacity, View, SafeAreaView, Image } from 'react-native';
 import PropTypes from 'prop-types';
 import Toast from 'react-native-root-toast';
-import NaviBar, { forceInset } from 'react-native-pure-navigation-bar';
+import NaviBar, {forceInset} from 'react-native-pure-navigation-bar';
 import ArrowImage from '@hecom/image-arrow';
 import Listener from 'react-native-general-listener';
 import * as PageKeys from '../pagekey';
-import { mapListToSection } from '../util';
-import { Event, Conversation } from '../typings';
+import {mapListToSection} from '../util';
+import {Conversation, Event} from '../typings';
 import delegate from '../delegate';
 
 export default class extends React.PureComponent {
@@ -19,7 +19,9 @@ export default class extends React.PureComponent {
     static defaultProps = {
         itemHeight: 64,
     };
-    
+
+    listener: any;
+
     constructor(props) {
         super(props);
         this.state = {};
@@ -58,7 +60,7 @@ export default class extends React.PureComponent {
             </View>
         );
     }
-    
+
     _renderList = () => {
         const {itemHeight} = this.props;
         return (
@@ -133,9 +135,14 @@ export default class extends React.PureComponent {
         const loadStarUser = delegate.config.useStarUser ? delegate.contact.loadStarUser() : Promise.resolve();
         return Promise.all([loadUser, loadOrg, loadStarUser])
             .then(([users, , starUsers = []]) => {
-                const data = mapListToSection(users, delegate.config.pinyinField);
-                if (starUsers.length > 0) {
-                    data.unshift({key: '☆', title: '星标好友', data: starUsers});
+                let data: Array<{}>;
+                if (users.length < delegate.config.maxContactLimitNumber) {
+                    data = mapListToSection(users, delegate.config.pinyinField);
+                    if (starUsers.length > 0) {
+                        data.unshift({key: '☆', title: '星标好友', data: starUsers});
+                    }
+                } else {
+                    data = []
                 }
                 const {getHeaderConfig} = this.props;
                 const items = getHeaderConfig ? getHeaderConfig({users, sections: data}) : [];

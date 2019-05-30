@@ -161,6 +161,11 @@ export interface ConfigPart {
     pinyinField: string;
     titleLoading: string;
     buttonOK: string;
+    useStarUser?: boolean;
+    /**
+     * 通讯录列表最大限制数量，超过则不显示列表
+     */
+    maxContactLimitNumber: number;
     messageType: {
         text: number;
         voice: number;

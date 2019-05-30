@@ -24,6 +24,7 @@ export default class extends React.PureComponent {
     }
 
     render() {
+        const {sections = []} = this.props;
         return (
             <View style={styles.container}>
                 <SectionList
@@ -37,10 +38,10 @@ export default class extends React.PureComponent {
                         listHeaderHeight: () => this.props.headerHeight,
                     })}
                 />
-                <delegate.component.SelectList
-                    sections={['↑'].concat(this.props.sections.map(i => i.key))}
+                {sections && sections.length > 0 && <delegate.component.SelectList
+                    sections={['↑'].concat(sections.map(i => i.key))}
                     onItemChange={this._scrollToLocation}
-                />
+                />}
                 {this.state.isShowBackTop && this._renderBackTop()}
             </View>
         );
