@@ -1,6 +1,8 @@
 /**
  * Message send status.
  */
+import {ChatType} from "./Conversation";
+
 export enum Status {
     Pending = 0,
     Delivering = 1,
@@ -11,7 +13,8 @@ export enum Status {
 /**
  * Super message body interface as an empty object.
  */
-export interface Body {}
+export interface Body {
+}
 
 /**
  * General message body with an indexed key.
@@ -27,6 +30,9 @@ export interface General<T extends Body = GeneralBody> {
     conversationId: string;
     messageId?: string;
     innerId?: string;
+    chatType?: ChatType.Single | ChatType.Group;
+    direction?: number;
+    isRead?: boolean;
     status: Status;
     type: number;
     from: string;

@@ -16,8 +16,7 @@ export async function onMessageReceived(
         throw new Error('无法处理该消息');
     }
     const imId = message.conversationId;
-    const isSingle = !!delegate.user.getUser(imId);
-    const chatType = isSingle ? Conversation.ChatType.Single : Conversation.ChatType.Group;
+    const chatType = message.chatType;
     if (!delegate.model.Conversation.getOne(imId, false)) {
         await delegate.model.Conversation.loadItem(imId, chatType);
     }
