@@ -102,12 +102,16 @@ export default class extends React.PureComponent {
 
     _renderItem = (row) => {
         const item = row.item;
+        let subTitle = item.dept && item.dept.name;
+        if (item.title) {
+            subTitle += (subTitle ? ' | ' : '') + item.title
+        }
         return (
             <delegate.component.ListCell
                 style={this._itemStyle()}
                 avatar={{imId: item.userId, chatType: Conversation.ChatType.Single}}
                 title={item.name}
-                subTitle={item.dept && item.dept.name}
+                subTitle={subTitle}
                 right={this._renderRight(item)}
                 onClick={this._clickItem.bind(this, item)}
             />

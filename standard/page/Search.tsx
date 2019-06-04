@@ -1,7 +1,7 @@
 import React from 'react';
-import { StyleSheet, Text } from 'react-native';
+import {StyleSheet, Text} from 'react-native';
 import * as PageKeys from '../pagekey';
-import { Conversation } from '../typings';
+import {Conversation} from '../typings';
 import delegate from '../delegate';
 
 export default class extends React.PureComponent {
@@ -186,7 +186,10 @@ export default class extends React.PureComponent {
     _renderContactItem = ({item, searchText}) => {
         const length = searchText.length;
         let titleIndex, subTitleIndex;
-        let title = item.name, subTitle = item.title;
+        let title = item.name, subTitle = item.dept && item.dept.name;
+        if (item.title) {
+            subTitle += (subTitle ? ' | ' : '') + item.title
+        }
         if ((titleIndex = title.indexOf(searchText)) > -1) {
             title = [
                 <Text key={1}>
