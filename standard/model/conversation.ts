@@ -1,11 +1,11 @@
 import AsyncStorage from 'react-native-general-storage';
 import Listener from 'react-native-general-listener';
-import { Conversation, Message, Event, Storage } from '../typings';
+import {Conversation, Event, Message, Storage} from '../typings';
 import * as Action from './action';
-import { simpleExport } from '../util';
+import {simpleExport} from '../util';
 import delegate from '../delegate';
 
-const rootNode: {[imId: string]: Conversation.Item} = {};
+const rootNode: { [imId: string]: Conversation.Item } = {};
 
 export const name = 'im-conversation';
 
@@ -48,14 +48,14 @@ export async function load(): Promise<void> {
 
 export async function loadItem(imId: string, chatType: Conversation.ChatType): Promise<Conversation.Item> {
     const result = await delegate.im.conversation.loadItem(imId, chatType, true);
-    const message = !result.latestMessage ? null : 
+    const message = !result.latestMessage ? null :
         Action.Parse.get([], result.latestMessage, result.latestMessage);
     if (!rootNode[imId]) {
         rootNode[imId] = {
             ...result,
             latestMessage: message,
             unreadMessagesCount: result.unreadMessagesCount || 0,
-            atMe: result.atMe || false,
+            atMe: result.atMe || 0,
             config: {
                 ...defaultConfig,
                 ...result.config || {},
@@ -142,11 +142,9 @@ export function getName(imId: string): string | void {
     return null;
 }
 
-export async function updateConfig(
-    imId: string,
-    chatType: Conversation.ChatType,
-    config: Conversation.ConfigUpdate
-): Promise<void> {
+export async function updateConfig(imId: string,
+                                   chatType: Conversation.ChatType,
+                                   config: Conversation.ConfigUpdate): Promise<void> {
     await loadItem(imId, chatType);
     const newConfig = {
         ...getConfig(imId),
@@ -158,16 +156,10 @@ export async function updateConfig(
     await writeData(imId);
 }
 
-export async function updateMessage(imId: string, message: Message.General): Promise<void> {
-    const item = getOne(imId, false);
-    if (!item) {
-        return;
-    }
-    rootNode[imId].latestMessage = message;
-    // Has @ or not
+function hasAtMe(item: Conversation.Item, message: Message.General) {
+    let hasAtMe = false;
     const myUserId = delegate.user.getMine().userId;
     const isFromMe = message.from === myUserId;
-    let hasAtMe = false;
     if (item.chatType === Conversation.ChatType.Group && !isFromMe) {
         if (message.data && message.data.atMemberList) {
             if (message.data.atMemberList === Message.AtAll) {
@@ -177,7 +169,17 @@ export async function updateMessage(imId: string, message: Message.General): Pro
             }
         }
     }
-    rootNode[imId].atMe = rootNode[imId].atMe || hasAtMe;
+    return hasAtMe;
+}
+
+export async function updateMessage(imId: string, message: Message.General): Promise<void> {
+    const item = getOne(imId, false);
+    if (!item) {
+        return;
+    }
+    rootNode[imId].latestMessage = message;
+    // Has @ or not
+    rootNode[imId].atMe = (rootNode[imId].atMe || 0) + (hasAtMe(item, message) ? 1 : 0);
     Listener.trigger([Event.Base, Event.Conversation, imId]);
     await loadItem(imId, item.chatType);
     Listener.trigger([Event.Base, Event.UnreadCount, imId]);
@@ -224,12 +226,21 @@ export async function markReadStatus(imId: string, chatType: Conversation.ChatTy
     }
     rootNode[imId].unreadMessagesCount = status ? 0 : 1;
     if (status) {
-        rootNode[imId].atMe = false;
+        rootNode[imId].atMe = 0;
         Listener.trigger([Event.Base, Event.Conversation, imId]);
     }
     Listener.trigger([Event.Base, Event.UnreadCount, imId]);
     onUnreadCountChanged();
     await writeData(imId);
+}
+
+export async function recallMessage(imId: string, message: Message.General): Promise<void> {
+    const item = getOne(imId, false);
+    if (!item) {
+        return;
+    }
+    rootNode[imId].atMe = (rootNode[imId].atMe || 0) - (hasAtMe(item, message) ? 1 : 0);
+    if (rootNode[imId].atMe < 0) rootNode[imId].atMe = 0;
 }
 
 function onUnreadCountChanged(): void {

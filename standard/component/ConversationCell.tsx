@@ -222,7 +222,7 @@ export default class extends React.PureComponent<Props> {
         if (!latestMessage || message.timestamp >= latestMessage.timestamp) {
             this.setState({
                 latestMessage: message,
-                atMe: false,
+                atMe: 0,
             });
         }
     };

@@ -30,7 +30,7 @@
 | config | [Config](#会话配置) | 否 | 配置信息 |
 | latestMessage | [ImMessage](#消息) | 否 | 最新一条消息 |
 | unreadMessagesCount | number | 否 | 未读消息数 |
-| atMe | boolean | 否 | 当前会话中是否有@消息 |
+| atMe | number | 否 | 当前会话中是否有@消息，数值代表@次数，便于撤回时处理 |
 
 ## 消息
 

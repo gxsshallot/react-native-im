@@ -36,7 +36,7 @@ export type ConfigUpdate = Partial<Config>;
 export interface ItemPart {
     unreadMessagesCount: number;
     config: Config;
-    atMe: boolean;
+    atMe: number;
     latestMessage: Message.General | void;
 }
 

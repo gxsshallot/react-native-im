@@ -36,6 +36,7 @@ export interface ConversationModelPart {
     deleteOne: (imId: string) => Promise<void>;
     createOne: (memberUserIds: string | string[]) => Promise<Conversation.Item>;
     markReadStatus: (imId: string, chatType: Conversation.ChatType, status: boolean) => Promise<void>;
+    recallMessage: (imId: string, message: Message.General) => Promise<void>;
 }
 
 export interface GroupModelPart {

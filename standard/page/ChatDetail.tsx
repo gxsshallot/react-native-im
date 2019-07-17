@@ -269,12 +269,8 @@ export default class extends React.PureComponent {
             imId,
             chatType,
             delegate.user.getMine().userId,
-            message.messageId,
-            message.localTime,
-            message.timestamp,
-            message.innerId
+            message
         );
-        await delegate.im.conversation.recallMessage({imId, chatType, message});
     }
 
     _onQuote(item) {
