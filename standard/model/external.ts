@@ -51,6 +51,12 @@ export async function onGroupCreate(
     timestamp: number
 ): Promise<void> {
     await groupUpdateOperation(groupId, null, localTime, timestamp);
+    const conversation = delegate.model.Conversation.getOne(groupId, false);
+    const group = delegate.model.Group.findByGroupId(groupId, false);
+    if (!conversation && group && group.owner === delegate.user.getMine().userId) {
+        await delegate.model.Conversation.loadItem(groupId, Conversation.ChatType.Group);
+        Listener.trigger([Event.Base, Event.Conversation, groupId]);
+    }
 }
 
 export async function onUserJoin(
