@@ -31,7 +31,7 @@ export interface ConversationModelPart {
     getOne: (imId: string, enableExport?: boolean) => Conversation.Item | void;
     getConfig: (imId: string) => Conversation.Config;
     getName: (imId: string) => string | void;
-    updateConfig: (imId: string, chatType: Conversation.ChatType, config: Conversation.ConfigUpdate) => Promise<void>;
+    updateConfig: (imId: string, chatType: Conversation.ChatType, config: Conversation.ConfigUpdate, localOnly: boolean) => Promise<void>;
     updateMessage: (imId: string, message: Message.General) => Promise<void>;
     deleteOne: (imId: string) => Promise<void>;
     createOne: (memberUserIds: string | string[]) => Promise<Conversation.Item>;

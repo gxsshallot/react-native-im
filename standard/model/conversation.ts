@@ -144,13 +144,14 @@ export function getName(imId: string): string | void {
 
 export async function updateConfig(imId: string,
                                    chatType: Conversation.ChatType,
-                                   config: Conversation.ConfigUpdate): Promise<void> {
+                                   config: Conversation.ConfigUpdate,
+                                   localOnly: boolean = false): Promise<void> {
     await loadItem(imId, chatType);
     const newConfig = {
         ...getConfig(imId),
         ...config,
     };
-    const result = await delegate.im.conversation.updateConfig(imId, newConfig);
+    const result = !localOnly ? await delegate.im.conversation.updateConfig(imId, newConfig) : newConfig;
     rootNode[imId].config = result;
     Listener.trigger([Event.Base, Event.Conversation, imId]);
     await writeData(imId);
