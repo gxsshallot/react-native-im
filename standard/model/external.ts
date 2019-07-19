@@ -42,7 +42,6 @@ export async function onRecallMessage(
     await delegate.im.conversation.deleteMessage({imId, chatType, message: {messageId}});
     await delegate.model.Conversation.recallMessage(imId, message);
     await delegate.model.Message.insertSystemMessage(imId, Conversation.ChatType.Group, text, localTime, timestamp, innerId);
-    await delegate.im.conversation.recallMessage({imId, chatType, message});
 }
 
 export async function onGroupCreate(

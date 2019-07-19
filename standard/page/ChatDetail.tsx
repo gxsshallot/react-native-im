@@ -271,6 +271,7 @@ export default class extends React.PureComponent {
             delegate.user.getMine().userId,
             message
         );
+        await delegate.im.conversation.recallMessage({imId, chatType, message});
     }
 
     _onQuote(item) {
