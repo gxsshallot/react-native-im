@@ -17,7 +17,7 @@ export default class extends React.PureComponent<Props> {
                 isVisible={menuShow}
                 fromView={menuRef}
                 onClose={onClose}
-                placement={'top'}
+                placement={'auto'}
                 showInModal={false}
                 showBackground={false}
                 verticalOffset={-verticalOffset}
