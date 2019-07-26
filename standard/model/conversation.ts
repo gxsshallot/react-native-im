@@ -228,8 +228,8 @@ export async function markReadStatus(imId: string, chatType: Conversation.ChatTy
     rootNode[imId].unreadMessagesCount = status ? 0 : 1;
     if (status) {
         rootNode[imId].atMe = 0;
-        Listener.trigger([Event.Base, Event.Conversation, imId]);
     }
+    Listener.trigger([Event.Base, Event.Conversation, imId]);
     Listener.trigger([Event.Base, Event.UnreadCount, imId]);
     onUnreadCountChanged();
     await writeData(imId);
