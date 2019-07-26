@@ -41,6 +41,7 @@ export async function onAddMembers(
             }));
         }
     }
+    return Delegate.model.Group.getMembers(imId);
 }
 
 export async function onRemoveMembers(
