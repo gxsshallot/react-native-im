@@ -80,7 +80,7 @@ async function _insertTimeMessage(
         type: delegate.config.messageType.text,
         from: delegate.user.getMine().userId,
         to: imId,
-        localTime: Date.now(),
+        localTime: Date.now() - 1,
         timestamp: message.timestamp - 1,
         data: {
             text: '',
