@@ -1,5 +1,15 @@
 import React from 'react';
-import { Alert, InteractionManager, LayoutAnimation, Linking, StyleSheet, TouchableOpacity, View, SafeAreaView, Image } from 'react-native';
+import {
+    Alert,
+    Image,
+    InteractionManager,
+    LayoutAnimation,
+    Linking,
+    SafeAreaView,
+    StyleSheet,
+    TouchableOpacity,
+    View
+} from 'react-native';
 import PropTypes from 'prop-types';
 import Toast from 'react-native-root-toast';
 import NaviBar, {forceInset} from 'react-native-pure-navigation-bar';
@@ -17,7 +27,7 @@ export default class extends React.PureComponent {
     };
 
     static defaultProps = {
-        itemHeight: 64,
+        itemHeight: 70,
     };
 
     listener: any;
@@ -69,8 +79,8 @@ export default class extends React.PureComponent {
                 sections={this.state.data}
                 renderItem={this._renderItem}
                 headerHeight={itemHeight * 3}
+                ItemSeparatorComponent={this.renderSeparator}
                 keyExtractor={item => item.userId}
-                separatorStyle={styles.separator}
                 ListHeaderComponent={this._renderHeader}
                 separatorHeight={StyleSheet.hairlineWidth}
                 stickySectionHeadersEnabled={true}
@@ -81,6 +91,10 @@ export default class extends React.PureComponent {
             />
         );
     };
+
+    renderSeparator = () => {
+        return <View style={styles.separator} />
+    }
 
     _renderSectionHeader = ({section: {title}}) => {
         return <delegate.component.SectionHeader title={title} />;
@@ -94,7 +108,6 @@ export default class extends React.PureComponent {
                 subTitle={subTitle}
                 onClick={onClick}
                 avatar={icon}
-                style={this._itemStyle()}
                 right={<ArrowImage style={styles.arrow} />}
             />
         ));
@@ -108,7 +121,6 @@ export default class extends React.PureComponent {
         }
         return (
             <delegate.component.ListCell
-                style={this._itemStyle()}
                 avatar={{imId: item.userId, chatType: Conversation.ChatType.Single}}
                 title={item.name}
                 subTitle={subTitle}
@@ -202,14 +214,6 @@ export default class extends React.PureComponent {
                 Toast.show(err.message);
             });
     };
-
-    _itemStyle = () => {
-        return {
-            height: this.props.itemHeight,
-            borderBottomWidth: StyleSheet.hairlineWidth,
-            borderBottomColor: delegate.style.separatorLineColor,
-        };
-    };
 }
 
 const styles = StyleSheet.create({
@@ -229,13 +233,14 @@ const styles = StyleSheet.create({
         width: 48,
         justifyContent: 'center',
         alignItems: 'center',
-        marginRight: 8
     },
     list: {
         backgroundColor: 'white',
     },
     separator: {
-        marginLeft: 80,
+        height: StyleSheet.hairlineWidth,
+        marginLeft: 74,
+        backgroundColor: delegate.style.separatorLineColor,
     },
     arrow: {
         marginLeft: 10,

@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import {StyleSheet, Text, View} from 'react-native';
 import PropTypes from 'prop-types';
 import delegate from '../delegate';
 
@@ -10,14 +10,15 @@ export default class extends React.PureComponent {
     };
 
     static defaultProps = {
-        height: 25,
+        height: 32,
     };
 
     render() {
-        const { title, height } = this.props;
+        const {title, height} = this.props;
         const style = {
             borderBottomWidth: StyleSheet.hairlineWidth,
-            borderBottomColor: delegate.style.separatorLineColor,
+            borderColor: delegate.style.separatorLineColor,
+            borderTopWidth: StyleSheet.hairlineWidth,
             height: height,
         };
         return (
@@ -34,10 +35,10 @@ const styles = StyleSheet.create({
     section: {
         justifyContent: 'center',
         paddingLeft: 16,
-        backgroundColor: '#e1e1e1',
+        backgroundColor: '#f7f7f9',
     },
     sectionText: {
-        fontSize: 13,
+        fontSize: 14,
         color: '#666666',
     },
 });
