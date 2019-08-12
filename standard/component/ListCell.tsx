@@ -126,8 +126,8 @@ const styles = StyleSheet.create({
     },
     layout: {
         flex: 1,
-        marginLeft: 13,
-        height: 68,
+        marginLeft: 12,
+        height: 70,
         flexDirection: 'column',
         justifyContent: 'center',
     },
@@ -136,8 +136,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     title: {
-        fontSize: 17,
-        color: '#333333',
+        fontSize: 16,
+        color: '#222',
     },
     label: {
         borderWidth: 1,
@@ -153,6 +153,6 @@ const styles = StyleSheet.create({
     subTitle: {
         fontSize: 14,
         color: '#999999',
-        marginTop: 8,
+        marginTop: 4,
     },
 });
