@@ -1,6 +1,6 @@
 import React from 'react';
-import { Image, StyleSheet, View, Text, Platform, TextStyle } from 'react-native';
-import { Typings, Delegate } from '../../../standard';
+import {Image, Platform, StyleSheet, Text, TextStyle, View} from 'react-native';
+import {Delegate, Typings} from '../../../standard';
 
 export type Props = Typings.Action.Display.Params<Typings.Message.TextBody>;
 
@@ -35,28 +35,26 @@ export default class extends React.PureComponent<Props> {
     componentDidMount() {
         this.props.enableBubble(true);
     }
-    
+
     render() {
+        // TODO IOS Image inside Text 有问题，表情对不齐
+        const Comp = Platform.OS === 'ios' ? View : Text;
         // TODO URL、电话支持，居中对齐
         return (
-            <View style={styles.view}>
+            <Comp style={styles.view}>
                 {this.textArr.map(this._renderItem.bind(this))}
-            </View>
+            </Comp>
         );
     }
 
     _renderItem(text: string, index: number) {
         const emojiImage = Delegate.model.Emoji.getEmoji(text);
         if (this._isEmoji(text) && emojiImage) {
-            const isEmoji = index > 0 ? this._isEmoji(this.textArr[index - 1]) : false;
-            const style = isEmoji ? {
-                marginLeft: 3,
-            } : {};
             return (
                 <Image
                     key={index}
                     source={emojiImage}
-                    style={[styles.image, style]}
+                    style={[styles.image]}
                     resizeMode={'contain'}
                 />
             );
@@ -85,19 +83,19 @@ const styles = StyleSheet.create({
         flexWrap: 'wrap',
     },
     text: {
+        lineHeight: 24,
         fontSize: 17,
         backgroundColor: 'transparent',
         ...Platform.select({
             android: {textAlignVertical: 'center'},
-            ios: {lineHeight: 21},
         }),
         overflow: 'hidden',
     } as TextStyle,
     image: {
-        width: 18,
-        height: 18,
-        marginVertical: 1,
-        marginRight: 3,
+        width: 20,
+        height: 20,
+        paddingRight: 2,
+        paddingLeft: 2,
         backgroundColor: 'transparent',
     },
 });
