@@ -19,8 +19,10 @@ export async function sendMessage(
     if (!delegate.model.Conversation.getOne(imId, false)) {
         await delegate.model.Conversation.loadItem(imId, chatType);
     }
-    const timeMessage = await insertTimeMessage(imId, chatType, message);
-    timeMessage && Listener.trigger(sendEventName, timeMessage);
+    if (!isSystem){
+        const timeMessage = await insertTimeMessage(imId, chatType, message);
+        timeMessage && Listener.trigger(sendEventName, timeMessage);
+    }
     await delegate.model.Conversation.updateMessage(imId, message);
     // 事件发送之前，先触发通知，加入详情列表中，发送后再更新状态
     !isSystem && Listener.trigger(sendEventName, message);
