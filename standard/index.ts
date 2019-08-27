@@ -5,6 +5,7 @@ import * as Components from './component';
 import * as Pages from './page';
 import * as PageKeys from './pagekey';
 import * as Utils from './util';
+import * as Render from './render';
 import Delegate from './delegate';
 
 function setup_common_page() {
@@ -19,6 +20,10 @@ function setup_common_page() {
     Delegate.page[PageKeys.GroupMembers] = Pages.GroupMembersPage;
     Delegate.page[PageKeys.Search] = Pages.SearchPage;
     Delegate.page[PageKeys.SearchMore] = Components.SearchList;
+}
+
+function setup_common_render() {
+    Delegate.render.renderBadge = Render.renderBadge;
 }
 
 function setup_common_component() {
@@ -76,6 +81,7 @@ export {
     setup_common_page,
     setup_common_component,
     setup_common_model,
+    setup_common_render,
     login,
     logout,
 };

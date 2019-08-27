@@ -29,6 +29,11 @@ function noComponentDelegate<P>(name: string) {
 }
 
 const page: Delegate.PagePart = {};
+
+const render: Delegate.renderPart = {
+    renderBadge: noDataDelegate('renderBadge'),
+};
+
 const component: Delegate.ComponentPart = {
     AvatarImage: noComponentDelegate<Component.AvatarImageProps>('AvatarImage'),
     AvatarList: noComponentDelegate<Component.AvatarListProps>('AvatarList'),
@@ -144,6 +149,7 @@ const config: Delegate.ConfigPart = {
 
 export default {
     page,
+    render,
     component,
     model,
     contact,

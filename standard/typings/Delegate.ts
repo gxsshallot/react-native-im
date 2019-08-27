@@ -1,5 +1,6 @@
-import React from 'react';
+import React, {ReactNode} from 'react';
 import {ImageRequireSource, ImageURISource} from 'react-native';
+import {Props as BadgeProps} from '@hecom/badge';
 import * as Component from './Component';
 import * as Contact from './Contact';
 import * as Conversation from './Conversation';
@@ -8,6 +9,10 @@ import * as Message from './Message';
 
 export interface PagePart {
     [key: string]: React.ComponentClass
+}
+
+export interface renderPart {
+    renderBadge: (avoid: boolean, count: number) => ReactNode
 }
 
 export interface ComponentPart {
@@ -156,6 +161,10 @@ export interface FuncPart {
 export interface StylePart {
     viewBackgroundColor: string;
     separatorLineColor: string;
+}
+
+export interface PropsPart {
+    badgeProps: BadgeProps
 }
 
 export interface ConfigPart {

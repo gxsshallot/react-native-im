@@ -1,8 +1,7 @@
 import React from 'react';
 import {Dimensions, Image, SafeAreaView, StyleSheet, Text, View} from 'react-native';
 import Listener from 'react-native-general-listener';
-import {forceInset, getSafeAreaInset} from 'react-native-pure-navigation-bar';
-import Badge from '@hecom/badge';
+import {forceInset} from 'react-native-pure-navigation-bar';
 import * as PageKeys from '../pagekey';
 import * as Model from '../model';
 import {DateUtil} from '../util';
@@ -72,24 +71,7 @@ export default class extends React.PureComponent<Props> {
 
     _renderBadge = () => {
         const {unreadMessagesCount, avoid} = this.state;
-        const {width} = Dimensions.get('window');
-        const inset = getSafeAreaInset();
-        const style = avoid ? {
-            top: 5,
-            right: width - 70 - inset.left + 5,
-        } : {
-            top: 0,
-            right: width - 70 - inset.left,
-        };
-        return (
-            <Badge
-                count={avoid ? null : unreadMessagesCount}
-                maxCount={99}
-                radius={avoid ? 3 : 8}
-                outSpace={2}
-                style={[styles.count, style]}
-            />
-        );
+        return delegate.render.renderBadge(avoid, unreadMessagesCount);
     };
 
     _renderRightColumn = () => {
