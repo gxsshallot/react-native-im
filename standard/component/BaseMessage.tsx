@@ -1,8 +1,8 @@
 import React from 'react';
-import { Image, StyleSheet, Text, View, TouchableWithoutFeedback, ActivityIndicator, ImageStyle } from 'react-native';
-import Listener, { ListenerObjType } from 'react-native-general-listener';
+import {ActivityIndicator, Image, ImageStyle, StyleSheet, Text, TouchableWithoutFeedback, View} from 'react-native';
+import Listener, {ListenerObjType} from 'react-native-general-listener';
 import Toast from 'react-native-root-toast';
-import { Component, Event, Message } from '../typings';
+import {Component, Event, Message} from '../typings';
 import delegate from '../delegate';
 
 export type Props = Component.BaseMessageProps;
@@ -125,7 +125,7 @@ export default class extends React.PureComponent<Props, State> {
         const user = position < 0 ?
             delegate.user.getUser(message.from) :
             delegate.user.getMine();
-        const {userId, avatar} = user;
+        const {userId, avatar, imId} = user;
         const defaultImage = delegate.func.getDefaultUserHeadImage(userId);
         const size = 41;
         const innerStyle = {
@@ -137,10 +137,12 @@ export default class extends React.PureComponent<Props, State> {
             ? {uri: delegate.func.fitUrlForAvatarSize(avatar, size)}
             : defaultImage;
         return (
-            <Image
-                style={[styles.userImage, innerStyle, style]}
-                source={image}
-            />
+            <TouchableWithoutFeedback onPress={() => delegate.func.pushToUserDetailPage(imId)}>
+                <Image
+                    style={[styles.userImage, innerStyle, style]}
+                    source={image}
+                />
+            </TouchableWithoutFeedback>
         );
     }
 
