@@ -10,7 +10,12 @@ import {DateUtil, guid} from '../util';
 import {Conversation, Event, Message} from '../typings';
 import delegate from '../delegate';
 
-export default class extends React.PureComponent {
+interface ChatDetailProps {
+    imId: string
+    chatType: number
+}
+
+export default class extends React.PureComponent<ChatDetailProps> {
     static navigationOptions = function ({navigation}) {
         const {_title_, _right_} = navigation.state.params;
         return {
@@ -19,26 +24,18 @@ export default class extends React.PureComponent {
         };
     };
 
-    // static propTypes = {
-    //     ...Types.BasicConversation,
-    //     ...Types.Navigation,
-    // };
-
     static defaultProps = {};
 
-    constructor(props) {
+    listeners = new Array(5);
+    isGroup: boolean;
+    pageCount: number;
+
+    constructor(props: ChatDetailProps) {
         super(props);
         this.isGroup = props.chatType === Conversation.ChatType.Group;
         this.pageCount = delegate.component.DetailListView.defaultProps.pageSize;
-        this.events = [
-            [Event.SendMessage, this._onReceiveMessage.bind(this)],
-            [Event.ReceiveMessage, this._onReceiveMessage.bind(this)],
-        ];
-        if (this.isGroup) {
-            this.events.push([Event.Group, this._setNaviBar.bind(this)]);
-        }
-        this.listeners = new Array(this.events.length);
         this.state = {
+            listKey: guid(),
             messages: [],
             keyboardShow: false,
             menuShow: false,
@@ -49,33 +46,48 @@ export default class extends React.PureComponent {
 
     componentDidMount() {
         this._setNaviBar();
-        this.keyboardShow = Keyboard.addListener(
-            'keyboardDidShow',
-            this._setKeyboardStatus.bind(this, true)
-        );
-        this.keyboardHide = Keyboard.addListener(
-            'keyboardWillHide',
-            this._setKeyboardStatus.bind(this, false)
-        );
-        this.events.forEach(([eventType, func], index) => {
+        this._registerListener();
+    }
+
+    componentWillUnmount() {
+        this._unRegisterListener();
+    }
+
+    componentDidUpdate(prevProps) {
+        if (prevProps.imId !== this.props.imId) {
+            this.isGroup = this.props.chatType === Conversation.ChatType.Group;
+            this._setNaviBar();
+            this._unRegisterListener();
+            this._registerListener();
+            this.setState({listKey: guid()});
+        }
+    }
+
+    _registerListener = () => {
+        [
+            [Event.SendMessage, this._onReceiveMessage.bind(this)],
+            [Event.ReceiveMessage, this._onReceiveMessage.bind(this)],
+            this.isGroup && [Event.Group, this._setNaviBar.bind(this)],
+        ].filter(i => !!i).forEach(([eventType, func], index) => {
             this.listeners[index] = Listener.register(
                 [Event.Base, eventType, this.props.imId],
                 func
             );
         });
-    }
+        const index = this.listeners.length;
+        this.listeners[index] = Keyboard.addListener(
+            'keyboardDidShow',
+            this._setKeyboardStatus.bind(this, true)
+        );
+        this.listeners[index + 1] = Keyboard.addListener(
+            'keyboardWillHide',
+            this._setKeyboardStatus.bind(this, false)
+        );
+    };
 
-    componentWillUnmount() {
-        this.keyboardShow && this.keyboardShow.remove();
-        this.keyboardHide && this.keyboardHide.remove();
-        this.events.forEach(([eventType], index) => {
-            const listener = this.listeners[index];
-            listener && Listener.unregister(
-                [Event.Base, eventType, this.props.imId],
-                listener
-            );
-        });
-    }
+    _unRegisterListener = () => {
+        this.listeners.forEach(listener => listener && listener.remove())
+    };
 
     render() {
         const {imId, chatType} = this.props;
@@ -128,6 +140,7 @@ export default class extends React.PureComponent {
         return (
             <View style={styles.container}>
                 <delegate.component.DetailListView
+                    key={this.state.listKey}
                     ref={ref => this.list = ref}
                     style={styles.fixedList}
                     renderItem={this._renderItem.bind(this)}

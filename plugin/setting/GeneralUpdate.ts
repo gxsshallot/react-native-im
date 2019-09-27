@@ -1,12 +1,10 @@
-import { InteractionManager } from 'react-native';
+import {InteractionManager} from 'react-native';
 import Toast from 'react-native-root-toast';
 import i18n from 'i18n-js';
-import { Typings, Delegate, PageKeys } from '../../standard';
+import {Delegate, PageKeys, Typings} from '../../standard';
 
-export async function onAddMembers(
-    props: Typings.Action.Setting.Params,
-    memberUserIds: string[]
-): Promise<void> {
+export async function onAddMembers(props: Typings.Action.Setting.Params,
+                                   memberUserIds: string[]): Promise<void> {
     const {imId, chatType, onDataChange, navigation} = props;
     const isGroup = chatType === Typings.Conversation.ChatType.Group;
     if (isGroup) {
@@ -23,17 +21,11 @@ export async function onAddMembers(
         try {
             const result = await Delegate.model.Conversation.createOne(newMembers);
             navigation.navigate({
-                routeName: PageKeys.ChatList,
-                params: {},
-            });
-            InteractionManager.runAfterInteractions(() => {
-                navigation.navigate({
-                    routeName: PageKeys.ChatDetail,
-                    params: {
-                        imId: result.imId,
-                        chatType: result.chatType,
-                    },
-                });
+                routeName: PageKeys.ChatDetail,
+                params: {
+                    imId: result.imId,
+                    chatType: result.chatType,
+                },
             });
         } catch (err) {
             Toast.show(i18n.t('IMToastError', {
@@ -44,10 +36,8 @@ export async function onAddMembers(
     return Delegate.model.Group.getMembers(imId);
 }
 
-export async function onRemoveMembers(
-    props: Typings.Action.Setting.Params,
-    memberUserIds: string[]
-): Promise<void> {
+export async function onRemoveMembers(props: Typings.Action.Setting.Params,
+                                      memberUserIds: string[]): Promise<void> {
     const {imId, onDataChange} = props;
     try {
         await Delegate.model.Group.removeMembers(imId, memberUserIds);
