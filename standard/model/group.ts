@@ -187,7 +187,7 @@ async function changeGroupInfo<T>(
     return promiseResult;
 }
 
-async function deleteOne(groupId: string): Promise<void> {
+export async function deleteOne(groupId: string): Promise<void> {
     if (groupId) {
         delete rootNode[groupId];
     }

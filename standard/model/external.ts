@@ -113,11 +113,9 @@ export async function onUpdateOwner(
 
 export async function onGroupDelete(
     groupId: string,
-    localTime: number,
-    timestamp: number
 ): Promise<void> {
     await delegate.model.Conversation.deleteOne(groupId);
-    await groupUpdateOperation(groupId, null, localTime, timestamp);
+    await delegate.model.Group.deleteOne(groupId);
 }
 
 export function getOperatorName(userId?: string): string {

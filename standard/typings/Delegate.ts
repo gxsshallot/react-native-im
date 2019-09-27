@@ -59,6 +59,7 @@ export interface GroupModelPart {
     getAllowInvites: (groupId: string) => boolean;
     createOne: (memberUserIds: string[]) => Promise<Group.Item>;
     destroyOne: (groupId: string) => Promise<void>;
+    deleteOne: (groupId: string) => Promise<void>;
     quitOne: (groupId: string) => Promise<void>;
     addMembers: (groupId: string, memberUserIds: string[]) => Promise<string[]>;
     removeMembers: (groupId: string, memberUserIds: string[]) => Promise<string[]>;
