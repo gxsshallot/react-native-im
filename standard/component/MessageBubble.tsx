@@ -1,9 +1,8 @@
 import React from 'react';
-import { TouchableWithoutFeedback, View, Dimensions, ImageSourcePropType } from 'react-native';
+import {Dimensions, ImageSourcePropType, TouchableWithoutFeedback, View} from 'react-native';
 import ImageCapInset from '@hecom/react-native-image-capinsets';
 import * as Model from '../model';
-import { Component, Action } from '../typings';
-import delegate from '../delegate';
+import {Action, Component} from '../typings';
 
 export interface Props extends Component.MessageBubbleProps {
     leftBubble: ImageSourcePropType;
@@ -23,7 +22,7 @@ export default class extends React.PureComponent<Props, State> {
     protected readonly paddingHorizontal = 5;
     protected bubble: View | null = null;
     protected innerView: Action.Display.Result | null = null;
-    
+
     state: State = {
         enableBubble: false,
     };
@@ -61,7 +60,7 @@ export default class extends React.PureComponent<Props, State> {
     }
 
     protected _renderMessage(maxWidth: number) {
-        const {message, isSender} = this.props;
+        const {message, isSender, messages} = this.props;
         const state = {
             imId: this.props.imId,
             chatType: this.props.chatType,
@@ -69,12 +68,11 @@ export default class extends React.PureComponent<Props, State> {
             isSender: isSender,
         };
         const params = {
-            ref: (ref: Action.Display.Result | null) => {this.innerView = ref;},
-            message: message,
-            isSender: isSender,
+            ref: (ref: Action.Display.Result | null) => {
+                this.innerView = ref;
+            },
+            message, messages, isSender, maxWidth, style: {},
             enableBubble: this._enableBubble.bind(this),
-            maxWidth: maxWidth,
-            style: {},
         };
         const displayView = Model.Action.Display.get(
             message.type,

@@ -1,8 +1,6 @@
 import React from 'react';
-import { FlatList, StyleSheet } from 'react-native';
+import {FlatList, StyleSheet} from 'react-native';
 import PropTypes from 'prop-types';
-import { Message } from '../typings';
-import delegate from '../delegate';
 
 export default class extends React.PureComponent {
     static propTypes = {
@@ -47,6 +45,7 @@ export default class extends React.PureComponent {
                 onEndReached={this._loadPage}
                 keyExtractor={item => item.messageId || item.innerId}
                 {...this.props}
+                renderItem={(arg) => this.props.renderItem(arg, this.state.data)}
             />
         );
     }
@@ -60,7 +59,7 @@ export default class extends React.PureComponent {
             .then(({data, isEnd, isAllData}) => {
                 data = data.reduce((prv, cur) => {
                     const {messageId, innerId} = cur;
-                    if (messageId && this.ids.has(messageId) || 
+                    if (messageId && this.ids.has(messageId) ||
                         innerId && this.innerIds.has(innerId)) {
                         return prv;
                     } else {

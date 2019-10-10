@@ -304,7 +304,7 @@ export default class extends React.PureComponent<ChatDetailProps> {
         return await delegate.model.Conversation.markReadStatus(imId, chatType, true);
     }
 
-    _renderItem({item}) {
+    _renderItem({item}, messageList) {
         const isMe = item.from === delegate.user.getMine().userId;
         const position = item.data.isSystem ? 0 : isMe ? 1 : -1;
         if (item.data.isSystem && item.data.text.length <= 0) {
@@ -316,6 +316,7 @@ export default class extends React.PureComponent<ChatDetailProps> {
                 chatType={this.props.chatType}
                 position={position}
                 message={item}
+                messages={messageList}
                 onShowMenu={this._onShowMenu.bind(this)}
                 navigation={this.props.navigation}
             />

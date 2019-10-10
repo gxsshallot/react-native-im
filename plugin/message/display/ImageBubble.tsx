@@ -1,6 +1,7 @@
 import React from 'react';
 import {Image, ImageURISource, Platform, StyleSheet, View} from 'react-native';
 import RNFS from 'react-native-fs';
+import {IMConstant} from 'react-native-im-easemob'
 import {showPhotoBrowserPage} from 'react-native-photo-browse';
 import {Typings} from '../../../standard';
 
@@ -69,10 +70,14 @@ export default class extends React.PureComponent<Props, State> {
     }
 
     public onPress() {
-        const {message: {data: {remotePath}}} = this.props;
+        const {message: {data: {remotePath}, messageId}, messages = []} = this.props;
+        const images = messages.filter(({type}) => type === IMConstant.MessageType.image).reverse();
+        const currentIndex = images.findIndex(image => image.messageId === messageId);
         showPhotoBrowserPage({
-            images: [remotePath],
+            currentIndex: currentIndex < 0 ? 0 : currentIndex,
+            images: images.length === 0 ? [remotePath] : images.map(({data: {remotePath}}) => remotePath),
             canSave: true,
+            renderIndicator: () => null,
         });
     }
 }

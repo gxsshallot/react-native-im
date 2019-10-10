@@ -49,7 +49,7 @@ export default class extends React.PureComponent<Props, State> {
     }
 
     protected _renderLeft() {
-        const {message, onShowMenu} = this.props;
+        const {message, onShowMenu, messages} = this.props;
         const user = delegate.user.getUser(message.from);
         return (
             <View style={styles.rowLeft}>
@@ -65,6 +65,7 @@ export default class extends React.PureComponent<Props, State> {
                         chatType={this.props.chatType}
                         isSender={false}
                         message={message}
+                        messages={messages}
                         onShowMenu={onShowMenu}
                         navigation={this.props.navigation}
                     />
@@ -74,7 +75,7 @@ export default class extends React.PureComponent<Props, State> {
     }
 
     protected _renderRight() {
-        const {message, onShowMenu} = this.props;
+        const {message, onShowMenu, messages} = this.props;
         const status = message.status;
         let leftItem = null;
         if (status === Message.Status.Delivering ||
@@ -103,6 +104,7 @@ export default class extends React.PureComponent<Props, State> {
                     chatType={this.props.chatType}
                     isSender={true}
                     message={message}
+                    messages={messages}
                     onShowMenu={onShowMenu}
                     navigation={this.props.navigation}
                 />
