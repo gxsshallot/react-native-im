@@ -212,9 +212,9 @@ export default class extends React.PureComponent<ChatDetailProps> {
         this._markAllRead()
     }
 
-    _onSendMessage(imId, chatType, {type, body}) {
+    _onSendMessage(imId, chatType, {type, body, ...other}) {
         const isCurrent = this.props.imId === imId;
-        const message = this._generateMessage(type, body);
+        const message = this._generateMessage(type, body, other);
         delegate.model.Message.sendMessage(imId, chatType, message, {})
             .then(() => {
                 if (isCurrent) {
@@ -295,7 +295,7 @@ export default class extends React.PureComponent<ChatDetailProps> {
         this._onSendMessage(
             conversations[0].imId,
             conversations[0].chatType,
-            {type: message.type, body: message.data}
+            {...message, body: message.data}
         );
     }
 
