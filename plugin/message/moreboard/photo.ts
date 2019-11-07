@@ -17,7 +17,7 @@ export const takePhoto: ImageResult = {
     onPress: (params: ImageParams) => {
         ImagePicker.getAlbum({
             autoConvertPath: true,
-            maxSize: 1,
+            maxSize: 9,
             canEdit: true,
             callback: (items: callbackParams) => onPhotoViewFinish<Typings.Message.ImageBody>(false, params.onDataChange, items),
         });

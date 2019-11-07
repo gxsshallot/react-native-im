@@ -72,6 +72,7 @@ export interface GroupModelPart {
 export interface MessageModelPart {
     name: string,
     sendMessage: (imId: string, chatType: Conversation.ChatType, message: Message.General, ext: object, isSystem: boolean) => Promise<void>
+    sendMultiMessage: (imId: string, chatType: Conversation.ChatType, messages: Array<Message.General>) => Promise<void>
     insertTimeMessage: (imId: string, chatType: Conversation.ChatType, message: Message.General) => Promise<Message.General | void>
     insertSystemMessage: (imId: string, chatType: Conversation.ChatType, text: string, localTime: number, timestamp: number, innerId?: string) => Promise<void>
 }

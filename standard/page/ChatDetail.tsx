@@ -108,6 +108,7 @@ export default class extends React.PureComponent<ChatDetailProps> {
                     ref={ref => this.bottomBar = ref}
                     imId={imId}
                     chatType={chatType}
+                    onSendMultiMessage={this._onSendMultiMessage.bind(this, imId, chatType)}
                     onSendMessage={this._onSendMessage.bind(this, imId, chatType)}
                     navigation={this.props.navigation}
                 />
@@ -212,10 +213,19 @@ export default class extends React.PureComponent<ChatDetailProps> {
         this._markAllRead()
     }
 
+    _onSendMultiMessage(imId, chatType, {type, bodies}) {
+        const messages = bodies.map(body => this._generateMessage(type, body));
+        this._sendMessage(imId, chatType, messages, delegate.model.Message.sendMultiMessage);
+    }
+
     _onSendMessage(imId, chatType, {type, body, ...other}) {
-        const isCurrent = this.props.imId === imId;
         const message = this._generateMessage(type, body, other);
-        delegate.model.Message.sendMessage(imId, chatType, message, {})
+        this._sendMessage(imId, chatType, message, delegate.model.Message.sendMessage);
+    }
+
+    _sendMessage(imId, chatType, message, sendFunc) {
+        const isCurrent = this.props.imId === imId;
+        sendFunc(imId, chatType, message)
             .then(() => {
                 if (isCurrent) {
                     this._markAllRead();
@@ -323,7 +333,7 @@ export default class extends React.PureComponent<ChatDetailProps> {
         );
     }
 
-    _generateMessage(type, body, others) {
+    _generateMessage(type, body, others = {}) {
         return {
             conversationId: this.props.imId,
             messageId: undefined,

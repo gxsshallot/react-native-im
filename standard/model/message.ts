@@ -7,19 +7,30 @@ import delegate from '../delegate';
 export const name = 'im-message';
 const interval = 3 * 60 * 1000;
 
+export async function sendMultiMessage(
+    imId: string,
+    chatType:Conversation.ChatType,
+    messages: Array<Message.General> = []
+):Promise<void> {
+    messages.forEach((message, index)=>{
+        sendMessage(imId, chatType, message, {}, false, index === 0);
+    })
+}
+
 export async function sendMessage(
     imId: string,
     chatType: Conversation.ChatType,
     message: Message.General,
     ext: object = {},
-    isSystem: boolean = false
+    isSystem: boolean = false,
+    autoTimestamp: boolean = true,
 ): Promise<void> {
     ext = {...ext, innerId: message.innerId};
     const sendEventName = [Event.Base, Event.SendMessage, imId];
     if (!delegate.model.Conversation.getOne(imId, false)) {
         await delegate.model.Conversation.loadItem(imId, chatType);
     }
-    if (!isSystem){
+    if (!isSystem && autoTimestamp){
         const timeMessage = await insertTimeMessage(imId, chatType, message);
         timeMessage && Listener.trigger(sendEventName, timeMessage);
     }

@@ -1,8 +1,7 @@
 import React from 'react';
-import { Image, StyleSheet, Text, TouchableOpacity, View, Dimensions } from 'react-native';
-import { getSafeAreaInset } from 'react-native-pure-navigation-bar';
+import {Dimensions, Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {getSafeAreaInset} from 'react-native-pure-navigation-bar';
 import * as Model from '../model';
-import delegate from '../delegate';
 import BottomBar from './BottomBar';
 
 export default class extends React.PureComponent {
@@ -19,7 +18,7 @@ export default class extends React.PureComponent {
     innerHorizontal = 30;
 
     render() {
-        const { imId, chatType, getItems } = this.props;
+        const {imId, chatType, getItems} = this.props;
         const allItems = getItems(imId, chatType);
         const {width, height} = Dimensions.get('window');
         let pageSize;
@@ -120,10 +119,14 @@ export default class extends React.PureComponent {
     };
 
     _onDataChange = (messageType, messageBody) => {
-        this.props.onSendMessage({
-            type: messageType,
-            body: messageBody,
-        });
+        if (Array.isArray(messageBody)) {
+            this.props.onSendMultiMessage({type: messageType, bodies: messageBody})
+        } else {
+            this.props.onSendMessage({
+                type: messageType,
+                body: messageBody,
+            });
+        }
     };
 }
 
