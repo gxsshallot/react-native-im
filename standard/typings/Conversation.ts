@@ -14,6 +14,7 @@ export enum ChatType {
 export interface Base {
     imId: string;
     chatType: ChatType;
+    config?: Config;
 }
 
 /**
@@ -33,7 +34,7 @@ export type ConfigUpdate = Partial<Config>;
 /**
  * Conversation item part with a converted latest message.
  */
-export interface ItemPart {
+export interface ItemPart extends Base {
     unreadMessagesCount: number;
     config: Config;
     atMe: number;
@@ -43,11 +44,11 @@ export interface ItemPart {
 /**
  * Conversation item with a converted latest message.
  */
-export interface Item extends ItemPart, Base {
+export interface Item extends ItemPart {
 }
 
 /**
  * Conversation item with an origin message.
  */
-export interface Origin extends Partial<ItemPart>, Base {
+export interface Origin extends Partial<Item> {
 }

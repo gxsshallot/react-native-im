@@ -18,14 +18,13 @@ export const defaultConfig: Conversation.Config = {
 export async function init(forceUpdate: boolean): Promise<void> {
     const getCache = async function (): Promise<void> {
         const items = await AsyncStorage.getKeys(keys(), Storage.Part);
-        Object.values(items).forEach((item) => {
+        Object.values(items).forEach((item: Conversation.Item) => {
             rootNode[item.imId] = item;
         });
     };
+    await getCache();
     if (forceUpdate) {
-        await load().catch(() => getCache());
-    } else {
-        await getCache();
+        await load();
     }
     onUnreadCountChanged();
 }
@@ -40,13 +39,13 @@ export async function uninit(forceClear: boolean): Promise<void> {
 
 export async function load(): Promise<void> {
     const result = await delegate.im.conversation.loadList();
-    await Promise.all(result.map((item) => {
-        rootNode[item.imId] = {...item};
-        return loadItem(item.imId, item.chatType);
+    await Promise.all(result.map(async (item) => {
+        const conversation = await loadItem(item.imId, item.chatType, false);
+        Object.assign(conversation.config, item.config)
     }));
 }
 
-export async function loadItem(imId: string, chatType: Conversation.ChatType): Promise<Conversation.Item> {
+export async function loadItem(imId: string, chatType: Conversation.ChatType, enableExport: boolean = false): Promise<Conversation.Item> {
     const result = await delegate.im.conversation.loadItem(imId, chatType, true);
     const message = !result.latestMessage ? null :
         Action.Parse.get([], result.latestMessage, result.latestMessage);
@@ -79,7 +78,7 @@ export async function loadItem(imId: string, chatType: Conversation.ChatType): P
     if (isGroup && !delegate.model.Group.findByGroupId(imId)) {
         await delegate.model.Group.loadItem(imId);
     }
-    return simpleExport(rootNode[imId]);
+    return enableExport ? simpleExport(rootNode[imId]) : rootNode[imId];
 }
 
 export function isValid(imId: string, chatType: Conversation.ChatType): boolean {
@@ -93,7 +92,7 @@ export function isValid(imId: string, chatType: Conversation.ChatType): boolean 
 }
 
 export function get(): Conversation.Item[] {
-    const originItems = Object.values(rootNode);
+    const originItems: Array<Conversation.Item> = Object.values(rootNode);
     const validItems = originItems.filter(item => isValid(item.imId, item.chatType));
     const sortedItems = validItems
         .sort((a, b) => {
@@ -130,7 +129,7 @@ export function getConfig(imId: string): Conversation.Config {
     }
 }
 
-export function getName(imId: string): string | void {
+export function getName(imId: string): string | void | null {
     const item = getOne(imId, false);
     if (item) {
         if (item.chatType === Conversation.ChatType.Group) {
@@ -151,8 +150,7 @@ export async function updateConfig(imId: string,
         ...getConfig(imId),
         ...config,
     };
-    const result = !localOnly ? await delegate.im.conversation.updateConfig(imId, newConfig) : newConfig;
-    rootNode[imId].config = result;
+    rootNode[imId].config = !localOnly ? await delegate.im.conversation.updateConfig(imId, newConfig) : newConfig;
     Listener.trigger([Event.Base, Event.Conversation, imId]);
     await writeData(imId);
 }
@@ -242,11 +240,12 @@ export async function recallMessage(imId: string, message: Message.General): Pro
     }
     rootNode[imId].atMe = (rootNode[imId].atMe || 0) - (hasAtMe(item, message) ? 1 : 0);
     if (rootNode[imId].atMe < 0) rootNode[imId].atMe = 0;
+    writeData(imId);
 }
 
 function onUnreadCountChanged(): void {
     const count = Object.values(rootNode)
-        .reduce((prv, cur) => {
+        .reduce((prv: number, cur: Conversation.Item) => {
             const isAvoid = cur.config.avoid;
             if (!isAvoid && isValid(cur.imId, cur.chatType)) {
                 prv += cur.unreadMessagesCount;
