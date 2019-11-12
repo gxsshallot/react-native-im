@@ -26,7 +26,7 @@ const isVideo = (message: Typings.Message.Origin) => isFunc(message, IMConstant.
 const isVoice = (message: Typings.Message.Origin) => isFunc(message, IMConstant.MessageType.voice);
 
 function isFunc(message: Typings.Message.Origin, messageType: number): boolean {
-    return message.body.type === messageType;
+    return message && message.body && message.body.type === messageType;
 }
 
 function convertText(message: Typings.Message.Origin) {
