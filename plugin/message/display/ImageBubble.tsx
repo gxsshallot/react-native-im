@@ -61,6 +61,7 @@ export default class extends React.PureComponent<Props, State> {
         return this.state.source ? (
             <View style={[styles.view, style]}>
                 <Image
+                    key={this.state.source}
                     resizeMode={'contain'}
                     source={this.state.source}
                     style={[styles.image, {width, height}]}
