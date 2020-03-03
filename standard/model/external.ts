@@ -88,6 +88,17 @@ export async function onUserLeave(
     await groupUpdateOperation(groupId, text, localTime, timestamp);
 }
 
+export async function onUserDidLeaveGroup(
+    group: object,
+    reason: number,
+){
+    if (reason == 0) {
+        await delegate.model.Conversation.deleteOne(group.groupId);
+        await delegate.model.Group.deleteOne(group.groupId);  
+    }
+    Listener.trigger([Event.Base, Event.GroupLeave, group.groupId], {group: group, reason: reason});
+}
+
 export async function onUpdateName(
     groupId: string,
     updatorId: string,

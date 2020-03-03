@@ -1,5 +1,5 @@
 import React from 'react';
-import {Clipboard, Keyboard, SafeAreaView, StyleSheet, TouchableWithoutFeedback, View} from 'react-native';
+import {Clipboard, Keyboard, SafeAreaView, StyleSheet, TouchableWithoutFeedback, View, Alert} from 'react-native';
 import {HeaderButton} from 'react-navigation-header-buttons';
 import Toast from 'react-native-root-toast';
 import Listener from 'react-native-general-listener';
@@ -9,6 +9,7 @@ import * as Model from '../model';
 import {DateUtil, guid} from '../util';
 import {Conversation, Event, Message} from '../typings';
 import delegate from '../delegate';
+import { StackActions } from 'react-navigation';
 
 interface ChatDetailProps {
     imId: string
@@ -68,6 +69,7 @@ export default class extends React.PureComponent<ChatDetailProps> {
             [Event.SendMessage, this._onReceiveMessage.bind(this)],
             [Event.ReceiveMessage, this._onReceiveMessage.bind(this)],
             this.isGroup && [Event.Group, this._setNaviBar.bind(this)],
+            [Event.GroupLeave, this._userLeave.bind(this)],
         ].filter(i => !!i).forEach(([eventType, func], index) => {
             this.listeners[index] = Listener.register(
                 [Event.Base, eventType, this.props.imId],
@@ -200,6 +202,27 @@ export default class extends React.PureComponent<ChatDetailProps> {
             data: result,
             isEnd: result.length < this.pageCount,
         };
+    }
+
+    _userLeave(data){
+        const {reason} = data;
+        let message = '';
+        if (reason == 0) {
+            message = '您已被移出群聊';
+        } else if (reason == 2) {
+            message = '群聊已解散';
+        }
+
+        if (message.length > 0) {
+            this._unRegisterListener();
+            Alert.alert('提示', message, [
+                {text: i18n.t('IMCommonOK'), onPress: () => {
+                    this.props.navigation.dispatch(
+                        StackActions.popToTop({})
+                    );
+                }},
+            ]); 
+        }
     }
 
     _insertMessageToList(message) {
