@@ -26,6 +26,9 @@ export default function () {
     Delegate.im.conversation.deleteOne = (imId) => {
         return ChatManager.deleteConversation(imId);
     };
+    Delegate.im.conversation.deleteAllMessages = (imId, chatType) => {
+        return ChatManager.deleteAllMessages(imId, chatType);
+    };
     // TODO updateConfig
     Delegate.im.conversation.markAllRead = (imId, chatType) => {
         return ChatManager.markAllMessagesAsRead(imId, chatType);

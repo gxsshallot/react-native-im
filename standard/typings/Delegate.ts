@@ -112,6 +112,7 @@ export interface ConversationApiPart {
     updateConfig: (imId: string, config: Conversation.ConfigUpdate) => Promise<Conversation.Config>;
     markAllRead: (imId: string, chatType: Conversation.ChatType) => Promise<void>;
     markLatestUnread: (imId: string, chatType: Conversation.ChatType) => Promise<void>;
+    deleteAllMessages: (imId: string, chatType: Conversation.ChatType) => Promise<void>;
     loadMessage: (params: {
         imId: string;
         chatType: Conversation.ChatType;
