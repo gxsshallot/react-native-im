@@ -85,12 +85,17 @@ export interface ExternalModelPart {
 
 }
 
+export interface ExternalModelSetting {
+
+}
+
 export interface ModelPart {
     Conversation: ConversationModelPart;
     Group: GroupModelPart;
     Message: MessageModelPart;
     Emoji: EmojiModelPart;
     External: ExternalModelPart;
+    Setting: ExternalModelSetting;
 }
 
 export interface ContactPart {

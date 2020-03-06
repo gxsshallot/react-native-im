@@ -54,6 +54,7 @@ function setup_common_model() {
     Delegate.model.External = Model.External;
     Delegate.model.Group = Model.Group;
     Delegate.model.Message = Model.Message;
+    Delegate.model.Setting = Model.Setting;
 }
 
 function login(forceUpdate: boolean) {
