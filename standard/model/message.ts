@@ -46,7 +46,7 @@ export async function sendMessage(
         throw new Error('暂不支持发送该消息类型');
     }
     const newOriginMessage = await promise;
-    const newMessage = Action.Parse.get([], newOriginMessage, newOriginMessage);
+    const newMessage = newOriginMessage ? Action.Parse.get([], newOriginMessage, newOriginMessage) : message;
     Listener.trigger(sendEventName, newMessage);
     await delegate.model.Conversation.updateMessage(imId, newMessage);
 }
