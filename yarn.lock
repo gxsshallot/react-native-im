@@ -89,6 +89,30 @@
     lodash "^4.17.13"
     to-fast-properties "^2.0.0"
 
+"@egjs/hammerjs@^2.0.17":
+  version "2.0.17"
+  resolved "https://registry.npm.taobao.org/@egjs/hammerjs/download/@egjs/hammerjs-2.0.17.tgz#5dc02af75a6a06e4c2db0202cae38c9263895124"
+  integrity sha1-XcAq91pqBuTC2wICyuOMkmOJUSQ=
+  dependencies:
+    "@types/hammerjs" "^2.0.36"
+
+"@hecom-rn/react-native-full-image-picker@1.3.1":
+  version "1.3.1"
+  resolved "https://registry.npm.taobao.org/@hecom-rn/react-native-full-image-picker/download/@hecom-rn/react-native-full-image-picker-1.3.1.tgz#b22b70fde9dcfb53ebdde830b9e19ad5a14266cb"
+  integrity sha1-sitw/enc+1Pr3egwueGa1aFCZss=
+  dependencies:
+    "@react-native-community/cameraroll" "^1.2.1"
+    react-native-fs "^2.13.3"
+    react-native-pure-navigation-bar "^1.4.7"
+    react-native-root-siblings "^3.1.7"
+
+"@hecom-rn/react-native-general-actionsheet@1.0.5":
+  version "1.0.5"
+  resolved "https://registry.npmjs.org/@hecom-rn/react-native-general-actionsheet/-/react-native-general-actionsheet-1.0.5.tgz#2d2f8584e408fb1ed99614be9572473e0cbc4bf1"
+  integrity sha512-aA4aDwxw/ijzdWeumWKbMUFkpTO7lg6aioh0LXAS3P9qCExt63Tlh6axjwPj7q8dDkCKc3+2ChdqhbIRC+PeZg==
+  dependencies:
+    react-native-safe-area-utility "^1.0.0"
+
 "@hecom/badge@^1.0.2":
   version "1.0.3"
   resolved "https://registry.npmjs.org/@hecom/badge/-/badge-1.0.3.tgz#ea7691709a47df04e26d858f994a213406ada317"
@@ -99,15 +123,15 @@
   resolved "https://registry.npmjs.org/@hecom/image-arrow/-/image-arrow-1.0.3.tgz#cddbd10a1c7e716a7c08d8108f8a00f804a20471"
   integrity sha512-Ao5kIffZUCFcavPjBSoz+2nrMqLHYcv7nwQqqSmgj5nEq0OsS4vpSjTHL1ernZrudnJ/Bodw13w4BjtvQgDHWA==
 
-"@hecom/react-native-image-capinsets@^0.5.1":
-  version "0.5.4"
-  resolved "https://registry.npmjs.org/@hecom/react-native-image-capinsets/-/react-native-image-capinsets-0.5.4.tgz#8f9fdfee5e773a2097bf633b3ebea91685ddac2c"
-  integrity sha512-2+BRlnYcyB31ymZqOdZL4phKxlHNIncWiwFLcidxspr4hhi9ITG8JsALr+eopxJdIdUDP60G2HfDj5DmtUstsA==
-
 "@react-native-community/async-storage@^1.6.1":
   version "1.7.1"
   resolved "https://registry.npmjs.org/@react-native-community/async-storage/-/async-storage-1.7.1.tgz#ef2104d865de61ad91bba66613e57e689ff4e6a1"
   integrity sha512-/oX/x+EU4xNaqIaC/epVKzO8XghzImPA7l8cLz3USEFmtFiXFjBbTeeIFjjEm/u4/cv38Wi1xMEa10PHIWygRg==
+
+"@react-native-community/cameraroll@^1.2.1":
+  version "1.4.1"
+  resolved "https://registry.npm.taobao.org/@react-native-community/cameraroll/download/@react-native-community/cameraroll-1.4.1.tgz#e2891306243cf6a93556d4876ab99c38d497ab68"
+  integrity sha1-4okTBiQ89qk1VtSHarmcONSXq2g=
 
 "@react-navigation/core@^3.5.2":
   version "3.5.2"
@@ -131,6 +155,11 @@
   version "1.0.0"
   resolved "https://registry.npmjs.org/@types/eslint-visitor-keys/-/eslint-visitor-keys-1.0.0.tgz#1ee30d79544ca84d68d4b3cdb0af4f205663dd2d"
   integrity sha512-OCutwjDZ4aFS6PB1UZ988C4YgwlBHJd6wCeQqaLdmadZ/7e+w79+hbMUFC1QXDNCmdyoRfAFdm0RypzwR+Qpag==
+
+"@types/hammerjs@^2.0.36":
+  version "2.0.36"
+  resolved "https://registry.npm.taobao.org/@types/hammerjs/download/@types/hammerjs-2.0.36.tgz#17ce0a235e9ffbcdcdf5095646b374c2bf615a4c"
+  integrity sha1-F84KI16f+83N9QlWRrN0wr9hWkw=
 
 "@types/i18n-js@^3.0.1":
   version "3.0.1"
@@ -1008,11 +1037,6 @@ dom-walk@^0.1.0:
   resolved "https://registry.npmjs.org/dom-walk/-/dom-walk-0.1.1.tgz#672226dc74c8f799ad35307df936aba11acd6018"
   integrity sha1-ZyIm3HTI95mtNTB9+TaroRrNYBg=
 
-eme-encryption-scheme-polyfill@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.npmjs.org/eme-encryption-scheme-polyfill/-/eme-encryption-scheme-polyfill-2.0.0.tgz#b44a8fb7d5c7c0be869897be9d77a8cb9c0ba795"
-  integrity sha512-/zoXuACHLGQ8w5nkJrVr3YI0IGe05ZS8HR1x5uTqiAoHuj5hPzdnoyW9Zom8iPv93arPzwpde93GrKCFKLFK4g==
-
 emoji-regex@^7.0.1:
   version "7.0.3"
   resolved "https://registry.npmjs.org/emoji-regex/-/emoji-regex-7.0.3.tgz#933a04052860c85e83c122479c4748a8e4c72156"
@@ -1495,10 +1519,10 @@ internal-slot@^1.0.2:
     has "^1.0.3"
     side-channel "^1.0.2"
 
-invariant@^2.2.2:
+invariant@^2.2.2, invariant@^2.2.4:
   version "2.2.4"
-  resolved "https://registry.npmjs.org/invariant/-/invariant-2.2.4.tgz#610f3c92c9359ce1db616e538008d23ff35158e6"
-  integrity sha512-phJfQVBuaJM5raOpJjSfkiD6BpbCE4Ns//LaXl6wGYtUBY83nWS6Rf9tXm2e8VaK60JEjYldbPif/A2B1C2gNA==
+  resolved "https://registry.npm.taobao.org/invariant/download/invariant-2.2.4.tgz#610f3c92c9359ce1db616e538008d23ff35158e6"
+  integrity sha1-YQ88ksk1nOHbYW5TgAjSP/NRWOY=
   dependencies:
     loose-envify "^1.0.0"
 
@@ -1625,11 +1649,6 @@ jsx-ast-utils@^2.2.3:
   dependencies:
     array-includes "^3.0.3"
     object.assign "^4.1.0"
-
-keymirror@^0.1.1:
-  version "0.1.1"
-  resolved "https://registry.npmjs.org/keymirror/-/keymirror-0.1.1.tgz#918889ea13f8d0a42e7c557250eee713adc95c35"
-  integrity sha1-kYiJ6hP40KQufFVyUO7nE63JXDU=
 
 levn@^0.3.0, levn@~0.3.0:
   version "0.3.0"
@@ -1978,13 +1997,6 @@ react-is@^16.7.0, react-is@^16.8.1, react-is@^16.8.6:
   resolved "https://registry.npmjs.org/react-is/-/react-is-16.12.0.tgz#2cc0fe0fba742d97fd527c42a13bec4eeb06241c"
   integrity sha512-rPCkf/mWBtKc97aLL9/txD8DZdemK0vkA3JMLShjlJB3Pj3s+lpf1KaBzMfQrAmhMQB0n1cU/SUGgKKBCe837Q==
 
-react-native-camera@^1.8.0:
-  version "1.13.1"
-  resolved "https://registry.npmjs.org/react-native-camera/-/react-native-camera-1.13.1.tgz#19277ccae0a49dbf1b96049da5b95c847ea7aff2"
-  integrity sha512-wYjMi06ygYIiHRM4dSCH914xFUay7Wplx0bAej4iBkZeh54M4AxJDcF4vVZ5vdkpuAg8zvof3l+L1VhcKziMgw==
-  dependencies:
-    prop-types "^15.6.2"
-
 react-native-fs@^2.13.3:
   version "2.16.4"
   resolved "https://registry.npmjs.org/react-native-fs/-/react-native-fs-2.16.4.tgz#34c477399af9ed33fd64e869b33a587c3ad029e9"
@@ -1992,25 +2004,6 @@ react-native-fs@^2.13.3:
   dependencies:
     base-64 "^0.1.0"
     utf8 "^3.0.0"
-
-react-native-full-image-picker@^1.2.10:
-  version "1.2.11"
-  resolved "https://registry.npmjs.org/react-native-full-image-picker/-/react-native-full-image-picker-1.2.11.tgz#342953c5281adc8f8749ee52b96d21a41a57b47f"
-  integrity sha512-cOAyhfbjzl8FFICylcm+c1bwg4jZbuNBaevkAzXeYTtBPZRUOnvXHRFM2D/+IjmaBENFvQi0vSrNCxaaunCREg==
-  dependencies:
-    react-native-camera "^1.8.0"
-    react-native-fs "^2.13.3"
-    react-native-pure-navigation-bar "^1.4.7"
-    react-native-root-siblings "^3.1.7"
-    react-native-video "^4.3.0"
-
-react-native-general-actionsheet@^1.0.3:
-  version "1.0.4"
-  resolved "https://registry.npmjs.org/react-native-general-actionsheet/-/react-native-general-actionsheet-1.0.4.tgz#d9fb8ee8b1001a30b90e7b507bf8c0d3e878e403"
-  integrity sha512-XKlPt1MK9mtFgTk+z72X9ZCI2ygRr0BjqM5bPZJCBnRvMH87RNYaVak/XO18ebx6XCtd3sEfc5dCzTbhV0egpA==
-  dependencies:
-    react-native-root-siblings "^3.1.6"
-    react-native-safe-area-utility "^1.0.0"
 
 react-native-general-listener@^1.0.3:
   version "1.0.3"
@@ -2028,6 +2021,16 @@ react-native-general-storage@^1.0.4:
   integrity sha512-5QoffXVGeIEwWoYrOLvtHo9Ux6shHnMcJr6fkWx6Cjn87m6GxI82Q6QhWcAuRiQqaAvdXpBhcYST6Gik5MND2w==
   dependencies:
     "@react-native-community/async-storage" "^1.6.1"
+
+react-native-gesture-handler@^1.6.0:
+  version "1.6.0"
+  resolved "https://registry.npm.taobao.org/react-native-gesture-handler/download/react-native-gesture-handler-1.6.0.tgz#e9a4e1d0c7ac21eb0d6b6ec013e73f9c0c33a629"
+  integrity sha1-6aTh0MesIesNa27AE+c/nAwzpik=
+  dependencies:
+    "@egjs/hammerjs" "^2.0.17"
+    hoist-non-react-statics "^2.3.1"
+    invariant "^2.2.4"
+    prop-types "^15.7.2"
 
 react-native-im-easemob@^1.0.24:
   version "1.0.28"
@@ -2180,15 +2183,6 @@ react-native-swipe-list-view@^1.5.0:
   resolved "https://registry.npmjs.org/react-native-swipe-list-view/-/react-native-swipe-list-view-1.5.8.tgz#1da75ed9eb8216c9bb401ee0a3c781e8cdc56093"
   integrity sha512-GvnnnMClypABc4Tq6VQPvaUVL95LcyiIsE/jI89zDWVB3qvzOC3d/2iiMTxj5CAUg4d9NBBqxx6hzjhK/jvzyQ==
 
-react-native-video@^4.3.0:
-  version "4.4.4"
-  resolved "https://registry.npmjs.org/react-native-video/-/react-native-video-4.4.4.tgz#e33da29990556a9b2d575d6b2e88190fc04d9b50"
-  integrity sha512-GzC9dqvEV3kPQDgfM41bxuhXK0pf6NF+/PSY0nCqzikaapUtOs/69gPHEoG0D6ykI5ru0TxKdc1ZYM6MfZfgRw==
-  dependencies:
-    keymirror "^0.1.1"
-    prop-types "^15.5.10"
-    shaka-player "^2.4.4"
-
 react-navigation-header-buttons@^2.1.1:
   version "2.3.1"
   resolved "https://registry.npmjs.org/react-navigation-header-buttons/-/react-navigation-header-buttons-2.3.1.tgz#f5465ee4d3e6e9d17656221809e16e6eae39067d"
@@ -2331,13 +2325,6 @@ semver@5.5.0:
   version "5.5.0"
   resolved "https://registry.npmjs.org/semver/-/semver-5.5.0.tgz#dc4bbc7a6ca9d916dee5d43516f0092b58f7b8ab"
   integrity sha512-4SJ3dm0WAwWy/NVeioZh5AntkdJoWKxHxcmyP622fOkgHa4z3R0TdBJICINyaSDE6uNwVc8gZr+ZinwZAH4xIA==
-
-shaka-player@^2.4.4:
-  version "2.5.9"
-  resolved "https://registry.npmjs.org/shaka-player/-/shaka-player-2.5.9.tgz#007dc19df2bb5d3d959d278b2d894af05adffe38"
-  integrity sha512-XavLBqxvIbvLOPfk7VKZu5fbMJyVko9bBfzxmMWdX5bvQwUSjU7ZhV8v2tHqXQYafpHml1hlGHzKkLs7idouNQ==
-  dependencies:
-    eme-encryption-scheme-polyfill "^2.0.0"
 
 shebang-command@^1.2.0:
   version "1.2.0"
