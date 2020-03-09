@@ -79,6 +79,7 @@ function convertVideo(message: Typings.Message.Origin) {
             localPath: message.body.localPath,
             remotePath: message.body.remotePath,
             duration: 0, // TODO duration
+            shouldRead: message.ext.shouldRead,
         }
     );
 }

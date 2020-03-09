@@ -3,6 +3,7 @@ import {Dimensions, ImageSourcePropType, TouchableWithoutFeedback, View} from 'r
 import ImageCapInset from '@hecom/react-native-image-capinsets';
 import * as Model from '../model';
 import {Action, Component} from '../typings';
+import delegate from '../delegate';
 
 export interface Props extends Component.MessageBubbleProps {
     leftBubble: ImageSourcePropType;
@@ -39,7 +40,7 @@ export default class extends React.PureComponent<Props, State> {
                 onPress={this._onPress.bind(this)}
                 onLongPress={this._onLongPress.bind(this)}
             >
-                <View ref={ref => this.bubble = ref}>
+                <View ref={ref => this.bubble = ref} style={{flexDirection: 'row'}}>
                     {this.state.enableBubble ? (
                         <ImageCapInset
                             capInsets={{top: 28, left: 13, bottom: 10, right: 13}}
@@ -54,9 +55,26 @@ export default class extends React.PureComponent<Props, State> {
                             {this._renderMessage(innerMaxWidth)}
                         </View>
                     )}
+                    {!isSender && this._renderRedFlag()}
                 </View>
             </TouchableWithoutFeedback>
         );
+    }
+
+    protected _renderRedFlag() {
+        if (this.props.message.data.shouldRead) {
+            return (
+                <View style={{
+                    backgroundColor: 'red',
+                    width: 5,
+                    height: 5,
+                    borderRadius: 10,
+                    marginLeft: 5,
+                }}/>
+            )
+        }  else {
+            return null;
+        }
     }
 
     protected _renderMessage(maxWidth: number) {
@@ -87,6 +105,14 @@ export default class extends React.PureComponent<Props, State> {
     }
 
     protected _onPress() {
+        const { message, message: { messageId, type} } = this.props;
+        //语音消息删除未读标志
+        if (type == 5 && messageId) {
+            let ext = { shouldRead: false };
+            delegate.im.conversation.updateMessageExt(messageId, ext);
+        }
+        message.data.shouldRead = false;
+        this.forceUpdate();
         if (this.innerView && this.innerView.onPress) {
             this.innerView.onPress();
         }

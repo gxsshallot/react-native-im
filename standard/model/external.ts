@@ -11,6 +11,13 @@ export interface ProcessedMessage<T extends Message.Body = Message.GeneralBody>
 export async function onMessageReceived(
     originMessage: Message.Origin
 ): Promise<ProcessedMessage> {
+    //语音消息插入未读标志
+    const { ext: { extend_message_body: { messageType } = {} } = {} } = originMessage;
+    if (messageType == 5) {
+        originMessage.ext.shouldRead = true;
+        delegate.im.conversation.updateMessageExt(originMessage.messageId, originMessage.ext);
+    }
+    
     const message = Action.Parse.get([], originMessage, originMessage);
     if (!message) {
         throw new Error('无法处理该消息');
