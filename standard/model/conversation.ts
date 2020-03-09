@@ -29,7 +29,7 @@ export async function init(forceUpdate: boolean): Promise<void> {
     onUnreadCountChanged();
 }
 
-export async function uninit(forceClear: boolean): Promise<void> {
+export async function uninit(forceClear: boolean = true): Promise<void> {
     const imIds = Object.keys(rootNode);
     imIds.forEach(imId => delete rootNode[imId]);
     if (forceClear) {

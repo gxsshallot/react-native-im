@@ -85,12 +85,17 @@ export interface ExternalModelPart {
 
 }
 
+export interface ExternalModelSetting {
+
+}
+
 export interface ModelPart {
     Conversation: ConversationModelPart;
     Group: GroupModelPart;
     Message: MessageModelPart;
     Emoji: EmojiModelPart;
     External: ExternalModelPart;
+    Setting: ExternalModelSetting;
 }
 
 export interface ContactPart {
@@ -112,6 +117,8 @@ export interface ConversationApiPart {
     updateConfig: (imId: string, config: Conversation.ConfigUpdate) => Promise<Conversation.Config>;
     markAllRead: (imId: string, chatType: Conversation.ChatType) => Promise<void>;
     markLatestUnread: (imId: string, chatType: Conversation.ChatType) => Promise<void>;
+    deleteAllMessages: (imId: string, chatType: Conversation.ChatType) => Promise<void>;
+    updateMessageExt: (messageId: string, ext: Object) => Promise<void>;
     loadMessage: (params: {
         imId: string;
         chatType: Conversation.ChatType;

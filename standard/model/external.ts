@@ -11,6 +11,13 @@ export interface ProcessedMessage<T extends Message.Body = Message.GeneralBody>
 export async function onMessageReceived(
     originMessage: Message.Origin
 ): Promise<ProcessedMessage> {
+    //语音消息插入未读标志
+    const { ext: { extend_message_body: { messageType } = {} } = {} } = originMessage;
+    if (messageType == 5) {
+        originMessage.ext.shouldRead = true;
+        delegate.im.conversation.updateMessageExt(originMessage.messageId, originMessage.ext);
+    }
+    
     const message = Action.Parse.get([], originMessage, originMessage);
     if (!message) {
         throw new Error('无法处理该消息');
@@ -86,6 +93,17 @@ export async function onUserLeave(
     const isUserQuit = userLeavedIds.length === 1 && userLeavedIds[0] === operatorId;
     const text =  users + (isUserQuit ? '退出了群聊' : '被移出群聊');
     await groupUpdateOperation(groupId, text, localTime, timestamp);
+}
+
+export async function onUserDidLeaveGroup(
+    group: object,
+    reason: number,
+){
+    if (reason == 0) {
+        await delegate.model.Conversation.deleteOne(group.groupId);
+        await delegate.model.Group.deleteOne(group.groupId);  
+    }
+    Listener.trigger([Event.Base, Event.GroupLeave, group.groupId], {group: group, reason: reason});
 }
 
 export async function onUpdateName(

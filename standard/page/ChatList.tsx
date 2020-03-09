@@ -32,12 +32,20 @@ export default class extends React.PureComponent {
             [Event.Base, Event.Conversation],
             this._refresh.bind(this)
         );
+        this.listenUserLeave = Listener.registerWithSubEvent(
+            [Event.Base, Event.GroupLeave],
+            this._userLeave.bind(this)
+        );
     }
 
     componentWillUnmount() {
         Listener.unregister(
             [Event.Base, Event.Conversation],
             this.listenListUpdate
+        );
+        Listener.unregister(
+            [Event.Base, Event.GroupLeave],
+            this.listenUserLeave
         );
     }
 
@@ -131,6 +139,13 @@ export default class extends React.PureComponent {
     _refresh() {
         const dataSource = delegate.model.Conversation.get();
         this.setState({dataSource});
+    }
+
+    _userLeave(data){
+        const {reason} = data;
+        if (reason == 0) {
+            this._refresh.bind(this);
+        }
     }
 
     _clickTop(item, config) {

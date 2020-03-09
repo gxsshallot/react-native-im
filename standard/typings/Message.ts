@@ -99,6 +99,7 @@ export interface VoiceBody extends Body {
     localPath: string;
     remotePath: string;
     duration: number;
+    shouldRead?: boolean
 }
 
 /**
@@ -128,6 +129,7 @@ export interface VideoBody extends Body {
     localPath?: string;
     remotePath?: string;
     duration: number;
+    shouldRead?: boolean;
 }
 
 /**
