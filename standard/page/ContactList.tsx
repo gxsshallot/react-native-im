@@ -101,13 +101,15 @@ export default class extends React.PureComponent {
     };
 
     _renderHeader = () => {
-        return this.state.items.map(({title, subTitle, onClick, icon}, index) => (
-            <delegate.component.ListCell
+        return this.state.items.map(({title, subTitle, onClick, icon, showBranchTop, showBranchBottom}, index) => (
+            <delegate.component.HeaderCell
                 key={index}
                 title={title}
                 subTitle={subTitle}
                 onClick={onClick}
                 avatar={icon}
+                showBranchTop={showBranchTop}
+                showBranchBottom={showBranchBottom}
                 right={<ArrowImage style={styles.arrow} />}
             />
         ));
