@@ -66,42 +66,49 @@ export default class extends React.PureComponent {
         const isAvatar = Object.prototype.isPrototypeOf(avatar) && avatar.imId;
 
         let centerView;
-        if (isAvatar) {
-            centerView = (
-                <delegate.component.AvatarImage
-                    {...avatar}
-                    style={styles.avatar}
-                />
-            );
-        } else {
-            const src = typeof avatar === 'string' ?
-                { uri: delegate.func.fitUrlForAvatarSize(avatar, 48) } :
-                avatar;
-            centerView = <Image style={styles.icon} resizeMode={'contain'} source={src} />;
-        }
-
         let topStyle = {};
         if (showBranchTop) {
-            topStyle = {backgroundColor: delegate.style.separatorLineColor}
-            centerView = <View style={{flexDirection: 'row', width: 48, backgroundColor:'transparent'}}>
-                <View style = {{flex: 1, backgroundColor:'transparent'}} />
-                <View style = {styles.branchRow} />
-            </View>
+            topStyle = {
+                borderLeftColor: delegate.style.separatorLineColor,
+                borderLeftWidth: 1,
+                borderBottomColor: delegate.style.separatorLineColor,
+                borderBottomWidth: 1,
+            }
+        } else {
+            if (isAvatar) {
+                centerView = (
+                    <delegate.component.AvatarImage
+                        {...avatar}
+                        style={styles.avatar}
+                    />
+                );
+            } else {
+                const src = typeof avatar === 'string' ?
+                    { uri: delegate.func.fitUrlForAvatarSize(avatar, 48) } :
+                    avatar;
+                centerView = <Image style={styles.icon} resizeMode={'contain'} source={src} />;
+            }
         }
 
         let bottomStyle = {};
         if (showBranchBottom) {
             bottomStyle = {
-                backgroundColor: delegate.style.separatorLineColor,
-                marginTop: showBranchTop ? 0 : 5,
+                borderLeftColor: delegate.style.separatorLineColor,
+                borderLeftWidth: 1,
             }
         }
 
         return (
             <View style={{alignItems: 'center'}}>
-                <View style={[styles.branch, topStyle]}/>
+                <View style={styles.branchContent}>
+                    <View style={styles.branch} />
+                    <View style={[styles.branch, topStyle]} />
+                </View>
                 {centerView}
-                <View style={[styles.branch, bottomStyle]}/>
+                <View style={[styles.branchContent, {marginTop: showBranchTop ? 0 : 5}]}>
+                    <View style={styles.branch} />
+                    <View style={[styles.branch, bottomStyle]} />
+                </View>
             </View>
         )
     };
@@ -161,9 +168,14 @@ const styles = StyleSheet.create({
         color: '#999999',
         marginTop: 4,
     },
+    branchContent: {
+        backgroundColor: 'transparent',
+        flex: 1,
+        flexDirection: 'row',
+        width: 48,
+    },
     branch: {
         backgroundColor: 'transparent',
-        width: 1,
         flex: 1
     },
     branchRow: {
