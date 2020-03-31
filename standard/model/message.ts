@@ -81,6 +81,40 @@ export async function insertTimeMessage(
     return Action.Parse.get([], newOriginMessage, newOriginMessage);
 }
 
+export async function insertTimeInMessage(
+    imId: string,
+    chatType: Conversation.ChatType,
+    message1: Message.General,
+    message2: Message.General,
+): Promise<Message.General | void> {
+    if (!(message1 || message2)) {
+        return;
+    }
+
+    if (message1 && message2) {
+        const delta = message1.timestamp - message2.timestamp;
+        if (delta < 0) {
+            const [forwardMessage] = await delegate.im.conversation.loadMessage({imId, chatType, lastMessage:message, count:1});
+            if (forwardMessage && message1.timestamp - forwardMessage.timestamp < interval){
+                return;
+            }
+        } else if (delta < interval) {
+            const oldTime = new Date(message2.timestamp).getMinutes();
+            const newTime = new Date(message1.timestamp).getMinutes();
+            if (Math.floor(oldTime / 3) === Math.floor(newTime / 3)) {
+                return;
+            }
+        }
+    }
+
+    const promise = _insertTimeMessage(imId, chatType, message1);
+    if (!promise) {
+        throw new Error('暂不支持发送该消息类型');
+    }
+    const newOriginMessage = await promise;
+    return Action.Parse.get([], newOriginMessage, newOriginMessage);
+}
+
 async function _insertTimeMessage(
     imId: string,
     chatType: Conversation.ChatType,

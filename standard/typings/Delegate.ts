@@ -74,6 +74,7 @@ export interface MessageModelPart {
     sendMessage: (imId: string, chatType: Conversation.ChatType, message: Message.General, ext: object, isSystem: boolean) => Promise<void>
     sendMultiMessage: (imId: string, chatType: Conversation.ChatType, messages: Array<Message.General>) => Promise<void>
     insertTimeMessage: (imId: string, chatType: Conversation.ChatType, message: Message.General) => Promise<Message.General | void>
+    insertTimeInMessage: (imId: string, chatType: Conversation.ChatType, message1: Message.General, message2: Message.General) => Promise<Message.General | void>
     insertSystemMessage: (imId: string, chatType: Conversation.ChatType, text: string, localTime: number, timestamp: number, innerId?: string) => Promise<void>
 }
 
