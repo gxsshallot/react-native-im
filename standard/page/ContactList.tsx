@@ -182,7 +182,7 @@ export default class extends React.PureComponent {
                     data = []
                 }
                 const {getHeaderConfig} = this.props;
-                const items = [];
+                const items = getHeaderConfig ? getHeaderConfig({users, sections: data}) : [];
                 LayoutAnimation.easeInEaseOut();
                 this.setState({data, items});
             });
