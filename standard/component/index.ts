@@ -17,6 +17,7 @@ import SegmentControl from './SegmentControl';
 import SelectList from './SelectList';
 import SettingItem from './SettingItem';
 import HeaderCell from './HeaderCell';
+import FixedSectionList from './FixedSectionList';
 
 export {
     AvatarImage,
@@ -38,4 +39,5 @@ export {
     SelectList,
     SettingItem,
     HeaderCell,
+    FixedSectionList,
 };

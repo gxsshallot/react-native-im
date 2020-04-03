@@ -139,7 +139,6 @@ const config: Delegate.ConfigPart = {
     pinyinField: 'pinyin',
     titleLoading: '加载中',
     buttonOK: '确定',
-    maxContactLimitNumber: 5000,
     messageType: {
         text: -1,
         voice: -1,

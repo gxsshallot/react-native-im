@@ -46,6 +46,7 @@ function setup_common_component() {
     Delegate.component.SelectList = Components.SelectList;
     Delegate.component.SettingItem = Components.SettingItem;
     Delegate.component.HeaderCell = Components.HeaderCell;
+    Delegate.component.FixedSectionList = Components.FixedSectionList;
 }
 
 function setup_common_model() {
