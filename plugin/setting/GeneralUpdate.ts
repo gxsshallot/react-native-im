@@ -47,4 +47,5 @@ export async function onRemoveMembers(props: Typings.Action.Setting.Params,
             action: i18n.t('IMSettingRemoveGroupMember'),
         }));
     }
+    return Delegate.model.Group.getMembers(imId);
 }
