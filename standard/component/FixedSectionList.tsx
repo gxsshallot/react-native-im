@@ -59,16 +59,16 @@ export default class extends React.PureComponent<FixedSectionListProps> {
             (type, dim) => {
                 switch (type) {
                     case ViewTypes.SECTION:
-                        dim.width = props.itemWidth;
-                        dim.height = props.sectionHeight;
+                        dim.width = this.props.itemWidth;
+                        dim.height = this.props.sectionHeight;
                         break;
                     case ViewTypes.CELL:
-                        dim.width = props.itemWidth;
-                        dim.height = props.itemHeight;
+                        dim.width = this.props.itemWidth;
+                        dim.height = this.props.itemHeight;
                         break;
                     case ViewTypes.HEADER:
-                        dim.width = props.itemWidth;
-                        dim.height = props.headerHeight;
+                        dim.width = this.props.itemWidth;
+                        dim.height = this.props.headerHeight;
                         break;
                     default:
                         dim.width = 0;
@@ -76,7 +76,7 @@ export default class extends React.PureComponent<FixedSectionListProps> {
                 }
             }
         );
-        const dataList = this._setDataList(props.sections);
+        const dataList = this._setDataList(this.props.sections);
         this.state = {
             dataList: dataList,
             isShowBackTop: false
@@ -121,6 +121,7 @@ export default class extends React.PureComponent<FixedSectionListProps> {
                         rowRenderer={this._rowRenderer.bind(this)}
                         onScroll={this._onScroll.bind(this)}
                         renderAheadOffset = {this.props.renderAheadOffset}
+                        canChangeSize = {true}
                     />
                 </StickyContainer>
                 {sections && sections.length > 0 && <delegate.component.SelectList

@@ -45,11 +45,17 @@ export default class extends React.PureComponent {
         InteractionManager.runAfterInteractions(() => {
             this._loadData();
         });
+        Dimensions.addEventListener('change', this._onOrientationChange.bind(this));
     }
 
     componentWillUnmount() {
         this.listener && Listener.unregister([Event.Base, Event.StarUserChange], this.listener);
+        Dimensions.removeEventListener('change', this._onOrientationChange.bind(this));
     }
+
+    _onOrientationChange = () => {
+        this.forceUpdate();
+    };
 
     render() {
         const style = {
