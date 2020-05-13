@@ -74,17 +74,19 @@ export default class extends React.PureComponent {
                 } else {
                     data = [...this.state.data, ...data];
                 }
-                return {
+
+                this.setState({
                     data: data,
                     isEnd: isEnd,
-                };
-            })
-            .finally((state = {}) => {
-                this.setState({
-                    ...state,
                     isLoading: false,
                 });
-            });
+            }).catch(() => {
+                this.setState({
+                    data: [],
+                    isEnd: false,
+                    isLoading: false,
+                });
+            })
     };
 
     scrollToTop = (animated = false) => {
