@@ -26,9 +26,7 @@ function _clickAllMembers(props: Typings.Action.Setting.Params): void {
     const {imId, navigation} = props;
     const groupMembers = Delegate.model.Group.getMembers(imId);
     const groupOwner = Delegate.model.Group.getOwner(imId);
-    navigation.navigate({
-        routeName: PageKeys.GroupMembers,
-        params: {
+    navigation.navigate( PageKeys.GroupMembers, {
             groupId: imId,
             members: groupMembers,
             admins: [groupOwner],
@@ -36,6 +34,5 @@ function _clickAllMembers(props: Typings.Action.Setting.Params): void {
             canRemove: groupOwner === Delegate.user.getMine().userId,
             onAddMembers: (memberUserIds: string[]) => onAddMembers(props, memberUserIds),
             onRemoveMembers: (memberUserIds: string[]) => onRemoveMembers(props, memberUserIds),
-        },
-    });
+        });
 }

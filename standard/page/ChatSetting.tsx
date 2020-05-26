@@ -7,8 +7,8 @@ import { Conversation } from '../typings';
 import delegate from '../delegate';
 
 export default class extends React.PureComponent {
-    static navigationOptions = function ({navigation}) {
-        const {chatType} = navigation.state.params;
+    static navigationOptions = function ({route}) {
+        const {chatType} = route.params;
         const isGroup = chatType === Conversation.ChatType.Group;
         const title = isGroup ? i18n.t('IMPageChatSettingTitleGroup') : i18n.t('IMPageChatSettingTitleSingle');
         return {title};

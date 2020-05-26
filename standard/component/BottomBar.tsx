@@ -321,16 +321,13 @@ export default class extends React.PureComponent<Props, State> {
             const dataSource = members
                 .filter(userId => userId !== delegate.user.getMine().userId)
                 .map(userId => delegate.user.getUser(userId));
-            this.props.navigation.navigate({
-                routeName: PageKeys.ChooseUser,
-                params: {
+            this.props.navigation.navigate(PageKeys.ChooseUser,{
                     title: i18n.t('IMComponentBottomBarChooseAtPerson'),
                     multiple: false,
                     onSelectData: this._onSelectData.bind(this),
                     selectedIds: [],
                     dataSource: dataSource,
-                },
-            });
+                });
         }
     }
 

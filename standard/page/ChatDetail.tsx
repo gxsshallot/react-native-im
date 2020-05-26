@@ -9,7 +9,7 @@ import * as Model from '../model';
 import {DateUtil, guid} from '../util';
 import {Conversation, Event, Message} from '../typings';
 import delegate from '../delegate';
-import { StackActions } from 'react-navigation';
+import { StackActions } from '@react-navigation/native';
 
 interface ChatDetailProps {
     imId: string
@@ -17,8 +17,8 @@ interface ChatDetailProps {
 }
 
 export default class extends React.PureComponent<ChatDetailProps> {
-    static navigationOptions = function ({navigation}) {
-        const {_title_, _right_} = navigation.state.params;
+    static navigationOptions = function ({route}) {
+        const {_title_, _right_} = route.params;
         return {
             title: _title_,
             headerRight: _right_,
@@ -135,7 +135,7 @@ export default class extends React.PureComponent<ChatDetailProps> {
         }
         this.props.navigation.setParams({
             _title_: title,
-            _right_: this._renderRightElement(),
+            _right_: this._renderRightElement,
         });
     }
 
@@ -159,13 +159,10 @@ export default class extends React.PureComponent<ChatDetailProps> {
             <HeaderButton
                 title={i18n.t('IMPageChatDetailSetting')}
                 onPress={() => {
-                    this.props.navigation.navigate({
-                        routeName: PageKeys.ChatSetting,
-                        params: {
+                    this.props.navigation.navigate( PageKeys.ChatSetting,{
                             imId: this.props.imId,
                             chatType: this.props.chatType,
-                        },
-                    });
+                        });
                 }}
             />
         );
@@ -299,14 +296,11 @@ export default class extends React.PureComponent<ChatDetailProps> {
     }
 
     _onForward(message) {
-        this.props.navigation.navigate({
-            routeName: PageKeys.ChooseConversation,
-            params: {
+        this.props.navigation.navigate(PageKeys.ChooseConversation,{
                 title: i18n.t('IMPageChooseConversationTitle'),
                 onSelectData: this._onSelectConversation.bind(this, message),
                 excludedIds: [this.props.imId],
-            },
-        });
+            });
     }
 
     async _onRecall(message) {

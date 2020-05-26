@@ -134,15 +134,12 @@ export default class extends React.PureComponent {
     }
 
     _clickHeader() {
-        this.props.navigation.navigate({
-            routeName: PageKeys.ChooseUser,
-            params: {
+        this.props.navigation.navigate(PageKeys.ChooseUser, {
                 title: i18n.t('IMPageChooseConversationCreateNew'),
                 multiple: true,
                 onSelectData: this._onCreateNew.bind(this),
                 selectedIds: [],
-            },
-        });
+            });
     }
 
     _onCreateNew(data) {
