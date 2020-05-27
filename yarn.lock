@@ -96,6 +96,16 @@
   dependencies:
     "@types/hammerjs" "^2.0.36"
 
+"@hecom-rn/react-native-full-image-picker@1.3.1":
+  version "1.3.1"
+  resolved "https://registry.npm.taobao.org/@hecom-rn/react-native-full-image-picker/download/@hecom-rn/react-native-full-image-picker-1.3.1.tgz#b22b70fde9dcfb53ebdde830b9e19ad5a14266cb"
+  integrity sha1-sitw/enc+1Pr3egwueGa1aFCZss=
+  dependencies:
+    "@react-native-community/cameraroll" "^1.2.1"
+    react-native-fs "^2.13.3"
+    react-native-pure-navigation-bar "^1.4.7"
+    react-native-root-siblings "^3.1.7"
+
 "@hecom-rn/react-native-general-actionsheet@1.0.5":
   version "1.0.5"
   resolved "https://registry.npmjs.org/@hecom-rn/react-native-general-actionsheet/-/react-native-general-actionsheet-1.0.5.tgz#2d2f8584e408fb1ed99614be9572473e0cbc4bf1"
