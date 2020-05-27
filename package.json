@@ -32,7 +32,6 @@
     "react-native-keyboard-aware-scroll-view": "^0.9.1",
     "react-native-localize": "^1.1.2",
     "react-native-photo-browse": "^1.1.1",
-    "react-native-picklist": "^1.2.5",
     "react-native-popover-view": "^1.0.17",
     "react-native-popup-dialog": "^0.16.6",
     "react-native-root-toast": "^3.1.1",
@@ -50,7 +49,8 @@
     "react-native": "*",
     "react-native-video": "*",
     "react-navigation": "*",
-    "@hecom-rn/react-native-full-image-picker":"*"
+    "@hecom-rn/react-native-full-image-picker":"*",
+    "react-native-picklist": "*"
   },
   "devDependencies": {
     "@types/i18n-js": "^3.0.1",
