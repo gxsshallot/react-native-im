@@ -1,6 +1,6 @@
 # 事件
 
-采用[react-native-general-listener](https://github.com/gaoxiaosong/react-native-general-listener)作为事件监听的类，这个库是支持多级层次的事件结构，并支持对所有下级事件的监听。
+采用[@hecom/listener](https://github.com/hecom-rn/listener)作为事件监听的类，这个库是支持多级层次的事件结构，并支持对所有下级事件的监听。
 
 事件类型都放在`src/constant.js`中，其中`BaseEvent`代表基础事件类型，是每个事件的根类型。
 

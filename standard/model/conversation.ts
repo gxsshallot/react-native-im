@@ -1,5 +1,5 @@
 import AsyncStorage from 'react-native-general-storage';
-import Listener from 'react-native-general-listener';
+import Listener from '@hecom/listener';
 import {Conversation, Event, Message, Storage} from '../typings';
 import * as Action from './action';
 import {simpleExport} from '../util';

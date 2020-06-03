@@ -1,4 +1,4 @@
-import Listener from 'react-native-general-listener';
+import Listener from '@hecom/listener';
 import * as Action from './action';
 import { Message, Conversation, Event } from '../typings';
 import { guid } from '../util';

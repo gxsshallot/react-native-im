@@ -15,7 +15,7 @@ import PropTypes from 'prop-types';
 import Toast from 'react-native-root-toast';
 import NaviBar, {forceInset} from 'react-native-pure-navigation-bar';
 import ArrowImage from '@hecom/image-arrow';
-import Listener from 'react-native-general-listener';
+import Listener from '@hecom/listener';
 import * as PageKeys from '../pagekey';
 import {mapListToSection} from '../util';
 import {Conversation, Event} from '../typings';

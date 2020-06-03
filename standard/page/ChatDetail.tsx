@@ -2,7 +2,7 @@ import React from 'react';
 import {Clipboard, Keyboard, SafeAreaView, StyleSheet, TouchableWithoutFeedback, View, Alert} from 'react-native';
 import {HeaderButton} from 'react-navigation-header-buttons';
 import Toast from 'react-native-root-toast';
-import Listener from 'react-native-general-listener';
+import Listener from '@hecom/listener';
 import i18n from 'i18n-js';
 import * as PageKeys from '../pagekey';
 import * as Model from '../model';

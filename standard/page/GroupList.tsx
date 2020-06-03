@@ -1,7 +1,7 @@
 import React from 'react';
 import { FlatList, SafeAreaView, StyleSheet, Text, View } from 'react-native';
 import NaviBar, { forceInset } from 'react-native-pure-navigation-bar';
-import Listener from 'react-native-general-listener';
+import Listener from '@hecom/listener';
 import Toast from 'react-native-root-toast';
 import * as PageKeys from '../pagekey';
 import { DateUtil } from '../util';
