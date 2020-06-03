@@ -135,7 +135,7 @@ export default class extends React.PureComponent<ChatDetailProps> {
         }
         this.props.navigation.setParams({
             _title_: title,
-            _right_: this._renderRightElement,
+            _right_: this._renderRightElement.bind(this),
         });
     }
 
