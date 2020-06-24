@@ -94,7 +94,7 @@ export async function insertTimeInMessage(
     if (message1 && message2) {
         const delta = message1.timestamp - message2.timestamp;
         if (delta < 0) {
-            const [forwardMessage] = await delegate.im.conversation.loadMessage({imId, chatType, lastMessage:message, count:1});
+            const [forwardMessage] = await delegate.im.conversation.loadMessage({imId, chatType, lastMessage:message1, count:1});
             if (forwardMessage && message1.timestamp - forwardMessage.timestamp < interval){
                 return;
             }
