@@ -246,7 +246,7 @@ export async function recallMessage(imId: string, message: Message.General): Pro
 function onUnreadCountChanged(): void {
     const count = Object.values(rootNode)
         .reduce((prv: number, cur: Conversation.Item) => {
-            const isAvoid = cur && cur.config && cur.config.avoid;
+            const isAvoid = !!cur && !!cur.config && cur.config.avoid;
             if (!isAvoid && isValid(cur.imId, cur.chatType)) {
                 prv += cur.unreadMessagesCount;
             }
