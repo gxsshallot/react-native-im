@@ -1,7 +1,7 @@
 import React from 'react';
 import Toast from 'react-native-root-toast';
 import ActionSheet from 'react-native-general-actionsheet';
-import * as ImagePicker from 'react-native-full-image-picker';
+import * as ImagePicker from '@hecom-rn/react-native-full-image-picker';
 import i18n from 'i18n-js';
 import { Typings, Delegate } from '../../standard';
 

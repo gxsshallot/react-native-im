@@ -95,19 +95,14 @@ export default class extends React.PureComponent {
     };
 
     _clickItem = (item) => {
-        this.props.navigation.navigate({
-            routeName: PageKeys.ChatDetail,
-            params: {
+        this.props.navigation.navigate(PageKeys.ChatDetail, {
                 imId: item.groupId,
                 chatType: Conversation.ChatType.Group,
-            },
-        });
+            });
     };
 
     _clickFakeSearchBar = () => {
-        this.props.navigation.navigate({
-            routeName: PageKeys.SearchMore,
-            params: {
+        this.props.navigation.navigate(PageKeys.SearchMore,{
                 keyExtractor: item => item.groupId,
                 showHistory: false,
                 searchHint: '搜索群名称、群成员',
@@ -116,8 +111,7 @@ export default class extends React.PureComponent {
                 doSearch: this._search,
                 renderItem: this._renderSearchItem,
                 searchOnTextChange: true,
-            },
-        });
+            });
     };
 
     _refresh = () => {

@@ -147,16 +147,13 @@ export default class extends React.PureComponent {
     _onRight = () => {
         const excludedUserIds = this.allMembers
             .reduce((prv, cur) => prv.concat(cur.data.map(i => i.userId)), []);
-        this.props.navigation.navigate({
-            routeName: PageKeys.ChooseUser,
-            params: {
+        this.props.navigation.navigate( PageKeys.ChooseUser,{
                 title: '添加群成员',
                 multiple: true,
                 excludedUserIds: excludedUserIds,
                 selectedIds: [],
                 onSelectData: this._onAddMembers,
-            },
-        });
+            });
     };
 
     _onAddMembers = (memberIds) => {

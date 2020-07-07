@@ -145,30 +145,24 @@ export default class extends React.PureComponent<Props> {
 
     protected _onItemPress(rowItem: string) {
         if (rowItem === this.add) {
-            this.props.navigation.navigate({
-                routeName: PageKeys.ChooseUser,
-                params: {
+            this.props.navigation.navigate(PageKeys.ChooseUser,{
                     title: i18n.t('IMSettingChooseGroupMember'),
                     multiple: true,
                     onSelectData: this.props.onAddMembers,
                     selectedIds: [],
                     excludedUserIds: this.props.data,
-                },
-            });
+                });
         } else if (rowItem === this.remove) {
             const dataSource = this.props.data
                 .filter(item => item !== this.props.owner)
                 .map(item => delegate.user.getUser(item));
-            this.props.navigation.navigate({
-                routeName: PageKeys.ChooseUser,
-                params: {
+            this.props.navigation.navigate(PageKeys.ChooseUser,{
                     title: i18n.t('IMSettingChooseGroupMember'),
                     multiple: true,
                     onSelectData: this.props.onRemoveMembers,
                     selectedIds: [],
                     dataSource: dataSource,
-                },
-            });
+                });
         } else {
             delegate.func.pushToUserDetailPage(rowItem);
         }

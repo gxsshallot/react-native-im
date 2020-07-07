@@ -172,14 +172,11 @@ export default class extends React.PureComponent {
             });
         };
         const {title, multiple, hasSelf, parentOrgId, excludedUserIds, selectedIds, spaceHeight} = this.props;
-        this.props.navigation.navigate({
-            routeName: PageKeys.ChooseUserFromOrg,
-            params: {
+        this.props.navigation.navigate(PageKeys.ChooseUserFromOrg,{
                 title, multiple, hasSelf, parentOrgId, excludedUserIds, selectedIds, spaceHeight,
                 firstTitleLine: delegate.user.getMine().entName,
                 onSelectData: onSelectDataFunc,
-            },
-        });
+            });
     }
 }
 

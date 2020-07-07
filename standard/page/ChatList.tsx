@@ -165,10 +165,7 @@ export default class extends React.PureComponent {
     }
 
     _clickSearch() {
-        this.props.navigation.navigate({
-            routeName: PageKeys.Search,
-            params: {},
-        });
+        this.props.navigation.navigate(PageKeys.Search,{});
     }
 }
 

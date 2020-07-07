@@ -1,4 +1,4 @@
-import * as ImagePicker from 'react-native-full-image-picker';
+import * as ImagePicker from '@hecom-rn/react-native-full-image-picker';
 import { Typings } from '../../../standard';
 
 export type ImageResult = Typings.Action.MoreBoard.GeneralResult<Typings.Message.ImageBody>;

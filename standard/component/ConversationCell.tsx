@@ -61,7 +61,7 @@ export default class extends React.PureComponent<Props> {
                     title={name}
                     subTitle={content}
                     right={this._renderRightColumn()}
-                    onClick={this._clickRow}
+                    onClick={this._clickRow.bind(this)}
                 />
                 {separatorLeft >= 0 && this._renderSeparatorLine()}
                 {!!this.state.unreadMessagesCount && this._renderBadge()}
@@ -141,13 +141,10 @@ export default class extends React.PureComponent<Props> {
     };
 
     _clickRow = () => {
-        this.props.navigation.navigate({
-            routeName: PageKeys.ChatDetail,
-            params: {
+        this.props.navigation.navigate( PageKeys.ChatDetail, {
                 imId: this.props.imId,
                 chatType: this.props.chatType,
-            },
-        });
+            });
     };
 
     _refresh = () => {

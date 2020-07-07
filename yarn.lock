@@ -2202,11 +2202,6 @@ react-native-progress@^4.1.0:
     "@react-native-community/art" "^1.1.2"
     prop-types "^15.7.2"
 
-react-native-pure-navigation-bar@^1.4.7, react-native-pure-navigation-bar@^1.4.9:
-  version "1.4.9"
-  resolved "https://registry.npmjs.org/react-native-pure-navigation-bar/-/react-native-pure-navigation-bar-1.4.9.tgz#990d4da090300b57bf643f5e702c5181b62e7ffd"
-  integrity sha512-tDktla7L5aaq3T1AcnCGzwYb68o2QtCvaOHBdN0hOy+LI1nrvSp2IBofylHegJTkUYBh64mbyfgmJp/VSbGGww==
-
 react-native-root-siblings@^3.1.6, react-native-root-siblings@^3.1.7:
   version "3.2.3"
   resolved "https://registry.npmjs.org/react-native-root-siblings/-/react-native-root-siblings-3.2.3.tgz#df5a1cff3a3a1f433f57320e1cae719f1b15a3f2"

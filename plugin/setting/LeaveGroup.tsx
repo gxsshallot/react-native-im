@@ -1,4 +1,4 @@
-import { StackActions } from 'react-navigation';
+import { StackActions } from '@react-navigation/native';
 import Toast from 'react-native-root-toast';
 import i18n from 'i18n-js';
 import { Typings, Delegate } from '../../standard';

@@ -235,13 +235,10 @@ export default class extends React.PureComponent {
 
     _onItemClick = ({item}) => {
         const type = item.groupId ? Conversation.ChatType.Group : Conversation.ChatType.Single;
-        this.props.navigation.navigate({
-            routeName: PageKeys.ChatDetail,
-            params: {
+        this.props.navigation.navigate(PageKeys.ChatDetail,{
                 imId: item.groupId || item.userId,
                 chatType: type,
-            },
-        });
+            });
     };
 }
 
