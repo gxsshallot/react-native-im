@@ -27,6 +27,11 @@ async function _clickLeave(
     try {
         const action = StackActions.pop({n: 2});
         navigation.dispatch(action);
+        await new Promise((resolve) => {
+            setTimeout(() => {
+                resolve()
+            }, 50);
+        });
         if (isOwner) {
             await Delegate.model.Group.destroyOne(imId);
         } else {
