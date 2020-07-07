@@ -1,6 +1,6 @@
 import React from 'react';
 import {Dimensions, Image, SafeAreaView, StyleSheet, Text, View} from 'react-native';
-import Listener from 'react-native-general-listener';
+import Listener from '@hecom/listener';
 import {forceInset} from 'react-native-pure-navigation-bar';
 import * as PageKeys from '../pagekey';
 import * as Model from '../model';

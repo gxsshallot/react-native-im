@@ -25,14 +25,14 @@ async function _clickLeave(
 ): Promise<void> {
     const {imId, navigation} = props;
     try {
+        const action = StackActions.pop({n: 2});
+        navigation.dispatch(action);
         if (isOwner) {
             await Delegate.model.Group.destroyOne(imId);
         } else {
             await Delegate.model.Group.quitOne(imId);
         }
         Toast.show(i18n.t('IMToastSuccess', {action: text}));
-        const action = StackActions.pop({n: 2});
-        navigation.dispatch(action);
     } catch (err) {
         Toast.show(i18n.t('IMToastError', {action: text}));
     }

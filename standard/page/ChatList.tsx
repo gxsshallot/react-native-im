@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SwipeListView } from 'react-native-swipe-list-view';
 import Toast from 'react-native-root-toast';
-import Listener from 'react-native-general-listener';
+import Listener from '@hecom/listener';
 import i18n from 'i18n-js';
 import * as PageKeys from '../pagekey';
 import { Event } from '../typings';

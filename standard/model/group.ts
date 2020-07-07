@@ -1,5 +1,5 @@
 import AsyncStorage from 'react-native-general-storage';
-import Listener from 'react-native-general-listener';
+import Listener from '@hecom/listener';
 import { Group, Event, Storage } from '../typings';
 import { simpleExport } from '../util';
 import delegate from '../delegate';

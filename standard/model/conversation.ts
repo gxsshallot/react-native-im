@@ -1,5 +1,5 @@
 import AsyncStorage from 'react-native-general-storage';
-import Listener from 'react-native-general-listener';
+import Listener from '@hecom/listener';
 import {Conversation, Event, Message, Storage} from '../typings';
 import * as Action from './action';
 import {simpleExport} from '../util';
@@ -246,7 +246,7 @@ export async function recallMessage(imId: string, message: Message.General): Pro
 function onUnreadCountChanged(): void {
     const count = Object.values(rootNode)
         .reduce((prv: number, cur: Conversation.Item) => {
-            const isAvoid = cur.config.avoid;
+            const isAvoid = !!cur && !!cur.config && cur.config.avoid;
             if (!isAvoid && isValid(cur.imId, cur.chatType)) {
                 prv += cur.unreadMessagesCount;
             }
