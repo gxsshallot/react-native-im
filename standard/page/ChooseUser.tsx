@@ -10,7 +10,7 @@ import delegate from '../delegate';
 import * as Types from '../proptype';
 import * as PageKeys from '../pagekey';
 
-export default class extends React.PureComponent {
+export default class extends React.Component {
     static navigationOptions = function (options) {
         if (PickList.initialized(options)) {
             return PickList.navigationOptions(options);
@@ -34,7 +34,9 @@ export default class extends React.PureComponent {
         super(props);
         this.state = {
             users: props.dataSource,
+ 	        selectedIds: props.selectedIds
         };
+	   this.idKey = 'userId';
     }
 
     componentDidMount() {
@@ -60,14 +62,15 @@ export default class extends React.PureComponent {
     }
 
     render() {
-        const {navigation, title, selectedIds, multiple, dataSource} = this.props;
+        const {navigation, title, selectedIds, multiple, dataSource, showBottomView} = this.props;
         return this.state.users !== undefined && (
             <PickList
+		ref={(ref) => (this.pickList = ref)}
                 navigation={navigation}
                 title={title}
                 multilevel={false}
                 multiselect={multiple}
-                showBottomView={false}
+                showBottomView={showBottomView}
                 data={this.state.users}
                 onFinish={this._onFinish.bind(this)}
                 renderHeader={dataSource ? undefined : this._renderHeader.bind(this)}
@@ -81,6 +84,9 @@ export default class extends React.PureComponent {
                     initialNumToRender: 20,
                     renderSectionHeader: this._renderSectionHeader.bind(this),
                 }}
+		        customView={this._getCustomView}
+                refreshSingleCell= {false}
+                renderRow={this._renderRow}
             />
         );
     }
@@ -158,6 +164,7 @@ export default class extends React.PureComponent {
     }
 
     _onFinish(nodes) {
+        this._selectedOnFinish(nodes);
         nodes = nodes
             .reduce((prv, cur) => [...prv, ...cur.getLeafChildren()], [])
             .map(node => node.getInfo().userId);
@@ -165,19 +172,33 @@ export default class extends React.PureComponent {
     }
 
     _clickHeader() {
-        const onSelectDataFunc = (nodes) => {
-            this.props.onSelectData && this.props.onSelectData(nodes);
-            InteractionManager.runAfterInteractions(() => {
-                this.props.navigation.goBack();
-            });
+        const selectedIds = this._getCurrentSelectedIdKeys('userId');
+        const onSelectDataFunc = (nodes, notBack = false) => {
+	    if(notBack){
+                this._refreshBackData(nodes, this.idKey);
+                return;
+          }
+        this.props.onSelectData && this.props.onSelectData(nodes);
+        InteractionManager.runAfterInteractions(() => {
+            this.props.navigation.goBack();
+        });
         };
-        const {title, multiple, hasSelf, parentOrgId, excludedUserIds, selectedIds, spaceHeight} = this.props;
+        const {title, multiple, hasSelf, parentOrgId, excludedUserIds, spaceHeight} = this.props;
         this.props.navigation.navigate(PageKeys.ChooseUserFromOrg,{
                 title, multiple, hasSelf, parentOrgId, excludedUserIds, selectedIds, spaceHeight,
                 firstTitleLine: delegate.user.getMine().entName,
                 onSelectData: onSelectDataFunc,
             });
     }
+    _getCustomView  = (data, renderRow) => null;
+
+    _renderRow  = (treeNode, props) => null;
+
+    _selectedOnFinish = (nodes) => null;
+
+    _getCurrentSelectedIdKeys = (idKey) => [];
+
+    _refreshBackData = (nodes) => []
 }
 
 const styles = StyleSheet.create({

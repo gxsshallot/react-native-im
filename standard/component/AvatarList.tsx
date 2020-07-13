@@ -14,7 +14,7 @@ export default class extends React.PureComponent<Props> {
     protected readonly padding = 16;
     protected readonly itemEdge = 50;
     protected itemMargin = 0;
-    
+
     constructor(props: Props) {
         super(props);
         this._onOrientationChange = this._onOrientationChange.bind(this);
@@ -162,6 +162,7 @@ export default class extends React.PureComponent<Props> {
                     onSelectData: this.props.onRemoveMembers,
                     selectedIds: [],
                     dataSource: dataSource,
+		            hideRecentlyPerson: true
                 });
         } else {
             delegate.func.pushToUserDetailPage(rowItem);
