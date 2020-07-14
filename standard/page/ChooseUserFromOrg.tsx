@@ -130,11 +130,11 @@ export default class extends React.PureComponent<Props> {
             PickListRowUtil.multiLevelNotLeafNode(treeNode, props);
     }
 
-    _onFinish(nodes) {
+    _onFinish(nodes, notBack = false) {
         nodes = nodes
             .reduce((prv, cur) => [...prv, ...cur.getLeafChildren()], [])
             .map(node => node.getInfo().userId);
-        this.props.onSelectData && this.props.onSelectData(nodes);
+        this.props.onSelectData && this.props.onSelectData(nodes, notBack);
     }
 
     _selectable(treeNode) {
