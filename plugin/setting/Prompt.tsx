@@ -1,6 +1,6 @@
 import React from 'react';
 import { TextInput, StyleSheet, Dimensions, TextInputProps } from 'react-native';
-import Dialog, { DialogTitle, DialogButton, DialogContent } from 'react-native-popup-dialog';
+import Modal, { ModalTitle, ModalButton, ModalContent } from 'react-native-modals';
 import i18n from 'i18n-js';
 
 export interface Props {
@@ -40,7 +40,7 @@ export default class extends React.PureComponent<Props, State> {
         const marginTop = isLandscape ? 15 : height * 0.1;
         const dialogWidth = Math.min(width - 15 * 2, 300);
         return (
-            <Dialog
+            <Modal
                 visible={visible}
                 onTouchOutside={onCancel}
                 dialogTitle={this._renderPromptTitle()}
@@ -49,14 +49,14 @@ export default class extends React.PureComponent<Props, State> {
                 containerStyle={styles.container}
                 actionContainerStyle={styles.footer}
                 actions={[
-                    <DialogButton
+                    <ModalButton
                         key={'cancel'}
                         text={i18n.t('IMCommonCancel')}
                         onPress={onCancel}
                         style={styles.action}
                         textStyle={styles.actionText}
                     />,
-                    <DialogButton
+                    <ModalButton
                         key={'ok'}
                         text={i18n.t('IMCommonOK')}
                         onPress={() => onSubmit(this.state.text)}
@@ -65,22 +65,22 @@ export default class extends React.PureComponent<Props, State> {
                     />
                 ]}
             >
-                <DialogContent style={styles.content}>
+                <ModalContent style={styles.content}>
                     <TextInput
                         style={styles.input}
                         onChangeText={(text) => this.setState({text})}
                         autoFocus={true}
                         {...textInputProps}
                     />
-                </DialogContent>
-            </Dialog>
+                </ModalContent>
+            </Modal>
         );
     }
     
     protected _renderPromptTitle() {
         const {title} = this.props;
         return (
-            <DialogTitle
+            <ModalTitle
                 title={title}
                 style={styles.title}
                 textStyle={styles.titleText}
