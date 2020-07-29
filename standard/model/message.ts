@@ -56,22 +56,24 @@ export async function insertTimeMessage(
     chatType: Conversation.ChatType,
     message: Message.General,
 ): Promise<Message.General | void> {
-    const conversation = delegate.model.Conversation.getOne(imId, false);
-    if (conversation && conversation.latestMessage) {
-        const oldMessage = conversation.latestMessage;
-        const delta = message.timestamp - oldMessage.timestamp;
-        if (delta < 0) {
-            const [forwardMessage] = await delegate.im.conversation.loadMessage({imId, chatType, lastMessage:message, count:1});
-            if (forwardMessage && message.timestamp - forwardMessage.timestamp < interval){
-                return;
-            }
-        } else if (delta < interval) {
-            const oldTime = new Date(oldMessage.timestamp).getMinutes();
-            const newTime = new Date(message.timestamp).getMinutes();
-            if (Math.floor(oldTime / 3) === Math.floor(newTime / 3)) {
-                return;
-            }
-        }
+    await insertTimeMessageLokc()
+    insertTimeMessageLokcFlag = true;
+    return insertTimeMessageAsync(imId, chatType, message)
+    .finally(()=> {
+        insertTimeMessageLokcFlag = false;
+    })
+}
+
+async function insertTimeMessageAsync(
+    imId: string,
+    chatType: Conversation.ChatType,
+    message: Message.General,
+): Promise<Message.General | void> {
+    const [forwardMessage] = await delegate.im.conversation.loadMessage({ imId, chatType, lastMessage: message, count: 1 });
+    if (forwardMessage &&
+         message.timestamp - forwardMessage.timestamp < interval &&
+          Math.floor(new Date(forwardMessage.timestamp).getMinutes() / 3) === Math.floor(new Date(message.timestamp).getMinutes() / 3)) {
+        return;
     }
     const promise = _insertTimeMessage(imId, chatType, message);
     if (!promise) {
@@ -81,29 +83,44 @@ export async function insertTimeMessage(
     return Action.Parse.get([], newOriginMessage, newOriginMessage);
 }
 
+let insertTimeMessageLokcFlag = false;
+async function insertTimeMessageLokc(): Promise<void> {
+    return new Promise((resolve) => {
+        const time = (func: { (value?: void | PromiseLike<void> | undefined): void; (): void; }) => {
+            if (insertTimeMessageLokcFlag) {
+                setTimeout(() => {
+                    time(func)
+                }, 0);
+            } else {
+                func()
+            }
+        }
+        time(resolve)
+    })
+}
+
 export async function insertTimeInMessage(
     imId: string,
     chatType: Conversation.ChatType,
     message1: Message.General,
     message2: Message.General,
 ): Promise<Message.General | void> {
-    if (!(message1 || message2)) {
+    if (!(message1 && message2)) {
         return;
     }
 
-    if (message1 && message2) {
-        const delta = message1.timestamp - message2.timestamp;
-        if (delta < 0) {
-            const [forwardMessage] = await delegate.im.conversation.loadMessage({imId, chatType, lastMessage:message1, count:1});
-            if (forwardMessage && message1.timestamp - forwardMessage.timestamp < interval){
-                return;
-            }
-        } else if (delta < interval) {
-            const oldTime = new Date(message2.timestamp).getMinutes();
-            const newTime = new Date(message1.timestamp).getMinutes();
-            if (Math.floor(oldTime / 3) === Math.floor(newTime / 3)) {
-                return;
-            }
+    const delta = message1.timestamp - message2.timestamp;
+    let addTimeMessage;
+    if (delta < 0) {
+        addTimeMessage = message2;
+    } else {
+        addTimeMessage = message1;
+    }
+     if (-interval < delta && delta < interval) {
+        const oldTime = new Date(message2.timestamp).getMinutes();
+        const newTime = new Date(message1.timestamp).getMinutes();
+        if (Math.floor(oldTime / 3) === Math.floor(newTime / 3)) {
+            return;
         }
     }
 
