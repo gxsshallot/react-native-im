@@ -165,10 +165,16 @@ export default class extends React.Component {
 
     _onFinish(nodes) {
         this._selectedOnFinish(nodes);
+        let label = '';
         nodes = nodes
             .reduce((prv, cur) => [...prv, ...cur.getLeafChildren()], [])
-            .map(node => node.getInfo().userId);
-        this.props.onSelectData && this.props.onSelectData(nodes);
+            .map(node => {
+                const nodeInfo = node.getInfo();
+                label = label.length > 0 ? label + '、' : label;
+                label =  label + nodeInfo.name;
+                return nodeInfo.userId;
+            });
+        this.props.onSelectData && this.props.onSelectData(nodes, label);
     }
 
     _clickHeader() {
