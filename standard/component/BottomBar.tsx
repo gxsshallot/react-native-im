@@ -2,7 +2,7 @@ import React from 'react';
 import { Image, Keyboard, PermissionsAndroid, Platform, SafeAreaView, StyleSheet, Text, TextInput, TouchableHighlight, TouchableOpacity, View, EmitterSubscription, TextStyle, NativeSyntheticEvent, TextInputSelectionChangeEventData, TextInputKeyPressEventData, KeyboardEvent } from 'react-native';
 import SoundRecorder from 'react-native-sound-recorder';
 import Toast from 'react-native-root-toast';
-import { getSafeAreaInset } from 'react-native-pure-navigation-bar';
+import { getSafeAreaInset } from '@hecom/react-native-pure-navigation-bar';
 import i18n from 'i18n-js';
 import { Component, Contact, Message, Conversation } from '../typings';
 import * as PageKeys from '../pagekey';

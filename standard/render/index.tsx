@@ -1,7 +1,7 @@
 import React from 'react';
 import {Dimensions, StyleSheet} from 'react-native';
 import Badge from '@hecom/badge';
-import {getSafeAreaInset} from 'react-native-pure-navigation-bar';
+import {getSafeAreaInset} from '@hecom/react-native-pure-navigation-bar';
 
 function renderBadge(avoid, count) {
     const {width} = Dimensions.get('window');

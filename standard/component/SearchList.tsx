@@ -1,7 +1,7 @@
 import React from 'react';
 import { Image, Keyboard, StyleSheet, Text, TouchableHighlight, TouchableOpacity, View, } from 'react-native';
 import PropTypes from 'prop-types';
-import NaviBar from 'react-native-pure-navigation-bar';
+import NaviBar from '@hecom/react-native-pure-navigation-bar';
 import SearchBar from 'react-native-general-searchbar';
 import AsyncStorage from 'react-native-general-storage';
 import { KeyboardAwareFlatList, KeyboardAwareSectionList } from 'react-native-keyboard-aware-scroll-view';

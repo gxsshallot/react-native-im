@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, StyleSheet, Text, Image, TouchableOpacity, Dimensions } from 'react-native';
-import { getSafeAreaInset } from 'react-native-pure-navigation-bar';
+import { getSafeAreaInset } from '@hecom/react-native-pure-navigation-bar';
 import i18n from 'i18n-js';
 import { Component } from '../typings';
 import * as PageKeys from '../pagekey';

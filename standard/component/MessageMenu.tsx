@@ -1,7 +1,7 @@
 import React from 'react';
 import { Text, View, TouchableWithoutFeedback, StyleSheet, Dimensions, Platform } from 'react-native';
 import { Component } from '../typings';
-import { getSafeAreaInset, DEFAULT_NAVBAR_HEIGHT } from 'react-native-pure-navigation-bar';
+import { getSafeAreaInset, DEFAULT_NAVBAR_HEIGHT } from '@hecom/react-native-pure-navigation-bar';
 import Popover from 'react-native-popover-view';
 
 export type Props = Component.MessageMenuProps;

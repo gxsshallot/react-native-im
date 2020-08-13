@@ -51,7 +51,8 @@
     "react-native": "*",
     "react-native-picklist": "*",
     "react-native-video": "*",
-    "react-navigation": "*"
+    "react-navigation": "*",
+    "@hecom/react-native-pure-navigation-bar": "*"
   },
   "devDependencies": {
     "@types/i18n-js": "^3.0.1",
