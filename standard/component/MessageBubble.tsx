@@ -1,5 +1,5 @@
 import React from 'react';
-import {Dimensions, ImageSourcePropType, TouchableWithoutFeedback, View} from 'react-native';
+import {Dimensions, ImageSourcePropType, PixelRatio, TouchableWithoutFeedback, View} from 'react-native';
 import ImageCapInset from '@hecom/react-native-image-capinsets';
 import * as Model from '../model';
 import {Action, Component} from '../typings';
@@ -35,6 +35,7 @@ export default class extends React.PureComponent<Props, State> {
         const paddingLeft = isSender ? 0 : this.paddingHorizontal;
         const paddingRight = isSender ? this.paddingHorizontal : 0;
         const innerMaxWidth = maxWidth - paddingLeft - paddingRight;
+        const ratio = PixelRatio.get();
         return (
             <TouchableWithoutFeedback
                 onPress={this._onPress.bind(this)}
@@ -43,7 +44,7 @@ export default class extends React.PureComponent<Props, State> {
                 <View ref={ref => this.bubble = ref} style={{flexDirection: 'row'}}>
                     {this.state.enableBubble ? (
                         <ImageCapInset
-                            capInsets={{top: 28, left: 13, bottom: 10, right: 13}}
+                            capInsets={{top: 84 / ratio, left: 39 / ratio, bottom: 30 / ratio, right: 39 / ratio}}
                             resizeMode='stretch'
                             source={bubbleImage}
                             style={{maxWidth, paddingLeft, paddingRight}}
@@ -72,7 +73,7 @@ export default class extends React.PureComponent<Props, State> {
                     marginLeft: 5,
                 }}/>
             )
-        }  else {
+        } else {
             return null;
         }
     }
@@ -105,10 +106,10 @@ export default class extends React.PureComponent<Props, State> {
     }
 
     protected _onPress() {
-        const { message, message: { messageId, type} } = this.props;
+        const {message, message: {messageId, type}} = this.props;
         //语音消息删除未读标志
         if (type == 5 && messageId) {
-            let ext = { shouldRead: false };
+            let ext = {shouldRead: false};
             delegate.im.conversation.updateMessageExt(messageId, ext);
         }
         message.data.shouldRead = false;
