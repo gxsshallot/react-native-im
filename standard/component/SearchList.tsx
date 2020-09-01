@@ -1,5 +1,5 @@
 import React from 'react';
-import { Image, Keyboard, StyleSheet, Text, TouchableHighlight, TouchableOpacity, View, } from 'react-native';
+import { Image, Keyboard, StyleSheet, Text, TouchableHighlight, TouchableOpacity, View, SafeAreaView} from 'react-native';
 import PropTypes from 'prop-types';
 import NaviBar from '@hecom/react-native-pure-navigation-bar';
 import SearchBar from 'react-native-general-searchbar';
@@ -8,13 +8,14 @@ import { KeyboardAwareFlatList, KeyboardAwareSectionList } from 'react-native-ke
 import { Storage } from '../typings';
 import delegate from '../delegate';
 
-export default class extends React.PureComponent {
+export default class extends React.Component {
     static propTypes = {
         searchText: PropTypes.string,
         searchHint: PropTypes.string,
         showHistory: PropTypes.bool,
         historyKey: PropTypes.string,
         doSearch: PropTypes.func.isRequired,
+        doCustomSearch: PropTypes.func,
         onItemClick: PropTypes.func,
         itemKey: PropTypes.string,
         maxHistoryLength: PropTypes.number,
@@ -41,7 +42,7 @@ export default class extends React.PureComponent {
 
     componentDidMount() {
         this.props.historyKey && this._initHistory();
-        this.state.searchText && this._submit();
+        this.state.searchText && this._customSubmit();
     }
 
     render() {
@@ -62,16 +63,19 @@ export default class extends React.PureComponent {
                     title={this._renderSearchBar()}
                 />
                 {showHistory && !result ? this._renderHistory() : (
-                    <List
-                        {...this.props}
-                        data={result || []}
-                        sections={result || []}
-                        ListEmptyComponent={this._renderEmpty('没有结果')}
-                        renderSectionFooter={this._renderSectionFooter}
-                        renderItem={this._renderResultItem()}
-                        ItemSeparatorComponent={ItemSeparatorComponent}
-                        SectionSeparatorComponent={SectionSeparatorComponent}
-                    />
+                    <>
+                        <List
+                            {...this.props}
+                            data={result || []}
+                            sections={result || []}
+                            ListEmptyComponent={this._renderEmpty('没有结果')}
+                            renderSectionFooter={this._renderSectionFooter}
+                            renderItem={this._renderResultItem()}
+                            ItemSeparatorComponent={ItemSeparatorComponent}
+                            SectionSeparatorComponent={SectionSeparatorComponent}
+                        />
+                        <SafeAreaView />
+                    </>
                 )}
             </View>
         );
@@ -86,7 +90,7 @@ export default class extends React.PureComponent {
                 autoFocus={true}
                 searchText={this.state.searchText}
                 canClear={true}
-                onSubmitEditing={this._submit}
+                onSubmitEditing={this._customSubmit}
                 onChangeText={this._onChangeSearchText}
             />
         );
@@ -194,11 +198,14 @@ export default class extends React.PureComponent {
 
     _clickHistory = (searchText) => {
         this.setState({searchText}, () => {
-            this._submit();
+            this._customSubmit();
         });
     };
 
     _onChangeSearchText = (searchText) => {
+        if (searchText === this.state.searchText) {
+            return;
+        }
         const state = {searchText};
         if (!searchText) {
             state.result = null;
@@ -254,6 +261,21 @@ export default class extends React.PureComponent {
             this.setState({searchHistory: []});
         }
     };
+
+    _customSubmit = (event?: any)=> {
+        this._submit(event);
+        const text = event ? event.nativeEvent.text : this.state.searchText;
+        if (text === undefined || text.length === 0 || !this.props.doCustomSearch) {
+            return;
+        }
+        this.props.doCustomSearch(text).then((result) => {
+            if (result.length > 0) {
+                let stateResult = this.state.result || [];
+                stateResult.unshift(...result);
+                this.setState({result: stateResult});
+            }
+        })
+    }
 
     _submit = (event) => {
         const text = event ? event.nativeEvent.text : this.state.searchText;

@@ -45,6 +45,9 @@ export default class extends React.PureComponent {
 
     render() {
         const hints = [];
+        if (this.props.customHint) {
+            hints.push(...this.props.customHint);
+        }
         if (this.props.canSearchContact) {
             hints.push('员工');
         }
@@ -59,25 +62,27 @@ export default class extends React.PureComponent {
             itemKey: 'name',
             searchOnTextChange: true,
         };
-        const onFooterClick = ({title, searchText}) => {
-            this.props.navigation.navigate(PageKeys.SearchMore, {
-                ...props,
-                showHistory: false,
-                searchHint: title,
-                searchText: searchText,
-                maxSectionItemLength: 0,
-                doSearch: title === '通讯录' ? this._searchFromContacts : this._searchFromGroup,
-            });
-        };
         return (
             <delegate.component.SearchList
                 {...props}
                 doSearch={this._doSearch}
                 searchHint={hint}
-                onSectionFooterClick={onFooterClick}
+                onSectionFooterClick={this._onFooterClick.bind(this)}
+                doCustomSearch={this._doCustomSearch}
             />
         );
     }
+
+    _onFooterClick = ({title, searchText}) => {
+        this.props.navigation.navigate(PageKeys.SearchMore, {
+            ...props,
+            showHistory: false,
+            searchHint: title,
+            searchText: searchText,
+            maxSectionItemLength: 0,
+            doSearch: title === '通讯录' ? this._searchFromContacts : this._searchFromGroup,
+        });
+    };
 
     _doSearch = (text) => {
         const result = [];
@@ -89,6 +94,8 @@ export default class extends React.PureComponent {
         }
         return result;
     };
+
+    _doCustomSearch = ()=>{}
 
     _searchFromGroup = (text) => {
         const result = this.groups
