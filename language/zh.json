@@ -23,6 +23,7 @@
     "IMPageChooseConversationTitle": "选择聊天",
     "IMPageChooseConversationCreateNew": "创建新聊天",
     "IMPageChooseUserSelectFromOrg": "按部门选同事",
+    "IMPageChooseUserAll": "所有人",
     "IMSettingAddGroupMember": "添加群成员",
     "IMSettingAllMembers": "全体成员({{length}})",
     "IMSettingAllowInvite": "允许添加成员",
