@@ -80,6 +80,15 @@ export default class extends React.PureComponent<Props, State> {
         this.textInput && this.textInput.focus();
     }
 
+    public insertAtMember(userId: string) {
+        const text = this.state.message;
+        const newText = text.slice(0, this.textLocation) + '@' + text.slice(this.textLocation);;
+        this.setState({message: newText},()=>{
+            this.textLocation++;
+            this._onSelectData([userId]);
+        });
+    }
+
     protected _renderLeftBtn() {
         const icon = this.state.showSpeech ?
             require('./image/chat_keyboard.png') :

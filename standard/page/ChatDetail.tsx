@@ -346,8 +346,20 @@ export default class extends React.PureComponent<ChatDetailProps> {
                 messages={messageList}
                 onShowMenu={this._onShowMenu.bind(this)}
                 navigation={this.props.navigation}
+                onLongPressAvatar={this._onLongPressAvatar}
             />
         );
+    }
+
+    _onLongPressAvatar =(params: Message.General)=>{
+        if (this.props.chatType !==Conversation.ChatType.Group) {
+            return;
+        }
+        const isMe = params.from === delegate.user.getMine().userId;
+        const canResponse = params.data.isSystem ? 0 : isMe ? 0 : 1;
+        if (canResponse) {
+            this.bottomBar.insertAtMember([params.from])
+        }
     }
 
     _generateMessage(type, body, others = {}) {
