@@ -2,6 +2,7 @@ import React from 'react';
 import Toast from 'react-native-root-toast';
 import i18n from 'i18n-js';
 import { Typings, Delegate } from '../../standard';
+import { APNs } from 'react-native-im-easemob';
 
 export const name = 'IMSettingAvoid';
 
@@ -52,6 +53,9 @@ export class AvoidCell extends React.PureComponent<Props, State> {
         const {imId, chatType} = this.props;
         this.setState({avoid});
         Delegate.model.Conversation.updateConfig(imId, chatType, {avoid})
+            .then(()=> {
+                APNs.ignoreGroupPush(imId, avoid);
+            })
             .catch(() => {
                 Toast.show(i18n.t('IMToastError', {
                     action: i18n.t('IMSettingConfigChange'),
