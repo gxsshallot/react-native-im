@@ -25,7 +25,7 @@ async function _clickLeave(
 ): Promise<void> {
     const {imId, navigation} = props;
     try {
-        const action = StackActions.pop({n: 2});
+        const action = StackActions.pop(2);
         navigation.dispatch(action);
         await new Promise((resolve) => {
             setTimeout(() => {

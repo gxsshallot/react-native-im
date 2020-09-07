@@ -1,6 +1,6 @@
 import React from 'react';
 import { FlatList, SafeAreaView, StyleSheet, Text, View } from 'react-native';
-import NaviBar, { forceInset } from 'react-native-pure-navigation-bar';
+import NaviBar, { forceInset } from '@hecom/react-native-pure-navigation-bar';
 import Listener from '@hecom/listener';
 import Toast from 'react-native-root-toast';
 import * as PageKeys from '../pagekey';

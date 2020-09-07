@@ -140,7 +140,10 @@ export default class extends React.PureComponent<Props, State> {
             ? {uri: delegate.func.fitUrlForAvatarSize(avatar, size)}
             : defaultImage;
         return (
-            <TouchableWithoutFeedback onPress={() => delegate.func.pushToUserDetailPage(imId)}>
+            <TouchableWithoutFeedback
+                onPress={() => delegate.func.pushToUserDetailPage(imId)}
+                onLongPress={() => this.props.onLongPressAvatar && this.props.onLongPressAvatar(this.props.message)}
+            >
                 <Image
                     style={[styles.userImage, innerStyle, style]}
                     source={image}

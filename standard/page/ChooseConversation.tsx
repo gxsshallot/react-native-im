@@ -142,13 +142,13 @@ export default class extends React.PureComponent {
             });
     }
 
-    _onCreateNew(data) {
+    _onCreateNew(data, label) {
         if (!data || data.length <= 0) {
             return;
         }
         delegate.model.Conversation.createOne(data)
             .then(({imId, chatType}) => {
-                const items = [{imId, chatType}];
+                const items = [{imId, chatType, label}];
                 this.props.onSelectData && this.props.onSelectData(items);
                 this.props.navigation.goBack();
             });

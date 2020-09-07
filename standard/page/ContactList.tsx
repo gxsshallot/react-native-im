@@ -13,7 +13,7 @@ import {
 } from 'react-native';
 import PropTypes from 'prop-types';
 import Toast from 'react-native-root-toast';
-import NaviBar, {forceInset} from 'react-native-pure-navigation-bar';
+import NaviBar, {forceInset} from '@hecom/react-native-pure-navigation-bar';
 import ArrowImage from '@hecom/image-arrow';
 import Listener from '@hecom/listener';
 import * as PageKeys from '../pagekey';

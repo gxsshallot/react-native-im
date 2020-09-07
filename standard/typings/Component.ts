@@ -32,6 +32,7 @@ export interface BaseMessageProps extends Props.Navigation, Props.Conversation {
     position: number;
     message: Message.General;
     onShowMenu: (params: ShowMenuParams) => void;
+    onLongPressAvatar:(params: Message.General) => void
 }
 
 export interface SendMessageParams<T = any> {

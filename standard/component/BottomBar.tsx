@@ -2,7 +2,7 @@ import React from 'react';
 import { Image, Keyboard, PermissionsAndroid, Platform, SafeAreaView, StyleSheet, Text, TextInput, TouchableHighlight, TouchableOpacity, View, EmitterSubscription, TextStyle, NativeSyntheticEvent, TextInputSelectionChangeEventData, TextInputKeyPressEventData, KeyboardEvent } from 'react-native';
 import SoundRecorder from 'react-native-sound-recorder';
 import Toast from 'react-native-root-toast';
-import { getSafeAreaInset } from 'react-native-pure-navigation-bar';
+import { getSafeAreaInset } from '@hecom/react-native-pure-navigation-bar';
 import i18n from 'i18n-js';
 import { Component, Contact, Message, Conversation } from '../typings';
 import * as PageKeys from '../pagekey';
@@ -78,6 +78,15 @@ export default class extends React.PureComponent<Props, State> {
         });
         this.atMemberList.push(user);
         this.textInput && this.textInput.focus();
+    }
+
+    public insertAtMember(userId: string) {
+        const text = this.state.message;
+        const newText = text.slice(0, this.textLocation) + '@' + text.slice(this.textLocation);;
+        this.setState({message: newText},()=>{
+            this.textLocation++;
+            this._onSelectData([userId]);
+        });
     }
 
     protected _renderLeftBtn() {
@@ -299,7 +308,14 @@ export default class extends React.PureComponent<Props, State> {
     }
 
     protected _onSelectData(data: string[]) {
-        const item = delegate.user.getUser(data[0]);
+        const dataFirst = data[0];
+        let item = {};
+        if (dataFirst === Message.AtAll) {
+            item.imId = Message.AtAll;
+            item.name = i18n.t('IMPageChooseUserAll');
+        } else {
+            item = delegate.user.getUser(data[0]);
+        }
         const text = this.state.message;
         const newText = text.slice(0, this.textLocation) + item.name + ' ' + text.slice(this.textLocation);
         this.setState({message: newText});
@@ -321,12 +337,15 @@ export default class extends React.PureComponent<Props, State> {
             const dataSource = members
                 .filter(userId => userId !== delegate.user.getMine().userId)
                 .map(userId => delegate.user.getUser(userId));
+            const groupOwner = delegate.model.Group.getOwner(this.props.imId);
+            const isOwner = groupOwner === delegate.user.getMine().userId;
             this.props.navigation.navigate(PageKeys.ChooseUser,{
                     title: i18n.t('IMComponentBottomBarChooseAtPerson'),
                     multiple: false,
                     onSelectData: this._onSelectData.bind(this),
                     selectedIds: [],
                     dataSource: dataSource,
+                    showAtAll: isOwner,
                 });
         }
     }

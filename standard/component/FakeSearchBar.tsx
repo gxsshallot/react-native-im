@@ -1,6 +1,6 @@
 import React from 'react';
 import { SafeAreaView } from 'react-native';
-import { forceInset } from 'react-native-pure-navigation-bar';
+import { forceInset } from '@hecom/react-native-pure-navigation-bar';
 import { FakeSearchBar } from 'react-native-general-searchbar';
 
 export default class extends React.PureComponent {

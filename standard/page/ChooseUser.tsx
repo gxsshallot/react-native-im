@@ -9,6 +9,7 @@ import ChooseUserFromOrgPage from './ChooseUserFromOrg';
 import delegate from '../delegate';
 import * as Types from '../proptype';
 import * as PageKeys from '../pagekey';
+import { Message } from '../typings';
 
 export default class extends React.Component {
     static navigationOptions = function (options) {
@@ -28,6 +29,7 @@ export default class extends React.Component {
 
     static defaultProps = {
         ...ChooseUserFromOrgPage.defaultProps,
+        showAtAll: false,
     };
 
     constructor(props) {
@@ -73,7 +75,7 @@ export default class extends React.Component {
                 showBottomView={showBottomView}
                 data={this.state.users}
                 onFinish={this._onFinish.bind(this)}
-                renderHeader={dataSource ? undefined : this._renderHeader.bind(this)}
+                renderHeader={this._renderHeader.bind(this)}
                 rightTitle={multiple ? delegate.config.buttonOK : undefined}
                 searchKeys={[delegate.config.pinyinField]}
                 labelKey={'name'}
@@ -105,11 +107,15 @@ export default class extends React.Component {
     }
 
     _renderHeader() {
-        const style = {
-            borderBottomWidth: StyleSheet.hairlineWidth,
-            borderBottomColor: delegate.style.separatorLineColor,
-        };
-        return (
+        const {dataSource, showAtAll} = this.props;
+        const atAllView = showAtAll ? (
+            <View style={{backgroundColor: 'white', paddingHorizontal: 10, height: 32, justifyContent: 'center'}}>
+                <TouchableOpacity onPress={this._onAtAll.bind(this)}>
+                    <Text>{'所有人'}</Text>
+                </TouchableOpacity>
+            </View>
+        ) : undefined;
+        const fromOrgView = dataSource ? undefined : (
             <View style={styles.row}>
                 <TouchableOpacity onPress={this._clickHeader.bind(this)}>
                     <View style={[styles.container, style]}>
@@ -119,6 +125,16 @@ export default class extends React.Component {
                         <ArrowImage style={styles.icon} />
                     </View>
                 </TouchableOpacity>
+            </View>
+        )
+        const style = {
+            borderBottomWidth: StyleSheet.hairlineWidth,
+            borderBottomColor: delegate.style.separatorLineColor,
+        };
+        return (
+            <View>
+                {atAllView}
+                {fromOrgView}
             </View>
         );
     }
@@ -165,10 +181,21 @@ export default class extends React.Component {
 
     _onFinish(nodes) {
         this._selectedOnFinish(nodes);
+        let label = '';
         nodes = nodes
             .reduce((prv, cur) => [...prv, ...cur.getLeafChildren()], [])
-            .map(node => node.getInfo().userId);
-        this.props.onSelectData && this.props.onSelectData(nodes);
+            .map(node => {
+                const nodeInfo = node.getInfo();
+                label = label.length > 0 ? label + '、' : label;
+                label =  label + nodeInfo.name;
+                return nodeInfo.userId;
+            });
+        this.props.onSelectData && this.props.onSelectData(nodes, label);
+    }
+
+    _onAtAll() {
+        this.props.onSelectData && this.props.onSelectData([Message.AtAll], i18n.t('IMPageChooseUserAll'));
+        this.props.navigation && this.props.navigation.goBack();
     }
 
     _clickHeader() {
