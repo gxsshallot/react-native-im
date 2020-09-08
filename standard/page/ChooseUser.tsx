@@ -1,5 +1,5 @@
 import React from 'react';
-import { InteractionManager, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { InteractionManager, StyleSheet, Text, TouchableOpacity, View, Image } from 'react-native';
 import PropTypes from 'prop-types';
 import Toast from 'react-native-root-toast';
 import PickList from 'react-native-picklist';
@@ -109,11 +109,12 @@ export default class extends React.Component {
     _renderHeader() {
         const {dataSource, showAtAll} = this.props;
         const atAllView = showAtAll ? (
-            <View style={{backgroundColor: 'white', paddingHorizontal: 10, height: 32, justifyContent: 'center'}}>
-                <TouchableOpacity onPress={this._onAtAll.bind(this)}>
-                    <Text>{'所有人'}</Text>
-                </TouchableOpacity>
-            </View>
+            <TouchableOpacity onPress={this._onAtAll.bind(this)}>
+                <View style={{ backgroundColor: 'white', height: 40, flexDirection: 'row', alignItems: 'center' }}>
+                    <Text style={{ fontSize: 15, color: '#222', flex: 1, marginLeft: 12 }}>{'所有人'}</Text>
+                    <Image style={{ marginRight: 25, marginLeft: 10 }} source={require('./image/checkbox.png')} />
+                </View>
+            </TouchableOpacity >
         ) : undefined;
         const fromOrgView = dataSource ? undefined : (
             <View style={styles.row}>
