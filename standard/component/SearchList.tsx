@@ -269,7 +269,7 @@ export default class extends React.Component {
             return;
         }
         this.props.doCustomSearch(text).then((result) => {
-            if (result.length > 0) {
+            if (result && result.length > 0) {
                 let stateResult = this.state.result || [];
                 stateResult.unshift(...result);
                 this.setState({result: stateResult});

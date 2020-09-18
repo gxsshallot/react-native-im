@@ -95,7 +95,7 @@ export default class extends React.PureComponent {
         return result;
     };
 
-    _doCustomSearch = ()=>{}
+    _doCustomSearch = ()=>Promise.resolve()
 
     _searchFromGroup = (text) => {
         const result = this.groups
