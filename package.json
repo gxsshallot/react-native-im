@@ -31,8 +31,8 @@
     "react-native-gesture-handler": "^1.6.0",
     "react-native-keyboard-aware-scroll-view": "^0.9.1",
     "react-native-localize": "^1.1.2",
+    "react-native-photo-browse": "https://github.com/hecom-rn/react-native-photo-browse#31b6278ef8d22c3945b3e4c2f66d302fc3ff9582",
     "react-native-picklist": "^1.2.5",
-    "react-native-popover-view": "^1.0.17",
     "react-native-section-list-get-item-layout": "^2.2.3",
     "react-native-sound": "^0.10.9",
     "react-native-sound-recorder": "^1.3.2",
@@ -52,6 +52,7 @@
     "react-native-root-toast": "*",
     "react-native-photo-browse": "*",
     "react-native-picklist": "*",
+    "react-native-popover-view": ">=3.0.3",
     "@hecom/react-native-pure-navigation-bar": "*"
   },
   "devDependencies": {
@@ -64,7 +65,8 @@
     "react-native-im-easemob": "^1.0.24",
     "react-native-modals": "^0.19.9",
     "react-native-root-toast": "^3.2.1",
-    "react-native-photo-browse": "https://github.com/hecom-rn/react-native-photo-browse#31b6278ef8d22c3945b3e4c2f66d302fc3ff9582",
+    "react-native-photo-browse": "1.3.0",
+    "react-native-popover-view": "^3.0.3",
     "tslib": "^1.9.3"
   }
 }
