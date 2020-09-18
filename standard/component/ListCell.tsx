@@ -37,7 +37,7 @@ export default class extends React.PureComponent {
     };
 
     _renderTitleLine = () => {
-        const {title, labels} = this.props;
+        const {title, labels, isWeakNode} = this.props;
         return (
             <View style={styles.titleline}>
                 <Text style={styles.title} numberOfLines={1}>

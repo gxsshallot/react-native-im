@@ -32,7 +32,6 @@
     "react-native-keyboard-aware-scroll-view": "^0.9.1",
     "react-native-localize": "^1.1.2",
     "react-native-photo-browse": "https://github.com/hecom-rn/react-native-photo-browse#31b6278ef8d22c3945b3e4c2f66d302fc3ff9582",
-    "react-native-picklist": "^1.2.5",
     "react-native-popover-view": "^1.0.17",
     "react-native-popup-dialog": "^0.16.6",
     "react-native-root-toast": "^3.1.1",
@@ -49,7 +48,7 @@
     "@hecom/react-native-image-capinsets": "*",
     "react": "*",
     "react-native": "*",
-    "react-native-picklist": "*",
+    "@hecom/react-native-picklist": "*",
     "react-native-video": "*",
     "react-navigation": "*",
     "@hecom/react-native-pure-navigation-bar": "*"

@@ -2,7 +2,7 @@ import React from 'react';
 import { InteractionManager, StyleSheet, Text, TouchableOpacity, View, Image } from 'react-native';
 import PropTypes from 'prop-types';
 import Toast from 'react-native-root-toast';
-import PickList from 'react-native-picklist';
+import PickList from '@hecom/react-native-picklist';
 import i18n from 'i18n-js';
 import ArrowImage from '@hecom/image-arrow';
 import ChooseUserFromOrgPage from './ChooseUserFromOrg';
@@ -202,21 +202,27 @@ export default class extends React.Component {
     _clickHeader() {
         const selectedIds = this._getCurrentSelectedIdKeys('userId');
         const onSelectDataFunc = (nodes, notBack = false) => {
-	    if(notBack){
+            if (notBack) {
                 this._refreshBackData(nodes, this.idKey);
                 return;
-          }
-        this.props.onSelectData && this.props.onSelectData(nodes);
-        InteractionManager.runAfterInteractions(() => {
-            this.props.navigation.goBack();
-        });
-        };
-        const {title, multiple, hasSelf, parentOrgId, excludedUserIds, spaceHeight} = this.props;
-        this.props.navigation.navigate(PageKeys.ChooseUserFromOrg,{
-                title, multiple, hasSelf, parentOrgId, excludedUserIds, selectedIds, spaceHeight,
-                firstTitleLine: delegate.user.getMine().entName,
-                onSelectData: onSelectDataFunc,
+            }
+            this.props.onSelectData && this.props.onSelectData(nodes);
+            InteractionManager.runAfterInteractions(() => {
+                this.props.navigation.goBack();
             });
+        };
+        const { title, multiple, hasSelf, parentOrgId, excludedUserIds, spaceHeight } = this.props;
+        this.props.navigation.navigate(PageKeys.ChooseUserFromOrg, {
+            title,
+            multiple,
+            hasSelf,
+            parentOrgId,
+            excludedUserIds,
+            selectedIds,
+            spaceHeight,
+            firstTitleLine: delegate.user.getMine().entName,
+            onSelectData: onSelectDataFunc,
+        });
     }
     _getCustomView  = (data, renderRow) => null;
 
