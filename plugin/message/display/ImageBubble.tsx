@@ -71,15 +71,22 @@ export default class extends React.PureComponent<Props, State> {
     }
 
     public onPress() {
-        const {message: {data: {remotePath}, messageId}, messages = []} = this.props;
-        const images = messages.filter(({type}) => type === IMConstant.MessageType.image).reverse();
-        const currentIndex = images.findIndex(image => image.messageId === messageId);
-        showPhotoBrowserPage({
-            currentIndex: currentIndex < 0 ? 0 : currentIndex,
-            images: images.length === 0 ? [remotePath] : images.map(({data: {remotePath}}) => remotePath),
-            canSave: true,
-            renderIndicator: () => null,
-        });
+        const {message: {data: {remotePath, localPath}, messageId}, messages = []} = this.props;
+
+        if (!remotePath && !localPath) {
+            return; 
+         }
+         const images = messages.filter(({type, data: {remotePath: remoteP, localPath: localP}}) => {
+             return type === IMConstant.MessageType.image &&
+             ((remoteP && remoteP.length > 0) || (localP && localP.length > 0))
+         }).reverse();
+         const currentIndex = images.findIndex(image => image.messageId === messageId);
+         showPhotoBrowserPage({
+             currentIndex: currentIndex < 0 ? 0 : currentIndex,
+             images: images.length === 0 ? [remotePath] : images.map(({data: {remotePath, localPath}}) => remotePath ? remotePath : localPath),
+             canSave: true,
+             renderIndicator: () => null,
+         });
     }
 }
 
