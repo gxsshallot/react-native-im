@@ -191,6 +191,7 @@ export default class extends React.PureComponent<ChatDetailProps> {
         let [result] = await Promise.all([loadPromise, markPromise]);
         result = result
             .map(item => Model.Action.Parse.get(undefined, item, item))
+            .filter((item)=> !!item)
             .sort((a, b) => a.timestamp >= b.timestamp ? -1 : 1);
         if (result && result.length > 0) {
             this.lastMessage = result[result.length - 1];
