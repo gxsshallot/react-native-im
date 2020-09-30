@@ -1,6 +1,6 @@
 import React from 'react';
 import { TextInput, StyleSheet, Dimensions, TextInputProps } from 'react-native';
-import Modal, { ModalTitle, ModalButton, ModalContent } from 'react-native-modals';
+import Modal, { ModalTitle, ModalButton, ModalContent, ModalFooter} from 'react-native-modals';
 import i18n from 'i18n-js';
 
 export interface Props {
@@ -43,27 +43,28 @@ export default class extends React.PureComponent<Props, State> {
             <Modal
                 visible={visible}
                 onTouchOutside={onCancel}
-                dialogTitle={this._renderPromptTitle()}
+                modalTitle={this._renderPromptTitle()}
                 width={dialogWidth}
-                dialogStyle={[styles.dialog, {marginTop}]}
+                modalStyle={[styles.dialog, {marginTop}]}
                 containerStyle={styles.container}
-                actionContainerStyle={styles.footer}
-                actions={[
-                    <ModalButton
-                        key={'cancel'}
-                        text={i18n.t('IMCommonCancel')}
-                        onPress={onCancel}
-                        style={styles.action}
-                        textStyle={styles.actionText}
-                    />,
-                    <ModalButton
-                        key={'ok'}
-                        text={i18n.t('IMCommonOK')}
-                        onPress={() => onSubmit(this.state.text)}
-                        style={styles.action}
-                        textStyle={styles.actionText}
-                    />
-                ]}
+                footer={
+                    <ModalFooter style={styles.footer}>
+                        <ModalButton
+                            key={'cancel'}
+                            text={i18n.t('IMCommonCancel')}
+                            onPress={onCancel}
+                            style={styles.action}
+                            textStyle={styles.actionText}
+                        />
+                        <ModalButton
+                            key={'ok'}
+                            text={i18n.t('IMCommonOK')}
+                            onPress={() => onSubmit(this.state.text)}
+                            style={styles.action}
+                            textStyle={styles.actionText}
+                        />
+                    </ModalFooter>
+                }
             >
                 <ModalContent style={styles.content}>
                     <TextInput
