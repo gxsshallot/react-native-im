@@ -18,10 +18,14 @@ interface ChatDetailProps {
 
 export default class extends React.PureComponent<ChatDetailProps> {
     static navigationOptions = function ({route}) {
-        const {_title_, _right_} = route.params;
+        const {_title_, _right_, _marginHorizontal_} = route.params;
+        const titleContainerStyle = !!_marginHorizontal_ ? { marginHorizontal: _marginHorizontal_ } : {}
         return {
             title: _title_,
             headerRight: _right_,
+            headerTitleContainerStyle: {
+                ...titleContainerStyle
+            }
         };
     };
 
@@ -127,15 +131,19 @@ export default class extends React.PureComponent<ChatDetailProps> {
     _setNaviBar() {
         const {imId} = this.props;
         let title;
+        let marginHorizontal;
         if (this.isGroup) {
             const groupName = delegate.model.Group.getName(imId, false) || i18n.t('IMCommonChatTypeGroup');
             title = groupName + ' (' + delegate.model.Group.getMembers(imId).length + ')';
+            marginHorizontal = 97;
         } else {
             title = delegate.user.getUser(imId).name;
+            marginHorizontal = 50;
         }
         this.props.navigation.setParams({
             _title_: title,
             _right_: this._renderRightElement.bind(this),
+            _marginHorizontal_: marginHorizontal
         });
     }
 
