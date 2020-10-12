@@ -15,11 +15,11 @@ export default class extends React.PureComponent<Props> {
         return (
             <Popover
                 isVisible={menuShow}
-                fromView={menuRef}
-                onClose={onClose}
-                placement={'auto'}
-                showInModal={false}
-                showBackground={false}
+                from={menuRef}
+                onRequestClose={onClose}
+                // placement={'auto'}
+                // showInModal={false}
+                // showBackground={false}
                 verticalOffset={-verticalOffset}
                 popoverStyle={styles.popover}
             >
