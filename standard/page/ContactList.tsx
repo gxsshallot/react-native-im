@@ -99,13 +99,14 @@ export default class extends React.PureComponent {
 
     _renderList = () => {
         const {itemHeight} = this.props;
+        const {items = []} = this.state;
         let { width } = Dimensions.get("window");
         return (
             <delegate.component.FixedSectionList
                 style={styles.list}
                 sections={this.state.data}
                 renderItem={this._rowRenderer}
-                headerHeight={itemHeight * 3}
+                headerHeight={itemHeight * items.length}
                 renderHeaderComponent={this._renderHeader}
                 hasHeader={true}
                 itemHeight={itemHeight + StyleSheet.hairlineWidth}
