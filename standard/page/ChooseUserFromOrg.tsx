@@ -61,7 +61,7 @@ export default class extends React.PureComponent<Props> {
         let promise;
         if (delegate.contact.loadUserOrgTree) {
             const {hasSelf, parentOrgId, excludedUserIds} = this.props;
-            promise = delegate.contact.loadUserOrgTree(hasSelf, parentOrgId, excludedUserIds, true);
+            promise = delegate.contact.loadUserOrgTree(hasSelf, parentOrgId, excludedUserIds);
         } else {
             const userPromise = delegate.contact.loadAllUser(true);
             const orgPromise = delegate.contact.loadAllOrg(true);
