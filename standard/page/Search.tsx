@@ -67,13 +67,13 @@ export default class extends React.PureComponent {
                 {...props}
                 doSearch={this._doSearch}
                 searchHint={hint}
-                onSectionFooterClick={this._onFooterClick.bind(this)}
+                onSectionFooterClick={this._onFooterClick.bind(this, props)}
                 doCustomSearch={this._doCustomSearch}
             />
         );
     }
 
-    _onFooterClick = ({title, searchText}) => {
+    _onFooterClick(props, { title, searchText }) {
         this.props.navigation.navigate(PageKeys.SearchMore, {
             ...props,
             showHistory: false,
