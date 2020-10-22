@@ -116,17 +116,38 @@ export default class extends React.PureComponent {
     };
 
     _searchFromContacts = (text) => {
-        const result = this.employees
-            .filter((user) => {
-                let r = false;
-                r = r || user.name.includes(text);
-                r = r || user.name_py && user.name_py.includes(text);
-                r = r || user.phone && user.phone.includes(text);
-                r = r || user.dept && user.dept.name && user.dept.name.includes(text);
-                r = r || user.email && user.email.toLowerCase().includes(text.toLowerCase());
-                return r;
-            })
-            .sort((a, b) => a.name_py ? a.name_py.localeCompare(b.name_py) : -1);
+        const poolDic: { [key: string]: number } = {
+        }
+        const resoultDic: { [key: string]: Array<any> } = {
+            _name_name_py_: [],
+            _phone_: [],
+            _dept_: [],
+            _email_: [],
+        }
+        for (let index = 0; index < this.employees.length; index++) {
+            const user: any = this.employees[index];
+            if (!!poolDic[user.code]) {
+                continue;
+            }
+            if ((user.name && user.name.includes(text)) ||
+                user.name_py && user.name_py.toLowerCase().includes(text.toLowerCase())) {
+                poolDic[user.code] = user;
+                resoultDic._name_name_py_.push(user);
+            } else if (user.phone && user.phone.includes(text)){
+                poolDic[user.code] = user;
+                resoultDic._phone_.push(user);
+            } else if (user.dept && user.dept.name && user.dept.name.includes(text)) {
+                poolDic[user.code] = user;
+                resoultDic._dept_.push(user);
+            } else if (user.email && user.email.toLowerCase().includes(text.toLowerCase())) {
+                poolDic[user.code] = user;
+                resoultDic._email_.push(user);
+            }
+        }
+        const result = Object.values(resoultDic).reduce((prv, cur) => {
+            return prv.concat(cur.sort((a, b) => a.name_py ? a.name_py.localeCompare(b.name_py) : -1));
+        }, []);
+        
         return result.length > 0 ? [{
             title: this.multi ? '通讯录' : undefined,
             data: result,
