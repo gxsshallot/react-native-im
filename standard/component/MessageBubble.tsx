@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { RefObject } from 'react';
 import {Dimensions, ImageSourcePropType, PixelRatio, TouchableWithoutFeedback, View} from 'react-native';
 import ImageCapInset from '@hecom/react-native-image-capinsets';
 import * as Model from '../model';
@@ -21,7 +21,7 @@ export default class extends React.PureComponent<Props, State> {
     };
 
     protected readonly paddingHorizontal = 5;
-    protected bubble: View | null = null;
+    protected bubble: RefObject<View> = React.createRef();
     protected innerView: Action.Display.Result | null = null;
 
     state: State = {
@@ -41,7 +41,7 @@ export default class extends React.PureComponent<Props, State> {
                 onPress={this._onPress.bind(this)}
                 onLongPress={this._onLongPress.bind(this)}
             >
-                <View ref={ref => this.bubble = ref} style={{flexDirection: 'row'}}>
+                <View ref={this.bubble} style={{flexDirection: 'row'}}>
                     {this.state.enableBubble ? (
                         <ImageCapInset
                             capInsets={{top: 84 / ratio, left: 39 / ratio, bottom: 30 / ratio, right: 39 / ratio}}
@@ -121,13 +121,13 @@ export default class extends React.PureComponent<Props, State> {
 
     protected _onLongPress() {
         const {message, isSender, onShowMenu} = this.props;
-        this.bubble && this.bubble.measure((width: number, height: number, px: number, py: number) => {
+        if (!!this.bubble.current) {
             const param = {
                 ref: this.bubble,
                 isSender: isSender,
                 message: message,
             };
             onShowMenu(param);
-        });
+        }
     }
 }
