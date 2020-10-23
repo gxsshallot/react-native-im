@@ -302,6 +302,7 @@ export default class extends React.PureComponent<ChatDetailProps> {
     _onCopy(message) {
         const text = message.data.text;
         Clipboard.setString(text);
+        Toast.show('复制成功');
     }
 
     _onForward(message) {
