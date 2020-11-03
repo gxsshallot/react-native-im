@@ -1,5 +1,5 @@
 import React from 'react';
-import { TextInput, StyleSheet, Dimensions, TextInputProps } from 'react-native';
+import { TextInput, StyleSheet, Dimensions, TextInputProps, Keyboard } from 'react-native';
 import Modal, { ModalTitle, ModalButton, ModalContent, ModalFooter} from 'react-native-modals';
 import i18n from 'i18n-js';
 
@@ -13,12 +13,16 @@ export interface Props {
 
 export interface State {
     text: string;
+    keyBoardShow: boolean
 }
 
 export default class extends React.PureComponent<Props, State> {
     state: State = {
         text: '',
+        keyBoardShow: false
     };
+    keyboardDidShowListener: any;
+    keyboardDidHideListener: any;
 
     constructor(props: Props) {
         super(props);
@@ -27,17 +31,30 @@ export default class extends React.PureComponent<Props, State> {
 
     componentDidMount() {
         Dimensions.addEventListener('change', this._onOrientationChange);
+        this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this._keyboardDidShow.bind(this));
+        this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this._keyboardDidHide.bind(this));
     }
 
     componentWillUnmount() {
         Dimensions.removeEventListener('change', this._onOrientationChange);
+        this.keyboardDidShowListener.remove();
+        this.keyboardDidHideListener.remove();
+    }
+
+    _keyboardDidShow(e: any) {
+        this.setState({
+            keyBoardShow: true
+        });
+    }
+    _keyboardDidHide() {
+        this.setState({
+            keyBoardShow: false
+        });
     }
 
     render() {
         const {visible, onCancel, onSubmit, textInputProps} = this.props;
         const {width, height} = Dimensions.get('window');
-        const isLandscape = width > height;
-        const marginTop = isLandscape ? 15 : height * 0.1;
         const dialogWidth = Math.min(width - 15 * 2, 300);
         return (
             <Modal
@@ -45,7 +62,7 @@ export default class extends React.PureComponent<Props, State> {
                 onTouchOutside={onCancel}
                 modalTitle={this._renderPromptTitle()}
                 width={dialogWidth}
-                modalStyle={[styles.dialog, {marginTop}]}
+                modalStyle={[styles.dialog, {marginBottom: this.state.keyBoardShow ? height / 2 : 0}]}
                 containerStyle={styles.container}
                 footer={
                     <ModalFooter style={styles.footer}>
@@ -129,7 +146,6 @@ const styles = StyleSheet.create({
         borderTopWidth: StyleSheet.hairlineWidth,
         borderTopColor: '#e6e6ea',
         flexDirection: 'row',
-        marginTop: 20,
         borderColor: '#cccccc',
     },
     action: {
