@@ -90,7 +90,7 @@ export default class extends React.Component {
                 autoFocus={true}
                 searchText={this.state.searchText}
                 canClear={true}
-                onSubmitEditing={this._customSubmit}
+                onSubmitEditing={this._submit}
                 onChangeText={this._onChangeSearchText}
             />
         );
@@ -262,26 +262,18 @@ export default class extends React.Component {
         }
     };
 
-    _customSubmit = (event?: any)=> {
-        this._submit(event);
-        const text = event ? event.nativeEvent.text : this.state.searchText;
-        if (text === undefined || text.length === 0 || !this.props.doCustomSearch) {
-            return;
-        }
-        this.props.doCustomSearch(text).then((result) => {
-            if (result && result.length > 0) {
-                let stateResult = this.state.result || [];
-                stateResult.unshift(...result);
-                this.setState({result: stateResult});
-            }
-        })
-    }
-
     _submit = (event) => {
         const text = event ? event.nativeEvent.text : this.state.searchText;
         if (text === undefined || text.length === 0) {
             return;
         }
+        this.props.doCustomSearch && this.props.doCustomSearch(text).then((result) => {
+            if (result && result.length > 0) {
+                let stateResult = this.state.result || [];
+                stateResult.unshift(...result);
+                this.setState({ result: stateResult });
+            }
+        })
         !this.props.onItemClick && this._addHistory(text);
         !this.props.searchOnTextChange && Keyboard.dismiss();
         const result = this.props.doSearch(text).filter(i => i);
