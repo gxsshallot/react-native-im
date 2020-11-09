@@ -42,7 +42,7 @@ export default class extends React.Component {
 
     componentDidMount() {
         this.props.historyKey && this._initHistory();
-        this.state.searchText && this._customSubmit();
+        this.state.searchText && this._submit();
     }
 
     render() {
@@ -198,7 +198,7 @@ export default class extends React.Component {
 
     _clickHistory = (searchText) => {
         this.setState({searchText}, () => {
-            this._customSubmit();
+            this._submit();
         });
     };
 
