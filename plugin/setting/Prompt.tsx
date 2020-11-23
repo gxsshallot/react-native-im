@@ -1,7 +1,9 @@
 import React from 'react';
-import { TextInput, StyleSheet, Dimensions, TextInputProps, Keyboard } from 'react-native';
+import { TextInput, StyleSheet, Dimensions, TextInputProps, Keyboard, Platform } from 'react-native';
 import Modal, { ModalTitle, ModalButton, ModalContent, ModalFooter} from 'react-native-modals';
 import i18n from 'i18n-js';
+
+const isAndroid = Platform.OS === 'android';
 
 export interface Props {
     visible: boolean;
@@ -56,13 +58,14 @@ export default class extends React.PureComponent<Props, State> {
         const {visible, onCancel, onSubmit, textInputProps} = this.props;
         const {width, height} = Dimensions.get('window');
         const dialogWidth = Math.min(width - 15 * 2, 300);
+        const marginStyle = isAndroid ? {} : {marginBottom: this.state.keyBoardShow ? height / 2 : 0};
         return (
             <Modal
                 visible={visible}
                 onTouchOutside={onCancel}
                 modalTitle={this._renderPromptTitle()}
                 width={dialogWidth}
-                modalStyle={[styles.dialog, {marginBottom: this.state.keyBoardShow ? height / 2 : 0}]}
+                modalStyle={[styles.dialog, marginStyle]}
                 containerStyle={styles.container}
                 footer={
                     <ModalFooter style={styles.footer}>
