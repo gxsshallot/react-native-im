@@ -99,6 +99,11 @@ export function getName(groupId: string, autoConj: boolean = true): string | voi
     }
 }
 
+export function getNotice(groupId: string): string {
+    const group = findByGroupId(groupId, false);
+    return (group && group.notice) ? group.notice : '';
+}
+
 export function getAvatar(groupId: string): string | void {
     const group = findByGroupId(groupId, false);
     return group ? group.avatar : null;

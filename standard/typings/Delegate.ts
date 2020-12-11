@@ -55,6 +55,7 @@ export interface GroupModelPart {
     getOwner: (groupId: string) => string;
     getMembers: (groupId: string, hasOwner?: boolean) => string[];
     getName: (groupId: string, autoConj?: boolean) => string | void;
+    getNotice: (groupId: string) => string;
     getAvatar: (groupId: string) => string | void;
     getAllowInvites: (groupId: string) => boolean;
     createOne: (memberUserIds: string[]) => Promise<Group.Item>;
