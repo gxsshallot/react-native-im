@@ -89,7 +89,7 @@ export class GroupNoticeCell extends React.PureComponent<Props, State> {
 
     protected _clickNotice() {
         const {imId, onDataChange, isOwner, groupNotice, navigation} = this.props;
-        const curNotice = (!groupNotice) ? groupNotice : ''
+        const curNotice = (groupNotice != null) ? groupNotice : ''
 
         navigation.navigate( PageKeys.GroupNoticeEdit, {
             groupId: imId,

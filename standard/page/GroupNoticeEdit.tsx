@@ -5,6 +5,7 @@ import NaviBar, {getSafeAreaInset} from '@hecom/react-native-pure-navigation-bar
 import {Delegate} from "react-native-im/standard/index";
 import Toast from "react-native-root-toast";
 import i18n from 'i18n-js';
+import Navigation from "@hecom/navigation/src/index";
 
 export default class extends React.PureComponent {
     private keyboardDidShowListener: any;
@@ -19,7 +20,7 @@ export default class extends React.PureComponent {
 
     static defaultProps = {};
 
-    state={
+    state = {
         keyBoardHeight: 0,
     }
 
@@ -48,6 +49,7 @@ export default class extends React.PureComponent {
         if (canEdit) {
             rights.rightElement = '保存';
             rights.onRight = this._onRight;
+            // rights.ab
         }
         const safeArea = getSafeAreaInset();
         const marginStyle = {marginBottom: Math.max(this.state.keyBoardHeight, 10) + safeArea.bottom};
@@ -57,6 +59,7 @@ export default class extends React.PureComponent {
                 {canEdit ? (
                     <TextInput
                         style={[styles.input, marginStyle]}
+                        defaultValue={groupNotice}
                         multiline={true}
                         placeholder='请输入群公告内容'
                         onChangeText={(text) => this.setState({text})}
@@ -78,11 +81,16 @@ export default class extends React.PureComponent {
         if (!notice) {
             notice = ''
         }
+        this.props.apiRefresh(true);
         Delegate.model.Group.changeNotice(groupId, notice)
             .then(() => {
+                this.props.apiRefresh(false);
                 onDataChange();
+                Toast.show('保存成功');
+                Navigation.pop();
             })
             .catch(() => {
+                this.props.apiRefresh(false);
                 Toast.show(i18n.t('IMToastError', {
                     action: i18n.t('IMSettingGroupNoticeChange'),
                 }));
