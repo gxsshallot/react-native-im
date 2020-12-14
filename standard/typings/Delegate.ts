@@ -65,6 +65,7 @@ export interface GroupModelPart {
     addMembers: (groupId: string, memberUserIds: string[]) => Promise<string[]>;
     removeMembers: (groupId: string, memberUserIds: string[]) => Promise<string[]>;
     changeName: (groupId: string, newName: string) => Promise<string>;
+    changeNotice: (groupId: string, newNotice: string) => Promise<string>;
     changeAvatar: (groupId: string, newAvatarUrl: string) => Promise<string>;
     changeAllowInvites: (groupId: string, allowInvites: boolean) => Promise<boolean>;
     changeOwner: (groupId: string, newOwnerId: string) => Promise<{ owner: string; members: string[] }>;
@@ -148,6 +149,7 @@ export interface GroupApiPart {
     addMembers: (groupId: string, memberUserIds: string[]) => Promise<void>;
     removeMembers: (groupId: string, memberUserIds: string[]) => Promise<void>;
     changeName: (groupId: string, newName: string) => Promise<void>;
+    changeNotice: (groupId: string, newNotice: string) => Promise<void>;
     changeAvatar: (groupId: string, newAvatarUrl: string) => Promise<void>;
     changeAllowInvites: (groupId: string, newAllowInvites: boolean) => Promise<void>;
     changeOwner: (groupId: string, newOwnerId: string) => Promise<void>;

@@ -7,6 +7,7 @@ import ChooseUserFromOrgPage from './ChooseUserFromOrg';
 import ContactListPage from './ContactList';
 import GroupListPage from './GroupList';
 import GroupMembersPage from './GroupMembers';
+import GroupNoticeEditPage from './GroupNoticeEdit';
 import SearchPage from './Search';
 
 export {
@@ -20,4 +21,5 @@ export {
     GroupListPage,
     GroupMembersPage,
     SearchPage,
+    GroupNoticeEditPage,
 };
