@@ -6,10 +6,13 @@ import {Delegate} from "react-native-im/standard/index";
 import Toast from "react-native-root-toast";
 import i18n from 'i18n-js';
 import Navigation from "@hecom/navigation/src/index";
+import {Message} from "react-native-im/standard/typings/index";
+import delegate from "react-native-im/standard/delegate";
 
 export default class extends React.PureComponent {
     private keyboardDidShowListener: any;
     private keyboardDidHideListener: any;
+    private isDisable = true
 
     static propTypes = {
         groupId: PropTypes.string.isRequired,
@@ -17,8 +20,6 @@ export default class extends React.PureComponent {
         canEdit: PropTypes.bool,
         onDataChange: PropTypes.func.isRequired,
     };
-
-    static defaultProps = {};
 
     state = {
         keyBoardHeight: 0,
@@ -32,12 +33,12 @@ export default class extends React.PureComponent {
         this.keyboardDidShowListener.remove();
         this.keyboardDidHideListener.remove();
     }
-    _keyboardDidShow(e) {
+    protected _keyboardDidShow(e) {
         this.setState({
             keyBoardHeight: e.endCoordinates.height
         });
     }
-    _keyboardDidHide() {
+    protected _keyboardDidHide() {
         this.setState({
             keyBoardHeight: 0
         });
@@ -48,8 +49,11 @@ export default class extends React.PureComponent {
         const rights = {};
         if (canEdit) {
             rights.rightElement = '保存';
-            rights.onRight = this._onRight;
-            // rights.ab
+            if (this.isDisable) {
+                rights.rightElementDisable = true;
+            } else {
+                rights.onRight = this._onRight;
+            }
         }
         const safeArea = getSafeAreaInset();
         const marginStyle = {marginBottom: Math.max(this.state.keyBoardHeight, 10) + safeArea.bottom};
@@ -60,13 +64,17 @@ export default class extends React.PureComponent {
                     <TextInput
                         style={[styles.input, marginStyle]}
                         defaultValue={groupNotice}
+                        maxLength={2000}
                         multiline={true}
                         placeholder='请输入群公告内容'
-                        onChangeText={(text) => this.setState({text})}
+                        onChangeText={(text) => {
+                            this.isDisable = false
+                            this.setState({text})
+                        }}
                         autoFocus={canEdit}
                     />
                 ) : (
-                    <ScrollView style={styles.content} showsVerticalScrollIndicator={true}>
+                    <ScrollView style={[styles.content, {marginBottom: safeArea.bottom}]} showsVerticalScrollIndicator={true}>
                         <Text style={[styles.contentText]}>{groupNotice}</Text>
                     </ScrollView>
                 )}
@@ -75,7 +83,7 @@ export default class extends React.PureComponent {
         );
     }
 
-    _onRight = () => {
+    protected _onRight = () => {
         const {groupId, onDataChange} = this.props;
         let notice = this.state.text;
         if (!notice) {
@@ -84,6 +92,7 @@ export default class extends React.PureComponent {
         this.props.apiRefresh(true);
         Delegate.model.Group.changeNotice(groupId, notice)
             .then(() => {
+                this._onSendMessageText()
                 this.props.apiRefresh(false);
                 onDataChange();
                 Toast.show('保存成功');
@@ -97,6 +106,20 @@ export default class extends React.PureComponent {
             });
     };
 
+    protected _onSendMessageText() {
+        let msg = this.state.text;
+        if (msg.length > 0) {
+            msg = '@所有人' + '\n' + msg
+            const message = {
+                type: delegate.config.messageType.text,
+                body: {
+                    text: msg,
+                    atMemberList: Message.AtAll,
+                },
+            };
+            this.props.onSendMessage(message);
+        }
+    }
 }
 
 const styles = StyleSheet.create({
@@ -111,15 +134,11 @@ const styles = StyleSheet.create({
     },
     content: {
         flex: 1,
-        flexDirection: 'row',
-        justifyContent: 'flex-end',
-        alignItems: 'center',
     },
     contentText: {
         fontSize: 14,
         color: '#aaaaaa',
         marginHorizontal: 12,
-        marginBottom: 10,
         marginTop: 10,
     },
 });
