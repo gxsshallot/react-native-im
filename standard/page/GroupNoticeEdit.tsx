@@ -6,6 +6,8 @@ import {Delegate} from "react-native-im/standard/index";
 import Toast from "react-native-root-toast";
 import i18n from 'i18n-js';
 import Navigation from "@hecom/navigation/src/index";
+import {Message} from "react-native-im/standard/typings/index";
+import delegate from "react-native-im/standard/delegate";
 
 export default class extends React.PureComponent {
     private keyboardDidShowListener: any;
@@ -31,12 +33,12 @@ export default class extends React.PureComponent {
         this.keyboardDidShowListener.remove();
         this.keyboardDidHideListener.remove();
     }
-    _keyboardDidShow(e) {
+    protected _keyboardDidShow(e) {
         this.setState({
             keyBoardHeight: e.endCoordinates.height
         });
     }
-    _keyboardDidHide() {
+    protected _keyboardDidHide() {
         this.setState({
             keyBoardHeight: 0
         });
@@ -81,7 +83,7 @@ export default class extends React.PureComponent {
         );
     }
 
-    _onRight = () => {
+    protected _onRight = () => {
         const {groupId, onDataChange} = this.props;
         let notice = this.state.text;
         if (!notice) {
@@ -90,6 +92,7 @@ export default class extends React.PureComponent {
         this.props.apiRefresh(true);
         Delegate.model.Group.changeNotice(groupId, notice)
             .then(() => {
+                this._onSendMessageText()
                 this.props.apiRefresh(false);
                 onDataChange();
                 Toast.show('保存成功');
@@ -103,6 +106,20 @@ export default class extends React.PureComponent {
             });
     };
 
+    protected _onSendMessageText() {
+        let msg = this.state.text;
+        if (msg.length > 0) {
+            msg = '@所有人' + '\n' + msg
+            const message = {
+                type: delegate.config.messageType.text,
+                body: {
+                    text: msg,
+                    atMemberList: Message.AtAll,
+                },
+            };
+            this.props.onSendMessage(message);
+        }
+    }
 }
 
 const styles = StyleSheet.create({

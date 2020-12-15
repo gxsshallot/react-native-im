@@ -14,7 +14,7 @@ import ArrowImage from '@hecom/image-arrow';
 export const name = 'IMSettingGroupNotice';
 
 export function getUi(props: Typings.Action.Setting.Params): Typings.Action.Setting.Result {
-    const {key, imId, chatType, onDataChange, navigation} = props;
+    const {key, imId, chatType, onDataChange, navigation, onSendMessage} = props;
     const isGroup = chatType === Typings.Conversation.ChatType.Group;
     if (!isGroup) {
         return null;
@@ -30,6 +30,7 @@ export function getUi(props: Typings.Action.Setting.Params): Typings.Action.Sett
             imId={imId}
             navigation={navigation}
             onDataChange={onDataChange}
+            onSendMessage={onSendMessage}
         />
     );
 }
@@ -97,7 +98,7 @@ export class GroupNoticeCell extends React.PureComponent<Props, State> {
     }
 
     protected _clickNotice() {
-        const {imId, onDataChange, isOwner, groupNotice, navigation} = this.props;
+        const {imId, onDataChange, isOwner, groupNotice, navigation, onSendMessage} = this.props;
         const curNotice = (groupNotice != null) ? groupNotice : ''
 
         navigation.navigate( PageKeys.GroupNoticeEdit, {
@@ -105,6 +106,7 @@ export class GroupNoticeCell extends React.PureComponent<Props, State> {
             groupNotice: curNotice,
             canEdit: isOwner,
             onDataChange: onDataChange,
+            onSendMessage: onSendMessage,
         })
     }
 

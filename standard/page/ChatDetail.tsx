@@ -163,14 +163,17 @@ export default class extends React.PureComponent<ChatDetailProps> {
     }
 
     _renderRightElement() {
+        const {imId, chatType} = this.props;
+        const onSendMsg = this._onSendMessage.bind(this, imId, chatType)
         return (
             <HeaderButton
                 title={i18n.t('IMPageChatDetailSetting')}
                 onPress={() => {
                     this.props.navigation.navigate( PageKeys.ChatSetting,{
-                            imId: this.props.imId,
-                            chatType: this.props.chatType,
-                        });
+                        imId: imId,
+                        chatType: chatType,
+                        onSendMessage: onSendMsg,
+                    });
                 }}
             />
         );
@@ -227,7 +230,7 @@ export default class extends React.PureComponent<ChatDetailProps> {
                         StackActions.popToTop({})
                     );
                 }},
-            ]); 
+            ]);
         }
     }
 
