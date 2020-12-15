@@ -10,6 +10,7 @@ import Navigation from "@hecom/navigation/src/index";
 export default class extends React.PureComponent {
     private keyboardDidShowListener: any;
     private keyboardDidHideListener: any;
+    private isDisable = true
 
     static propTypes = {
         groupId: PropTypes.string.isRequired,
@@ -17,8 +18,6 @@ export default class extends React.PureComponent {
         canEdit: PropTypes.bool,
         onDataChange: PropTypes.func.isRequired,
     };
-
-    static defaultProps = {};
 
     state = {
         keyBoardHeight: 0,
@@ -48,8 +47,11 @@ export default class extends React.PureComponent {
         const rights = {};
         if (canEdit) {
             rights.rightElement = '保存';
-            rights.onRight = this._onRight;
-            // rights.ab
+            if (this.isDisable) {
+                rights.rightElementDisable = true;
+            } else {
+                rights.onRight = this._onRight;
+            }
         }
         const safeArea = getSafeAreaInset();
         const marginStyle = {marginBottom: Math.max(this.state.keyBoardHeight, 10) + safeArea.bottom};
@@ -60,13 +62,17 @@ export default class extends React.PureComponent {
                     <TextInput
                         style={[styles.input, marginStyle]}
                         defaultValue={groupNotice}
+                        maxLength={2000}
                         multiline={true}
                         placeholder='请输入群公告内容'
-                        onChangeText={(text) => this.setState({text})}
+                        onChangeText={(text) => {
+                            this.isDisable = false
+                            this.setState({text})
+                        }}
                         autoFocus={canEdit}
                     />
                 ) : (
-                    <ScrollView style={styles.content} showsVerticalScrollIndicator={true}>
+                    <ScrollView style={[styles.content, {marginBottom: safeArea.bottom}]} showsVerticalScrollIndicator={true}>
                         <Text style={[styles.contentText]}>{groupNotice}</Text>
                     </ScrollView>
                 )}
