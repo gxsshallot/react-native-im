@@ -117,15 +117,11 @@ const styles = StyleSheet.create({
     },
     content: {
         flex: 1,
-        flexDirection: 'row',
-        justifyContent: 'flex-end',
-        alignItems: 'center',
     },
     contentText: {
         fontSize: 14,
         color: '#aaaaaa',
         marginHorizontal: 12,
-        marginBottom: 10,
         marginTop: 10,
     },
 });

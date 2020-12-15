@@ -1,5 +1,6 @@
 import React from 'react';
 import {
+    Alert,
     StyleSheet,
     Text,
     TouchableHighlight,
@@ -48,17 +49,25 @@ export class GroupNoticeCell extends React.PureComponent<Props, State> {
     };
 
     render() {
-        const {groupNotice} = this.props;
+        const {isOwner, groupNotice} = this.props;
         let title = i18n.t('IMSettingGroupNotice')
         const hasContent = groupNotice != null && groupNotice.length > 0;
+        let onPressFunc = (isOwner || hasContent) ? this._clickNotice.bind(this) : this._noSetting.bind(this)
         return (
             <TouchableHighlight
                 underlayColor={delegate.style.separatorLineColor}
-                onPress={() => this._clickNotice()}
+                onPress={onPressFunc}
             >
                 <View style={styles.container}>
                     <View style={styles.line}>
                         {this._renderLabel(title)}
+                        {hasContent == false && (
+                            <View style={styles.subTitleContainer}>
+                                <Text numberOfLines={1} style={styles.subtitle}>
+                                    {'未设置'}
+                                </Text>
+                            </View>
+                        )}
                         <ArrowImage />
                     </View>
                     {hasContent && this._renderContent(groupNotice)}
@@ -80,7 +89,7 @@ export class GroupNoticeCell extends React.PureComponent<Props, State> {
     protected _renderContent(text: string) {
         return (
             <View style={styles.content}>
-                <Text numberOfLines={2} style={styles.subtitle}>
+                <Text numberOfLines={2} style={styles.contentText}>
                     {text}
                 </Text>
             </View>
@@ -98,6 +107,22 @@ export class GroupNoticeCell extends React.PureComponent<Props, State> {
             onDataChange: onDataChange,
         })
     }
+
+    protected _noSetting() {
+        const {imId} = this.props;
+        const groupOwner = Delegate.model.Group.getOwner(imId);
+        if (groupOwner) {
+            const name = Delegate.user.getUser(groupOwner).name;
+            if (name && name.length > 0) {
+                Alert.alert('', '只有群主' + name +'才能修改群公告', [
+                    {
+                        text: '我知道了',
+                        onPress: () => {},
+                    },
+                ]);
+            }
+        }
+    }
 }
 
 const styles = StyleSheet.create({
@@ -114,6 +139,12 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         justifyContent: 'space-between',
         paddingHorizontal: 16,
+    },
+    subTitleContainer: {
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'flex-end',
+        alignItems: 'center',
     },
     content: {
         flex: 1,
@@ -133,6 +164,11 @@ const styles = StyleSheet.create({
         color: '#333333',
     },
     subtitle: {
+        fontSize: 14,
+        color: '#aaaaaa',
+        marginHorizontal: 12,
+    },
+    contentText: {
         fontSize: 14,
         color: '#aaaaaa',
     },
