@@ -76,7 +76,7 @@ const model: Delegate.ModelPart = {
         getOwner: noDataDelegate('model.Group.getOwner'),
         getMembers: noDataDelegate('model.Group.getMembers'),
         getName: noDataDelegate('model.Group.getName'),
-        getNotice: noDataDelegate('model.Group.getNotice'),
+        getAnnouncement: noDataDelegate('model.Group.getAnnouncement'),
         getAvatar: noDataDelegate('model.Group.getAvatar'),
         getAllowInvites: noDataDelegate('model.Group.getAllowInvites'),
         createOne: noPromiseDelegate('model.Group.createOne'),

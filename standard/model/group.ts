@@ -99,9 +99,9 @@ export function getName(groupId: string, autoConj: boolean = true): string | voi
     }
 }
 
-export function getNotice(groupId: string): string {
+export function getAnnouncement(groupId: string): string {
     const group = findByGroupId(groupId, false);
-    return (group && group.notice) ? group.notice : '';
+    return (group && group.announcement) ? group.announcement : '';
 }
 
 export function getAvatar(groupId: string): string | void {
@@ -157,9 +157,9 @@ export async function changeName(groupId: string, newName: string): Promise<stri
     return changeGroupInfo(groupId, {name: newName}, newName);
 }
 
-export async function changeNotice(groupId: string, newNotice: string): Promise<string> {
-    await delegate.im.group.changeNotice(groupId, newNotice);
-    return changeGroupInfo(groupId, {notice: newNotice}, newNotice);
+export async function changeAnnouncement(groupId: string, newAnnouncement: string): Promise<string> {
+    await delegate.im.group.changeAnnouncement(groupId, newAnnouncement);
+    return changeGroupInfo(groupId, {announcement: newAnnouncement}, newAnnouncement);
 }
 
 export async function changeAvatar(groupId: string, newAvatarUrl: string): Promise<string> {

@@ -18,7 +18,7 @@ function setup_common_page() {
     Delegate.page[PageKeys.ContactList] = Pages.ContactListPage;
     Delegate.page[PageKeys.GroupList] = Pages.GroupListPage;
     Delegate.page[PageKeys.GroupMembers] = Pages.GroupMembersPage;
-    Delegate.page[PageKeys.GroupNoticeEdit] = Pages.GroupNoticeEditPage;
+    Delegate.page[PageKeys.GroupAnnouncementEdit] = Pages.GroupAnnouncementEditPage;
     Delegate.page[PageKeys.Search] = Pages.SearchPage;
     Delegate.page[PageKeys.SearchMore] = Components.SearchList;
 }

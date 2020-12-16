@@ -6,7 +6,7 @@ import * as Avoid from './Avoid';
 import * as GroupAvatar from './GroupAvatar';
 import * as GroupMemberName from './GroupMemberName';
 import * as GroupName from './GroupName';
-import * as GroupNotice from './GroupNotice';
+import * as GroupAnnouncement from './GroupAnnouncement';
 import * as LeaveGroup from './LeaveGroup';
 import * as Top from './Top';
 import * as TransferOwner from './TransferOwner';
@@ -29,14 +29,14 @@ export function setup() {
         [LeaveGroup.name, LeaveGroup.getUi],
         [Top.name, Top.getUi],
         [TransferOwner.name, TransferOwner.getUi],
-        [GroupNotice.name, GroupNotice.getUi],
+        [GroupAnnouncement.name, GroupAnnouncement.getUi],
     ];
     actions.forEach(function ([name, getUi]) {
         Model.Setting.registerDefault(name, getUi);
     });
     Delegate.page[PageKeys.ChatSetting].defaultProps.sections = [
         [AvatarList.name, AllMembers.name],
-        [GroupName.name, GroupAvatar.name, GroupNotice.name, AllowInvite.name, Top.name, Avoid.name, GroupMemberName.name]
+        [GroupName.name, GroupAvatar.name, GroupAnnouncement.name, AllowInvite.name, Top.name, Avoid.name, GroupMemberName.name]
     ];
     Delegate.page[PageKeys.ChatSetting].defaultProps.buttons = [
         LeaveGroup.name,
@@ -51,7 +51,7 @@ export {
     Avoid,
     GroupAvatar,
     GroupName,
-    GroupNotice,
+    GroupAnnouncement,
     LeaveGroup,
     Top,
     TransferOwner,

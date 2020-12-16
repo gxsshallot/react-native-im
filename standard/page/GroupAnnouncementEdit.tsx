@@ -16,7 +16,7 @@ export default class extends React.PureComponent {
 
     static propTypes = {
         groupId: PropTypes.string.isRequired,
-        groupNotice: PropTypes.string.isRequired,
+        groupAnnouncement: PropTypes.string.isRequired,
         canEdit: PropTypes.bool,
         onDataChange: PropTypes.func.isRequired,
     };
@@ -45,7 +45,7 @@ export default class extends React.PureComponent {
     }
 
     render() {
-        const {canEdit, groupNotice} = this.props;
+        const {canEdit, groupAnnouncement} = this.props;
         const rights = {};
         if (canEdit) {
             rights.rightElement = '保存';
@@ -63,7 +63,7 @@ export default class extends React.PureComponent {
                 {canEdit ? (
                     <TextInput
                         style={[styles.input, marginStyle]}
-                        defaultValue={groupNotice}
+                        defaultValue={groupAnnouncement}
                         maxLength={2000}
                         multiline={true}
                         placeholder='请输入群公告内容'
@@ -75,7 +75,7 @@ export default class extends React.PureComponent {
                     />
                 ) : (
                     <ScrollView style={[styles.content, {marginBottom: safeArea.bottom}]} showsVerticalScrollIndicator={true}>
-                        <Text style={[styles.contentText]}>{groupNotice}</Text>
+                        <Text style={[styles.contentText]}>{groupAnnouncement}</Text>
                     </ScrollView>
                 )}
 
@@ -85,12 +85,12 @@ export default class extends React.PureComponent {
 
     protected _onRight = () => {
         const {groupId, onDataChange} = this.props;
-        let notice = this.state.text;
-        if (!notice) {
-            notice = ''
+        let announcement = this.state.text;
+        if (!announcement) {
+            announcement = ''
         }
         this.props.apiRefresh(true);
-        Delegate.model.Group.changeNotice(groupId, notice)
+        Delegate.model.Group.changeAnnouncement(groupId, announcement)
             .then(() => {
                 this._onSendMessageText()
                 this.props.apiRefresh(false);
@@ -101,7 +101,7 @@ export default class extends React.PureComponent {
             .catch(() => {
                 this.props.apiRefresh(false);
                 Toast.show(i18n.t('IMToastError', {
-                    action: i18n.t('IMSettingGroupNoticeChange'),
+                    action: i18n.t('IMSettingGroupAnnouncementChange'),
                 }));
             });
     };
