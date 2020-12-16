@@ -55,7 +55,7 @@ export interface GroupModelPart {
     getOwner: (groupId: string) => string;
     getMembers: (groupId: string, hasOwner?: boolean) => string[];
     getName: (groupId: string, autoConj?: boolean) => string | void;
-    getNotice: (groupId: string) => string;
+    getAnnouncement: (groupId: string) => string;
     getAvatar: (groupId: string) => string | void;
     getAllowInvites: (groupId: string) => boolean;
     createOne: (memberUserIds: string[]) => Promise<Group.Item>;
@@ -65,7 +65,7 @@ export interface GroupModelPart {
     addMembers: (groupId: string, memberUserIds: string[]) => Promise<string[]>;
     removeMembers: (groupId: string, memberUserIds: string[]) => Promise<string[]>;
     changeName: (groupId: string, newName: string) => Promise<string>;
-    changeNotice: (groupId: string, newNotice: string) => Promise<string>;
+    changeAnnouncement: (groupId: string, newAnnouncement: string) => Promise<string>;
     changeAvatar: (groupId: string, newAvatarUrl: string) => Promise<string>;
     changeAllowInvites: (groupId: string, allowInvites: boolean) => Promise<boolean>;
     changeOwner: (groupId: string, newOwnerId: string) => Promise<{ owner: string; members: string[] }>;
@@ -149,7 +149,7 @@ export interface GroupApiPart {
     addMembers: (groupId: string, memberUserIds: string[]) => Promise<void>;
     removeMembers: (groupId: string, memberUserIds: string[]) => Promise<void>;
     changeName: (groupId: string, newName: string) => Promise<void>;
-    changeNotice: (groupId: string, newNotice: string) => Promise<void>;
+    changeAnnouncement: (groupId: string, newAnnouncement: string) => Promise<void>;
     changeAvatar: (groupId: string, newAvatarUrl: string) => Promise<void>;
     changeAllowInvites: (groupId: string, newAllowInvites: boolean) => Promise<void>;
     changeOwner: (groupId: string, newOwnerId: string) => Promise<void>;

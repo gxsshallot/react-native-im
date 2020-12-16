@@ -11,7 +11,7 @@ import { Typings, Delegate, PageKeys } from '../../standard';
 import delegate from "react-native-im/standard/delegate";
 import ArrowImage from '@hecom/image-arrow';
 
-export const name = 'IMSettingGroupNotice';
+export const name = 'IMSettingGroupAnnouncement';
 
 export function getUi(props: Typings.Action.Setting.Params): Typings.Action.Setting.Result {
     const {key, imId, chatType, onDataChange, navigation, onSendMessage} = props;
@@ -19,14 +19,14 @@ export function getUi(props: Typings.Action.Setting.Params): Typings.Action.Sett
     if (!isGroup) {
         return null;
     }
-    const groupNotice = Delegate.model.Group.getNotice(imId);
+    const groupAnnouncement = Delegate.model.Group.getAnnouncement(imId);
     const groupOwner = Delegate.model.Group.getOwner(imId);
     const isOwner = groupOwner === Delegate.user.getMine().userId;
     return (
-        <GroupNoticeCell
+        <GroupAnnouncementCell
             key={key}
             isOwner={isOwner}
-            groupNotice={groupNotice}
+            groupAnnouncement={groupAnnouncement}
             imId={imId}
             navigation={navigation}
             onDataChange={onDataChange}
@@ -37,7 +37,7 @@ export function getUi(props: Typings.Action.Setting.Params): Typings.Action.Sett
 
 export interface Props {
     isOwner: boolean;
-    groupNotice: string | void;
+    groupAnnouncement: string | void;
     imId: string;
     onDataChange: () => void;
 }
@@ -45,15 +45,15 @@ export interface Props {
 export interface State {
 }
 
-export class GroupNoticeCell extends React.PureComponent<Props, State> {
+export class GroupAnnouncementCell extends React.PureComponent<Props, State> {
     state: State = {
     };
 
     render() {
-        const {isOwner, groupNotice} = this.props;
-        let title = i18n.t('IMSettingGroupNotice')
-        const hasContent = groupNotice != null && groupNotice.length > 0;
-        let onPressFunc = (isOwner || hasContent) ? this._clickNotice.bind(this) : this._noSetting.bind(this)
+        const {isOwner, groupAnnouncement} = this.props;
+        let title = i18n.t('IMSettingGroupAnnouncement')
+        const hasContent = groupAnnouncement != null && groupAnnouncement.length > 0;
+        let onPressFunc = (isOwner || hasContent) ? this._clickAnnouncement.bind(this) : this._noSetting.bind(this)
         return (
             <TouchableHighlight
                 underlayColor={delegate.style.separatorLineColor}
@@ -71,7 +71,7 @@ export class GroupNoticeCell extends React.PureComponent<Props, State> {
                         )}
                         <ArrowImage />
                     </View>
-                    {hasContent && this._renderContent(groupNotice)}
+                    {hasContent && this._renderContent(groupAnnouncement)}
                 </View>
             </TouchableHighlight>
         );
@@ -97,13 +97,13 @@ export class GroupNoticeCell extends React.PureComponent<Props, State> {
         );
     }
 
-    protected _clickNotice() {
-        const {imId, onDataChange, isOwner, groupNotice, navigation, onSendMessage} = this.props;
-        const curNotice = (groupNotice != null) ? groupNotice : ''
+    protected _clickAnnouncement() {
+        const {imId, onDataChange, isOwner, groupAnnouncement, navigation, onSendMessage} = this.props;
+        const curAnnouncement = (groupAnnouncement != null) ? groupAnnouncement : ''
 
-        navigation.navigate( PageKeys.GroupNoticeEdit, {
+        navigation.navigate( PageKeys.GroupAnnouncementEdit, {
             groupId: imId,
-            groupNotice: curNotice,
+            groupAnnouncement: curAnnouncement,
             canEdit: isOwner,
             onDataChange: onDataChange,
             onSendMessage: onSendMessage,
