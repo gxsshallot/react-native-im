@@ -38,6 +38,8 @@
     "IMSettingGroupNameChangeTips": "请输入群聊名称",
     "IMSettingGroupNameNotEmpty": "群聊名称不能为空",
     "IMSettingLeaveGroupDestroy": "解散群聊",
+    "IMSettingGroupAnnouncement": "群公告",
+    "IMSettingGroupAnnouncementChange": "更改群公告",
     "IMSettingLeaveGroupQuit": "退出群聊",
     "IMSettingRemoveGroupMember": "删除群成员",
     "IMSettingTop": "置顶聊天",
