@@ -48,6 +48,7 @@ export default class extends React.PureComponent {
     _renderSections() {
         const views = [];
         this.props.sections.forEach((section, index) => {
+            
             const items = this._renderItems(section, this._renderHorizontalLine.bind(this));
             if (items.length > 0) {
                 views.push((
