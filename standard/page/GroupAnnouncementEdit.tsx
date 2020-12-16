@@ -1,5 +1,5 @@
 import React from 'react';
-import {Keyboard, ScrollView, StyleSheet, Text, TextInput, View} from 'react-native';
+import {Keyboard, Platform, ScrollView, StyleSheet, Text, TextInput, View} from 'react-native';
 import PropTypes from 'prop-types';
 import NaviBar, {getSafeAreaInset} from '@hecom/react-native-pure-navigation-bar';
 import {Delegate} from "react-native-im/standard/index";
@@ -26,22 +26,30 @@ export default class extends React.PureComponent {
     }
 
     componentWillMount() {
-        this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this._keyboardDidShow.bind(this));
-        this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this._keyboardDidHide.bind(this));
+        if (Platform.OS === 'ios') {
+            this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this._keyboardDidShow.bind(this));
+            this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this._keyboardDidHide.bind(this));
+        }
     }
     componentWillUnmount() {
-        this.keyboardDidShowListener.remove();
-        this.keyboardDidHideListener.remove();
+        if (Platform.OS === 'ios') {
+            this.keyboardDidShowListener.remove();
+            this.keyboardDidHideListener.remove();
+        }
     }
     protected _keyboardDidShow(e) {
-        this.setState({
-            keyBoardHeight: e.endCoordinates.height
-        });
+        if (Platform.OS === 'ios') {
+            this.setState({
+                keyBoardHeight: e.endCoordinates.height
+            });
+        }
     }
     protected _keyboardDidHide() {
-        this.setState({
-            keyBoardHeight: 0
-        });
+        if (Platform.OS === 'ios') {
+            this.setState({
+                keyBoardHeight: 0
+            });
+        }
     }
 
     render() {
@@ -131,6 +139,7 @@ const styles = StyleSheet.create({
         fontSize: 14,
         marginTop: 10,
         marginHorizontal: 12,
+        textAlignVertical: 'top',
     },
     content: {
         flex: 1,
