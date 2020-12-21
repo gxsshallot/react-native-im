@@ -193,7 +193,7 @@ export default class extends React.PureComponent {
         }, []);
         const result = [...toInsert.reverse(), ...data];
         if (!hasFromMe && this.listOffsetY > 30 && newMessages && newMessages.length > 0) {
-            this.setState({data: result, newUnreadMessageCount: newMessages.length});
+            this.setState({data: result, newUnreadMessageCount: newMessages.length + this.state.newUnreadMessageCount});
         } else {
             this.setState({data: result, newUnreadMessageCount: 0}, this.scrollToTop);
         }
