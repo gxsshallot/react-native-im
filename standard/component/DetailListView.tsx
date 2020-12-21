@@ -37,7 +37,10 @@ export default class extends React.PureComponent {
         this._scrollToShowNewUnreadMessage = this._scrollToShowNewUnreadMessage.bind(this);
         this._scrollToShowOldUnreadMessage = this._scrollToShowOldUnreadMessage.bind(this);
         this._loadPage = this._loadPage.bind(this);
+        this._loadCount = this._loadCount.bind(this);
         this._renderMoreMessageElement = this._renderMoreMessageElement.bind(this);
+        this.scrollToTop = this.scrollToTop.bind(this);
+        this.scrollToBottom = this.scrollToBottom.bind(this);
     }
 
     componentDidMount() {
@@ -96,16 +99,28 @@ export default class extends React.PureComponent {
     }
 
     _scrollToShowOldUnreadMessage() {
-        this._loadPage()
+        this._loadCount(this.totalOldUnreadCount)
     }
 
     _loadPage = () => {
+        return this._loadCount(this.props.pageSize)
+    }
+
+    _loadCount = (onePageSize: number = this.props.pageSize) => {
         if (this.state.isEnd || this.state.isLoading) {
             return;
         }
         this.setState({isLoading: true});
-        return this.props.onLoadPage(this.state.data, this.props.pageSize)
+        return this.props.onLoadPage(this.state.data, onePageSize)
             .then(({data, isEnd, isAllData}) => {
+                if (this.totalOldUnreadCount > 0) {
+                    if (isAllData || isEnd) {
+                        this.totalOldUnreadCount = 0;
+                    } else {
+                        let curLength = Array.isArray(data) ? data.length : 0;
+                        this.totalOldUnreadCount -= curLength;
+                    }
+                }
                 data = data.reduce((prv, cur) => {
                     const {messageId, innerId} = cur;
                     if (messageId && this.ids.has(messageId) ||
@@ -124,11 +139,12 @@ export default class extends React.PureComponent {
                     data = [...this.state.data, ...data];
                 }
 
-                this.setState({
-                    data: data,
-                    isEnd: isEnd,
-                    isLoading: false,
-                });
+                console.log(this.totalOldUnreadCount)
+                if (this.totalOldUnreadCount <= 0 && this.state.oldUnreadMessageCount > 0) {
+                    this.setState({data: data, isEnd: isEnd, isLoading: false, oldUnreadMessageCount: 0}, this.scrollToBottom);
+                } else {
+                    this.setState({data: data, isEnd: isEnd, isLoading: false});
+                }
             }).catch(() => {
                 this.setState({
                     data: [],
@@ -147,7 +163,7 @@ export default class extends React.PureComponent {
     scrollToBottom = (animated = false) => {
         setTimeout(() => {
             this.innerList && this.innerList.scrollToEnd({animated: animated});
-        }, 200);
+        }, 2000);
     };
 
     insert = (newMessages) => {
