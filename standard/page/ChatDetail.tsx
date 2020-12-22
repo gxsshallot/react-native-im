@@ -10,6 +10,7 @@ import {DateUtil, guid} from '../util';
 import {Conversation, Event, Message} from '../typings';
 import delegate from '../delegate';
 import { StackActions } from '@react-navigation/native';
+import { IMConstant } from 'react-native-im-easemob';
 
 interface ChatDetailProps {
     imId: string
@@ -376,6 +377,9 @@ export default class extends React.PureComponent<ChatDetailProps> {
     }
 
     _generateMessage(type, body, others = {}) {
+        if (type == IMConstant.MessageType.image && body && body.mineType && body.mineType.startsWith('video')) {
+            type = IMConstant.MessageType.video;
+        }
         return {
             conversationId: this.props.imId,
             messageId: undefined,
