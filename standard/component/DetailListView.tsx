@@ -1,5 +1,5 @@
 import React from 'react';
-import {FlatList, StyleProp, StyleSheet, Text, TouchableHighlight, View, ViewStyle} from 'react-native';
+import {ImageBackground, ImageSourcePropType, FlatList, Image, StyleProp, StyleSheet, Text, TouchableHighlight, View, ViewStyle} from 'react-native';
 import PropTypes from 'prop-types';
 import {Delegate} from "react-native-im/standard/index";
 
@@ -21,12 +21,15 @@ export default class extends React.PureComponent {
     innerIds: Set<string>;
     listOffsetY = 0;
     totalOldUnreadCount = 0;//记录当前未读的历史消息数量，当下拉获取全部未读消息后，此值减至0，右上角获取未读消息按钮隐藏。
+    firstLoadCount = 0;
+    reservedData = [];
 
     constructor(props) {
         super(props);
         this.ids = new Set();
         this.innerIds = new Set();
         this.totalOldUnreadCount = props.oldUnreadMessageCount;
+        this.firstLoadCount = Math.max(this.props.oldUnreadMessageCount, this.props.pageSize);
         this.state = {
             data: [],
             isEnd: false,
@@ -44,7 +47,8 @@ export default class extends React.PureComponent {
     }
 
     componentDidMount() {
-        this._loadPage();
+        //点击查看历史未读消息，为了能快速scroll到相应位置，所以这里一次性拉取。
+        this._loadCount(this.firstLoadCount);
     }
 
     render() {
@@ -57,40 +61,53 @@ export default class extends React.PureComponent {
                     contentContainerStyle={styles.content}
                     showsVerticalScrollIndicator={false}
                     keyboardShouldPersistTaps={'handled'}
-                    initialNumToRender={this.props.pageSize}
+                    initialNumToRender={this.firstLoadCount}
                     data={this.state.data}
                     onEndReachedThreshold={0.3}
                     onEndReached={this._loadPage}
                     onScroll={(event) => {
                         this.listOffsetY = event.nativeEvent.contentOffset.y
-                        if (this.listOffsetY <= 30 && this.state.newUnreadMessageCount > 0) {
-                            this.setState({newUnreadMessageCount: 0});
+
+                        if (this.listOffsetY <= 30) {
+                            if (this.reservedData.length > 0) {
+                                const result = [...this.reservedData, ...this.state.data];
+                                this.reservedData = [];
+                                this.setState({data: result, newUnreadMessageCount: 0});
+                            } else if (this.state.newUnreadMessageCount > 0) {
+                                this.setState({newUnreadMessageCount: 0});
+                            }
                         }
                     }}
                     keyExtractor={item => item.messageId || item.innerId}
                     {...this.props}
                     renderItem={(arg) => this.props.renderItem(arg, this.state.data)}
                 />
-                {this.state.oldUnreadMessageCount > 12 && this._renderMoreMessageElement({top: 10}, this.state.oldUnreadMessageCount, this._scrollToShowOldUnreadMessage.bind(this))}
-                {this.state.newUnreadMessageCount > 0 && this._renderMoreMessageElement({bottom: 10}, this.state.newUnreadMessageCount, this._scrollToShowNewUnreadMessage.bind(this))}
+                {this.state.oldUnreadMessageCount > 12 && this._renderMoreMessageElement({top: 15}, this.state.oldUnreadMessageCount, require('./image/oldUnreadMessage.png'), this._scrollToShowOldUnreadMessage.bind(this))}
+                {this.state.newUnreadMessageCount > 0 && this._renderMoreMessageElement({bottom: 15}, this.state.newUnreadMessageCount, require('./image/newUnreadMessage.png'), this._scrollToShowNewUnreadMessage.bind(this))}
             </View>
         );
     }
 
-    _renderMoreMessageElement(style: StyleProp<ViewStyle>, count: number, callback: () => void) {
+    _renderMoreMessageElement(style: StyleProp<ViewStyle>, count: number, imageSource: ImageSourcePropType, callback: () => void) {
         let desc = count > 99 ? '99+' : count.toString()
         return (
-            <TouchableHighlight
-                style={[styles.moreMessage, style]}
-                underlayColor={'#d7d8d8'}
-                onPress={callback}
-            >
-                <View style={styles.moreMessageContainer}>
-                    <Text style={styles.moreMessageText}>
-                        {desc}条新消息
-                    </Text>
-                </View>
-            </TouchableHighlight>
+            <ImageBackground style={[styles.moreMessageContainer, style]}
+                             source={require('./image/unreadMessageContainer.png')}>
+                <TouchableHighlight
+                    style={styles.moreMessage}
+                    underlayColor={'#d7d8d8'}
+                    onPress={callback}
+                >
+                    <View style={styles.moreMessageBorder}>
+                        <Image style={styles.moreMessageDirection}
+                               source={imageSource}
+                        />
+                        <Text style={styles.moreMessageText}>
+                            {desc}条新消息
+                        </Text>
+                    </View>
+                </TouchableHighlight>
+            </ImageBackground>
         )
     }
 
@@ -99,7 +116,8 @@ export default class extends React.PureComponent {
     }
 
     _scrollToShowOldUnreadMessage() {
-        this._loadCount(this.totalOldUnreadCount)
+        this.setState({oldUnreadMessageCount: 0});
+        this.scrollToBottom()
     }
 
     _loadPage = () => {
@@ -113,14 +131,6 @@ export default class extends React.PureComponent {
         this.setState({isLoading: true});
         return this.props.onLoadPage(this.state.data, onePageSize)
             .then(({data, isEnd, isAllData}) => {
-                if (this.totalOldUnreadCount > 0) {
-                    if (isAllData || isEnd) {
-                        this.totalOldUnreadCount = 0;
-                    } else {
-                        let curLength = Array.isArray(data) ? data.length : 0;
-                        this.totalOldUnreadCount -= curLength;
-                    }
-                }
                 data = data.reduce((prv, cur) => {
                     const {messageId, innerId} = cur;
                     if (messageId && this.ids.has(messageId) ||
@@ -139,12 +149,12 @@ export default class extends React.PureComponent {
                     data = [...this.state.data, ...data];
                 }
 
-                console.log(this.totalOldUnreadCount)
                 if (this.totalOldUnreadCount <= 0 && this.state.oldUnreadMessageCount > 0) {
-                    this.setState({data: data, isEnd: isEnd, isLoading: false, oldUnreadMessageCount: 0}, this.scrollToBottom);
+                    this.setState({data: data, isEnd: isEnd, isLoading: false, oldUnreadMessageCount: 0});
                 } else {
                     this.setState({data: data, isEnd: isEnd, isLoading: false});
                 }
+                this.totalOldUnreadCount = 0;
             }).catch(() => {
                 this.setState({
                     data: [],
@@ -163,17 +173,28 @@ export default class extends React.PureComponent {
     scrollToBottom = (animated = false) => {
         setTimeout(() => {
             this.innerList && this.innerList.scrollToEnd({animated: animated});
-        }, 2000);
+        }, 200);
     };
 
     insert = (newMessages) => {
         const data = [...this.state.data];
         //是否有我自己发送的，如果有，直接自动scroll到底
-        let hasFromMe = false
-        const me = Delegate.user.getMine().userId
+        let hasFromMe = false;
+        //记录系统消息的条数，不应该计算进入未读消息。
+        let systemMessageCount = 0;
+        const me = Delegate.user.getMine().userId;
         const toInsert = newMessages.reduce((prv, cur) => {
-            if (!hasFromMe && me && cur.from && me == cur.from) {
-                hasFromMe = true
+            if (!hasFromMe
+                && me
+                && cur.from
+                && me == cur.from
+                && cur.data
+                && cur.data.isSystem
+                && cur.data.isSystem != true) {
+                hasFromMe = true;
+            }
+            if (cur.data.isSystem && cur.data.isSystem == true) {
+                systemMessageCount += 1;
             }
             const {messageId, innerId} = cur;
             if (messageId && this.ids.has(messageId) ||
@@ -191,10 +212,12 @@ export default class extends React.PureComponent {
                 return prv;
             }
         }, []);
-        const result = [...toInsert.reverse(), ...data];
         if (!hasFromMe && this.listOffsetY > 30 && newMessages && newMessages.length > 0) {
-            this.setState({data: result, newUnreadMessageCount: newMessages.length + this.state.newUnreadMessageCount});
+            this.reservedData = [...toInsert.reverse(), ...this.reservedData];
+            this.setState({newUnreadMessageCount: newMessages.length + this.state.newUnreadMessageCount - systemMessageCount});
         } else {
+            const result = [...toInsert.reverse(), ...this.reservedData, ...data];
+            this.reservedData = [];
             this.setState({data: result, newUnreadMessageCount: 0}, this.scrollToTop);
         }
     };
@@ -205,24 +228,30 @@ const styles = StyleSheet.create({
         paddingTop: 10,
         paddingBottom: 10,
     },
-    moreMessage: {
-        position: 'absolute',
-        backgroundColor: 'red',
-        right: 10,
-        width: 120,
-        height: 40,
-    },
     moreMessageContainer: {
+        position: 'absolute',
+        right: 0,
+        width: 120,
+        height: 46,
+    },
+    moreMessage: {
+        flex: 1,
+        borderTopLeftRadius: 23,
+        borderBottomLeftRadius:23,
+        left: 5,
+    },
+    moreMessageBorder: {
         flex: 1,
         flexDirection: 'row',
         alignItems: 'center',
-        paddingHorizontal: 8,
+        justifyContent: 'space-around',
     },
-    moreMessageImage: {
+    moreMessageDirection: {
+        marginLeft: 8,
     },
     moreMessageText: {
-        fontSize: 14,
-        color: '#333333',
-        marginVertical: 0,
+        fontSize: 12,
+        color: '#FC6364',
+        marginRight: 8,
     },
 });
