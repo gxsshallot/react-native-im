@@ -159,7 +159,7 @@ export default class extends React.PureComponent<ChatDetailProps> {
                     style={styles.fixedList}
                     renderItem={this._renderItem.bind(this)}
                     onLoadPage={this._refresh.bind(this)}
-                    oldUnreadMessageCount={!conversation ? 0 : conversation.unreadMessagesCount}
+                    oldUnreadMessageCount={Math.min(100, (!conversation ? 0 : conversation.unreadMessagesCount))}
                 />
                 <View style={styles.flexList} />
             </View>
