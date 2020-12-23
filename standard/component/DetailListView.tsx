@@ -22,6 +22,7 @@ export default class extends React.PureComponent {
     listOffsetY = 0;
     totalOldUnreadCount = 0;//记录当前未读的历史消息数量，当下拉获取全部未读消息后，此值减至0，右上角获取未读消息按钮隐藏。
     firstLoadCount = 0;
+    reservedData = [];
 
     constructor(props) {
         super(props);
@@ -66,8 +67,15 @@ export default class extends React.PureComponent {
                     onEndReached={this._loadPage}
                     onScroll={(event) => {
                         this.listOffsetY = event.nativeEvent.contentOffset.y
-                        if (this.listOffsetY <= 30 && this.state.newUnreadMessageCount > 0) {
-                            this.setState({newUnreadMessageCount: 0});
+
+                        if (this.listOffsetY <= 30) {
+                            if (this.reservedData.length > 0) {
+                                const result = [...this.reservedData, ...this.state.data];
+                                this.reservedData = [];
+                                this.setState({data: result, newUnreadMessageCount: 0});
+                            } else if (this.state.newUnreadMessageCount > 0) {
+                                this.setState({newUnreadMessageCount: 0});
+                            }
                         }
                     }}
                     keyExtractor={item => item.messageId || item.innerId}
@@ -193,10 +201,12 @@ export default class extends React.PureComponent {
                 return prv;
             }
         }, []);
-        const result = [...toInsert.reverse(), ...data];
         if (!hasFromMe && this.listOffsetY > 30 && newMessages && newMessages.length > 0) {
-            this.setState({data: result, newUnreadMessageCount: newMessages.length + this.state.newUnreadMessageCount});
+            this.reservedData = [...toInsert.reverse(), ...this.reservedData];
+            this.setState({newUnreadMessageCount: newMessages.length + this.state.newUnreadMessageCount});
         } else {
+            const result = [...toInsert.reverse(), ...this.reservedData, ...data];
+            this.reservedData = [];
             this.setState({data: result, newUnreadMessageCount: 0}, this.scrollToTop);
         }
     };
