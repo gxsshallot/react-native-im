@@ -179,11 +179,22 @@ export default class extends React.PureComponent {
     insert = (newMessages) => {
         const data = [...this.state.data];
         //是否有我自己发送的，如果有，直接自动scroll到底
-        let hasFromMe = false
-        const me = Delegate.user.getMine().userId
+        let hasFromMe = false;
+        //记录系统消息的条数，不应该计算进入未读消息。
+        let systemMessageCount = 0;
+        const me = Delegate.user.getMine().userId;
         const toInsert = newMessages.reduce((prv, cur) => {
-            if (!hasFromMe && me && cur.from && me == cur.from) {
-                hasFromMe = true
+            if (!hasFromMe
+                && me
+                && cur.from
+                && me == cur.from
+                && cur.data
+                && cur.data.isSystem
+                && cur.data.isSystem != true) {
+                hasFromMe = true;
+            }
+            if (cur.data.isSystem && cur.data.isSystem == true) {
+                systemMessageCount += 1;
             }
             const {messageId, innerId} = cur;
             if (messageId && this.ids.has(messageId) ||
@@ -203,7 +214,7 @@ export default class extends React.PureComponent {
         }, []);
         if (!hasFromMe && this.listOffsetY > 30 && newMessages && newMessages.length > 0) {
             this.reservedData = [...toInsert.reverse(), ...this.reservedData];
-            this.setState({newUnreadMessageCount: newMessages.length + this.state.newUnreadMessageCount});
+            this.setState({newUnreadMessageCount: newMessages.length + this.state.newUnreadMessageCount - systemMessageCount});
         } else {
             const result = [...toInsert.reverse(), ...this.reservedData, ...data];
             this.reservedData = [];
