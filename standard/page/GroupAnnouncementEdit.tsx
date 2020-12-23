@@ -139,14 +139,16 @@ const styles = StyleSheet.create({
         fontSize: 14,
         marginTop: 10,
         marginHorizontal: 12,
-        textAlignVertical: 'top',
+        ...Platform.select({
+            android: { textAlignVertical: 'top' },
+        }),
     },
     content: {
         flex: 1,
     },
     contentText: {
         fontSize: 14,
-        color: '#aaaaaa',
+        color: '#333333',
         marginHorizontal: 12,
         marginTop: 10,
     },

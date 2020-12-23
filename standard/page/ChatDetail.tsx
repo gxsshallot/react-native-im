@@ -149,6 +149,8 @@ export default class extends React.PureComponent<ChatDetailProps> {
     }
 
     _renderContent() {
+        const {imId} = this.props;
+        const conversation = delegate.model.Conversation.getOne(imId, false)
         return (
             <View style={styles.container}>
                 <delegate.component.DetailListView
@@ -157,6 +159,7 @@ export default class extends React.PureComponent<ChatDetailProps> {
                     style={styles.fixedList}
                     renderItem={this._renderItem.bind(this)}
                     onLoadPage={this._refresh.bind(this)}
+                    oldUnreadMessageCount={!conversation ? 0 : conversation.unreadMessagesCount}
                 />
                 <View style={styles.flexList} />
             </View>
@@ -190,14 +193,14 @@ export default class extends React.PureComponent<ChatDetailProps> {
         });
     }
 
-    protected async _refresh(oldData) {
+    protected async _refresh(oldData, pageSize = this.pageCount) {
         const isFirst = !oldData || oldData.length <= 0;
         const lastMessage = isFirst ? undefined : this.lastMessage;
         const loadPromise = delegate.im.conversation.loadMessage({
             imId: this.props.imId,
             chatType: this.props.chatType,
             lastMessage: lastMessage,
-            count: this.pageCount,
+            count: pageSize,
         });
         const markPromise = this._markAllRead();
         let [result] = await Promise.all([loadPromise, markPromise]);
@@ -210,7 +213,7 @@ export default class extends React.PureComponent<ChatDetailProps> {
         }
         return {
             data: result,
-            isEnd: result.length < this.pageCount,
+            isEnd: result.length < pageSize,
         };
     }
 
