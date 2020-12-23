@@ -16,6 +16,9 @@ export function getUi(props: Typings.Action.Setting.Params): Typings.Action.Sett
     const groupName = Delegate.model.Group.getName(imId, false);
     const groupOwner = Delegate.model.Group.getOwner(imId);
     const isOwner = groupOwner === Delegate.user.getMine().userId;
+    if (!isOwner) {
+        return null;
+    }
     return (
         <GroupNameCell
             key={key}

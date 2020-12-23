@@ -19,6 +19,9 @@ export function getUi(props: Typings.Action.Setting.Params): Typings.Action.Sett
     };
     const groupOwner = Delegate.model.Group.getOwner(imId);
     const isOwner = groupOwner === Delegate.user.getMine().userId;
+    if (!isOwner) {
+        return null;
+    }
     return (
         <Delegate.component.SettingItem
             key={key}

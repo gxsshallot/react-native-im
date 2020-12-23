@@ -103,10 +103,10 @@
   dependencies:
     react-native-safe-area-utility "^1.0.0"
 
-"@hecom/badge@^1.0.2":
+"@hecom/badge@^1.0.3":
   version "1.0.3"
-  resolved "https://registry.npmjs.org/@hecom/badge/-/badge-1.0.3.tgz#ea7691709a47df04e26d858f994a213406ada317"
-  integrity sha512-tOXKM+2MypDbUBXh7cZ4RefQyzzr2I46SLtu0vzFM4ewJnjw7ABw1chv0tsE9yUrPRyK+I1U2l3WQ8nzsPU2AQ==
+  resolved "https://registry.npm.taobao.org/@hecom/badge/download/@hecom/badge-1.0.3.tgz#ea7691709a47df04e26d858f994a213406ada317"
+  integrity sha1-6naRcJpH3wTibYWPmUohNAatoxc=
 
 "@hecom/image-arrow@^1.0.0", "@hecom/image-arrow@^1.0.3":
   version "1.0.3"
@@ -118,6 +118,15 @@
   resolved "https://registry.npmjs.org/@hecom/listener/-/listener-1.0.0.tgz#31fd889e8dbf3dcb304e93213052a5d3422e60d3"
   integrity sha512-hGsqbsecEDRDMgq/MBe2ZqmdUJIMY+NZrDACOC/CndGUoTVaS+LGHUjaidbrYN1b8dCpW2pa6DqRySiUeWHPiA==
 
+"@react-native-community/art@^1.1.2":
+  version "1.2.0"
+  resolved "https://registry.npm.taobao.org/@react-native-community/art/download/@react-native-community/art-1.2.0.tgz#386d95393f6042d9006f9d4bc6063fb898794460"
+  integrity sha1-OG2VOT9gQtkAb51LxgY/uJh5RGA=
+  dependencies:
+    art "^0.10.3"
+    invariant "^2.2.4"
+    prop-types "^15.7.2"
+
 "@react-native-community/async-storage@^1.6.1":
   version "1.7.1"
   resolved "https://registry.npmjs.org/@react-native-community/async-storage/-/async-storage-1.7.1.tgz#ef2104d865de61ad91bba66613e57e689ff4e6a1"
@@ -127,24 +136,6 @@
   version "1.4.1"
   resolved "https://registry.npm.taobao.org/@react-native-community/cameraroll/download/@react-native-community/cameraroll-1.4.1.tgz#e2891306243cf6a93556d4876ab99c38d497ab68"
   integrity sha1-4okTBiQ89qk1VtSHarmcONSXq2g=
-
-"@react-navigation/core@^3.5.2":
-  version "3.5.2"
-  resolved "https://registry.npmjs.org/@react-navigation/core/-/core-3.5.2.tgz#3a3d147b8419e5839e0f2ad4dea086bd2d307fe3"
-  integrity sha512-HgKXci1h74aETgm5CXMBoIWG8R7VZG1eUUHYb3BdxwekdiZjW1P/srjiXzsCqFGlsESnVIOIkzT4DqI9J752Bw==
-  dependencies:
-    hoist-non-react-statics "^3.3.0"
-    path-to-regexp "^1.7.0"
-    query-string "^6.4.2"
-    react-is "^16.8.6"
-
-"@react-navigation/native@^3.6.5":
-  version "3.6.5"
-  resolved "https://registry.npmjs.org/@react-navigation/native/-/native-3.6.5.tgz#97b0b9a48f059a0704e3527f40fb034720ef363d"
-  integrity sha512-ttEmnokFVf09CvrkzlPIdfA693KfYcRxTYf9OZwp0Ll6El27UYjJD4arwGc+zvlohjTErCdba6CAKV702Wv28w==
-  dependencies:
-    hoist-non-react-statics "^3.3.2"
-    react-native-safe-area-view "^0.14.8"
 
 "@types/eslint-visitor-keys@^1.0.0":
   version "1.0.0"
@@ -188,13 +179,6 @@
   dependencies:
     "@types/prop-types" "*"
     "@types/react" "*"
-
-"@types/react-navigation@^3.0.6":
-  version "3.4.0"
-  resolved "https://registry.npmjs.org/@types/react-navigation/-/react-navigation-3.4.0.tgz#d610d13c9162312079a8ca102660143f07432cbf"
-  integrity sha512-Y7F5zU8BTBK8tEOvUqgvwvPZ7+9vnc2UI1vHwJ/9ZJG98TntNv04GWa6lrn4MA4149pqw6cyNw/V49Yd2osAFQ==
-  dependencies:
-    react-navigation "*"
 
 "@types/react@*", "@types/react@^16.8.14":
   version "16.9.19"
@@ -317,6 +301,11 @@ array.prototype.flat@^1.2.1:
   dependencies:
     define-properties "^1.1.3"
     es-abstract "^1.17.0-next.1"
+
+art@^0.10.3:
+  version "0.10.3"
+  resolved "https://registry.npm.taobao.org/art/download/art-0.10.3.tgz#b01d84a968ccce6208df55a733838c96caeeaea2"
+  integrity sha1-sB2EqWjMzmII31WnM4OMlsrurqI=
 
 asap@~2.0.3:
   version "2.0.6"
@@ -905,6 +894,11 @@ chardet@^0.7.0:
   resolved "https://registry.npmjs.org/chardet/-/chardet-0.7.0.tgz#90094849f0937f2eedc2425d0d28a9e5f0cbad9e"
   integrity sha512-mT8iDcrh03qDGRRmoA2hmBJnxpllMR+0/0qlzjqZES6NdiWDcZkCNAk4rPFZ9Q85r27unkiNNg8ZOiwZXBHwcA==
 
+charenc@0.0.2:
+  version "0.0.2"
+  resolved "https://registry.npm.taobao.org/charenc/download/charenc-0.0.2.tgz#c0a1d2f3a7092e03774bfa83f14c0fc5790a8667"
+  integrity sha1-wKHS86cJLgN3S/qD8UwPxXkKhmc=
+
 cli-cursor@^2.1.0:
   version "2.1.0"
   resolved "https://registry.npmjs.org/cli-cursor/-/cli-cursor-2.1.0.tgz#b35dac376479facc3e94747d41d0d0f5238ffcb5"
@@ -967,6 +961,11 @@ cross-spawn@^6.0.5:
     shebang-command "^1.2.0"
     which "^1.2.9"
 
+crypt@0.0.2:
+  version "0.0.2"
+  resolved "https://registry.npm.taobao.org/crypt/download/crypt-0.0.2.tgz#88d7ff7ec0dfb86f713dc87bbb42d044d3e6c41b"
+  integrity sha1-iNf/fsDfuG9xPch7u0LQRNPmxBs=
+
 csstype@^2.2.0:
   version "2.6.8"
   resolved "https://registry.npmjs.org/csstype/-/csstype-2.6.8.tgz#0fb6fc2417ffd2816a418c9336da74d7f07db431"
@@ -990,11 +989,6 @@ debug@^4.0.1, debug@^4.1.0:
   integrity sha512-pYAIzeRo8J6KPEaJ0VWOh5Pzkbw/RetuzehGM7QRRX5he4fPHx2rdKMB256ehJCkX+XRQm16eZLqLNS8RSZXZw==
   dependencies:
     ms "^2.1.1"
-
-decode-uri-component@^0.2.0:
-  version "0.2.0"
-  resolved "https://registry.npmjs.org/decode-uri-component/-/decode-uri-component-0.2.0.tgz#eb3913333458775cb84cd1a1fae062106bb87545"
-  integrity sha1-6zkTMzRYd1y4TNGh+uBiEGu4dUU=
 
 deep-is@~0.1.3:
   version "0.1.3"
@@ -1453,13 +1447,6 @@ hoist-non-react-statics@^2.3.1:
   resolved "https://registry.npmjs.org/hoist-non-react-statics/-/hoist-non-react-statics-2.5.5.tgz#c5903cf409c0dfd908f388e619d86b9c1174cb47"
   integrity sha512-rqcy4pJo55FTTLWt+bU8ukscqHeE/e9KWvsOW2b/a3afxQZhwkQdT1rPPCJ0rYXdj4vNcasY8zHTH+jF/qStxw==
 
-hoist-non-react-statics@^3.3.0, hoist-non-react-statics@^3.3.2:
-  version "3.3.2"
-  resolved "https://registry.npmjs.org/hoist-non-react-statics/-/hoist-non-react-statics-3.3.2.tgz#ece0acaf71d62c2969c2ec59feff42a4b1a85b45"
-  integrity sha512-/gGivxi8JPKWNm/W0jSmzcMPpfpPLc3dY/6GxhX2hQ9iGj3aDfklV4ET7NjKpSinLpJ5vafa9iiGIEZg10SfBw==
-  dependencies:
-    react-is "^16.7.0"
-
 home-or-tmp@^2.0.0:
   version "2.0.0"
   resolved "https://registry.npmjs.org/home-or-tmp/-/home-or-tmp-2.0.0.tgz#e36c3f2d2cae7d746a857e38d18d5f32a7882db8"
@@ -1556,6 +1543,11 @@ is-arrayish@^0.2.1:
   resolved "https://registry.npmjs.org/is-arrayish/-/is-arrayish-0.2.1.tgz#77c99840527aa8ecb1a8ba697b80645a7a926a9d"
   integrity sha1-d8mYQFJ6qOyxqLppe4BkWnqSap0=
 
+is-buffer@~1.1.6:
+  version "1.1.6"
+  resolved "https://registry.npm.taobao.org/is-buffer/download/is-buffer-1.1.6.tgz?cache=0&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fis-buffer%2Fdownload%2Fis-buffer-1.1.6.tgz#efaa2ea9daa0d7ab2ea13a97b2b8ad51fefbe8be"
+  integrity sha1-76ouqdqg16suoTqXsritUf776L4=
+
 is-callable@^1.1.4, is-callable@^1.1.5:
   version "1.1.5"
   resolved "https://registry.npmjs.org/is-callable/-/is-callable-1.1.5.tgz#f7e46b596890456db74e7f6e976cb3273d06faab"
@@ -1606,11 +1598,6 @@ is-symbol@^1.0.2:
   integrity sha512-OwijhaRSgqvhm/0ZdAcXNZt9lYdKFpcRDT5ULUuYXPoT794UNOdU+gpT6Rzo7b4V2HUl/op6GqY894AZwv9faQ==
   dependencies:
     has-symbols "^1.0.1"
-
-isarray@0.0.1:
-  version "0.0.1"
-  resolved "https://registry.npmjs.org/isarray/-/isarray-0.0.1.tgz#8a18acfca9a8f4177e09abfc6038939b05d1eedf"
-  integrity sha1-ihis/Kmo9Bd+Cav8YDiTmwXR7t8=
 
 isarray@^1.0.0:
   version "1.0.0"
@@ -1735,6 +1722,15 @@ loose-envify@^1.0.0, loose-envify@^1.4.0:
   integrity sha512-lyuxPGr/Wfhrlem2CL/UcnUc1zcqKAImBDzukY7Y5F/yQiNdko6+fRLevlw1HgMySw7f611UIY408EtxRSoK3Q==
   dependencies:
     js-tokens "^3.0.0 || ^4.0.0"
+
+md5@^2.3.0:
+  version "2.3.0"
+  resolved "https://registry.npm.taobao.org/md5/download/md5-2.3.0.tgz#c3da9a6aae3a30b46b7b0c349b87b110dc3bda4f"
+  integrity sha1-w9qaaq46MLRreww0m4exENw72k8=
+  dependencies:
+    charenc "0.0.2"
+    crypt "0.0.2"
+    is-buffer "~1.1.6"
 
 mimic-fn@^1.0.0:
   version "1.2.0"
@@ -1969,13 +1965,6 @@ path-parse@^1.0.6:
   resolved "https://registry.npmjs.org/path-parse/-/path-parse-1.0.6.tgz#d62dbb5679405d72c4737ec58600e9ddcf06d24c"
   integrity sha512-GSmOT2EbHrINBf9SR7CDELwlJ8AENk3Qn7OikK4nFYAu3Ote2+JYNVvkpAEQm3/TLNEJFD/xZJjzyxg3KBWOzw==
 
-path-to-regexp@^1.7.0:
-  version "1.8.0"
-  resolved "https://registry.npmjs.org/path-to-regexp/-/path-to-regexp-1.8.0.tgz#887b3ba9d84393e87a0a0b9f4cb756198b53548a"
-  integrity sha512-n43JRhlUKUAlibEJhPeir1ncUID16QnEjNpwzNdO3Lm4ywrBpBZ5oLD0I6br9evr1Y9JTqwRtAh7JLoOzAQdVA==
-  dependencies:
-    isarray "0.0.1"
-
 path-type@^2.0.0:
   version "2.0.0"
   resolved "https://registry.npmjs.org/path-type/-/path-type-2.0.0.tgz#f012ccb8415b7096fc2daa1054c3d72389594c73"
@@ -2043,21 +2032,12 @@ punycode@^2.1.0:
   resolved "https://registry.npmjs.org/punycode/-/punycode-2.1.1.tgz#b58b010ac40c22c5657616c8d2c2c02c7bf479ec"
   integrity sha512-XRsRjdf+j5ml+y/6GKHPZbrF/8p2Yga0JPtdqTIY2Xe5ohJPD9saDJJLPvp9+NSBprVvevdXZybnj2cv8OEd0A==
 
-query-string@^6.4.2:
-  version "6.10.1"
-  resolved "https://registry.npmjs.org/query-string/-/query-string-6.10.1.tgz#30b3505f6fca741d5ae541964d1b3ae9dc2a0de8"
-  integrity sha512-SHTUV6gDlgMXg/AQUuLpTiBtW/etZ9JT6k6RCtCyqADquApLX0Aq5oK/s5UeTUAWBG50IExjIr587GqfXRfM4A==
-  dependencies:
-    decode-uri-component "^0.2.0"
-    split-on-first "^1.0.0"
-    strict-uri-encode "^2.0.0"
-
 react-deep-force-update@^1.0.0:
   version "1.1.2"
   resolved "https://registry.npmjs.org/react-deep-force-update/-/react-deep-force-update-1.1.2.tgz#3d2ae45c2c9040cbb1772be52f8ea1ade6ca2ee1"
   integrity sha512-WUSQJ4P/wWcusaH+zZmbECOk7H5N2pOIl0vzheeornkIMhu+qrNdGFm0bDZLCb0hSF0jf/kH1SgkNGfBdTc4wA==
 
-react-is@^16.7.0, react-is@^16.8.1, react-is@^16.8.6:
+react-is@^16.8.1:
   version "16.12.0"
   resolved "https://registry.npmjs.org/react-is/-/react-is-16.12.0.tgz#2cc0fe0fba742d97fd527c42a13bec4eeb06241c"
   integrity sha512-rPCkf/mWBtKc97aLL9/txD8DZdemK0vkA3JMLShjlJB3Pj3s+lpf1KaBzMfQrAmhMQB0n1cU/SUGgKKBCe837Q==
@@ -2075,10 +2055,10 @@ react-native-general-searchbar@^1.0.6:
   resolved "https://registry.npmjs.org/react-native-general-searchbar/-/react-native-general-searchbar-1.0.6.tgz#e17f445e57f4402577f54ac0625800e167a5a9da"
   integrity sha512-JPQWtEN5tIJR7QhDgGzI0l78E1AhwR5pdKVeeNWplhlNUGmy5Rwt1/J4F5rR5yAembUA72E2MNaR8TiUGfSXXQ==
 
-react-native-general-storage@^1.0.4:
+react-native-general-storage@^1.0.5:
   version "1.0.5"
-  resolved "https://registry.npmjs.org/react-native-general-storage/-/react-native-general-storage-1.0.5.tgz#0d80209fadd2446adb938f4e5d95ae76bd9125de"
-  integrity sha512-5QoffXVGeIEwWoYrOLvtHo9Ux6shHnMcJr6fkWx6Cjn87m6GxI82Q6QhWcAuRiQqaAvdXpBhcYST6Gik5MND2w==
+  resolved "https://registry.npm.taobao.org/react-native-general-storage/download/react-native-general-storage-1.0.5.tgz#0d80209fadd2446adb938f4e5d95ae76bd9125de"
+  integrity sha1-DYAgn63SRGrbk49OXZWudr2RJd4=
   dependencies:
     "@react-native-community/async-storage" "^1.6.1"
 
@@ -2097,16 +2077,17 @@ react-native-im-easemob@^1.0.24:
   resolved "https://registry.npmjs.org/react-native-im-easemob/-/react-native-im-easemob-1.0.28.tgz#a303ae0514fc7bbc41997906278cfec21ccae21e"
   integrity sha512-rutFF0NtO4kDZ1lgyvSiQhvf8UYO24utC99MfW3APPsA13RD3Sj9vZwQUtgOo84g6QHUyFJdM/ugOJc8N6ol2w==
 
-react-native-image-pan-zoom@^2.1.12:
+react-native-image-pan-zoom@^2.1.9:
   version "2.1.12"
-  resolved "https://registry.npmjs.org/react-native-image-pan-zoom/-/react-native-image-pan-zoom-2.1.12.tgz#eb98bf56fb5610379bdbfdb63219cc1baca98fd2"
-  integrity sha512-BF66XeP6dzuANsPmmFsJshM2Jyh/Mo1t8FsGc1L9Q9/sVP8MJULDabB1hms+eAoqgtyhMr5BuXV3E1hJ5U5H6Q==
+  resolved "https://registry.npm.taobao.org/react-native-image-pan-zoom/download/react-native-image-pan-zoom-2.1.12.tgz#eb98bf56fb5610379bdbfdb63219cc1baca98fd2"
+  integrity sha1-65i/VvtWEDeb2/22MhnMG6ypj9I=
 
-"react-native-image-zoom-viewer@https://github.com/summer88123/react-native-image-viewer.git":
-  version "3.0.1"
-  resolved "https://github.com/summer88123/react-native-image-viewer.git#39a901ccaf60bff4d5832763cecf0aa8fd7a0340"
+react-native-image-zoom-viewer@^2.2.23:
+  version "2.2.27"
+  resolved "https://registry.npm.taobao.org/react-native-image-zoom-viewer/download/react-native-image-zoom-viewer-2.2.27.tgz#fb3314c5dc86ac33da48cb31bf4920d97eecb6eb"
+  integrity sha1-+zMUxdyGrDPaSMsxv0kg2X7stus=
   dependencies:
-    react-native-image-pan-zoom "^2.1.12"
+    react-native-image-pan-zoom "^2.1.9"
 
 react-native-iphone-x-helper@^1.0.3:
   version "1.2.1"
@@ -2126,13 +2107,26 @@ react-native-localize@^1.1.2:
   resolved "https://registry.npmjs.org/react-native-localize/-/react-native-localize-1.3.3.tgz#3e29520b4c7907227729326dfbf2f2643a07495a"
   integrity sha512-lpKx/iqDKQ7dC58fb/vGGERLT4ZYfk+H2AXMg6aaVkgv8eEIgApQAzB2Oaotx7FIM/RopJponUFyJ4PMIHi4Rw==
 
-"react-native-photo-browse@https://github.com/hecom-rn/react-native-photo-browse#31b6278ef8d22c3945b3e4c2f66d302fc3ff9582":
+react-native-modals@^0.19.9:
+  version "0.19.10"
+  resolved "https://registry.npm.taobao.org/react-native-modals/download/react-native-modals-0.19.10.tgz#1d46020ecd1ad55e33d18b5953492ab98de2871c"
+  integrity sha1-HUYCDs0a1V4z0YtZU0kquY3ihxw=
+  dependencies:
+    babel-plugin-flow-react-proptypes "^9.1.1"
+    prop-types "^15.6.0"
+    react-native-root-siblings "^3.2.2"
+
+react-native-photo-browse@1.3.0:
   version "1.3.0"
-  resolved "https://github.com/hecom-rn/react-native-photo-browse#31b6278ef8d22c3945b3e4c2f66d302fc3ff9582"
+  resolved "https://registry.npm.taobao.org/react-native-photo-browse/download/react-native-photo-browse-1.3.0.tgz#9d09920b324cbb16ceedcd8e1ff562d5317400fe"
+  integrity sha1-nQmSCzJMuxbO7c2OH/Vi1TF0AP4=
   dependencies:
     "@react-native-community/cameraroll" "^1.2.1"
     react-native-fs "^2.13.3"
-    react-native-image-zoom-viewer "https://github.com/summer88123/react-native-image-viewer.git"
+    react-native-image-zoom-viewer "^2.2.23"
+    react-native-progress "^4.1.0"
+    react-native-root-siblings "^3.1.6"
+    react-native-root-toast "^3.0.1"
 
 react-native-picklist@^1.2.5:
   version "1.3.1"
@@ -2149,26 +2143,25 @@ react-native-platform-touchable@^1.1.1:
   resolved "https://registry.npmjs.org/react-native-platform-touchable/-/react-native-platform-touchable-1.1.1.tgz#fde4acc65eea585d28b164d0c3716a42129a68e4"
   integrity sha1-/eSsxl7qWF0osWTQw3FqQhKaaOQ=
 
-react-native-popover-view@^1.0.17:
-  version "1.0.19"
-  resolved "https://registry.npmjs.org/react-native-popover-view/-/react-native-popover-view-1.0.19.tgz#7b3f430c4c24a96d58e08dcdf90be30e2f92836c"
-  integrity sha512-vyh96EcffKEl6S+NCG30TjMkFRohrOPdvA3tZg2/NdKb4AO6pmjCAlsq1Gntw7fUqhEDlKHAdpQmR216kDpC7Q==
+react-native-popover-view@^3.0.3:
+  version "3.1.1"
+  resolved "https://registry.npm.taobao.org/react-native-popover-view/download/react-native-popover-view-3.1.1.tgz#d55e6856ec81b2823342fda57e28974947bc8d39"
+  integrity sha1-1V5oVuyBsoIzQv2lfiiXSUe8jTk=
   dependencies:
-    react-native-safe-area-view "^0.10.0"
+    react-native-safe-area-view "0.14.9"
 
-react-native-popup-dialog@^0.16.6:
-  version "0.16.6"
-  resolved "https://registry.npmjs.org/react-native-popup-dialog/-/react-native-popup-dialog-0.16.6.tgz#7cbc40412191e06f8338877ca677bdde127ebd6c"
-  integrity sha512-GBwl57QQxpKZA6bdy04/KWUjDgixz0nP1HsLFpWTlYWXBORE0svcbbVGRvKRFV3W0c0zRvssV/TitwJmr9E6pQ==
+react-native-progress@^4.1.0:
+  version "4.1.2"
+  resolved "https://registry.npm.taobao.org/react-native-progress/download/react-native-progress-4.1.2.tgz#ffb2264ddfeba409c730e36a9791bb7bbe07a00d"
+  integrity sha1-/7ImTd/rpAnHMONql5G7e74HoA0=
   dependencies:
-    babel-plugin-flow-react-proptypes "^9.1.1"
-    prop-types "^15.6.0"
-    react-native-root-siblings "^3.1.7"
+    "@react-native-community/art" "^1.1.2"
+    prop-types "^15.7.2"
 
-react-native-root-siblings@^3.1.7:
+react-native-root-siblings@^3.1.6, react-native-root-siblings@^3.2.2:
   version "3.2.3"
-  resolved "https://registry.npmjs.org/react-native-root-siblings/-/react-native-root-siblings-3.2.3.tgz#df5a1cff3a3a1f433f57320e1cae719f1b15a3f2"
-  integrity sha512-wOCCtKJteaSIW3K++hzhkfdWRikTqjrG34DnhNDVSzKatuNQyFY1fPBD1YFT/3+kxOIUmNsJdiaPMao9QgoZMA==
+  resolved "https://registry.npm.taobao.org/react-native-root-siblings/download/react-native-root-siblings-3.2.3.tgz#df5a1cff3a3a1f433f57320e1cae719f1b15a3f2"
+  integrity sha1-31oc/zo6H0M/VzIOHK5xnxsVo/I=
   dependencies:
     prop-types "^15.6.2"
     static-container "^1.0.0"
@@ -2180,10 +2173,10 @@ react-native-root-siblings@^4.0.0:
   dependencies:
     static-container "^1.5.1"
 
-react-native-root-toast@^3.1.1:
-  version "3.2.0"
-  resolved "https://registry.npmjs.org/react-native-root-toast/-/react-native-root-toast-3.2.0.tgz#eecd50bb914ad74152c0049d77f8e7c9842e03fa"
-  integrity sha512-Y8udA38bGvqdFRp9JiIAAxCaTc1TnjVWjG15UWzOzTKU4+kVuuCCuSGS1PZswhj+eA0ZuB2y2UbZ/ylxOknJ+Q==
+react-native-root-toast@^3.0.1, react-native-root-toast@^3.2.1:
+  version "3.2.1"
+  resolved "https://registry.npm.taobao.org/react-native-root-toast/download/react-native-root-toast-3.2.1.tgz#f456d029f5c5b76e4b686334f25371465478a3be"
+  integrity sha1-9FbQKfXFt25LaGM08lNxRlR4o74=
   dependencies:
     prop-types "^15.5.10"
     react-native-root-siblings "^4.0.0"
@@ -2193,17 +2186,10 @@ react-native-safe-area-utility@^1.0.0:
   resolved "https://registry.npmjs.org/react-native-safe-area-utility/-/react-native-safe-area-utility-1.0.0.tgz#1dc289145f67d65ff70cb57b3aa8898e2d588438"
   integrity sha512-tavIx5ONlc+VqthQnjgNUE2WqfZJ/kf2kXyWq7y/wRxz5Ag0wG8eInQnRYkKA1cM7LncPx+9agBmy54IOXY2dw==
 
-react-native-safe-area-view@^0.10.0:
-  version "0.10.0"
-  resolved "https://registry.npmjs.org/react-native-safe-area-view/-/react-native-safe-area-view-0.10.0.tgz#e8e9228d22698c0f82ad1202d24a4e4977260489"
-  integrity sha512-Y70uGBxfB5E+ipf4QInBynSQbuWdCtC1roJqrW9HGwYCTMLy6+ZxyOxMTe07N9jXlPX+FKzxeoEK9k8U2Zi4Sw==
-  dependencies:
-    hoist-non-react-statics "^2.3.1"
-
-react-native-safe-area-view@^0.14.8:
-  version "0.14.8"
-  resolved "https://registry.npmjs.org/react-native-safe-area-view/-/react-native-safe-area-view-0.14.8.tgz#ef33c46ff8164ae77acad48c3039ec9c34873e5b"
-  integrity sha512-MtRSIcZNstxv87Jet+UsPhEd1tpGe8cVskDXlP657x6rHpSrbrc+y13ZNXrwAgGNNhqQNX7UJT68ZIq//ZRmvw==
+react-native-safe-area-view@0.14.9:
+  version "0.14.9"
+  resolved "https://registry.npm.taobao.org/react-native-safe-area-view/download/react-native-safe-area-view-0.14.9.tgz#90ee8383037010d9a5055a97cf97e4c1da1f0c3d"
+  integrity sha1-kO6DgwNwENmlBVqXz5fkwdofDD0=
   dependencies:
     hoist-non-react-statics "^2.3.1"
 
@@ -2233,14 +2219,6 @@ react-navigation-header-buttons@^2.1.1:
   integrity sha512-LSc4DSmhnw4gCPim35cr5/40JDAk+oSoAW/Uy7zULz9l/dQckxk9v3zaIAhTVTCK1clwaHktZKFUjggkIlt1IQ==
   dependencies:
     react-native-platform-touchable "^1.1.1"
-
-react-navigation@*:
-  version "4.1.1"
-  resolved "https://registry.npmjs.org/react-navigation/-/react-navigation-4.1.1.tgz#670a1712e945e454fe9cafa424e685c2f1f30832"
-  integrity sha512-HEzPOsndrKnxTf0+gsi1N/0GKbwu8KSTOveL7ptJLG7XNXHBXVvp4lbaS3PVPe2IaiXbXCC+y3VJ8dH50wHR4g==
-  dependencies:
-    "@react-navigation/core" "^3.5.2"
-    "@react-navigation/native" "^3.6.5"
 
 react-proxy@^1.1.7:
   version "1.1.8"
@@ -2461,16 +2439,6 @@ spdx-license-ids@^3.0.0:
   resolved "https://registry.npmjs.org/spdx-license-ids/-/spdx-license-ids-3.0.5.tgz#3694b5804567a458d3c8045842a6358632f62654"
   integrity sha512-J+FWzZoynJEXGphVIS+XEh3kFSjZX/1i9gFBaWQcB+/tmpe2qUsSBABpcxqxnAxFdiUFEgAX1bjYGQvIZmoz9Q==
 
-specials@^2.0.4:
-  version "2.0.4"
-  resolved "https://registry.npmjs.org/specials/-/specials-2.0.4.tgz#7bf645511091ac739ffb2dbea45972246b20327b"
-  integrity sha512-OmU27wK7SUxAXJrVC29U8XjiGBmD/0oxemhzdgwRtPT3LwTo66GIUXqMZqYuyBp8/aiLqTTfaRLvECqdV48uRA==
-
-split-on-first@^1.0.0:
-  version "1.1.0"
-  resolved "https://registry.npmjs.org/split-on-first/-/split-on-first-1.1.0.tgz#f610afeee3b12bce1d0c30425e76398b78249a5f"
-  integrity sha512-43ZssAJaMusuKWL8sKUBQXHWOpq8d6CfN/u1p4gUzfJkM05C8rxTmYrkIPTXapZpORA6LkkzcUulJ8FqA7Uudw==
-
 sprintf-js@~1.0.2:
   version "1.0.3"
   resolved "https://registry.npmjs.org/sprintf-js/-/sprintf-js-1.0.3.tgz#04e6926f662895354f3dd015203633b857297e2c"
@@ -2480,11 +2448,6 @@ static-container@^1.0.0, static-container@^1.5.1:
   version "1.5.1"
   resolved "https://registry.npmjs.org/static-container/-/static-container-1.5.1.tgz#9d7a94e04dea864539a7b6a1304843ada740dc19"
   integrity sha512-OFChfLKIvSzaMA3otS5CEabJTIzHFPhMxogIT+io4F207PXTvS6woFyjXIyXyqMIYAhryePGeFZYC6uLcG1lpA==
-
-strict-uri-encode@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.npmjs.org/strict-uri-encode/-/strict-uri-encode-2.0.0.tgz#b9c7330c7042862f6b142dc274bbcc5866ce3546"
-  integrity sha1-ucczDHBChi9rFC3CdLvMWGbONUY=
 
 string-width@^2.1.0:
   version "2.1.1"

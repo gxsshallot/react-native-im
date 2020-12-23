@@ -3,6 +3,7 @@ import Toast from 'react-native-root-toast';
 import i18n from 'i18n-js';
 import { Typings, Delegate } from '../../standard';
 import getGeneralButton from './GeneralButton';
+import { Alert } from 'react-native';
 
 export const name = 'IMSettingLeaveGroup';
 
@@ -23,22 +24,47 @@ async function _clickLeave(
     text: string,
     isOwner: boolean
 ): Promise<void> {
-    const {imId, navigation} = props;
     try {
-        const action = StackActions.pop(2);
-        navigation.dispatch(action);
-        await new Promise((resolve) => {
-            setTimeout(() => {
-                resolve()
-            }, 50);
-        });
+        // dismissGroup, need confirm again
         if (isOwner) {
-            await Delegate.model.Group.destroyOne(imId);
+            Alert.alert('提示','是否' + i18n.t('IMSettingLeaveGroupDestroy') + '?', [
+                {
+                    text: '取消',
+                    onPress: () => {},
+                },
+                {
+                    text: '确定',
+                    onPress: () => {
+                        leaveDidTrue(props,text,isOwner);
+                    },
+                },
+            ]);
         } else {
-            await Delegate.model.Group.quitOne(imId);
+            leaveDidTrue(props,text,isOwner);
         }
-        Toast.show(i18n.t('IMToastSuccess', {action: text}));
     } catch (err) {
         Toast.show(i18n.t('IMToastError', {action: text}));
     }
+}
+
+async function leaveDidTrue(
+    props: Typings.Action.Setting.Params,
+    text: string,
+    isOwner: boolean) {
+
+    const {imId, navigation} = props;
+
+    const action = StackActions.pop(2);
+    navigation.dispatch(action);
+    await new Promise<void>((resolve) => {
+        setTimeout(() => {
+        resolve()
+         }, 50);
+       });
+    if (isOwner) {
+        await Delegate.model.Group.destroyOne(imId);
+    } else {
+        await Delegate.model.Group.quitOne(imId);
+     }
+    Toast.show(i18n.t('IMToastSuccess', {action: text}));
 }
