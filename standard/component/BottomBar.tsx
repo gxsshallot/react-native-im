@@ -1,12 +1,13 @@
-import React from 'react';
-import { Image, Keyboard, PermissionsAndroid, Platform, SafeAreaView, StyleSheet, Text, TextInput, TouchableHighlight, TouchableOpacity, View, EmitterSubscription, TextStyle, NativeSyntheticEvent, TextInputSelectionChangeEventData, TextInputKeyPressEventData, KeyboardEvent } from 'react-native';
-import SoundRecorder from 'react-native-sound-recorder';
-import Toast from 'react-native-root-toast';
 import { getSafeAreaInset } from '@hecom/react-native-pure-navigation-bar';
 import i18n from 'i18n-js';
-import { Component, Contact, Message, Conversation } from '../typings';
-import * as PageKeys from '../pagekey';
+import React from 'react';
+import { EmitterSubscription, Image, Keyboard, KeyboardEvent, NativeSyntheticEvent, PermissionsAndroid, Platform, SafeAreaView, StyleSheet, Text, TextInput, TextInputKeyPressEventData, TextInputSelectionChangeEventData, TextStyle, TouchableHighlight, TouchableOpacity, View } from 'react-native';
+import Toast from 'react-native-root-toast';
+import SoundRecorder from 'react-native-sound-recorder';
 import delegate from '../delegate';
+import * as PageKeys from '../pagekey';
+import { Component, Contact, Conversation, Message } from '../typings';
+import * as Body from '../typings/Message';
 
 export type Props = Component.BottomBarProps;
 
@@ -17,7 +18,11 @@ export interface State {
     showMoreBoard: boolean;
     showSpeech: boolean;
     isRecording: boolean;
+    showQuote: boolean;
+    quoteMsg: Message.General | undefined;
 }
+
+
 
 export default class extends React.PureComponent<Props, State> {
     static defaultProps = {};
@@ -29,7 +34,8 @@ export default class extends React.PureComponent<Props, State> {
     protected listenKeyboardShow: EmitterSubscription | void = null;
     protected listenKeyboardHide: EmitterSubscription | void = null;
     protected textInput: TextInput | null = null;
-    
+
+
     state = {
         message: '',
         keyboardHeight: 0,
@@ -37,6 +43,8 @@ export default class extends React.PureComponent<Props, State> {
         showMoreBoard: false,
         showSpeech: false,
         isRecording: false,
+        showQuote: true,
+        quoteMsg: new MockMsg(),
     };
 
     componentDidMount() {
@@ -54,7 +62,10 @@ export default class extends React.PureComponent<Props, State> {
             <SafeAreaView style={styles.safeview}>
                 <View style={styles.container}>
                     {this._renderLeftBtn()}
-                    {this._renderInputView()}
+                    <View style={styles.msgContainer}>
+                        {this._renderInputView()}
+                        {this._renderQuoteView()}
+                    </View>
                     {this._renderRightBtn()}
                 </View>
                 {this._renderBottomView()}
@@ -70,9 +81,15 @@ export default class extends React.PureComponent<Props, State> {
         });
     }
 
+    public quoteMsg(msg: Message.General) {
+        this.setState({
+            quoteMsg: msg,
+        });
+        this.textInput && this.textInput.focus();
+    }
     public changeInputText(imId: string, text: string) {
         const user = delegate.user.getUser(imId);
-        const newText = '@' + user.name + ' : "' + text + '"\n' + '-----\n' + delegate.user.getMine().name + ': ';
+        const newText = '@' + user.name + ' ';
         this.setState({
             message: newText,
         });
@@ -83,7 +100,7 @@ export default class extends React.PureComponent<Props, State> {
     public insertAtMember(userId: string) {
         const text = this.state.message;
         const newText = text.slice(0, this.textLocation) + '@' + text.slice(this.textLocation);;
-        this.setState({message: newText},()=>{
+        this.setState({ message: newText }, () => {
             this.textLocation++;
             this._onSelectData([userId]);
         });
@@ -124,20 +141,45 @@ export default class extends React.PureComponent<Props, State> {
                         autoCorrect={false}
                     />
                 ) : (
-                    <TouchableHighlight
-                        underlayColor={'#d7d8d8'}
-                        onPressIn={this._onStartRecording.bind(this)}
-                        onPressOut={this._onEndRecording.bind(this)}
-                    >
-                        <View style={styles.sound}>
-                            <Text style={styles.soundText}>
-                                {this.state.isRecording ? i18n.t('IMComponentBottomBarVoiceRelease') : i18n.t('IMComponentBottomBarVoicePress')}
-                            </Text>
-                        </View>
-                    </TouchableHighlight>
-                )}
+                        <TouchableHighlight
+                            underlayColor={'#d7d8d8'}
+                            onPressIn={this._onStartRecording.bind(this)}
+                            onPressOut={this._onEndRecording.bind(this)}
+                        >
+                            <View style={styles.sound}>
+                                <Text style={styles.soundText}>
+                                    {this.state.isRecording ? i18n.t('IMComponentBottomBarVoiceRelease') : i18n.t('IMComponentBottomBarVoicePress')}
+                                </Text>
+                            </View>
+                        </TouchableHighlight>
+                    )}
             </View>
         );
+    }
+    protected _renderQuoteView() {
+        let quoteMsg: Message.General | undefined = this.state.quoteMsg;
+        // let quoteMsg = 1;
+        return quoteMsg ?
+            (<View style={styles.quoteTextBorder}>
+                <Text
+                    numberOfLines={1}
+                    ellipsizeMode={'tail'}
+                    style={styles.quoteText} >
+                    {delegate.user.getUser('test__c_v2011_1122225706').name + ':'}
+                    {/* {delegate.user.getUser((quoteMsg as Message.General).from).name + ':'} */}
+                </Text>
+                <TouchableOpacity
+                    activeOpacity={0.5}
+                    onPress={this._onQuoteMsgDel.bind(this)}
+                    style={[styles.delIconTouch]}
+                >
+                    <Image
+                        source={require('./image/chat_add.png')}
+                        style={styles.delIcon}
+                    />
+                </TouchableOpacity>
+            </View>)
+            : undefined
     }
 
     protected _renderRightBtn() {
@@ -169,18 +211,18 @@ export default class extends React.PureComponent<Props, State> {
                         <Image style={styles.icon} source={secondIcon} />
                     </TouchableOpacity>
                 ) : (
-                    <TouchableOpacity
-                        activeOpacity={0.5}
-                        onPress={this._onSendMessageText.bind(this)}
-                        style={styles.sendTouch}
-                    >
-                        <View style={styles.sendView}>
-                            <Text style={styles.sendText}>
-                                {i18n.t('IMCommonSend')}
-                            </Text>
-                        </View>
-                    </TouchableOpacity>
-                )}
+                        <TouchableOpacity
+                            activeOpacity={0.5}
+                            onPress={this._onSendMessageText.bind(this)}
+                            style={styles.sendTouch}
+                        >
+                            <View style={styles.sendView}>
+                                <Text style={styles.sendText}>
+                                    {i18n.t('IMCommonSend')}
+                                </Text>
+                            </View>
+                        </TouchableOpacity>
+                    )}
             </View>
         );
     }
@@ -196,7 +238,7 @@ export default class extends React.PureComponent<Props, State> {
         } else if (this.state.showMoreBoard) {
             return <delegate.component.MoreBoard {...this.props} />;
         } else {
-            return <View style={{height: this.state.keyboardHeight}} />;
+            return <View style={{ height: this.state.keyboardHeight }} />;
         }
     }
 
@@ -207,7 +249,7 @@ export default class extends React.PureComponent<Props, State> {
             atMemberList = Message.AtAll;
         } else {
             const memberMap = this.atMemberList
-                .reduce((prv: {[key: string]: Contact.User}, cur: Contact.User) => {
+                .reduce((prv: { [key: string]: Contact.User }, cur: Contact.User) => {
                     if (!prv[cur.userId]) {
                         prv[cur.userId] = cur;
                     }
@@ -223,12 +265,12 @@ export default class extends React.PureComponent<Props, State> {
             },
         };
         this.props.onSendMessage(message);
-        this.setState({message: ''});
+        this.setState({ message: '' });
         this.atMemberList = [];
     }
 
     protected _onStartRecording() {
-        this.setState({isRecording: true});
+        this.setState({ isRecording: true });
         const option = !this.isIos ? {
             format: SoundRecorder.FORMAT_AAC_ADTS,
             encoder: SoundRecorder.ENCODER_AAC
@@ -239,8 +281,8 @@ export default class extends React.PureComponent<Props, State> {
     }
 
     protected _onEndRecording() {
-        this.setState({isRecording: false});
-        const {onSendMessage} = this.props;
+        this.setState({ isRecording: false });
+        const { onSendMessage } = this.props;
         SoundRecorder.stop()
             .then((result) => {
                 const time = Math.floor(result.duration / 1000);
@@ -279,7 +321,7 @@ export default class extends React.PureComponent<Props, State> {
             this.selectedEmojiArr.push(text);
             message = this.state.message + text;
         }
-        this.setState({message});
+        this.setState({ message });
     }
 
     protected _onChangeText(text: string) {
@@ -304,7 +346,7 @@ export default class extends React.PureComponent<Props, State> {
                 }
             }
         }
-        this.setState({message: newText});
+        this.setState({ message: newText });
     }
 
     protected _onSelectData(data: string[]) {
@@ -318,20 +360,20 @@ export default class extends React.PureComponent<Props, State> {
         }
         const text = this.state.message;
         const newText = text.slice(0, this.textLocation) + item.name + ' ' + text.slice(this.textLocation);
-        this.setState({message: newText});
+        this.setState({ message: newText });
         this.atMemberList.push(item);
         this.textInput && this.textInput.focus();
     }
 
     protected _onSelectionChange(event: NativeSyntheticEvent<TextInputSelectionChangeEventData>) {
-        const {nativeEvent: {selection: {start, end}}} = event;
+        const { nativeEvent: { selection: { start, end } } } = event;
         if (start === end) {
             this.textLocation = start;
         }
     }
 
     protected _onKeyPress(event: NativeSyntheticEvent<TextInputKeyPressEventData>) {
-        const {nativeEvent: {key}} = event;
+        const { nativeEvent: { key } } = event;
         if (key === '@' && this.props.chatType === Conversation.ChatType.Group) {
             const members = delegate.model.Group.getMembers(this.props.imId);
             const dataSource = members
@@ -339,14 +381,14 @@ export default class extends React.PureComponent<Props, State> {
                 .map(userId => delegate.user.getUser(userId));
             const groupOwner = delegate.model.Group.getOwner(this.props.imId);
             const isOwner = groupOwner === delegate.user.getMine().userId;
-            this.props.navigation.navigate(PageKeys.ChooseUser,{
-                    title: i18n.t('IMComponentBottomBarChooseAtPerson'),
-                    multiple: false,
-                    onSelectData: this._onSelectData.bind(this),
-                    selectedIds: [],
-                    dataSource: dataSource,
-                    showAtAll: isOwner,
-                });
+            this.props.navigation.navigate(PageKeys.ChooseUser, {
+                title: i18n.t('IMComponentBottomBarChooseAtPerson'),
+                multiple: false,
+                onSelectData: this._onSelectData.bind(this),
+                selectedIds: [],
+                dataSource: dataSource,
+                showAtAll: isOwner,
+            });
         }
     }
 
@@ -382,6 +424,12 @@ export default class extends React.PureComponent<Props, State> {
             showSpeech: false,
             showEmojiView: false,
         });
+    }
+
+    protected _onQuoteMsgDel() {
+        this.setState({
+            quoteMsg: undefined,
+        })
     }
 
     protected _onSwitchSpeechKeyboard() {
@@ -438,27 +486,7 @@ const styles = StyleSheet.create({
     container: {
         flexDirection: 'row',
         alignItems: 'flex-end',
-        maxHeight: 150, // TODO
     },
-    inputBorder: {
-        flex: 1,
-        marginTop: 9,
-        marginBottom: 7,
-        backgroundColor: '#fcfcfc',
-        overflow: 'hidden',
-        alignSelf: 'center',
-        borderRadius: 4,
-    },
-    input: {
-        fontSize: 16,
-        ...Platform.select({
-            ios: {lineHeight: 20},
-            android: {textAlignVertical: 'center'}
-        }),
-        minHeight: 40,
-        maxHeight: 120,
-        marginHorizontal: 5,
-    } as TextStyle,
     leftIconTouch: {
         width: 40,
         height: 40,
@@ -508,5 +536,59 @@ const styles = StyleSheet.create({
         fontSize: 17,
         fontWeight: 'bold',
         color: '#565656',
+    },
+
+    msgContainer: {
+        flexDirection: 'column',
+        alignItems: 'stretch',
+        flex: 1,
+    },
+    inputBorder: {
+        marginTop: 9,
+        marginBottom: 13,
+        backgroundColor: '#fcfcfc',
+        overflow: 'hidden',
+        borderRadius: 4,
+    },
+    input: {
+        fontSize: 16,
+        ...Platform.select({
+            ios: { lineHeight: 20 },
+            android: { textAlignVertical: 'center' }
+        }),
+        minHeight: 30,
+        maxHeight: 120,
+        marginHorizontal: 5,
+    } as TextStyle,
+    quoteTextBorder: {
+        flexDirection: "row",
+        marginBottom: 13,
+        backgroundColor: '#cccccc',
+        overflow: 'hidden',
+        borderRadius: 4,
+        alignItems: "center",
+        justifyContent: "flex-end",
+        paddingEnd: 6,
+        height: 30,
+    },
+    quoteText: {
+        flex: 1,
+        fontSize: 13,
+        ...Platform.select({
+            ios: { lineHeight: 20 },
+            android: { textAlignVertical: 'center' }
+        }),
+        marginEnd: 10,
+        marginHorizontal: 5,
+    } as TextStyle,
+    delIconTouch: {
+        width: 25,
+        height: 25,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    delIcon: {
+        width: 16,
+        height: 16,
     },
 });
