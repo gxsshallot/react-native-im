@@ -4,6 +4,7 @@ import ImageCapInset from '@hecom/react-native-image-capinsets';
 import * as Model from '../model';
 import {Action, Component} from '../typings';
 import delegate from '../delegate';
+import { QuoteMsgBubble } from '../../plugin/message/display';
 
 export interface Props extends Component.MessageBubbleProps {
     leftBubble: ImageSourcePropType;
@@ -29,36 +30,49 @@ export default class extends React.PureComponent<Props, State> {
     };
 
     render() {
-        const {isSender, leftBubble, rightBubble} = this.props;
+        const { isSender, leftBubble, rightBubble, message } = this.props;
         const bubbleImage = isSender ? rightBubble : leftBubble;
         const maxWidth = Dimensions.get('window').width / 3 * 2;
         const paddingLeft = isSender ? 0 : this.paddingHorizontal;
         const paddingRight = isSender ? this.paddingHorizontal : 0;
         const innerMaxWidth = maxWidth - paddingLeft - paddingRight;
         const ratio = PixelRatio.get();
+        const rootAlignItems = isSender?'flex-end':'flex-start';
         return (
-            <TouchableWithoutFeedback
-                onPress={this._onPress.bind(this)}
-                onLongPress={this._onLongPress.bind(this)}
-            >
-                <View ref={this.bubble} style={{flexDirection: 'row'}}>
-                    {this.state.enableBubble ? (
-                        <ImageCapInset
-                            capInsets={{top: 84 / ratio, left: 39 / ratio, bottom: 30 / ratio, right: 39 / ratio}}
-                            resizeMode='stretch'
-                            source={bubbleImage}
-                            style={{maxWidth, paddingLeft, paddingRight}}
-                        >
-                            {this._renderMessage(innerMaxWidth)}
-                        </ImageCapInset>
-                    ) : (
-                        <View style={{maxWidth, paddingLeft, paddingRight}}>
-                            {this._renderMessage(innerMaxWidth)}
-                        </View>
-                    )}
-                    {!isSender && this._renderRedFlag()}
-                </View>
-            </TouchableWithoutFeedback>
+            <View style={{ flexDirection: 'column',alignItems: rootAlignItems}}>
+                <TouchableWithoutFeedback
+                    onPress={this._onPress.bind(this)}
+                    onLongPress={this._onLongPress.bind(this)}
+                >
+                    <View ref={this.bubble} style={{ flexDirection: 'row' }}>
+                        {this.state.enableBubble ? (
+                            <View>
+                                <ImageCapInset
+                                    capInsets={{ top: 84 / ratio, left: 39 / ratio, bottom: 30 / ratio, right: 39 / ratio }}
+                                    resizeMode='stretch'
+                                    source={bubbleImage}
+                                    style={{ maxWidth, paddingLeft, paddingRight }}
+                                >
+                                    {this._renderMessage(innerMaxWidth)}
+                                </ImageCapInset>
+                            </View>
+
+                        ) : (
+                                <View style={{ maxWidth, paddingLeft, paddingRight }}>
+                                    {this._renderMessage(innerMaxWidth)}
+                                </View>
+                            )}
+                        {!isSender && this._renderRedFlag()}
+                    </View>
+                </TouchableWithoutFeedback>
+                <QuoteMsgBubble
+                    message={message}
+                    maxWidth={maxWidth}
+                    paddingLeft={paddingLeft}
+                    paddingRight={paddingRight}
+                    innerMaxWidth={innerMaxWidth}
+                />
+            </View>
         );
     }
 
@@ -71,7 +85,7 @@ export default class extends React.PureComponent<Props, State> {
                     height: 5,
                     borderRadius: 10,
                     marginLeft: 5,
-                }}/>
+                }} />
             )
         } else {
             return null;

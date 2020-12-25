@@ -182,6 +182,9 @@ export default class extends React.PureComponent<Props, State> {
         );
     }
     protected _renderQuoteView() {
+        if(this.state.showSpeech ){
+            return;
+        }
         let quoteMsg: Message.General | undefined = this.state.quoteMsg;
         var msgDesc: String = '';
         if (quoteMsg != undefined) {
@@ -310,6 +313,7 @@ export default class extends React.PureComponent<Props, State> {
             body: {
                 text: this.state.message,
                 atMemberList: atMemberList,
+                quoteMsg:this.state.quoteMsg,
             },
         };
         this.props.onSendMessage(message);
