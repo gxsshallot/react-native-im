@@ -32,12 +32,10 @@ export interface Props {
 }
 
 export interface State {
-    showPrompt: boolean;
 }
 
-export class GroupDataInfoCell extends React.PureComponent<Props, State> {
+export class GroupDataInfoCell extends React.PureComponent<Props,State> {
     state: State = {
-        showPrompt: false,
     };
 
     render() {
