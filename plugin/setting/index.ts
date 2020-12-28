@@ -7,6 +7,7 @@ import * as GroupAvatar from './GroupAvatar';
 import * as GroupMemberName from './GroupMemberName';
 import * as GroupName from './GroupName';
 import * as GroupAnnouncement from './GroupAnnouncement';
+import * as GroupData from './GroupData';
 import * as LeaveGroup from './LeaveGroup';
 import * as Top from './Top';
 import * as TransferOwner from './TransferOwner';
@@ -23,6 +24,7 @@ export function setup() {
         [AllowInvite.name, AllowInvite.getUi],
         [AvatarList.name, AvatarList.getUi],
         [Avoid.name, Avoid.getUi],
+        [GroupData.name,GroupData.getUi],
         [GroupAvatar.name, GroupAvatar.getUi],
         [GroupMemberName.name, GroupMemberName.getUi],
         [GroupName.name, GroupName.getUi],
@@ -36,6 +38,7 @@ export function setup() {
     });
     Delegate.page[PageKeys.ChatSetting].defaultProps.sections = [
         [AvatarList.name, AllMembers.name],
+        [GroupData.name],
         [GroupName.name, GroupAvatar.name, GroupAnnouncement.name, AllowInvite.name, Top.name, Avoid.name, GroupMemberName.name]
     ];
     Delegate.page[PageKeys.ChatSetting].defaultProps.buttons = [
@@ -49,6 +52,7 @@ export {
     AllowInvite,
     AvatarList,
     Avoid,
+    GroupData,
     GroupAvatar,
     GroupName,
     GroupAnnouncement,
