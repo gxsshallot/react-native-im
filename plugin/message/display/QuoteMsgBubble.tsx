@@ -4,6 +4,10 @@ import { Message } from 'react-native-im/standard/typings';
 import { Delegate, Typings } from '../../../standard';
 import { IMConstant } from 'react-native-im-easemob';
 import delegate from '../../../standard/delegate';
+import {showPhotoBrowserPage} from 'react-native-photo-browse';
+import Navigation from '@hecom/navigation';
+import Constant from '../../../../../core/constant';
+import Model from '../../../../../core/model';
 
 interface Props {
     message: Message.General;
@@ -12,6 +16,7 @@ interface Props {
     paddingRight: number,
     innerMaxWidth: number,
 }
+const FilePreviewPage = 'standard/accessory/FilePreviewPage';
 
 export default class QuoteMsgBubble extends React.PureComponent<Props> {
 
@@ -23,7 +28,6 @@ export default class QuoteMsgBubble extends React.PureComponent<Props> {
     render() {
 
         const { message: { data: { quoteMsg } }, maxWidth, paddingLeft, paddingRight, innerMaxWidth } = this.props;
-        console.log(`####props:####\n ${JSON.stringify(quoteMsg)}`);
         var msgDesc: String = '';
         if (quoteMsg != undefined) {
             switch (quoteMsg.type) {
@@ -64,8 +68,45 @@ export default class QuoteMsgBubble extends React.PureComponent<Props> {
     }
 
     protected _onPress() {
-        const { data: { quoteMsg } } = this.props;
-        //todo
+        const { message: {data:{quoteMsg: quoteMsg}}  } = this.props;
+        console.log(`####quoteMsg:####\n ${JSON.stringify(quoteMsg)}`);
+        switch (quoteMsg.type) {
+            case IMConstant.MessageType.text:
+                break;
+            case IMConstant.MessageType.image:
+                let img = (quoteMsg as Message.Image).data;
+                showPhotoBrowserPage({
+                    currentIndex: 0,
+                    images:[img.localPath?img.localPath:img.remotePath ],
+                    canSave: true,
+                    renderIndicator: () => null,
+                });
+                break;
+            case IMConstant.MessageType.video:
+                // if (this.isAndroid) {
+                //     if (this.state.downloadReady) {
+                //         IMStandard.Delegate.func.playVideo(this.displayPath.replace('file://', ''));
+                //     }
+                // } else {
+                //     this.player.presentFullscreenPlayer();
+                // }
+                break;
+            case IMConstant.MessageType.location:
+                let loc =(quoteMsg as Message.Location).data
+                Delegate.func.pushToLocationViewPage(loc);
+                break;
+            case IMConstant.MessageType.file:
+                let file = (quoteMsg as Message.File).data;
+                Navigation.push(FilePreviewPage, { url: file.remotePath,name: file.name, size:file.size, inComponent: false });
+                break;
+            case IMConstant.MessageType.material:
+                let obj= quoteMsg.data.object;
+                Model.event.trigger(Constant.event.JumpToDetail, {
+                    metaid: obj.metaName,
+                    itemData: obj,
+                });
+                break;
+        }
     }
 }
 

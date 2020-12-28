@@ -4,6 +4,7 @@ import ImageBubble from './ImageBubble';
 import LocationBubble from './LocationBubble';
 import VideoBubble from './VideoBubble';
 import VoiceBubble from './VoiceBubble';
+import QuoteMsgBubble from './QuoteMsgBubble';
 
 export {
     GeneralBubble,
@@ -12,4 +13,5 @@ export {
     LocationBubble,
     VideoBubble,
     VoiceBubble,
+    QuoteMsgBubble,
 };
