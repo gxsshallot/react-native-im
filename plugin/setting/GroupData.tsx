@@ -39,14 +39,13 @@ export class GroupDataInfoCell extends React.PureComponent<Props,State> {
     };
 
     render() {
-        let onPressFunc = this._clickLine.bind(this);
         return (
             <View>
                 <Delegate.component.SettingItem
                     type={Typings.Component.SettingItemType.Text}
                     title={i18n.t('IMSettingGroupDataInfo')}
                     data={""}
-                    onPressLine={onPressFunc}
+                    onPressLine={this._clickLine.bind(this)}
                 />
             </View>
         );
