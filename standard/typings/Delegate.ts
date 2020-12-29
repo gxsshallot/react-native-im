@@ -69,6 +69,7 @@ export interface GroupModelPart {
     changeAvatar: (groupId: string, newAvatarUrl: string) => Promise<string>;
     changeAllowInvites: (groupId: string, allowInvites: boolean) => Promise<boolean>;
     changeOwner: (groupId: string, newOwnerId: string) => Promise<{ owner: string; members: string[] }>;
+    showGroupDataRecord:(imId:String) => Promise<void>;
 }
 
 export interface MessageModelPart {
@@ -153,6 +154,7 @@ export interface GroupApiPart {
     changeAvatar: (groupId: string, newAvatarUrl: string) => Promise<void>;
     changeAllowInvites: (groupId: string, newAllowInvites: boolean) => Promise<void>;
     changeOwner: (groupId: string, newOwnerId: string) => Promise<void>;
+    showGroupDataRecord:(imId:String) => Promise<void>;
 }
 
 export interface ApiPart {
