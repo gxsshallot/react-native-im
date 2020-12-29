@@ -168,7 +168,8 @@ export interface FuncPart {
     pushToUserDetailPage: (userId: string) => void;
     fitUrlForAvatarSize: (avatar: string, size?: number) => string;
     getDefaultUserHeadImage: (userId?: string) => ImageURISource | ImageRequireSource;
-    playVideo:(uri:string) => void;
+    playVideo: (uri: string) => void;
+    getVideoMetaData: (uri: string) => Promise<any>;
     // uploadImages: unset('func.uploadImages'),
 }
 
