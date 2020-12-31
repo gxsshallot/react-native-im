@@ -24,31 +24,6 @@ export interface State {
     quoteMsg: Message.General | undefined;
 }
 
-class TB implements Body.TextBody {
-    constructor() {
-    }
-    atMemberList: Message.AtList = [];
-    text: string = '';
-    isSystem: boolean = false;
-
-}
-
-class MockMsg implements Message.General<Body.TextBody>{
-    conversationId: string = '111';
-    messageId?: string | undefined;
-    innerId?: string | undefined;
-    chatType?: Conversation.ChatType | undefined;
-    direction?: number | undefined;
-    isRead?: boolean | undefined;
-    status: Message.Status = Message.Status.Succeed;
-    type: number = 1;
-    from: string = 'A';
-    to: string = 'B';
-    localTime: number = 1341341;
-    timestamp: number = 144141341;
-    data: Message.TextBody = new TB();
-}
-
 export default class extends React.PureComponent<Props, State> {
     static defaultProps = {};
 
@@ -69,7 +44,7 @@ export default class extends React.PureComponent<Props, State> {
         showSpeech: false,
         isRecording: false,
         showQuote: true,
-        quoteMsg: new MockMsg(),
+        quoteMsg: undefined,
     };
 
     componentDidMount() {
