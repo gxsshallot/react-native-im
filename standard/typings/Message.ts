@@ -100,7 +100,6 @@ export interface VoiceBody extends Body {
     remotePath: string;
     duration: number;
     shouldRead?: boolean;
-    hasChecked?: boolean;
 }
 
 /**
