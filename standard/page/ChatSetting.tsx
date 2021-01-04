@@ -14,13 +14,6 @@ export default class extends React.PureComponent {
         return {title};
     };
 
-    // static propTypes = {
-    //     ...Types.BasicConversation,
-    //     ...Types.Navigation,
-    //     sections: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string)),
-    //     buttons: PropTypes.arrayOf(PropTypes.string),
-    // };
-
     static defaultProps = {
         sections: [],
         buttons: [],
