@@ -10,3 +10,4 @@ export const GroupMembers = 'IMGroupMembers';
 export const GroupAnnouncementEdit = 'IMGroupAnnouncementEdit';
 export const Search = 'IMSearch';
 export const SearchMore = 'IMSearchMore';
+export const GroupNameEdit = 'IMGroupNameEdit';

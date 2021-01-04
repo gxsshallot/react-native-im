@@ -1,5 +1,5 @@
 import React from 'react';
-import {Clipboard, Keyboard, SafeAreaView, StyleSheet, TouchableWithoutFeedback, View, Alert} from 'react-native';
+import {Clipboard, Keyboard, SafeAreaView, StyleSheet, TouchableWithoutFeedback,Image, View, Alert,Text,TouchableOpacity} from 'react-native';
 import {HeaderButton} from 'react-navigation-header-buttons';
 import Toast from 'react-native-root-toast';
 import Listener from '@hecom/listener';
@@ -169,18 +169,23 @@ export default class extends React.PureComponent<ChatDetailProps> {
     _renderRightElement() {
         const {imId, chatType} = this.props;
         const onSendMsg = this._onSendMessage.bind(this, imId, chatType)
-        return (
-            <HeaderButton
-                title={i18n.t('IMPageChatDetailSetting')}
-                onPress={() => {
-                    this.props.navigation.navigate( PageKeys.ChatSetting,{
-                        imId: imId,
-                        chatType: chatType,
-                        onSendMessage: onSendMsg,
-                    });
-                }}
-            />
-        );
+        const moreImage = require('./image/showMore.png');
+        return (<TouchableOpacity
+            onPress={() => {
+                this.props.navigation.navigate( PageKeys.ChatSetting,{
+                    imId: imId,
+                    chatType: chatType,
+                    onSendMessage: onSendMsg,
+                });
+            }}
+            activeOpacity={0.8}
+        >
+            <Image
+                    source={moreImage}
+                    style={styles.rightImage}
+                />
+        </TouchableOpacity>
+    )
     }
 
     _setKeyboardStatus(status) {
@@ -417,5 +422,10 @@ const styles = StyleSheet.create({
     },
     container: {
         flex: 1,
+    },
+    rightImage: {
+        width: 24,
+        height: 24,
+        right: 10,
     },
 });

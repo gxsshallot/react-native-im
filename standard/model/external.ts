@@ -12,11 +12,12 @@ export async function onMessageReceived(
     originMessage: Message.Origin
 ): Promise<ProcessedMessage> {
     //语音消息插入未读标志
+    //语音消息插入未点击标志
     const {ext} = originMessage;
     if (ext &&
         ext.extend_message_body &&
         ext.extend_message_body.messageType &&
-        ext.extend_message_body.messageType.messageType == 5) {
+        ext.extend_message_body.messageType == 5) {
         originMessage.ext.shouldRead = true;
         delegate.im.conversation.updateMessageExt(originMessage.messageId, originMessage.ext);
     }

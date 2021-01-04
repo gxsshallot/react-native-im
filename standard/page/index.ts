@@ -9,6 +9,7 @@ import GroupListPage from './GroupList';
 import GroupMembersPage from './GroupMembers';
 import GroupAnnouncementEditPage from './GroupAnnouncementEdit';
 import SearchPage from './Search';
+import GroupNameEdit from './GroupNameEdit';
 
 export {
     ChatDetailPage,
@@ -22,4 +23,5 @@ export {
     GroupMembersPage,
     SearchPage,
     GroupAnnouncementEditPage,
+    GroupNameEdit,
 };

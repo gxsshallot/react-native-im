@@ -21,6 +21,7 @@ function setup_common_page() {
     Delegate.page[PageKeys.GroupAnnouncementEdit] = Pages.GroupAnnouncementEditPage;
     Delegate.page[PageKeys.Search] = Pages.SearchPage;
     Delegate.page[PageKeys.SearchMore] = Components.SearchList;
+    Delegate.page[PageKeys.GroupNameEdit] = Pages.GroupNameEdit;
 }
 
 function setup_common_render() {
