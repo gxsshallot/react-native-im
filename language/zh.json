@@ -25,7 +25,7 @@
     "IMPageChooseUserSelectFromOrg": "按部门选同事",
     "IMPageChooseUserAll": "所有人",
     "IMSettingAddGroupMember": "添加群成员",
-    "IMSettingAllMembers": "全体成员({{length}})",
+    "IMSettingAllMembers": "查看全体群成员({{length}})",
     "IMSettingAllowInvite": "允许添加成员",
     "IMSettingAvoid": "消息免打扰",
     "IMSettingChooseGroupMember": "选择群成员",

@@ -20,7 +20,6 @@ export function setup() {
         (props: Typings.Action.Setting.Params) => Typings.Action.Setting.Result
     ];
     const actions: ActionItem[] = [
-        [AllMembers.name, AllMembers.getUi],
         [AllowInvite.name, AllowInvite.getUi],
         [AvatarList.name, AvatarList.getUi],
         [Avoid.name, Avoid.getUi],
@@ -37,7 +36,7 @@ export function setup() {
         Model.Setting.registerDefault(name, getUi);
     });
     Delegate.page[PageKeys.ChatSetting].defaultProps.sections = [
-        [AvatarList.name, AllMembers.name],
+        [AvatarList.name],
         [GroupData.name],
         [GroupName.name, GroupAvatar.name, GroupAnnouncement.name, AllowInvite.name, Top.name, Avoid.name, GroupMemberName.name]
     ];

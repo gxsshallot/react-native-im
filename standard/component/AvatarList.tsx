@@ -5,6 +5,7 @@ import i18n from 'i18n-js';
 import { Component } from '../typings';
 import * as PageKeys from '../pagekey';
 import delegate from '../delegate';
+import { AllMembers } from 'react-native-im/plugin/setting';
 
 export type Props = Component.AvatarListProps;
 
@@ -30,9 +31,11 @@ export default class extends React.PureComponent<Props> {
 
     render() {
         const dataSource = this._getDataSource();
+        const {tempProps} = this.props;
         return (
             <View>
                 {dataSource.map(this._renderRow.bind(this))}
+                {AllMembers.getUi(tempProps)}
             </View>
         );
     }
@@ -104,7 +107,7 @@ export default class extends React.PureComponent<Props> {
 
     protected _getDataSource(): string[][] {
         const column = this._calculateColumn();
-        const maxRow = 6;
+        const maxRow = 3;
         const {canAdd, canRemove, data} = this.props;
         const showCount = column * maxRow - (canAdd ? 1 : 0) - (canRemove ? 1 : 0);
         const newData = [...data.slice(0, showCount)];

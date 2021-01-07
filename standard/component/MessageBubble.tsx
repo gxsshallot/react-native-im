@@ -71,6 +71,7 @@ export default class extends React.PureComponent<Props, State> {
                     height: 5,
                     borderRadius: 10,
                     marginLeft: 5,
+                    alignSelf: 'center',
                 }}/>
             )
         } else {
