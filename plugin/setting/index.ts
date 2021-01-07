@@ -36,11 +36,7 @@ export function setup() {
         Model.Setting.registerDefault(name, getUi);
     });
     Delegate.page[PageKeys.ChatSetting].defaultProps.sections = [
-<<<<<<< HEAD
         [AvatarList.name],
-=======
-        [AvatarList.name, AllMembers.name],
->>>>>>> master
         [GroupData.name],
         [GroupName.name, GroupAvatar.name, GroupAnnouncement.name, AllowInvite.name, Top.name, Avoid.name, GroupMemberName.name]
     ];
