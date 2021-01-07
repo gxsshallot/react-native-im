@@ -21,6 +21,7 @@ export function getUi(props: Typings.Action.Setting.Params): Typings.Action.Sett
             canAdd={isOwner || allowAdd}
             canRemove={isOwner}
             navigation={navigation}
+            tempProps={props}
         />
     );
 }

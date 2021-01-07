@@ -1,6 +1,5 @@
 import React from 'react';
-import {Platform, Text, ActivityIndicator, Image, StyleSheet, View} from "react-native";
-
+import {ActivityIndicator, Image, Platform, StyleSheet, Text, View} from "react-native";
 import Video from 'react-native-video';
 import {Typings} from '../../../standard';
 import OSSManager from 'core/oss/OSSManager';
@@ -15,6 +14,12 @@ export type Props = Typings.Action.Display.Params<Typings.Message.VideoBody>;
 export interface State {
     paused: boolean;
     downloadReady: boolean;
+    displaySize?: Size;
+}
+
+class Size {
+    width: number;
+    height: number;
 }
 
 export default class extends React.PureComponent<Props, State> {
@@ -26,16 +31,18 @@ export default class extends React.PureComponent<Props, State> {
     };
     private remotePath: string;
     private localPath: string;
-    private maxWidth: number;
     private playableDuration: any;
     private displayPath: string;
+    private maxDisplaySize: number;
+    private size: Size;
 
     constructor(props: Props) {
         super(props);
-        const {message: {data: {localPath, remotePath, playableDuration}}, maxWidth} = props;
+        const {message: {data: {localPath, remotePath, playableDuration, size}}, maxWidth} = props;
         this.remotePath = remotePath;
         this.localPath = localPath;
-        this.maxWidth = maxWidth;
+        this.maxDisplaySize = maxWidth * 0.6;
+        this.size = size;
         this.playableDuration = playableDuration;
     }
 
@@ -49,13 +56,11 @@ export default class extends React.PureComponent<Props, State> {
     }
 
     _renderContent() {
-        const width = this.maxWidth;
-        const height = this.maxWidth * 0.75;
         let content;
         if (this.isAndroid) {
             content = (
                 <Image
-                    style={[styles.video, {width, height}]}
+                    style={[styles.video, {...this.state.displaySize}]}
                     resizeMode='cover'
                     source={{uri: this.displayPath}}
                 />
@@ -65,7 +70,7 @@ export default class extends React.PureComponent<Props, State> {
                 <Video
                     source={{uri: this.displayPath}}
                     ref={(ref: Video | null) => this.player = ref}
-                    style={[styles.video, {width, height}]}
+                    style={[styles.video, {...this.state.displaySize}]}
                     paused={this.state.paused}
                     resizeMode="cover"
                     onFullscreenPlayerWillPresent={this._fullScreenPlayerWillPresent.bind(this)}
@@ -77,7 +82,7 @@ export default class extends React.PureComponent<Props, State> {
             <View style={{justifyContent: 'flex-end'}}>
                 {content}
                 <Image
-                    style={[styles.image, {width, height}]}
+                    style={[styles.image, {...this.state.displaySize}]}
                     resizeMode='center'
                     source={require('./image/video_play.png')}
                 />
@@ -95,6 +100,36 @@ export default class extends React.PureComponent<Props, State> {
         );
     }
 
+    async _determinSize(size: Size, localPath: string): Promise<Size> {
+        localPath = this._trimPrefix(localPath);
+        if (Platform.OS === 'ios') {
+            localPath = localPath.replace(RNFS.TemporaryDirectoryPath, 'tmp/');
+        }
+        const result = new Size();
+        const radio = size.height / size.width;
+        if (IMStandard.Delegate.func.getVideoMetaData === undefined) {
+            result.width = this.maxDisplaySize;
+            result.height = result.width * radio;
+            return result;
+        }
+        let rotation = 90;
+        try {
+            const metaData = await IMStandard.Delegate.func.getVideoMetaData(localPath);
+            rotation = metaData.rotation;
+        } catch (e) {
+            console.log(`get ${localPath} rotation failed!`);
+        }
+        //land or portrait
+        if (rotation == 0 || rotation == 180) {
+            result.width = this.maxDisplaySize;
+            result.height = result.width * radio;
+        } else {
+            result.height = this.maxDisplaySize;
+            result.width = result.height * radio;
+        }
+
+        return result;
+    }
 
     _convertDuration(playableDuration: number) {
         const prefixWithZero = (time: number) => {
@@ -143,7 +178,10 @@ export default class extends React.PureComponent<Props, State> {
         const checkTask = async () => {
             if (this.localPath != null && await RNFS.exists(this._trimPrefix(this.localPath))) {
                 this.displayPath = this._filePrefix(this.localPath);
-                this.setState({downloadReady: true});
+                this._determinSize(this.size, this.displayPath).then(size => {
+                    this.setState({downloadReady: true, displaySize: size,});
+                });
+
             } else {
                 if (this.remotePath == null) {
                     return;
@@ -151,7 +189,9 @@ export default class extends React.PureComponent<Props, State> {
                 const exist = await RNFS.exists(this._generateLocalPath(this.remotePath));
                 if (exist) {
                     this.displayPath = this._filePrefix(this._generateLocalPath(this.remotePath));
-                    this.setState({downloadReady: true});
+                    this._determinSize(this.size, this.displayPath).then(size => {
+                        this.setState({downloadReady: true, displaySize: size,});
+                    });
                 } else {
                     this._downLoad();
                 }
@@ -164,11 +204,13 @@ export default class extends React.PureComponent<Props, State> {
         const path = await OSSManager.downloadFile(this.remotePath, this._generateLocalPath(this.remotePath), (percent) => {
         });
         this.displayPath = this._filePrefix(path);
-        this.setState({downloadReady: true});
+        this._determinSize(this.size, this.displayPath).then(size => {
+            this.setState({downloadReady: true, displaySize: size,});
+        });
     }
 
     _generateLocalPath(path: string) {
-        if (isAndroid) {
+        if (this.isAndroid) {
             return `${RNFS.ExternalCachesDirectoryPath}/${md5(path)}.${path.split('.').pop()}`;
         } else {
             return `${RNFS.TemporaryDirectoryPath}/${md5(path)}.${path.split('.').pop()}`;

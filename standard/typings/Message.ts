@@ -99,7 +99,7 @@ export interface VoiceBody extends Body {
     localPath: string;
     remotePath: string;
     duration: number;
-    shouldRead?: boolean
+    shouldRead?: boolean;
 }
 
 /**
