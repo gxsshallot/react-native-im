@@ -189,8 +189,7 @@ export default class extends React.PureComponent {
                 && cur.from
                 && me == cur.from
                 && cur.data
-                && cur.data.isSystem
-                && cur.data.isSystem != true) {
+                && (!(cur.data.isSystem && cur.data.isSystem == true))) {
                 hasFromMe = true;
             }
             if (cur.data.isSystem && cur.data.isSystem == true) {
