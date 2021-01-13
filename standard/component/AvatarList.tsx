@@ -107,7 +107,7 @@ export default class extends React.PureComponent<Props> {
 
     protected _getDataSource(): string[][] {
         const column = this._calculateColumn();
-        const maxRow = 3;
+        const maxRow = 6;
         const {canAdd, canRemove, data} = this.props;
         const showCount = column * maxRow - (canAdd ? 1 : 0) - (canRemove ? 1 : 0);
         const newData = [...data.slice(0, showCount)];

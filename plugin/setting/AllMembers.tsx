@@ -43,7 +43,7 @@ function showMaxColumn(props: Typings.Action.Setting.Params): number {
     }
     let canAdd = true;
     let canRemove = groupOwner === Delegate.user.getMine().userId;
-    const maxRow = 3;
+    const maxRow = 6;
     const showCount = column * maxRow - (canAdd ? 1 : 0) - (canRemove ? 1 : 0);
     return showCount;
 }
