@@ -20,6 +20,9 @@ export async function onMessageReceived(
         ext.extend_message_body.messageType == 5) {
         originMessage.ext.shouldRead = true;
         delegate.im.conversation.updateMessageExt(originMessage.messageId, originMessage.ext);
+    } else {
+        originMessage.ext.shouldRead = false;
+        delegate.im.conversation.updateMessageExt(originMessage.messageId, originMessage.ext);
     }
     
     const message = Action.Parse.get([], originMessage, originMessage);
