@@ -232,7 +232,9 @@ export default class extends React.PureComponent<Props, State> {
     }
 
     componentWillUnmount() {
-
+        if(this.player!=null){
+            this.player.dismissFullscreenPlayer();
+        }
     }
 }
 
