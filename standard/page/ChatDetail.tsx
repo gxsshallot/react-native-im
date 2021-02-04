@@ -291,7 +291,9 @@ export default class extends React.PureComponent<ChatDetailProps> {
         const canRecall = interval < 5 * 60;
         if (messageType === delegate.config.messageType.text) {
             actionList.push({title: '复制', action: this._onCopy.bind(this, message)});
-            this.isGroup && !isSender && actionList.push({
+        }
+        if (messageType != delegate.config.messageType.voice){
+            actionList.push({
                 title: '引用',
                 action: this._onQuote.bind(this, message)
             });
@@ -337,7 +339,8 @@ export default class extends React.PureComponent<ChatDetailProps> {
     }
 
     _onQuote(item) {
-        this.bottomBar.changeInputText(item.from, item.data.text);
+        // this.bottomBar.changeInputText(item.from, item.data.text);
+        this.bottomBar.quoteMsg(item);
     }
 
     _onSelectConversation(message, conversations) {

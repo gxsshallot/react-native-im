@@ -66,6 +66,7 @@ export interface TextBody extends Body {
     atMemberList: AtList;
     text: string;
     isSystem: boolean;
+    quoteMsg:General|undefined;
 }
 
 /**
