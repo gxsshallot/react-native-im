@@ -65,16 +65,19 @@ export default class extends React.PureComponent<Props, State> {
                     resizeMode={'contain'}
                     source={this.state.source}
                     style={[styles.image, {width, height}]}
+                    onError={this.onError}
                 />
             </View>
         ) : null;
     }
 
+    onError = () => this.setState({source: require('./image/load_error.png')})
+
     public onPress() {
         const {message: {data: {remotePath, localPath}, messageId}, messages = []} = this.props;
 
         if (!remotePath && !localPath) {
-            return; 
+            return;
          }
          const images = messages.filter(({type, data: {remotePath: remoteP, localPath: localP}}) => {
              return type === IMConstant.MessageType.image &&

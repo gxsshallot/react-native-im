@@ -157,6 +157,10 @@ export async function changeName(groupId: string, newName: string): Promise<stri
     return changeGroupInfo(groupId, {name: newName}, newName);
 }
 
+export async function showGroupDataRecord(imId:string) {
+    await delegate.im.group.showGroupDataRecord(imId)
+}
+
 export async function changeAnnouncement(groupId: string, newAnnouncement: string): Promise<string> {
     await delegate.im.group.changeAnnouncement(groupId, newAnnouncement);
     return changeGroupInfo(groupId, {announcement: newAnnouncement}, newAnnouncement);

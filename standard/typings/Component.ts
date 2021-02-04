@@ -1,6 +1,7 @@
 import { StyleProp, ViewStyle, ImageURISource, ImageRequireSource } from 'react-native';
 import * as Props from './Props';
 import * as Message from './Message';
+import {Typings} from '../../standard'
 
 export interface AvatarImageProps extends Props.Conversation {
     style?: StyleProp<ViewStyle>;
@@ -11,6 +12,7 @@ export interface AvatarListProps extends Props.Navigation {
     data: string[];
     canAdd: boolean;
     canRemove: boolean;
+    tempProps: Typings.Action.Setting.Params;
     onAddMembers: (newMemberUserIds: string[]) => void;
     onRemoveMembers: (deletedMemberUserIds: string[]) => void;
 }

@@ -10,6 +10,7 @@ import { Component, Contact, Conversation, Message } from '../typings';
 import * as Body from '../typings/Message';
 import { IMConstant } from 'react-native-im-easemob';
 import * as Model from '../model';
+import {check, PERMISSIONS, RESULTS} from 'react-native-permissions';
 
 export type Props = Component.BottomBarProps;
 
@@ -464,11 +465,29 @@ export default class extends React.PureComponent<Props, State> {
             Keyboard.dismiss();
         }
         if (this.isIos) {
-            this.setState({
-                showSpeech: !this.state.showSpeech,
-                showEmojiView: false,
-                showMoreBoard: false,
-            });
+            check(PERMISSIONS.IOS.MICROPHONE).then((result: any) => {
+                switch (result) {
+                  case RESULTS.UNAVAILABLE:
+                    Toast.show(i18n.t('IMCommonNoRecordAuthority'));
+                    break;
+                  case RESULTS.DENIED:
+                    Toast.show(i18n.t('IMCommonNoRecordAuthority'));
+                    break;
+                  case RESULTS.GRANTED:
+                    this.setState({
+                        showSpeech: !this.state.showSpeech,
+                        showEmojiView: false,
+                        showMoreBoard: false,
+                    });
+                    break;
+                  case RESULTS.BLOCKED:
+                    Toast.show(i18n.t('IMCommonNoRecordAuthority'));
+                    break;
+                }
+              })
+              .catch(() => {
+                
+              });
         } else {
             PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.RECORD_AUDIO)
                 .then(granted => granted ? PermissionsAndroid.RESULTS.GRANTED :
