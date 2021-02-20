@@ -393,11 +393,25 @@ export default class extends React.PureComponent<Props, State> {
             check(PERMISSIONS.IOS.MICROPHONE).then((result: any) => {
                 switch (result) {
                   case RESULTS.UNAVAILABLE:
-                    Toast.show(i18n.t('IMCommonNoRecordAuthority'));
-                    break;
                   case RESULTS.DENIED:
-                    Toast.show(i18n.t('IMCommonNoRecordAuthority'));
-                    break;
+                  case RESULTS.BLOCKED:
+                      request(PERMISSIONS.IOS.MICROPHONE).then((result: any) => {
+                        switch(result) {
+                            case RESULTS.GRANTED:
+                                this.setState({
+                                    showSpeech: !this.state.showSpeech,
+                                    showEmojiView: false,
+                                    showMoreBoard: false,
+                                });
+                                break;
+                            case RESULTS.BLOCKED:
+                            case RESULTS.DENIED:
+                            case RESULTS.UNAVAILABLE:
+                                Toast.show(i18n.t('IMCommonNoRecordAuthority'));
+                                break;
+                        }
+                      });
+                      break;
                   case RESULTS.GRANTED:
                     this.setState({
                         showSpeech: !this.state.showSpeech,
@@ -405,9 +419,7 @@ export default class extends React.PureComponent<Props, State> {
                         showMoreBoard: false,
                     });
                     break;
-                  case RESULTS.BLOCKED:
-                    Toast.show(i18n.t('IMCommonNoRecordAuthority'));
-                    break;
+                  
                 }
               })
               .catch(() => {
