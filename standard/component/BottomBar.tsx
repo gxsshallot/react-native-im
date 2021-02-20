@@ -390,41 +390,22 @@ export default class extends React.PureComponent<Props, State> {
             Keyboard.dismiss();
         }
         if (this.isIos) {
-            check(PERMISSIONS.IOS.MICROPHONE).then((result: any) => {
-                switch (result) {
-                  case RESULTS.UNAVAILABLE:
-                  case RESULTS.DENIED:
-                  case RESULTS.BLOCKED:
-                      request(PERMISSIONS.IOS.MICROPHONE).then((result: any) => {
-                        switch(result) {
-                            case RESULTS.GRANTED:
-                                this.setState({
-                                    showSpeech: !this.state.showSpeech,
-                                    showEmojiView: false,
-                                    showMoreBoard: false,
-                                });
-                                break;
-                            case RESULTS.BLOCKED:
-                            case RESULTS.DENIED:
-                            case RESULTS.UNAVAILABLE:
-                                Toast.show(i18n.t('IMCommonNoRecordAuthority'));
-                                break;
-                        }
-                      });
-                      break;
-                  case RESULTS.GRANTED:
-                    this.setState({
-                        showSpeech: !this.state.showSpeech,
-                        showEmojiView: false,
-                        showMoreBoard: false,
+            check(PERMISSIONS.IOS.MICROPHONE)
+            .then(result => result === RESULTS.GRANTED ? RESULTS.GRANTED :
+                request(PERMISSIONS.IOS.MICROPHONE))
+            .then(result => {
+                if (result === RESULTS.GRANTED) {
+                     this.setState({
+                       showSpeech: !this.state.showSpeech,
+                       showEmojiView: false,
+                       showMoreBoard: false,
                     });
-                    break;
-                  
+                } else if (result === RESULTS.DENIED) {
+                    // do nothing
+                } else {
+                     Toast.show(i18n.t('IMCommonNoRecordAuthority'));
                 }
-              })
-              .catch(() => {
-                
-              });
+            });
         } else {
             PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.RECORD_AUDIO)
                 .then(granted => granted ? PermissionsAndroid.RESULTS.GRANTED :
