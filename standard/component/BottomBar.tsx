@@ -7,7 +7,7 @@ import i18n from 'i18n-js';
 import { Component, Contact, Message, Conversation } from '../typings';
 import * as PageKeys from '../pagekey';
 import delegate from '../delegate';
-import {check, PERMISSIONS, RESULTS} from 'react-native-permissions';
+import {check, PERMISSIONS, RESULTS, request} from 'react-native-permissions';
 
 export type Props = Component.BottomBarProps;
 
