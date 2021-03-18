@@ -10,7 +10,7 @@ import { Component, Contact, Conversation, Message } from '../typings';
 import * as Body from '../typings/Message';
 import { IMConstant } from 'react-native-im-easemob';
 import * as Model from '../model';
-import {check, PERMISSIONS, RESULTS} from 'react-native-permissions';
+import {check, PERMISSIONS, RESULTS, request} from 'react-native-permissions';
 
 export type Props = Component.BottomBarProps;
 
