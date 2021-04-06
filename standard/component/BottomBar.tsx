@@ -201,7 +201,7 @@ export default class extends React.PureComponent<Props, State> {
                     style={[styles.delIconTouch]}
                 >
                     <Image
-                        source={require('./image/chat_add.png')}
+                        source={require('./image/clear.png')}
                         style={styles.delIcon}
                     />
                 </TouchableOpacity>
@@ -293,7 +293,7 @@ export default class extends React.PureComponent<Props, State> {
             },
         };
         this.props.onSendMessage(message);
-        this.setState({ message: '' });
+        this.setState({ message: '', quoteMsg: undefined });
         this.atMemberList = [];
     }
 
