@@ -54,7 +54,7 @@ export default class extends React.PureComponent<Props, State> {
         }
         return (
             <View style={styles.message}>
-                {!!showTime && this._renderTime()}
+                {!!showTime && position !== 0 && this._renderTime()}
                 {msgContent}
             </View>
         );
