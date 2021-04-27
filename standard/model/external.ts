@@ -21,7 +21,7 @@ export async function onMessageReceived(
         originMessage.ext.shouldRead = true;
         delegate.im.conversation.updateMessageExt(originMessage.messageId, originMessage.ext);
     }
-    
+
     const message = Action.Parse.get([], originMessage, originMessage);
     if (!message) {
         throw new Error('无法处理该消息');
@@ -31,8 +31,6 @@ export async function onMessageReceived(
     if (!delegate.model.Conversation.getOne(imId, false)) {
         await delegate.model.Conversation.loadItem(imId, chatType);
     }
-    const timeMessage = await delegate.model.Message.insertTimeMessage(imId, chatType, message);
-    timeMessage && Listener.trigger([Event.Base, Event.SendMessage, imId], timeMessage);
     await delegate.model.Conversation.updateMessage(imId, message);
     Listener.trigger(
         [Event.Base, Event.ReceiveMessage, imId],
@@ -105,7 +103,7 @@ export async function onUserDidLeaveGroup(
 ){
     if (reason == 0) {
         await delegate.model.Conversation.deleteOne(group.groupId);
-        await delegate.model.Group.deleteOne(group.groupId);  
+        await delegate.model.Group.deleteOne(group.groupId);
     }
     Listener.trigger([Event.Base, Event.GroupLeave, group.groupId], {group: group, reason: reason});
 }

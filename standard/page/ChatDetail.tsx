@@ -1,6 +1,15 @@
 import React from 'react';
-import {Clipboard, Keyboard, SafeAreaView, StyleSheet, TouchableWithoutFeedback,Image, View, Alert,Text,TouchableOpacity} from 'react-native';
-import {HeaderButton} from 'react-navigation-header-buttons';
+import {
+    Alert,
+    Clipboard,
+    Image,
+    Keyboard,
+    SafeAreaView,
+    StyleSheet,
+    TouchableOpacity,
+    TouchableWithoutFeedback,
+    View
+} from 'react-native';
 import Toast from 'react-native-root-toast';
 import Listener from '@hecom/listener';
 import i18n from 'i18n-js';
@@ -9,8 +18,8 @@ import * as Model from '../model';
 import {DateUtil, guid} from '../util';
 import {Conversation, Event, Message} from '../typings';
 import delegate from '../delegate';
-import { StackActions } from '@react-navigation/native';
-import { IMConstant } from 'react-native-im-easemob';
+import {StackActions} from '@react-navigation/native';
+import {IMConstant} from 'react-native-im-easemob';
 
 interface ChatDetailProps {
     imId: string
@@ -20,7 +29,7 @@ interface ChatDetailProps {
 export default class extends React.PureComponent<ChatDetailProps> {
     static navigationOptions = function ({route}) {
         const {_title_, _right_, _marginHorizontal_} = route.params;
-        const titleContainerStyle = !!_marginHorizontal_ ? { marginHorizontal: _marginHorizontal_ } : {}
+        const titleContainerStyle = !!_marginHorizontal_ ? {marginHorizontal: _marginHorizontal_} : {}
         return {
             title: _title_,
             headerRight: _right_,
@@ -161,7 +170,7 @@ export default class extends React.PureComponent<ChatDetailProps> {
                     onLoadPage={this._refresh.bind(this)}
                     oldUnreadMessageCount={Math.min(100, (!conversation ? 0 : conversation.unreadMessagesCount))}
                 />
-                <View style={styles.flexList} />
+                <View style={styles.flexList}/>
             </View>
         );
     }
@@ -171,21 +180,21 @@ export default class extends React.PureComponent<ChatDetailProps> {
         const onSendMsg = this._onSendMessage.bind(this, imId, chatType)
         const moreImage = require('./image/showMore.png');
         return (<TouchableOpacity
-            onPress={() => {
-                this.props.navigation.navigate( PageKeys.ChatSetting,{
-                    imId: imId,
-                    chatType: chatType,
-                    onSendMessage: onSendMsg,
-                });
-            }}
-            activeOpacity={0.8}
-        >
-            <Image
+                onPress={() => {
+                    this.props.navigation.navigate(PageKeys.ChatSetting, {
+                        imId: imId,
+                        chatType: chatType,
+                        onSendMessage: onSendMsg,
+                    });
+                }}
+                activeOpacity={0.8}
+            >
+                <Image
                     source={moreImage}
                     style={styles.rightImage}
                 />
-        </TouchableOpacity>
-    )
+            </TouchableOpacity>
+        )
     }
 
     _setKeyboardStatus(status) {
@@ -211,7 +220,7 @@ export default class extends React.PureComponent<ChatDetailProps> {
         let [result] = await Promise.all([loadPromise, markPromise]);
         result = result
             .map(item => Model.Action.Parse.get(undefined, item, item))
-            .filter((item)=> !!item)
+            .filter((item) => !!item && !(item.data.isSystem && item.data.text.length <= 0))
             .sort((a, b) => a.timestamp >= b.timestamp ? -1 : 1);
         if (result && result.length > 0) {
             this.lastMessage = result[result.length - 1];
@@ -222,7 +231,7 @@ export default class extends React.PureComponent<ChatDetailProps> {
         };
     }
 
-    _userLeave(data){
+    _userLeave(data) {
         const {reason} = data;
         let message = '';
         if (reason == 0) {
@@ -234,11 +243,13 @@ export default class extends React.PureComponent<ChatDetailProps> {
         if (message.length > 0) {
             this._unRegisterListener();
             Alert.alert('提示', message, [
-                {text: i18n.t('IMCommonOK'), onPress: () => {
-                    this.props.navigation.dispatch(
-                        StackActions.popToTop({})
-                    );
-                }},
+                {
+                    text: i18n.t('IMCommonOK'), onPress: () => {
+                        this.props.navigation.dispatch(
+                            StackActions.popToTop({})
+                        );
+                    }
+                },
             ]);
         }
     }
@@ -320,11 +331,11 @@ export default class extends React.PureComponent<ChatDetailProps> {
     }
 
     _onForward(message) {
-        this.props.navigation.navigate(PageKeys.ChooseConversation,{
-                title: i18n.t('IMPageChooseConversationTitle'),
-                onSelectData: this._onSelectConversation.bind(this, message),
-                excludedIds: [this.props.imId],
-            });
+        this.props.navigation.navigate(PageKeys.ChooseConversation, {
+            title: i18n.t('IMPageChooseConversationTitle'),
+            onSelectData: this._onSelectConversation.bind(this, message),
+            excludedIds: [this.props.imId],
+        });
     }
 
     async _onRecall(message) {
@@ -356,17 +367,18 @@ export default class extends React.PureComponent<ChatDetailProps> {
         return await delegate.model.Conversation.markReadStatus(imId, chatType, true);
     }
 
-    _renderItem({item}, messageList) {
+    _renderItem({item, index}, messageList) {
         const isMe = item.from === delegate.user.getMine().userId;
         const position = item.data.isSystem ? 0 : isMe ? 1 : -1;
         if (item.data.isSystem && item.data.text.length <= 0) {
-            item.data.text = DateUtil.showDateTime(item.timestamp, true);
+            return <View/>
         }
         return (
             <delegate.component.BaseMessage
                 imId={this.props.imId}
                 chatType={this.props.chatType}
                 position={position}
+                showTime={DateUtil.needShowTime(messageList[index + 1], item)}
                 message={item}
                 messages={messageList}
                 onShowMenu={this._onShowMenu.bind(this)}
@@ -376,8 +388,8 @@ export default class extends React.PureComponent<ChatDetailProps> {
         );
     }
 
-    _onLongPressAvatar =(params: Message.General)=>{
-        if (this.props.chatType !==Conversation.ChatType.Group) {
+    _onLongPressAvatar = (params: Message.General) => {
+        if (this.props.chatType !== Conversation.ChatType.Group) {
             return;
         }
         const isMe = params.from === delegate.user.getMine().userId;
