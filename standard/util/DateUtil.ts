@@ -1,6 +1,6 @@
 import * as RNLocalize from 'react-native-localize';
-import DateFormat from 'dateformat';
 import i18n from 'i18n-js';
+import {General} from "standard/typings/Message";
 
 export function showDateTime(
     timestamp: number,
@@ -12,8 +12,7 @@ export function showDateTime(
     const now = new Date();
     const that = new Date(timestamp);
     const locale = i18n.locale;
-    const options: Intl.DateTimeFormatOptions = {
-    };
+    const options: Intl.DateTimeFormatOptions = {};
     const isSameDay = sameDay(now, that);
     const isSameWeek = sameWeek(now, that);
     const timeStr = (isSameDay || showTime) ? that.toLocaleTimeString(locale, {
@@ -43,4 +42,10 @@ function isInNDay(now: Date, that: Date, number: number) {
     const today = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
     const before = new Date(today - 24 * 3600 * 1000 * number).getTime();
     return that.getTime() < today && before <= that.getTime();
+}
+
+export function needShowTime(forward: General, current: General) {
+    return !(forward &&
+        current.timestamp - forward.timestamp < 3 * 60 * 1000 &&
+        Math.floor(new Date(forward.timestamp).getMinutes() / 3) === Math.floor(new Date(current.timestamp).getMinutes() / 3))
 }

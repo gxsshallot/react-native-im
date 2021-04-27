@@ -1,9 +1,19 @@
 import React from 'react';
-import {EmitterSubscription, ActivityIndicator, Image, ImageStyle, StyleSheet, Text, TouchableWithoutFeedback, View} from 'react-native';
+import {
+    ActivityIndicator,
+    EmitterSubscription,
+    Image,
+    ImageStyle,
+    StyleSheet,
+    Text,
+    TouchableWithoutFeedback,
+    View
+} from 'react-native';
 import Listener from '@hecom/listener';
 import Toast from 'react-native-root-toast';
 import {Component, Event, Message} from '../typings';
 import delegate from '../delegate';
+import {DateUtil} from '../util';
 
 export type Props = Component.BaseMessageProps;
 export type ListenerObjType = EmitterSubscription;
@@ -33,7 +43,7 @@ export default class extends React.PureComponent<Props, State> {
     }
 
     render() {
-        const {position} = this.props;
+        const {position, showTime} = this.props;
         let msgContent = null;
         if (position < 0) {
             msgContent = this._renderLeft();
@@ -44,8 +54,18 @@ export default class extends React.PureComponent<Props, State> {
         }
         return (
             <View style={styles.message}>
+                {!!showTime && this._renderTime()}
                 {msgContent}
             </View>
+        );
+    }
+
+    protected _renderTime() {
+        const {message: {timestamp}} = this.props;
+        return (
+            <Text style={[styles.center, {marginBottom: 18}]}>
+                {DateUtil.showDateTime(timestamp, true)}
+            </Text>
         );
     }
 
