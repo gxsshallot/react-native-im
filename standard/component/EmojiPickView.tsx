@@ -1,18 +1,22 @@
 import React from 'react';
-import { FlatList, Image, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
-import PropTypes from 'prop-types';
+import {Dimensions, FlatList, Image, ScrollView, StyleSheet, TouchableOpacity, View} from 'react-native';
 import delegate from '../delegate';
 
-export default class extends React.PureComponent {
-    static propTypes = {
-        key: PropTypes.string.isRequired,
-        height: PropTypes.number.isRequired,
-        onPickEmoji: PropTypes.func,
-        style: PropTypes.any,
-        itemSize: PropTypes.number,
-        tabViewHeight: PropTypes.number,
-    };
+interface Props {
+    key: string;
+    height: number;
+    onPickEmoji: () => void;
+    style: any;
+    itemSize: number;
+    tabViewHeight: number;
+}
 
+interface State {
+    width: number;
+    curIndex: number;
+}
+
+export default class extends React.PureComponent<Props, State> {
     static defaultProps = {
         itemSize: 42,
         tabViewHeight: 30,
@@ -20,6 +24,8 @@ export default class extends React.PureComponent {
 
     DeleteItem = '__emoji_pick_delete__';
     PlaceholderItem = '__emoji_pick_placeholder__';
+
+    scrollView: ScrollView;
 
     constructor(props) {
         super(props);
@@ -74,9 +80,10 @@ export default class extends React.PureComponent {
 
     _renderPage = (collection, obj, index) => {
         const {marginH, marginV, numColumns} = collection;
+        const {width, height} = Dimensions.get('window')
         return (
             <FlatList
-                key={index}
+                key={index + (width > height ? 'h' : 'v')}
                 style={{marginHorizontal: marginH, marginVertical: marginV}}
                 data={obj}
                 renderItem={this._renderItem}
@@ -94,17 +101,17 @@ export default class extends React.PureComponent {
             height: this.props.itemSize,
         };
         if (text === this.PlaceholderItem) {
-            return <View style={style} />;
+            return <View style={style}/>;
         }
         return (
             <TouchableOpacity onPress={this._clickEmoji.bind(this, text)}>
                 <View style={[styles.itemview, style]}>
-                    <Image style={styles.icon} source={image} />
+                    <Image style={styles.icon} source={image}/>
                 </View>
             </TouchableOpacity>
         );
     };
-    
+
     _onContentHorizontalScrollEnd = (event) => {
         const offsetX = event.nativeEvent.contentOffset.x;
         const newIndex = Math.floor(offsetX / this.state.width);
@@ -168,8 +175,7 @@ export default class extends React.PureComponent {
 }
 
 const styles = StyleSheet.create({
-    view: {
-    },
+    view: {},
     scrollview: {
         flexDirection: 'row',
     },
