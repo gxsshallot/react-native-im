@@ -7,9 +7,7 @@ import SoundRecorder from 'react-native-sound-recorder';
 import delegate from '../delegate';
 import * as PageKeys from '../pagekey';
 import { Component, Contact, Conversation, Message } from '../typings';
-import * as Body from '../typings/Message';
 import { IMConstant } from 'react-native-im-easemob';
-import * as Model from '../model';
 import {check, PERMISSIONS, RESULTS, request} from 'react-native-permissions';
 
 export type Props = Component.BottomBarProps;
