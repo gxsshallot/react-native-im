@@ -3,7 +3,7 @@ import { Image, Keyboard, StyleSheet, Text, TouchableHighlight, TouchableOpacity
 import PropTypes from 'prop-types';
 import NaviBar from '@hecom/react-native-pure-navigation-bar';
 import SearchBar from 'react-native-general-searchbar';
-import AsyncStorage from 'react-native-general-storage';
+import AsyncStorage from '@hecom/storage';
 import { KeyboardAwareFlatList, KeyboardAwareSectionList } from 'react-native-keyboard-aware-scroll-view';
 import { Storage } from '../typings';
 import delegate from '../delegate';

@@ -1,4 +1,4 @@
-import AsyncStorage from 'react-native-general-storage';
+import AsyncStorage from '@hecom/storage';
 import * as Typings from './typings';
 import * as Model from './model';
 import * as Components from './component';
