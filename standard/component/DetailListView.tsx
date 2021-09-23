@@ -224,8 +224,6 @@ export default class extends React.PureComponent {
 
 const styles = StyleSheet.create({
     content: {
-        paddingTop: 10,
-        paddingBottom: 10,
     },
     moreMessageContainer: {
         position: 'absolute',

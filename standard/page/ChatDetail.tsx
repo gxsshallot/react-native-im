@@ -217,9 +217,10 @@ export default class extends React.PureComponent<ChatDetailProps> {
             count: pageSize,
         });
         const markPromise = this._markAllRead();
-        let [result] = await Promise.all([loadPromise, markPromise]);
-        result = result
+        let [message] = await Promise.all([loadPromise, markPromise]);
+        const result = message
             .map(item => Model.Action.Parse.get(undefined, item, item))
+            // 历史数据中存在的时间消息可能导致isEnd计算错误
             .filter((item) => !!item && !(item.data.isSystem && item.data.text.length <= 0))
             .sort((a, b) => a.timestamp >= b.timestamp ? -1 : 1);
         if (result && result.length > 0) {
@@ -227,7 +228,7 @@ export default class extends React.PureComponent<ChatDetailProps> {
         }
         return {
             data: result,
-            isEnd: result.length < pageSize,
+            isEnd: message.length < pageSize,
         };
     }
 
