@@ -30,7 +30,7 @@ export default class extends React.PureComponent<Props, State> {
     };
 
     render() {
-        const { isSender, leftBubble, rightBubble, message } = this.props;
+        const {isSender, touchable, leftBubble, rightBubble, message} = this.props;
         const bubbleImage = isSender ? rightBubble : leftBubble;
         const maxWidth = Dimensions.get('window').width / 3 * 2;
         const paddingLeft = isSender ? 0 : this.paddingHorizontal;
@@ -41,6 +41,7 @@ export default class extends React.PureComponent<Props, State> {
         return (
             <View style={{ flexDirection: 'column',alignItems: rootAlignItems}}>
                 <TouchableWithoutFeedback
+                    disabled={touchable}
                     onPress={this._onPress.bind(this)}
                     onLongPress={this._onLongPress.bind(this)}
                 >

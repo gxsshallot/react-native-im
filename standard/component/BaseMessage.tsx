@@ -13,7 +13,9 @@ import Listener from '@hecom/listener';
 import Toast from 'react-native-root-toast';
 import {Component, Event, Message} from '../typings';
 import delegate from '../delegate';
-import {DateUtil} from '../util';
+import { DateUtil } from '../util';
+import { Icon } from 'core/common';
+import HecomModel from 'core/model';
 
 export type Props = Component.BaseMessageProps;
 export type ListenerObjType = EmitterSubscription;
@@ -70,41 +72,53 @@ export default class extends React.PureComponent<Props, State> {
     }
 
     protected _renderLeft() {
-        const {message, onShowMenu, messages} = this.props;
+        const { message, onShowMenu, messages, hasCheckBox, isSelected, changeSelectState } = this.props;
         const user = delegate.user.getUser(message.from);
         return (
-            <View style={styles.rowLeft}>
-                {this._renderAvatar(styles.avatarLeft)}
-                <View>
-                    {this.state.showMembersName && (
-                        <Text style={styles.userName}>
-                            {user.name}
-                        </Text>
-                    )}
-                    <delegate.component.MessageBubble
-                        imId={this.props.imId}
-                        chatType={this.props.chatType}
-                        isSender={false}
-                        message={message}
-                        messages={messages}
-                        onShowMenu={onShowMenu}
-                        navigation={this.props.navigation}
-                    />
+            <TouchableWithoutFeedback disabled={!hasCheckBox} onPress={()=>changeSelectState(isSelected,message)}>
+                <View style={styles.rowLeft}>
+                    {(hasCheckBox && (
+                        <Icon
+                            name={isSelected ? 'e66d' : 'e66f'}
+                            size={18}
+                            style={{
+                                color: HecomModel.entConfig.getThemeColor('#ef4140') as string
+                            }}
+                        />
+                    ))}
+                    {this._renderAvatar(styles.avatarLeft, hasCheckBox)}
+                    <View>
+                        {this.state.showMembersName && (
+                            <Text style={styles.userName}>
+                                {user.name}
+                            </Text>
+                        )}
+                        <delegate.component.MessageBubble
+                            imId={this.props.imId}
+                            chatType={this.props.chatType}
+                            isSender={false}
+                            message={message}
+                            messages={messages}
+                            onShowMenu={onShowMenu}
+                            touchable={hasCheckBox}
+                            navigation={this.props.navigation}
+                        />
+                    </View>
                 </View>
-            </View>
+            </TouchableWithoutFeedback>
         );
     }
 
     protected _renderRight() {
-        const {message, onShowMenu, messages} = this.props;
+        const { message, onShowMenu, messages, hasCheckBox, isSelected, changeSelectState } = this.props;
         const status = message.status;
         let leftItem = null;
         if (status === Message.Status.Delivering ||
             status === Message.Status.Pending) {
             leftItem = (
                 <ActivityIndicator
-                    size='small'
-                    color='#999999'
+                    size="small"
+                    color="#999999"
                 />
             );
         } else if (status === Message.Status.Failed) {
@@ -118,19 +132,33 @@ export default class extends React.PureComponent<Props, State> {
             );
         }
         return (
-            <View style={styles.rowRight}>
-                {leftItem}
-                <delegate.component.MessageBubble
-                    imId={this.props.imId}
-                    chatType={this.props.chatType}
-                    isSender={true}
-                    message={message}
-                    messages={messages}
-                    onShowMenu={onShowMenu}
-                    navigation={this.props.navigation}
-                />
-                {this._renderAvatar(styles.avatarRight)}
-            </View>
+            <TouchableWithoutFeedback disabled={!hasCheckBox} onPress={()=>changeSelectState(isSelected,message)}>
+                <View style={styles.rowLeft}>
+                    {(hasCheckBox && (
+                        <Icon
+                            name={isSelected ? 'e66d' : 'e66f'}
+                            size={18}
+                            style={{
+                                color: HecomModel.entConfig.getThemeColor('#ef4140') as string
+                            }}
+                        />
+                    ))}
+                    <View style={styles.rowRight}>
+                        {leftItem}
+                        <delegate.component.MessageBubble
+                            imId={this.props.imId}
+                            chatType={this.props.chatType}
+                            isSender={true}
+                            message={message}
+                            messages={messages}
+                            onShowMenu={onShowMenu}
+                            touchable={hasCheckBox}
+                            navigation={this.props.navigation}
+                        />
+                        {this._renderAvatar(styles.avatarRight, hasCheckBox)}
+                    </View>
+                </View>
+            </TouchableWithoutFeedback>
         );
     }
 
@@ -143,8 +171,8 @@ export default class extends React.PureComponent<Props, State> {
         );
     }
 
-    protected _renderAvatar(style: ImageStyle) {
-        const {position, message} = this.props;
+    protected _renderAvatar(style: ImageStyle, touchable: boolean) {
+        const { position, message } = this.props;
         const user = position < 0 ?
             delegate.user.getUser(message.from) :
             delegate.user.getMine();
@@ -161,6 +189,7 @@ export default class extends React.PureComponent<Props, State> {
             : defaultImage;
         return (
             <TouchableWithoutFeedback
+                disabled={touchable}
                 onPress={() => delegate.func.pushToUserDetailPage(imId)}
                 onLongPress={() => this.props.onLongPressAvatar && this.props.onLongPressAvatar(this.props.message)}
             >

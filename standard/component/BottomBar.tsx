@@ -1,7 +1,7 @@
 import { getSafeAreaInset } from '@hecom/react-native-pure-navigation-bar';
 import i18n from 'i18n-js';
 import React from 'react';
-import { EmitterSubscription, Image, Keyboard, KeyboardEvent, NativeSyntheticEvent, PermissionsAndroid, Platform, SafeAreaView, StyleSheet, Text, TextInput, TextInputKeyPressEventData, TextInputSelectionChangeEventData, TextStyle, TouchableHighlight, TouchableOpacity, View } from 'react-native';
+import { EmitterSubscription, Image, Keyboard, KeyboardEvent, NativeSyntheticEvent, PermissionsAndroid, Platform, SafeAreaView, StyleSheet, Text, TextInput, TextInputKeyPressEventData, TextInputSelectionChangeEventData, TextStyle, TouchableHighlight, TouchableOpacity, View, TouchableWithoutFeedback } from 'react-native';
 import Toast from 'react-native-root-toast';
 import SoundRecorder from 'react-native-sound-recorder';
 import delegate from '../delegate';
@@ -57,8 +57,16 @@ export default class extends React.PureComponent<Props, State> {
     }
 
     render() {
-        return (
+        const { batchOptionMode, onBatchForward } = this.props;
+        return batchOptionMode ? (
             <SafeAreaView style={styles.safeview}>
+                <TouchableWithoutFeedback onPress={()=>onBatchForward()}>
+                    <View style={styles.container}>
+                        <Text style={styles.btnText}>转发</Text>
+                    </View>
+                </TouchableWithoutFeedback>
+            </SafeAreaView>
+        ) : (<SafeAreaView style={styles.safeview}>
                 <View style={styles.container}>
                     {this._renderLeftBtn()}
                     <View style={styles.msgContainer}>
@@ -86,6 +94,7 @@ export default class extends React.PureComponent<Props, State> {
         });
         this.textInput && this.textInput.focus();
     }
+
     public changeInputText(imId: string, text: string) {
         const user = delegate.user.getUser(imId);
         const newText = '@' + user.name + ' ';
@@ -627,5 +636,18 @@ const styles = StyleSheet.create({
     delIcon: {
         width: 16,
         height: 16,
+    },
+    btnText: {
+        fontSize:17,
+        flex:1,
+        textAlign:'center',
+        ...Platform.select({
+            ios:{
+                lineHeight:40,
+            },
+            android:{
+            }
+        }),
+        height: 40, // TODO
     },
 });

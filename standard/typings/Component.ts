@@ -31,11 +31,14 @@ export interface ShowMenuParams {
 }
 
 export interface BaseMessageProps extends Props.Navigation, Props.Conversation {
+    isSelected: boolean;
+    hasCheckBox: boolean;
     position: number;
     showTime: boolean;
     message: Message.General;
     onShowMenu: (params: ShowMenuParams) => void;
-    onLongPressAvatar:(params: Message.General) => void
+    onLongPressAvatar:(params: Message.General) => void;
+    changeSelectState:(oriSelectState:boolean, msg: Message.General) => void;
 }
 
 export interface SendMessageParams<T = any> {
@@ -45,6 +48,8 @@ export interface SendMessageParams<T = any> {
 
 export interface BottomBarProps extends Props.Navigation, Props.Conversation {
     onSendMessage: (message: SendMessageParams) => void;
+    batchOptionMode: boolean;
+    onBatchForward:()=>void;
 }
 
 export interface ConversationCellProps extends Props.Navigation, Props.Conversation {
@@ -55,6 +60,7 @@ export interface MessageBubbleProps extends Props.Navigation, Props.Conversation
     isSender: boolean;
     message: Message.General;
     onShowMenu: (params: ShowMenuParams) => void;
+    touchable: boolean;
 }
 
 export interface MenuAction {

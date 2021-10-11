@@ -5,10 +5,11 @@ import {
     Image,
     Keyboard,
     SafeAreaView,
-    StyleSheet,
+    StyleSheet, Text,
     TouchableOpacity,
     TouchableWithoutFeedback,
-    View
+    View,
+    Button, Platform
 } from 'react-native';
 import Toast from 'react-native-root-toast';
 import Listener from '@hecom/listener';
@@ -26,21 +27,23 @@ interface ChatDetailProps {
     chatType: number
 }
 
-export default class extends React.PureComponent<ChatDetailProps> {
-    static navigationOptions = function ({route}) {
-        const {_title_, _right_, _marginHorizontal_} = route.params;
-        const titleContainerStyle = !!_marginHorizontal_ ? {marginHorizontal: _marginHorizontal_} : {}
+export default class ChatDetail extends React.PureComponent<ChatDetailProps> {
+    static navigationOptions = function({ route }) {
+        const { _title_, _right_, _marginHorizontal_, _left_ } = route.params;
+        const titleContainerStyle = !!_marginHorizontal_ ? { marginHorizontal: _marginHorizontal_ } : {};
         return {
+            headerLeft: _left_,
             title: _title_,
             headerRight: _right_,
             headerTitleContainerStyle: {
                 ...titleContainerStyle
-            }
+            },
         };
     };
 
     static defaultProps = {};
 
+    selectMessages= Array<Message.General>();
     listeners = new Array(5);
     isGroup: boolean;
     pageCount: number;
@@ -56,6 +59,8 @@ export default class extends React.PureComponent<ChatDetailProps> {
             menuShow: false,
             menuRef: null,
             actionList: [],
+            hasCheckBox: false,
+            refresh: false,
         };
     }
 
@@ -127,6 +132,8 @@ export default class extends React.PureComponent<ChatDetailProps> {
                     onSendMultiMessage={this._onSendMultiMessage.bind(this, imId, chatType)}
                     onSendMessage={this._onSendMessage.bind(this, imId, chatType)}
                     navigation={this.props.navigation}
+                    batchOptionMode={this.state.hasCheckBox}
+                    onBatchForward={this._onBatchForward}
                 />
                 <delegate.component.MessageMenu
                     menuShow={this.state.menuShow}
@@ -151,6 +158,7 @@ export default class extends React.PureComponent<ChatDetailProps> {
             marginHorizontal = 50;
         }
         this.props.navigation.setParams({
+            _left_: this._renderLeftElement.bind(this),
             _title_: title,
             _right_: this._renderRightElement.bind(this),
             _marginHorizontal_: marginHorizontal
@@ -166,12 +174,35 @@ export default class extends React.PureComponent<ChatDetailProps> {
                     key={this.state.listKey}
                     ref={ref => this.list = ref}
                     style={styles.fixedList}
-                    renderItem={this._renderItem.bind(this)}
+                    renderItem={this._renderItem}
                     onLoadPage={this._refresh.bind(this)}
                     oldUnreadMessageCount={Math.min(100, (!conversation ? 0 : conversation.unreadMessagesCount))}
                 />
                 <View style={styles.flexList}/>
             </View>
+        );
+    }
+
+    _renderLeftElement() {
+        const { navigation } = this.props;
+        const backImage = require('./image/nav_back.png');
+        return (<TouchableOpacity
+                onPress={() => {
+                    const { hasCheckBox } = this.state;
+                    if(hasCheckBox){
+                        this.selectMessages.length=0;
+                        this.setState({hasCheckBox:false});
+                    }else {
+                        navigation.goBack();
+                    }
+                }}
+                activeOpacity={0.8}
+            >
+                <Image
+                    source={backImage}
+                    style={styles.leftImage}
+                />
+            </TouchableOpacity>
         );
     }
 
@@ -311,6 +342,7 @@ export default class extends React.PureComponent<ChatDetailProps> {
             });
         }
         actionList.push({title: '转发', action: this._onForward.bind(this, message)});
+        actionList.push({ title: '多选转发', action: this._onForwardMultiMessage.bind(this, message) });
         if (isSender && canRecall) {
             actionList.push({title: '撤回', action: this._onRecall.bind(this, message)});
         }
@@ -368,9 +400,10 @@ export default class extends React.PureComponent<ChatDetailProps> {
         return await delegate.model.Conversation.markReadStatus(imId, chatType, true);
     }
 
-    _renderItem({item, index}, messageList) {
+    _renderItem=({ item, index }, messageList) => {
         const isMe = item.from === delegate.user.getMine().userId;
         const position = item.data.isSystem ? 0 : isMe ? 1 : -1;
+        const { hasCheckBox } = this.state;
         if (item.data.isSystem && item.data.text.length <= 0) {
             return <View/>
         }
@@ -381,7 +414,10 @@ export default class extends React.PureComponent<ChatDetailProps> {
                 position={position}
                 showTime={DateUtil.needShowTime(messageList[index + 1], item)}
                 message={item}
+                hasCheckBox={hasCheckBox}
+                isSelected={this._isMessageSelected(item)}
                 messages={messageList}
+                changeSelectState={this._onChangeSelectState}
                 onShowMenu={this._onShowMenu.bind(this)}
                 navigation={this.props.navigation}
                 onLongPressAvatar={this._onLongPressAvatar}
@@ -418,6 +454,42 @@ export default class extends React.PureComponent<ChatDetailProps> {
             ...others,
         };
     }
+
+    _onForwardMultiMessage(msg: Message.General) {
+        this.selectMessages.push(msg);
+        this._switchMultiSelect();
+    }
+
+    _switchMultiSelect = () => {
+        const { hasCheckBox: oldCheckState } = this.state;
+        this.setState({
+            hasCheckBox: !oldCheckState
+        });
+    };
+
+    _isMessageSelected=(msg: Message.General)=>{
+        const removeIndex = this.selectMessages.findIndex(((value, index, iter) => value.messageId===msg.messageId));
+        return removeIndex>=0;
+    }
+
+    _onChangeSelectState=(oriState:boolean,msg: Message.General)=>{
+        if(oriState){
+            this._unSelectMessage(msg);
+        }else {
+            this._selectMessage(msg)
+        }
+    }
+
+    _selectMessage = (msg: Message.General) => {
+        this.selectMessages.push(msg);
+        this.setState({ refresh: !this.state.refresh });
+    };
+
+    _unSelectMessage = (msg: Message.General) => {
+        const removeIndex = this.selectMessages.findIndex(((value, index, iter) => value.messageId === msg.messageId));
+        this.selectMessages.splice(removeIndex,1);
+        this.setState({ refresh: !this.state.refresh });
+    }
 }
 
 const styles = StyleSheet.create({
@@ -444,4 +516,9 @@ const styles = StyleSheet.create({
         height: 24,
         right: 10,
     },
+    leftImage: {
+        marginLeft: Platform.OS === 'ios' ? 14 : 0,
+        width: 18,
+        height: 16,
+    }
 });
