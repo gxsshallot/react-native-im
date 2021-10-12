@@ -117,6 +117,9 @@ export default class ChatDetail extends React.PureComponent<ChatDetailProps> {
             Toast.show('请选择消息');
             return;
         }
+        this.selectMessages.forEach(value=>{
+            value.data.quoteMsg=undefined;
+        });
         if (this.selectMessages.findIndex(msg => msg.type == delegate.config.messageType.voice) >= 0) {
             Alert.alert('', '你选择的消息中，语音特殊消息不能转发给朋友，是否继续？', [
                 { text: '取消', onPress: null },
@@ -412,6 +415,7 @@ export default class ChatDetail extends React.PureComponent<ChatDetailProps> {
     }
 
     _onForward(message) {
+        message.data.quoteMsg=undefined;
         this.props.navigation.navigate(PageKeys.ChooseConversation, {
             title: i18n.t('IMPageChooseConversationTitle'),
             onSelectData: this._onSelectConversation.bind(this, message,undefined),
