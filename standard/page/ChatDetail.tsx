@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useDebugValue } from 'react';
 import {
     Alert,
     Clipboard,
@@ -16,11 +16,13 @@ import Listener from '@hecom/listener';
 import i18n from 'i18n-js';
 import * as PageKeys from '../pagekey';
 import * as Model from '../model';
-import {DateUtil, guid} from '../util';
-import {Conversation, Event, Message} from '../typings';
+import { DateUtil, guid } from '../util';
+import { Conversation, Event, Message } from '../typings';
 import delegate from '../delegate';
-import {StackActions} from '@react-navigation/native';
-import {IMConstant} from 'react-native-im-easemob';
+import { StackActions } from '@react-navigation/native';
+import { IMConstant } from 'react-native-im-easemob';
+import Detail from '@hecom/detail';
+import Constant from 'core/constant';
 
 interface ChatDetailProps {
     imId: string
@@ -107,13 +109,57 @@ export default class ChatDetail extends React.PureComponent<ChatDetailProps> {
     };
 
     _unRegisterListener = () => {
-        this.listeners.forEach(listener => listener && listener.remove())
+        this.listeners.forEach(listener => listener && listener.remove());
+    };
+
+    _onBatchForward = () => {
+        if (this.selectMessages.length < 1) {
+            Toast.show('请选择消息');
+            return;
+        }
+        if (this.selectMessages.findIndex(msg => msg.type == delegate.config.messageType.voice) >= 0) {
+            Alert.alert('', '你选择的消息中，语音特殊消息不能转发给朋友，是否继续？', [
+                { text: '取消', onPress: null },
+                {
+                    text: '继续',
+                    onPress: () => {
+                        let removeIndex = this.selectMessages.findIndex(msg => msg.type == delegate.config.messageType.voice);
+                        while (removeIndex >= 0) {
+                            this.selectMessages.splice(removeIndex, 1);
+                            removeIndex = this.selectMessages.findIndex(msg => msg.type == delegate.config.messageType.voice);
+                        }
+                        if (this.selectMessages.length > 0) {
+                            this.props.navigation.navigate(PageKeys.ChooseConversation, {
+                                title: i18n.t('IMPageChooseConversationTitle'),
+                                onSelectData:
+                                    this._onSelectConversation.bind(this, this.selectMessages,()=>{
+                                        this.selectMessages.length = 0;
+                                        this.setState({ hasCheckBox: false });
+                                    }),
+                                excludedIds: [this.props.imId]
+                            });
+                        }
+
+                    }
+                }
+            ]);
+            return;
+        }
+        this.props.navigation.navigate(PageKeys.ChooseConversation, {
+            title: i18n.t('IMPageChooseConversationTitle'),
+            onSelectData:
+                this._onSelectConversation.bind(this, this.selectMessages,()=>{
+                    this.selectMessages.length = 0;
+                    this.setState({ hasCheckBox: false });
+                }),
+            excludedIds: [this.props.imId]
+        });
     };
 
     render() {
-        const {imId, chatType} = this.props;
+        const { imId, chatType } = this.props;
         return (
-            <View style={[styles.view, {backgroundColor: delegate.style.viewBackgroundColor}]}>
+            <View style={[styles.view, { backgroundColor: delegate.style.viewBackgroundColor }]}>
                 <SafeAreaView
                     style={styles.innerview}
                 >
@@ -146,7 +192,7 @@ export default class ChatDetail extends React.PureComponent<ChatDetailProps> {
     }
 
     _setNaviBar() {
-        const {imId} = this.props;
+        const { imId } = this.props;
         let title;
         let marginHorizontal;
         if (this.isGroup) {
@@ -264,7 +310,7 @@ export default class ChatDetail extends React.PureComponent<ChatDetailProps> {
     }
 
     _userLeave(data) {
-        const {reason} = data;
+        const { reason } = data;
         let message = '';
         if (reason == 0) {
             message = '您已被移出群聊';
@@ -302,12 +348,12 @@ export default class ChatDetail extends React.PureComponent<ChatDetailProps> {
         this._sendMessage(imId, chatType, messages, delegate.model.Message.sendMultiMessage);
     }
 
-    _onSendMessage(imId, chatType, {type, body, ...other}) {
+    _onSendMessage(imId, chatType, { type, body, ...other }, sendCallBackFunc?) {
         const message = this._generateMessage(type, body, other);
-        this._sendMessage(imId, chatType, message, delegate.model.Message.sendMessage);
+        this._sendMessage(imId, chatType, message, delegate.model.Message.sendMessage, sendCallBackFunc);
     }
 
-    _sendMessage(imId, chatType, message, sendFunc) {
+    _sendMessage(imId, chatType, message, sendFunc, sendCallBackFunc?) {
         const isCurrent = this.props.imId === imId;
         sendFunc(imId, chatType, message)
             .then(() => {
@@ -318,11 +364,13 @@ export default class ChatDetail extends React.PureComponent<ChatDetailProps> {
                         action: i18n.t('IMCommonSendMessage')
                     }));
                 }
+                sendCallBackFunc&&sendCallBackFunc();
             })
             .catch(() => {
                 Toast.show(i18n.t('IMToastError', {
                     action: i18n.t('IMCommonSendMessage')
                 }));
+                sendCallBackFunc&&sendCallBackFunc();
             });
     }
 
@@ -366,8 +414,8 @@ export default class ChatDetail extends React.PureComponent<ChatDetailProps> {
     _onForward(message) {
         this.props.navigation.navigate(PageKeys.ChooseConversation, {
             title: i18n.t('IMPageChooseConversationTitle'),
-            onSelectData: this._onSelectConversation.bind(this, message),
-            excludedIds: [this.props.imId],
+            onSelectData: this._onSelectConversation.bind(this, message,undefined),
+            excludedIds: [this.props.imId]
         });
     }
 
@@ -387,12 +435,22 @@ export default class ChatDetail extends React.PureComponent<ChatDetailProps> {
         this.bottomBar.quoteMsg(item);
     }
 
-    _onSelectConversation(message, conversations) {
-        this._onSendMessage(
-            conversations[0].imId,
-            conversations[0].chatType,
-            {...message, body: message.data}
-        );
+    _onSelectConversation(message, sendCallBackFunc, conversations) {
+        if (message instanceof Array) {
+            message.forEach((value, index, array) => this._onSendMessage(
+                conversations[0].imId,
+                conversations[0].chatType,
+                { ...value, body: value.data },
+                index === message.length - 1 ? sendCallBackFunc : undefined
+            ));
+        } else {
+            this._onSendMessage(
+                conversations[0].imId,
+                conversations[0].chatType,
+                { ...message, body: message.data },
+                sendCallBackFunc
+            );
+        }
     }
 
     protected async _markAllRead() {
