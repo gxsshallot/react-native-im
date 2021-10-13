@@ -520,6 +520,7 @@ export default class ChatDetail extends React.PureComponent<ChatDetailProps> {
         return {
             conversationId: this.props.imId,
             messageId: undefined,
+            innerId: guid(),
             status: Message.Status.Pending,
             type: type,
             from: delegate.user.getMine().userId,
