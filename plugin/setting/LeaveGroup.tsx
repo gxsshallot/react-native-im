@@ -40,7 +40,18 @@ async function _clickLeave(
                 },
             ]);
         } else {
-            leaveDidTrue(props,text,isOwner);
+            Alert.alert('提示','删除并退出后，将不再接收此群聊信息！', [
+                {
+                    text: '取消',
+                    onPress: () => {},
+                },
+                {
+                    text: '确定',
+                    onPress: () => {
+                        leaveDidTrue(props,text,isOwner);
+                    },
+                },
+            ]);
         }
     } catch (err) {
         Toast.show(i18n.t('IMToastError', {action: text}));
