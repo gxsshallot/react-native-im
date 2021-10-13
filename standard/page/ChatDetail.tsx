@@ -1,28 +1,26 @@
-import React, { useDebugValue } from 'react';
+import React from 'react';
 import {
     Alert,
+    BackHandler,
     Clipboard,
     Image,
     Keyboard,
     SafeAreaView,
-    StyleSheet, Text,
+    StyleSheet,
     TouchableOpacity,
     TouchableWithoutFeedback,
-    View,
-    Button, Platform
+    View
 } from 'react-native';
 import Toast from 'react-native-root-toast';
 import Listener from '@hecom/listener';
 import i18n from 'i18n-js';
 import * as PageKeys from '../pagekey';
 import * as Model from '../model';
-import { DateUtil, guid } from '../util';
-import { Conversation, Event, Message } from '../typings';
+import {DateUtil, guid} from '../util';
+import {Conversation, Event, Message} from '../typings';
 import delegate from '../delegate';
-import { StackActions } from '@react-navigation/native';
-import { IMConstant } from 'react-native-im-easemob';
-import Detail from '@hecom/detail';
-import Constant from 'core/constant';
+import {StackActions} from '@react-navigation/native';
+import {IMConstant} from 'react-native-im-easemob';
 
 interface ChatDetailProps {
     imId: string
@@ -86,6 +84,7 @@ export default class ChatDetail extends React.PureComponent<ChatDetailProps> {
     }
 
     _registerListener = () => {
+        BackHandler.addEventListener('hardwareBackPress', this._onBackPress);
         [
             [Event.SendMessage, this._onReceiveMessage.bind(this)],
             [Event.ReceiveMessage, this._onReceiveMessage.bind(this)],
@@ -109,7 +108,19 @@ export default class ChatDetail extends React.PureComponent<ChatDetailProps> {
     };
 
     _unRegisterListener = () => {
+        BackHandler.removeEventListener('hardwareBackPress', this._onBackPress);
         this.listeners.forEach(listener => listener && listener.remove());
+    };
+
+    _onBackPress = () => {
+        const { hasCheckBox } = this.state;
+        if(hasCheckBox){
+            this.selectMessages.length=0;
+            this.setState({hasCheckBox:false});
+        }else {
+            this.props.navigation.goBack();
+        }
+        return true;
     };
 
     _onBatchForward = () => {
@@ -393,7 +404,7 @@ export default class ChatDetail extends React.PureComponent<ChatDetailProps> {
             });
         }
         actionList.push({title: '转发', action: this._onForward.bind(this, message)});
-        actionList.push({ title: '多选转发', action: this._onForwardMultiMessage.bind(this, message) });
+        actionList.push({ title: '多选', action: this._onForwardMultiMessage.bind(this, message) });
         if (isSender && canRecall) {
             actionList.push({title: '撤回', action: this._onRecall.bind(this, message)});
         }
@@ -441,17 +452,21 @@ export default class ChatDetail extends React.PureComponent<ChatDetailProps> {
 
     _onSelectConversation(message, sendCallBackFunc, conversations) {
         if (message instanceof Array) {
-            message.forEach((value, index, array) => this._onSendMessage(
-                conversations[0].imId,
-                conversations[0].chatType,
-                { ...value, body: value.data },
-                index === message.length - 1 ? sendCallBackFunc : undefined
-            ));
+            message.forEach((value, index, array) => {
+                const {messageId,innerId, ...others}=value
+                this._onSendMessage(
+                    conversations[0].imId,
+                    conversations[0].chatType,
+                    { ...others, body: value.data },
+                    index === message.length - 1 ? sendCallBackFunc : undefined
+                );
+            });
         } else {
+            const {messageId,innerId, ...others}=message
             this._onSendMessage(
                 conversations[0].imId,
                 conversations[0].chatType,
-                { ...message, body: message.data },
+                { ...others, body: message.data },
                 sendCallBackFunc
             );
         }
@@ -505,7 +520,6 @@ export default class ChatDetail extends React.PureComponent<ChatDetailProps> {
         return {
             conversationId: this.props.imId,
             messageId: undefined,
-            innerId: guid(),
             status: Message.Status.Pending,
             type: type,
             from: delegate.user.getMine().userId,
@@ -579,7 +593,7 @@ const styles = StyleSheet.create({
         right: 10,
     },
     leftImage: {
-        marginLeft: Platform.OS === 'ios' ? 14 : 0,
+        marginLeft: 14,
         width: 18,
         height: 16,
     }

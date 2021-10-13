@@ -1,14 +1,33 @@
-import { getSafeAreaInset } from '@hecom/react-native-pure-navigation-bar';
+import {getSafeAreaInset} from '@hecom/react-native-pure-navigation-bar';
 import i18n from 'i18n-js';
 import React from 'react';
-import { EmitterSubscription, Image, Keyboard, KeyboardEvent, NativeSyntheticEvent, PermissionsAndroid, Platform, SafeAreaView, StyleSheet, Text, TextInput, TextInputKeyPressEventData, TextInputSelectionChangeEventData, TextStyle, TouchableHighlight, TouchableOpacity, View, TouchableWithoutFeedback } from 'react-native';
+import {
+    EmitterSubscription,
+    Image,
+    Keyboard,
+    KeyboardEvent,
+    NativeSyntheticEvent,
+    PermissionsAndroid,
+    Platform,
+    SafeAreaView,
+    StyleSheet,
+    Text,
+    TextInput,
+    TextInputKeyPressEventData,
+    TextInputSelectionChangeEventData,
+    TextStyle,
+    TouchableHighlight,
+    TouchableOpacity,
+    TouchableWithoutFeedback,
+    View
+} from 'react-native';
 import Toast from 'react-native-root-toast';
 import SoundRecorder from 'react-native-sound-recorder';
 import delegate from '../delegate';
 import * as PageKeys from '../pagekey';
-import { Component, Contact, Conversation, Message } from '../typings';
-import { IMConstant } from 'react-native-im-easemob';
-import {check, PERMISSIONS, RESULTS, request} from 'react-native-permissions';
+import {Component, Contact, Conversation, Message} from '../typings';
+import {IMConstant} from 'react-native-im-easemob';
+import {check, PERMISSIONS, request, RESULTS} from 'react-native-permissions';
 
 export type Props = Component.BottomBarProps;
 
@@ -245,18 +264,18 @@ export default class extends React.PureComponent<Props, State> {
                         <Image style={styles.icon} source={secondIcon} />
                     </TouchableOpacity>
                 ) : (
-                        <TouchableOpacity
-                            activeOpacity={0.5}
-                            onPress={this._onSendMessageText.bind(this)}
-                            style={styles.sendTouch}
-                        >
-                            <View style={styles.sendView}>
-                                <Text style={styles.sendText}>
-                                    {i18n.t('IMCommonSend')}
-                                </Text>
-                            </View>
-                        </TouchableOpacity>
-                    )}
+                    <TouchableOpacity
+                        activeOpacity={0.5}
+                        onPress={this._onSendMessageText.bind(this)}
+                        style={styles.sendTouch}
+                    >
+                        <View style={styles.sendView}>
+                            <Text style={styles.sendText}>
+                                {i18n.t('IMCommonSend')}
+                            </Text>
+                        </View>
+                    </TouchableOpacity>
+                )}
             </View>
         );
     }
@@ -473,21 +492,21 @@ export default class extends React.PureComponent<Props, State> {
         }
         if (this.isIos) {
             check(PERMISSIONS.IOS.MICROPHONE)
-            .then(result => result === RESULTS.GRANTED ? RESULTS.GRANTED :
-                request(PERMISSIONS.IOS.MICROPHONE))
-            .then(result => {
-                if (result === RESULTS.GRANTED) {
-                     this.setState({
-                       showSpeech: !this.state.showSpeech,
-                       showEmojiView: false,
-                       showMoreBoard: false,
-                    });
-                } else if (result === RESULTS.DENIED) {
-                    // do nothing
-                } else {
-                     Toast.show(i18n.t('IMCommonNoRecordAuthority'));
-                }
-            });
+                .then(result => result === RESULTS.GRANTED ? RESULTS.GRANTED :
+                    request(PERMISSIONS.IOS.MICROPHONE))
+                .then(result => {
+                    if (result === RESULTS.GRANTED) {
+                        this.setState({
+                            showSpeech: !this.state.showSpeech,
+                            showEmojiView: false,
+                            showMoreBoard: false,
+                        });
+                    } else if (result === RESULTS.DENIED) {
+                        // do nothing
+                    } else {
+                        Toast.show(i18n.t('IMCommonNoRecordAuthority'));
+                    }
+                });
         } else {
             PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.RECORD_AUDIO)
                 .then(granted => granted ? PermissionsAndroid.RESULTS.GRANTED :
@@ -640,7 +659,11 @@ const styles = StyleSheet.create({
     btnText: {
         fontSize:17,
         flex:1,
+        color:'black',
         textAlign:'center',
+        alignItems:'center',
+        justifyContent:'center',
+        textAlignVertical:'center',
         ...Platform.select({
             ios:{
                 lineHeight:40,
