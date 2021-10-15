@@ -1,10 +1,11 @@
 import React from 'react';
 import { View, StyleSheet, Text, Image, TouchableOpacity, Dimensions } from 'react-native';
-import { getSafeAreaInset } from 'react-native-pure-navigation-bar';
+import { getSafeAreaInset } from '@hecom/react-native-pure-navigation-bar';
 import i18n from 'i18n-js';
 import { Component } from '../typings';
 import * as PageKeys from '../pagekey';
 import delegate from '../delegate';
+import { AllMembers } from 'react-native-im/plugin/setting';
 
 export type Props = Component.AvatarListProps;
 
@@ -14,7 +15,7 @@ export default class extends React.PureComponent<Props> {
     protected readonly padding = 16;
     protected readonly itemEdge = 50;
     protected itemMargin = 0;
-    
+
     constructor(props: Props) {
         super(props);
         this._onOrientationChange = this._onOrientationChange.bind(this);
@@ -30,9 +31,11 @@ export default class extends React.PureComponent<Props> {
 
     render() {
         const dataSource = this._getDataSource();
+        const {tempProps} = this.props;
         return (
             <View>
                 {dataSource.map(this._renderRow.bind(this))}
+                {AllMembers.getUi(tempProps)}
             </View>
         );
     }
@@ -104,7 +107,7 @@ export default class extends React.PureComponent<Props> {
 
     protected _getDataSource(): string[][] {
         const column = this._calculateColumn();
-        const maxRow = 3;
+        const maxRow = 6;
         const {canAdd, canRemove, data} = this.props;
         const showCount = column * maxRow - (canAdd ? 1 : 0) - (canRemove ? 1 : 0);
         const newData = [...data.slice(0, showCount)];
@@ -145,30 +148,25 @@ export default class extends React.PureComponent<Props> {
 
     protected _onItemPress(rowItem: string) {
         if (rowItem === this.add) {
-            this.props.navigation.navigate({
-                routeName: PageKeys.ChooseUser,
-                params: {
+            this.props.navigation.navigate(PageKeys.ChooseUser,{
                     title: i18n.t('IMSettingChooseGroupMember'),
                     multiple: true,
                     onSelectData: this.props.onAddMembers,
                     selectedIds: [],
                     excludedUserIds: this.props.data,
-                },
-            });
+                });
         } else if (rowItem === this.remove) {
             const dataSource = this.props.data
                 .filter(item => item !== this.props.owner)
                 .map(item => delegate.user.getUser(item));
-            this.props.navigation.navigate({
-                routeName: PageKeys.ChooseUser,
-                params: {
+            this.props.navigation.navigate(PageKeys.ChooseUser,{
                     title: i18n.t('IMSettingChooseGroupMember'),
                     multiple: true,
                     onSelectData: this.props.onRemoveMembers,
                     selectedIds: [],
                     dataSource: dataSource,
-                },
-            });
+		            hideRecentlyPerson: true
+                });
         } else {
             delegate.func.pushToUserDetailPage(rowItem);
         }

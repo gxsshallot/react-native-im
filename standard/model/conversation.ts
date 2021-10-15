@@ -1,5 +1,5 @@
-import AsyncStorage from 'react-native-general-storage';
-import Listener from 'react-native-general-listener';
+import AsyncStorage from '@hecom/storage';
+import Listener from '@hecom/listener';
 import {Conversation, Event, Message, Storage} from '../typings';
 import * as Action from './action';
 import {simpleExport} from '../util';
@@ -29,7 +29,7 @@ export async function init(forceUpdate: boolean): Promise<void> {
     onUnreadCountChanged();
 }
 
-export async function uninit(forceClear: boolean): Promise<void> {
+export async function uninit(forceClear: boolean = true): Promise<void> {
     const imIds = Object.keys(rootNode);
     imIds.forEach(imId => delete rootNode[imId]);
     if (forceClear) {
@@ -246,7 +246,7 @@ export async function recallMessage(imId: string, message: Message.General): Pro
 function onUnreadCountChanged(): void {
     const count = Object.values(rootNode)
         .reduce((prv: number, cur: Conversation.Item) => {
-            const isAvoid = cur.config.avoid;
+            const isAvoid = !!cur && !!cur.config && cur.config.avoid;
             if (!isAvoid && isValid(cur.imId, cur.chatType)) {
                 prv += cur.unreadMessagesCount;
             }

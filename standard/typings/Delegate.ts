@@ -55,6 +55,7 @@ export interface GroupModelPart {
     getOwner: (groupId: string) => string;
     getMembers: (groupId: string, hasOwner?: boolean) => string[];
     getName: (groupId: string, autoConj?: boolean) => string | void;
+    getAnnouncement: (groupId: string) => string;
     getAvatar: (groupId: string) => string | void;
     getAllowInvites: (groupId: string) => boolean;
     createOne: (memberUserIds: string[]) => Promise<Group.Item>;
@@ -64,24 +65,30 @@ export interface GroupModelPart {
     addMembers: (groupId: string, memberUserIds: string[]) => Promise<string[]>;
     removeMembers: (groupId: string, memberUserIds: string[]) => Promise<string[]>;
     changeName: (groupId: string, newName: string) => Promise<string>;
+    changeAnnouncement: (groupId: string, newAnnouncement: string) => Promise<string>;
     changeAvatar: (groupId: string, newAvatarUrl: string) => Promise<string>;
     changeAllowInvites: (groupId: string, allowInvites: boolean) => Promise<boolean>;
     changeOwner: (groupId: string, newOwnerId: string) => Promise<{ owner: string; members: string[] }>;
+    showGroupDataRecord: (imId: String) => Promise<void>;
 }
 
 export interface MessageModelPart {
     name: string,
     sendMessage: (imId: string, chatType: Conversation.ChatType, message: Message.General, ext: object, isSystem: boolean) => Promise<void>
     sendMultiMessage: (imId: string, chatType: Conversation.ChatType, messages: Array<Message.General>) => Promise<void>
-    insertTimeMessage: (imId: string, chatType: Conversation.ChatType, message: Message.General) => Promise<Message.General | void>
     insertSystemMessage: (imId: string, chatType: Conversation.ChatType, text: string, localTime: number, timestamp: number, innerId?: string) => Promise<void>
 }
 
 export interface EmojiModelPart {
     name: string,
+    getPartEmojis: (key: string) => any
 }
 
 export interface ExternalModelPart {
+
+}
+
+export interface ExternalModelSetting {
 
 }
 
@@ -91,6 +98,7 @@ export interface ModelPart {
     Message: MessageModelPart;
     Emoji: EmojiModelPart;
     External: ExternalModelPart;
+    Setting: ExternalModelSetting;
 }
 
 export interface ContactPart {
@@ -112,6 +120,8 @@ export interface ConversationApiPart {
     updateConfig: (imId: string, config: Conversation.ConfigUpdate) => Promise<Conversation.Config>;
     markAllRead: (imId: string, chatType: Conversation.ChatType) => Promise<void>;
     markLatestUnread: (imId: string, chatType: Conversation.ChatType) => Promise<void>;
+    deleteAllMessages: (imId: string, chatType: Conversation.ChatType) => Promise<void>;
+    updateMessageExt: (messageId: string, ext: Object) => Promise<void>;
     loadMessage: (params: {
         imId: string;
         chatType: Conversation.ChatType;
@@ -139,9 +149,11 @@ export interface GroupApiPart {
     addMembers: (groupId: string, memberUserIds: string[]) => Promise<void>;
     removeMembers: (groupId: string, memberUserIds: string[]) => Promise<void>;
     changeName: (groupId: string, newName: string) => Promise<void>;
+    changeAnnouncement: (groupId: string, newAnnouncement: string) => Promise<void>;
     changeAvatar: (groupId: string, newAvatarUrl: string) => Promise<void>;
     changeAllowInvites: (groupId: string, newAllowInvites: boolean) => Promise<void>;
     changeOwner: (groupId: string, newOwnerId: string) => Promise<void>;
+    showGroupDataRecord: (imId: String) => Promise<void>;
 }
 
 export interface ApiPart {
@@ -157,6 +169,8 @@ export interface FuncPart {
     pushToUserDetailPage: (userId: string) => void;
     fitUrlForAvatarSize: (avatar: string, size?: number) => string;
     getDefaultUserHeadImage: (userId?: string) => ImageURISource | ImageRequireSource;
+    playVideo: (uri: string) => void;
+    getVideoMetaData: (uri: string) => Promise<any>;
     // uploadImages: unset('func.uploadImages'),
 }
 
@@ -174,10 +188,6 @@ export interface ConfigPart {
     titleLoading: string;
     buttonOK: string;
     useStarUser?: boolean;
-    /**
-     * 通讯录列表最大限制数量，超过则不显示列表
-     */
-    maxContactLimitNumber: number;
     messageType: {
         text: number;
         voice: number;

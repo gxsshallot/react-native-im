@@ -37,6 +37,7 @@ function convertText(message: Typings.Message.Origin) {
             text: message.body.text,
             atMemberList: message.ext ? message.ext.atMemberList : [],
             isSystem: message.ext ? message.ext.isSystemMessage : false,
+            quoteMsg: message.ext ? message.ext.quoteMsg : undefined,
         }
     );
 }
@@ -79,6 +80,7 @@ function convertVideo(message: Typings.Message.Origin) {
             localPath: message.body.localPath,
             remotePath: message.body.remotePath,
             duration: 0, // TODO duration
+            shouldRead: message.ext.shouldRead,
         }
     );
 }

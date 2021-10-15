@@ -1,5 +1,7 @@
 /docs
 /example
+/node_modules
 .eslintignore
 .eslintrc.js
 .travis.yml
+yarn.lock

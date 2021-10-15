@@ -1,25 +1,18 @@
 import React from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
-import { getSafeAreaInset } from 'react-native-pure-navigation-bar';
+import { getSafeAreaInset } from '@hecom/react-native-pure-navigation-bar';
 import i18n from 'i18n-js';
 import * as Model from '../model';
 import { Conversation } from '../typings';
 import delegate from '../delegate';
 
 export default class extends React.PureComponent {
-    static navigationOptions = function ({navigation}) {
-        const {chatType} = navigation.state.params;
+    static navigationOptions = function ({route}) {
+        const {chatType} = route.params;
         const isGroup = chatType === Conversation.ChatType.Group;
         const title = isGroup ? i18n.t('IMPageChatSettingTitleGroup') : i18n.t('IMPageChatSettingTitleSingle');
         return {title};
     };
-
-    // static propTypes = {
-    //     ...Types.BasicConversation,
-    //     ...Types.Navigation,
-    //     sections: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string)),
-    //     buttons: PropTypes.arrayOf(PropTypes.string),
-    // };
 
     static defaultProps = {
         sections: [],
@@ -48,6 +41,7 @@ export default class extends React.PureComponent {
     _renderSections() {
         const views = [];
         this.props.sections.forEach((section, index) => {
+            
             const items = this._renderItems(section, this._renderHorizontalLine.bind(this));
             if (items.length > 0) {
                 views.push((

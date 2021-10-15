@@ -1,8 +1,8 @@
 import React from 'react';
-import { View } from 'react-native';
+import { View, Text } from 'react-native';
 import PropTypes from 'prop-types';
 import Toast from 'react-native-root-toast';
-import PickList, { PickListRowUtil } from 'react-native-picklist';
+import PickList, { PickListRowUtil } from '@hecom/react-native-picklist';
 import i18n from 'i18n-js';
 import { deepExport } from '../util';
 import delegate from '../delegate';
@@ -82,10 +82,14 @@ export default class extends React.PureComponent<Props> {
     render() {
         const {navigation, title, firstTitleLine, selectedIds, multiple} = this.props;
         const {tree = []} = this.state;
-        let data, titleLine;
+        let data, titleLine, rawRootPath;
         if (tree.length === 1) {
             data = tree[0].children;
             titleLine = tree[0].name;
+
+            const detpPath = tree[0].dept ? tree[0].dept.path + '/' + tree[0].dept.code :
+                (tree[0].path ? tree[0].path : '');
+            rawRootPath = detpPath + '/' + tree[0].code;
         } else {
             data = tree;
             titleLine = firstTitleLine;
@@ -112,6 +116,18 @@ export default class extends React.PureComponent<Props> {
                     initialNumToRender: 30,
                     renderSectionFooter: this._renderSectionFooter.bind(this),
                 }}
+                firstRawRootPath={rawRootPath}
+                weakNodeTag={this._weakNodeTag}
+                rootPath={(root: any) => {
+                    if (root.firstRawRootPath) {
+                        return root.firstRawRootPath;
+                    }
+                    const detpPath = root.dept ? root.dept.path + '/' + root.dept.code : '';
+                    return detpPath + '/' + (root.code || '');
+                }}
+                parentPath={(root: any) => {
+                    return root.dept ? root.dept.path + '/' + root.dept.code : '';
+                }}
             />
         );
     }
@@ -130,11 +146,11 @@ export default class extends React.PureComponent<Props> {
             PickListRowUtil.multiLevelNotLeafNode(treeNode, props);
     }
 
-    _onFinish(nodes) {
+    _onFinish(nodes, notBack = false) {
         nodes = nodes
             .reduce((prv, cur) => [...prv, ...cur.getLeafChildren()], [])
             .map(node => node.getInfo().userId);
-        this.props.onSelectData && this.props.onSelectData(nodes);
+        this.props.onSelectData && this.props.onSelectData(nodes, notBack);
     }
 
     _selectable(treeNode) {
@@ -198,4 +214,25 @@ export default class extends React.PureComponent<Props> {
         }
         return tree;
     }
+
+    _weakNodeTag = () => {
+        return (
+            <View style={{
+                borderColor: '#1890FF',
+                borderWidth: 1,
+                borderRadius: 4,
+                justifyContent: 'center',
+                alignItems: 'center',
+                marginLeft: 5,
+            }}>
+                <Text style={{
+                    color: '#1890FF',
+                    paddingHorizontal: 2,
+                    fontSize: 13
+                }}>
+                    {'兼职'}
+                </Text>
+            </View>
+        )
+    };
 }

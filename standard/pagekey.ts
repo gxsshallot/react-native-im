@@ -7,5 +7,7 @@ export const ChooseUserFromOrg = 'IMChooseUserFromOrg';
 export const ContactList = 'IMContactList';
 export const GroupList = 'IMGroupList';
 export const GroupMembers = 'IMGroupMembers';
+export const GroupAnnouncementEdit = 'IMGroupAnnouncementEdit';
 export const Search = 'IMSearch';
 export const SearchMore = 'IMSearchMore';
+export const GroupNameEdit = 'IMGroupNameEdit';

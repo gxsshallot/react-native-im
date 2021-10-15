@@ -10,4 +10,5 @@ export interface Item {
     avatar?: string;
     createdOn?: number;
     allowInvites?: boolean;
+    announcement?: string;
 }

@@ -2,6 +2,9 @@ import React from 'react';
 import { Image, StyleSheet, View, Text } from 'react-native';
 import Sound from 'react-native-sound';
 import { Typings } from '../../../standard';
+import Listener from '@hecom/listener';
+
+const voiceListenerKey = 'react-native-im_VoiceBubble_voice_listener_key'
 
 export type Props = Typings.Action.Display.Params<Typings.Message.VoiceBody>;
 
@@ -15,6 +18,7 @@ export default class extends React.PureComponent<Props, State> {
     state: State = {
         isPlaying: false,
     };
+    voiceListener: any;
 
     constructor(props: Props) {
         super(props);
@@ -22,6 +26,12 @@ export default class extends React.PureComponent<Props, State> {
         this.sound = new Sound(localPath || remotePath, '', (error) => {
             if (error) {
                 console.log('failed to load the sound', error);
+            }
+        });
+        this.voiceListener = Listener.register(voiceListenerKey, ()=>{
+            if (this.sound.isPlaying()) {
+                this.sound.stop();
+                this.setState({isPlaying: false});
             }
         });
     }
@@ -32,6 +42,7 @@ export default class extends React.PureComponent<Props, State> {
 
     componentWillUnmount() {
         this.sound.release();
+        Listener.unregister(voiceListenerKey, this.voiceListener);
     }
 
     render() {
@@ -63,6 +74,7 @@ export default class extends React.PureComponent<Props, State> {
         if (this.state.isPlaying) {
             this.sound.stop();
         } else {
+            Listener.trigger(voiceListenerKey);
             setTimeout(() => {
                 this.sound.play((success) => {
                     if (success) {

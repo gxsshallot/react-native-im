@@ -20,13 +20,10 @@ export async function onAddMembers(props: Typings.Action.Setting.Params,
         const newMembers = [imId, ...memberUserIds];
         try {
             const result = await Delegate.model.Conversation.createOne(newMembers);
-            navigation.navigate({
-                routeName: PageKeys.ChatDetail,
-                params: {
+            navigation.navigate(PageKeys.ChatDetail, {
                     imId: result.imId,
                     chatType: result.chatType,
-                },
-            });
+                });
         } catch (err) {
             Toast.show(i18n.t('IMToastError', {
                 action: i18n.t('IMCreateGroup'),
@@ -47,4 +44,5 @@ export async function onRemoveMembers(props: Typings.Action.Setting.Params,
             action: i18n.t('IMSettingRemoveGroupMember'),
         }));
     }
+    return Delegate.model.Group.getMembers(imId);
 }

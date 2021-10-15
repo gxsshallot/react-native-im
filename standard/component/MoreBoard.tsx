@@ -1,6 +1,6 @@
 import React from 'react';
 import {Dimensions, Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import {getSafeAreaInset} from 'react-native-pure-navigation-bar';
+import {getSafeAreaInset} from '@hecom/react-native-pure-navigation-bar';
 import * as Model from '../model';
 import BottomBar from './BottomBar';
 

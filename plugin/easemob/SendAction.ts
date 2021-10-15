@@ -43,6 +43,7 @@ function sendText(params: Typings.Action.Send.Params<Typings.Message.TextBody>) 
             chatType,
             message.data.text,
             {
+                quoteMsg:message.data.quoteMsg,
                 atMemberList: message.data.atMemberList,
                 ...ext,
             },

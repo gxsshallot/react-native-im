@@ -1,8 +1,7 @@
 import React from 'react';
-import { Text, View, TouchableWithoutFeedback, StyleSheet, Dimensions, Platform } from 'react-native';
+import { Text, View, TouchableWithoutFeedback, StyleSheet } from 'react-native';
 import { Component } from '../typings';
-import { getSafeAreaInset, DEFAULT_NAVBAR_HEIGHT } from 'react-native-pure-navigation-bar';
-import Popover from 'react-native-popover-view';
+import Popover, { PopoverMode } from 'react-native-popover-view';
 
 export type Props = Component.MessageMenuProps;
 
@@ -10,18 +9,18 @@ export default class extends React.PureComponent<Props> {
     static defaultProps = {};
 
     render() {
-        const verticalOffset = this._getOffset();
+        // const verticalOffset = this._getOffset();
         const {menuShow, menuRef, onClose} = this.props;
         return (
             <Popover
                 isVisible={menuShow}
-                fromView={menuRef}
-                onClose={onClose}
-                placement={'auto'}
-                showInModal={false}
-                showBackground={false}
-                verticalOffset={-verticalOffset}
+                from={menuRef}
+                onRequestClose={onClose}
+                mode={PopoverMode.RN_MODAL}
+                // verticalOffset={-verticalOffset}
                 popoverStyle={styles.popover}
+                backgroundStyle = {{backgroundColor: 'transparent'}}
+                animationConfig = {{duration: 150}}
             >
                 {this._renderContent()}
             </Popover>
@@ -56,13 +55,13 @@ export default class extends React.PureComponent<Props> {
         );
     }
 
-    protected _getOffset() {
-        const offset = getSafeAreaInset(undefined, true).top;
-        const {width, height} = Dimensions.get('window');
-        const isLandscape = width > height;
-        const isIos = Platform.OS === 'ios';
-        return isLandscape && isIos ? 30 : offset + DEFAULT_NAVBAR_HEIGHT;
-    }
+    // protected _getOffset() {
+    //     const offset = getSafeAreaInset(undefined, true).top;
+    //     const {width, height} = Dimensions.get('window');
+    //     const isLandscape = width > height;
+    //     const isIos = Platform.OS === 'ios';
+    //     return isLandscape && isIos ? 30 : offset + DEFAULT_NAVBAR_HEIGHT;
+    // }
 
     protected _onPress(action: () => void) {
         this.props.onClose();

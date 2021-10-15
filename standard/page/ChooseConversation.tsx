@@ -1,7 +1,7 @@
 import React from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import PropTypes from 'prop-types';
-import PickList, { PickListRowUtil } from 'react-native-picklist';
+import PickList, { PickListRowUtil } from '@hecom/react-native-picklist';
 import i18n from 'i18n-js';
 import * as PageKeys from '../pagekey';
 import delegate from '../delegate';
@@ -134,24 +134,21 @@ export default class extends React.PureComponent {
     }
 
     _clickHeader() {
-        this.props.navigation.navigate({
-            routeName: PageKeys.ChooseUser,
-            params: {
+        this.props.navigation.navigate(PageKeys.ChooseUser, {
                 title: i18n.t('IMPageChooseConversationCreateNew'),
                 multiple: true,
                 onSelectData: this._onCreateNew.bind(this),
                 selectedIds: [],
-            },
-        });
+            });
     }
 
-    _onCreateNew(data) {
+    _onCreateNew(data, label) {
         if (!data || data.length <= 0) {
             return;
         }
         delegate.model.Conversation.createOne(data)
             .then(({imId, chatType}) => {
-                const items = [{imId, chatType}];
+                const items = [{imId, chatType, label}];
                 this.props.onSelectData && this.props.onSelectData(items);
                 this.props.navigation.goBack();
             });

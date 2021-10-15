@@ -27,16 +27,13 @@ function _clickTransferOwner(props: Typings.Action.Setting.Params) {
     const dataSource = groupMembers
         .filter(userId => userId !== myUserId)
         .map(userId => Delegate.user.getUser(userId));
-    navigation.navigate({
-        routeName: PageKeys.ChooseUser,
-        params: {
+    navigation.navigate(PageKeys.ChooseUser,{
             title: i18n.t('IMSettingChooseGroupMember'),
             multiple: false,
             dataSource: dataSource,
             onSelectData: (data: string[]) => _onTransferOwnerAlert(props, data),
             selectedIds: [],
-        },
-    });
+        });
 }
 
 function _onTransferOwnerAlert(props: Typings.Action.Setting.Params, data: string[]) {

@@ -1,7 +1,7 @@
 import React from 'react';
 import {Dimensions, Image, SafeAreaView, StyleSheet, Text, View} from 'react-native';
-import Listener from 'react-native-general-listener';
-import {forceInset} from 'react-native-pure-navigation-bar';
+import Listener from '@hecom/listener';
+import {forceInset} from '@hecom/react-native-pure-navigation-bar';
 import * as PageKeys from '../pagekey';
 import * as Model from '../model';
 import {DateUtil} from '../util';
@@ -61,7 +61,7 @@ export default class extends React.PureComponent<Props> {
                     title={name}
                     subTitle={content}
                     right={this._renderRightColumn()}
-                    onClick={this._clickRow}
+                    onClick={this._clickRow.bind(this)}
                 />
                 {separatorLeft >= 0 && this._renderSeparatorLine()}
                 {!!this.state.unreadMessagesCount && this._renderBadge()}
@@ -141,13 +141,10 @@ export default class extends React.PureComponent<Props> {
     };
 
     _clickRow = () => {
-        this.props.navigation.navigate({
-            routeName: PageKeys.ChatDetail,
-            params: {
+        this.props.navigation.navigate( PageKeys.ChatDetail, {
                 imId: this.props.imId,
                 chatType: this.props.chatType,
-            },
-        });
+            });
     };
 
     _refresh = () => {

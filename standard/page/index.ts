@@ -7,7 +7,9 @@ import ChooseUserFromOrgPage from './ChooseUserFromOrg';
 import ContactListPage from './ContactList';
 import GroupListPage from './GroupList';
 import GroupMembersPage from './GroupMembers';
+import GroupAnnouncementEditPage from './GroupAnnouncementEdit';
 import SearchPage from './Search';
+import GroupNameEdit from './GroupNameEdit';
 
 export {
     ChatDetailPage,
@@ -20,4 +22,6 @@ export {
     GroupListPage,
     GroupMembersPage,
     SearchPage,
+    GroupAnnouncementEditPage,
+    GroupNameEdit,
 };

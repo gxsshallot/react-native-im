@@ -1,8 +1,8 @@
-import { NavigationScreenProp, NavigationRoute } from 'react-navigation';
+import { NavigationContainerRef } from '@react-navigation/native';
 import * as Conversation from './Conversation';
 
 export interface Navigation {
-    navigation: NavigationScreenProp<NavigationRoute>;
+    navigation: NavigationContainerRef;
 }
 
 export interface Refresh {

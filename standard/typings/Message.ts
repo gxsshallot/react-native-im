@@ -66,6 +66,7 @@ export interface TextBody extends Body {
     atMemberList: AtList;
     text: string;
     isSystem: boolean;
+    quoteMsg:General|undefined;
 }
 
 /**
@@ -99,6 +100,7 @@ export interface VoiceBody extends Body {
     localPath: string;
     remotePath: string;
     duration: number;
+    shouldRead?: boolean;
 }
 
 /**
@@ -128,6 +130,7 @@ export interface VideoBody extends Body {
     localPath?: string;
     remotePath?: string;
     duration: number;
+    shouldRead?: boolean;
 }
 
 /**

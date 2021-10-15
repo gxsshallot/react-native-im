@@ -1,19 +1,18 @@
-import Listener from 'react-native-general-listener';
+import Listener from '@hecom/listener';
 import * as Action from './action';
 import { Message, Conversation, Event } from '../typings';
 import { guid } from '../util';
 import delegate from '../delegate';
 
 export const name = 'im-message';
-const interval = 3 * 60 * 1000;
 
 export async function sendMultiMessage(
     imId: string,
     chatType:Conversation.ChatType,
     messages: Array<Message.General> = []
 ):Promise<void> {
-    messages.forEach((message, index)=>{
-        sendMessage(imId, chatType, message, {}, false, index === 0);
+    messages.forEach((message)=>{
+        sendMessage(imId, chatType, message, {}, false);
     })
 }
 
@@ -23,16 +22,11 @@ export async function sendMessage(
     message: Message.General,
     ext: object = {},
     isSystem: boolean = false,
-    autoTimestamp: boolean = true,
 ): Promise<void> {
     ext = {...ext, innerId: message.innerId};
     const sendEventName = [Event.Base, Event.SendMessage, imId];
     if (!delegate.model.Conversation.getOne(imId, false)) {
         await delegate.model.Conversation.loadItem(imId, chatType);
-    }
-    if (!isSystem && autoTimestamp){
-        const timeMessage = await insertTimeMessage(imId, chatType, message);
-        timeMessage && Listener.trigger(sendEventName, timeMessage);
     }
     await delegate.model.Conversation.updateMessage(imId, message);
     // 事件发送之前，先触发通知，加入详情列表中，发送后再更新状态
@@ -46,65 +40,9 @@ export async function sendMessage(
         throw new Error('暂不支持发送该消息类型');
     }
     const newOriginMessage = await promise;
-    const newMessage = Action.Parse.get([], newOriginMessage, newOriginMessage);
+    const newMessage = newOriginMessage ? Action.Parse.get([], newOriginMessage, newOriginMessage) : message;
     Listener.trigger(sendEventName, newMessage);
     await delegate.model.Conversation.updateMessage(imId, newMessage);
-}
-
-export async function insertTimeMessage(
-    imId: string,
-    chatType: Conversation.ChatType,
-    message: Message.General,
-): Promise<Message.General | void> {
-    const conversation = delegate.model.Conversation.getOne(imId, false);
-    if (conversation && conversation.latestMessage) {
-        const oldMessage = conversation.latestMessage;
-        const delta = message.timestamp - oldMessage.timestamp;
-        if (delta < 0) {
-            const [forwardMessage] = await delegate.im.conversation.loadMessage({imId, chatType, lastMessage:message, count:1});
-            if (forwardMessage && message.timestamp - forwardMessage.timestamp < interval){
-                return;
-            }
-        } else if (delta < interval) {
-            const oldTime = new Date(oldMessage.timestamp).getMinutes();
-            const newTime = new Date(message.timestamp).getMinutes();
-            if (Math.floor(oldTime / 3) === Math.floor(newTime / 3)) {
-                return;
-            }
-        }
-    }
-    const promise = _insertTimeMessage(imId, chatType, message);
-    if (!promise) {
-        throw new Error('暂不支持发送该消息类型');
-    }
-    const newOriginMessage = await promise;
-    return Action.Parse.get([], newOriginMessage, newOriginMessage);
-}
-
-async function _insertTimeMessage(
-    imId: string,
-    chatType: Conversation.ChatType,
-    message: Message.General){
-    const timeMessage = {
-        conversationId: imId,
-        messageId: null,
-        innerId: guid(),
-        status: Message.Status.Succeed,
-        type: delegate.config.messageType.text,
-        from: delegate.user.getMine().userId,
-        to: imId,
-        localTime: Date.now() - 1,
-        timestamp: message.timestamp - 1,
-        data: {
-            text: '',
-            isSystem: true,
-        },
-    };
-    return Action.Send.get(
-        timeMessage.type,
-        {imId, chatType, message: timeMessage, ext: {}},
-        {imId, chatType, message: timeMessage, ext: {}},
-    );
 }
 
 export async function insertSystemMessage(

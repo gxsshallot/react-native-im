@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SwipeListView } from 'react-native-swipe-list-view';
 import Toast from 'react-native-root-toast';
-import Listener from 'react-native-general-listener';
+import Listener from '@hecom/listener';
 import i18n from 'i18n-js';
 import * as PageKeys from '../pagekey';
 import { Event } from '../typings';
@@ -32,12 +32,20 @@ export default class extends React.PureComponent {
             [Event.Base, Event.Conversation],
             this._refresh.bind(this)
         );
+        this.listenUserLeave = Listener.registerWithSubEvent(
+            [Event.Base, Event.GroupLeave],
+            this._userLeave.bind(this)
+        );
     }
 
     componentWillUnmount() {
         Listener.unregister(
             [Event.Base, Event.Conversation],
             this.listenListUpdate
+        );
+        Listener.unregister(
+            [Event.Base, Event.GroupLeave],
+            this.listenUserLeave
         );
     }
 
@@ -133,6 +141,13 @@ export default class extends React.PureComponent {
         this.setState({dataSource});
     }
 
+    _userLeave(data){
+        const {reason} = data;
+        if (reason == 0) {
+            this._refresh.bind(this);
+        }
+    }
+
     _clickTop(item, config) {
         const top = !config.top;
         delegate.model.Conversation.updateConfig(item.imId, item.chatType, {top})
@@ -150,10 +165,7 @@ export default class extends React.PureComponent {
     }
 
     _clickSearch() {
-        this.props.navigation.navigate({
-            routeName: PageKeys.Search,
-            params: {},
-        });
+        this.props.navigation.navigate(PageKeys.Search,{});
     }
 }
 

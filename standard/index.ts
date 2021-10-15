@@ -1,4 +1,4 @@
-import AsyncStorage from 'react-native-general-storage';
+import AsyncStorage from '@hecom/storage';
 import * as Typings from './typings';
 import * as Model from './model';
 import * as Components from './component';
@@ -18,8 +18,10 @@ function setup_common_page() {
     Delegate.page[PageKeys.ContactList] = Pages.ContactListPage;
     Delegate.page[PageKeys.GroupList] = Pages.GroupListPage;
     Delegate.page[PageKeys.GroupMembers] = Pages.GroupMembersPage;
+    Delegate.page[PageKeys.GroupAnnouncementEdit] = Pages.GroupAnnouncementEditPage;
     Delegate.page[PageKeys.Search] = Pages.SearchPage;
     Delegate.page[PageKeys.SearchMore] = Components.SearchList;
+    Delegate.page[PageKeys.GroupNameEdit] = Pages.GroupNameEdit;
 }
 
 function setup_common_render() {
@@ -45,6 +47,8 @@ function setup_common_component() {
     Delegate.component.SegmentControl = Components.SegmentControl;
     Delegate.component.SelectList = Components.SelectList;
     Delegate.component.SettingItem = Components.SettingItem;
+    Delegate.component.HeaderCell = Components.HeaderCell;
+    Delegate.component.FixedSectionList = Components.FixedSectionList;
 }
 
 function setup_common_model() {
@@ -54,6 +58,7 @@ function setup_common_model() {
     Delegate.model.External = Model.External;
     Delegate.model.Group = Model.Group;
     Delegate.model.Message = Model.Message;
+    Delegate.model.Setting = Model.Setting;
 }
 
 function login(forceUpdate: boolean) {

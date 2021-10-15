@@ -1,16 +1,17 @@
 import React from 'react';
-import { InteractionManager, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { InteractionManager, StyleSheet, Text, TouchableOpacity, View, Image } from 'react-native';
 import PropTypes from 'prop-types';
 import Toast from 'react-native-root-toast';
-import PickList from 'react-native-picklist';
+import PickList from '@hecom/react-native-picklist';
 import i18n from 'i18n-js';
 import ArrowImage from '@hecom/image-arrow';
 import ChooseUserFromOrgPage from './ChooseUserFromOrg';
 import delegate from '../delegate';
 import * as Types from '../proptype';
 import * as PageKeys from '../pagekey';
+import { Message } from '../typings';
 
-export default class extends React.PureComponent {
+export default class extends React.Component {
     static navigationOptions = function (options) {
         if (PickList.initialized(options)) {
             return PickList.navigationOptions(options);
@@ -28,13 +29,16 @@ export default class extends React.PureComponent {
 
     static defaultProps = {
         ...ChooseUserFromOrgPage.defaultProps,
+        showAtAll: false,
     };
 
     constructor(props) {
         super(props);
         this.state = {
             users: props.dataSource,
+ 	        selectedIds: props.selectedIds
         };
+	   this.idKey = 'userId';
     }
 
     componentDidMount() {
@@ -60,17 +64,18 @@ export default class extends React.PureComponent {
     }
 
     render() {
-        const {navigation, title, selectedIds, multiple, dataSource} = this.props;
+        const {navigation, title, selectedIds, multiple, dataSource, showBottomView} = this.props;
         return this.state.users !== undefined && (
             <PickList
+		ref={(ref) => (this.pickList = ref)}
                 navigation={navigation}
                 title={title}
                 multilevel={false}
                 multiselect={multiple}
-                showBottomView={false}
+                showBottomView={showBottomView}
                 data={this.state.users}
                 onFinish={this._onFinish.bind(this)}
-                renderHeader={dataSource ? undefined : this._renderHeader.bind(this)}
+                renderHeader={this._renderHeader.bind(this)}
                 rightTitle={multiple ? delegate.config.buttonOK : undefined}
                 searchKeys={[delegate.config.pinyinField]}
                 labelKey={'name'}
@@ -81,6 +86,9 @@ export default class extends React.PureComponent {
                     initialNumToRender: 20,
                     renderSectionHeader: this._renderSectionHeader.bind(this),
                 }}
+		        customView={this._getCustomView}
+                refreshSingleCell= {false}
+                renderRow={this._renderRow}
             />
         );
     }
@@ -99,11 +107,16 @@ export default class extends React.PureComponent {
     }
 
     _renderHeader() {
-        const style = {
-            borderBottomWidth: StyleSheet.hairlineWidth,
-            borderBottomColor: delegate.style.separatorLineColor,
-        };
-        return (
+        const {dataSource, showAtAll} = this.props;
+        const atAllView = showAtAll ? (
+            <TouchableOpacity onPress={this._onAtAll.bind(this)}>
+                <View style={{ backgroundColor: 'white', height: 40, flexDirection: 'row', alignItems: 'center' }}>
+                    <Text style={{ fontSize: 15, color: '#222', flex: 1, marginLeft: 12 }}>{'所有人'}</Text>
+                    <Image style={{ marginRight: 25, marginLeft: 10 }} source={require('./image/checkbox.png')} />
+                </View>
+            </TouchableOpacity >
+        ) : undefined;
+        const fromOrgView = dataSource ? undefined : (
             <View style={styles.row}>
                 <TouchableOpacity onPress={this._clickHeader.bind(this)}>
                     <View style={[styles.container, style]}>
@@ -113,6 +126,16 @@ export default class extends React.PureComponent {
                         <ArrowImage style={styles.icon} />
                     </View>
                 </TouchableOpacity>
+            </View>
+        )
+        const style = {
+            borderBottomWidth: StyleSheet.hairlineWidth,
+            borderBottomColor: delegate.style.separatorLineColor,
+        };
+        return (
+            <View>
+                {atAllView}
+                {fromOrgView}
             </View>
         );
     }
@@ -158,29 +181,58 @@ export default class extends React.PureComponent {
     }
 
     _onFinish(nodes) {
+        this._selectedOnFinish(nodes);
+        let label = '';
         nodes = nodes
             .reduce((prv, cur) => [...prv, ...cur.getLeafChildren()], [])
-            .map(node => node.getInfo().userId);
-        this.props.onSelectData && this.props.onSelectData(nodes);
+            .map(node => {
+                const nodeInfo = node.getInfo();
+                label = label.length > 0 ? label + '、' : label;
+                label =  label + nodeInfo.name;
+                return nodeInfo.userId;
+            });
+        this.props.onSelectData && this.props.onSelectData(nodes, label);
+    }
+
+    _onAtAll() {
+        this.props.onSelectData && this.props.onSelectData([Message.AtAll], i18n.t('IMPageChooseUserAll'));
+        this.props.navigation && this.props.navigation.goBack();
     }
 
     _clickHeader() {
-        const onSelectDataFunc = (nodes) => {
+        const selectedIds = this._getCurrentSelectedIdKeys('userId');
+        const onSelectDataFunc = (nodes, notBack = false) => {
+            if (notBack) {
+                this._refreshBackData(nodes, this.idKey);
+                return;
+            }
             this.props.onSelectData && this.props.onSelectData(nodes);
             InteractionManager.runAfterInteractions(() => {
                 this.props.navigation.goBack();
             });
         };
-        const {title, multiple, hasSelf, parentOrgId, excludedUserIds, selectedIds, spaceHeight} = this.props;
-        this.props.navigation.navigate({
-            routeName: PageKeys.ChooseUserFromOrg,
-            params: {
-                title, multiple, hasSelf, parentOrgId, excludedUserIds, selectedIds, spaceHeight,
-                firstTitleLine: delegate.user.getMine().entName,
-                onSelectData: onSelectDataFunc,
-            },
+        const { title, multiple, hasSelf, parentOrgId, excludedUserIds, spaceHeight } = this.props;
+        this.props.navigation.navigate(PageKeys.ChooseUserFromOrg, {
+            title,
+            multiple,
+            hasSelf,
+            parentOrgId,
+            excludedUserIds,
+            selectedIds,
+            spaceHeight,
+            firstTitleLine: delegate.user.getMine().entName,
+            onSelectData: onSelectDataFunc,
         });
     }
+    _getCustomView  = (data, renderRow) => null;
+
+    _renderRow  = (treeNode, props) => null;
+
+    _selectedOnFinish = (nodes) => null;
+
+    _getCurrentSelectedIdKeys = (idKey) => [];
+
+    _refreshBackData = (nodes) => []
 }
 
 const styles = StyleSheet.create({

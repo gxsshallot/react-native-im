@@ -1,5 +1,5 @@
-import AsyncStorage from 'react-native-general-storage';
-import Listener from 'react-native-general-listener';
+import AsyncStorage from '@hecom/storage';
+import Listener from '@hecom/listener';
 import { Group, Event, Storage } from '../typings';
 import { simpleExport } from '../util';
 import delegate from '../delegate';
@@ -99,6 +99,11 @@ export function getName(groupId: string, autoConj: boolean = true): string | voi
     }
 }
 
+export function getAnnouncement(groupId: string): string {
+    const group = findByGroupId(groupId, false);
+    return (group && group.announcement) ? group.announcement : '';
+}
+
 export function getAvatar(groupId: string): string | void {
     const group = findByGroupId(groupId, false);
     return group ? group.avatar : null;
@@ -150,6 +155,15 @@ export async function removeMembers(groupId: string, memberUserIds: string[]): P
 export async function changeName(groupId: string, newName: string): Promise<string> {
     await delegate.im.group.changeName(groupId, newName);
     return changeGroupInfo(groupId, {name: newName}, newName);
+}
+
+export async function showGroupDataRecord(imId:string) {
+    await delegate.im.group.showGroupDataRecord(imId)
+}
+
+export async function changeAnnouncement(groupId: string, newAnnouncement: string): Promise<string> {
+    await delegate.im.group.changeAnnouncement(groupId, newAnnouncement);
+    return changeGroupInfo(groupId, {announcement: newAnnouncement}, newAnnouncement);
 }
 
 export async function changeAvatar(groupId: string, newAvatarUrl: string): Promise<string> {

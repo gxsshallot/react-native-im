@@ -2,13 +2,13 @@ import React from 'react';
 import { View } from 'react-native';
 import Toast from 'react-native-root-toast';
 import i18n from 'i18n-js';
-import { Typings, Delegate } from '../../standard';
+import { Typings, Delegate, PageKeys } from '../../standard';
 import Prompt from './Prompt';
 
 export const name = 'IMSettingGroupName';
 
 export function getUi(props: Typings.Action.Setting.Params): Typings.Action.Setting.Result {
-    const {key, imId, chatType, onDataChange} = props;
+    const {key, imId, chatType, onDataChange,navigation} = props;
     const isGroup = chatType === Typings.Conversation.ChatType.Group;
     if (!isGroup) {
         return null;
@@ -16,12 +16,16 @@ export function getUi(props: Typings.Action.Setting.Params): Typings.Action.Sett
     const groupName = Delegate.model.Group.getName(imId, false);
     const groupOwner = Delegate.model.Group.getOwner(imId);
     const isOwner = groupOwner === Delegate.user.getMine().userId;
+    if (!isOwner) {
+        return null;
+    }
     return (
         <GroupNameCell
             key={key}
             isOwner={isOwner}
             groupName={groupName}
             imId={imId}
+            navigation={navigation}
             onDataChange={onDataChange}
         />
     );
@@ -45,7 +49,7 @@ export class GroupNameCell extends React.PureComponent<Props, State> {
 
     render() {
         const {groupName, isOwner} = this.props;
-        const showNameLineFunc = !isOwner ? undefined : this._changePromptStatus.bind(this, true);
+        const showNameLineFunc = !isOwner ? undefined : this._clickNameEdit.bind(this);
         return (
             <View>
                 <Delegate.component.SettingItem
@@ -54,13 +58,13 @@ export class GroupNameCell extends React.PureComponent<Props, State> {
                     data={groupName}
                     onPressLine={showNameLineFunc}
                 />
-                <Prompt
+                {/* <Prompt
                     visible={this.state.showPrompt}
                     title={i18n.t('IMSettingGroupNameChangeTips')}
                     onCancel={this._changePromptStatus.bind(this, false)}
                     onSubmit={this._clickName.bind(this)}
                     textInputProps={{secureTextEntry: false}}
-                />
+                /> */}
             </View>
         );
     }
@@ -85,5 +89,19 @@ export class GroupNameCell extends React.PureComponent<Props, State> {
                     action: i18n.t('IMSettingGroupNameChange'),
                 }));
             });
+    }
+
+    protected _clickNameEdit() {
+        const {imId, onDataChange, groupName, navigation, onSendMessage} = this.props;
+        const curGroupName = (groupName != null) ? groupName : ''
+        const groupAvatar = { imId: imId, chatType:Typings.Conversation.ChatType.Group };
+
+        navigation.navigate( PageKeys.GroupNameEdit, {
+            groupId: imId,
+            groupName: curGroupName,
+            groupAvatar: groupAvatar,
+            onDataChange: onDataChange,
+            onSendMessage: onSendMessage,
+        })
     }
 }

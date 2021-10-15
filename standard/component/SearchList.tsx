@@ -1,20 +1,21 @@
 import React from 'react';
-import { Image, Keyboard, StyleSheet, Text, TouchableHighlight, TouchableOpacity, View, } from 'react-native';
+import { Image, Keyboard, StyleSheet, Text, TouchableHighlight, TouchableOpacity, View, SafeAreaView} from 'react-native';
 import PropTypes from 'prop-types';
-import NaviBar from 'react-native-pure-navigation-bar';
+import NaviBar from '@hecom/react-native-pure-navigation-bar';
 import SearchBar from 'react-native-general-searchbar';
-import AsyncStorage from 'react-native-general-storage';
+import AsyncStorage from '@hecom/storage';
 import { KeyboardAwareFlatList, KeyboardAwareSectionList } from 'react-native-keyboard-aware-scroll-view';
 import { Storage } from '../typings';
 import delegate from '../delegate';
 
-export default class extends React.PureComponent {
+export default class extends React.Component {
     static propTypes = {
         searchText: PropTypes.string,
         searchHint: PropTypes.string,
         showHistory: PropTypes.bool,
         historyKey: PropTypes.string,
         doSearch: PropTypes.func.isRequired,
+        doCustomSearch: PropTypes.func,
         onItemClick: PropTypes.func,
         itemKey: PropTypes.string,
         maxHistoryLength: PropTypes.number,
@@ -62,16 +63,19 @@ export default class extends React.PureComponent {
                     title={this._renderSearchBar()}
                 />
                 {showHistory && !result ? this._renderHistory() : (
-                    <List
-                        {...this.props}
-                        data={result || []}
-                        sections={result || []}
-                        ListEmptyComponent={this._renderEmpty('没有结果')}
-                        renderSectionFooter={this._renderSectionFooter}
-                        renderItem={this._renderResultItem()}
-                        ItemSeparatorComponent={ItemSeparatorComponent}
-                        SectionSeparatorComponent={SectionSeparatorComponent}
-                    />
+                    <>
+                        <List
+                            {...this.props}
+                            data={result || []}
+                            sections={result || []}
+                            ListEmptyComponent={this._renderEmpty('没有结果')}
+                            renderSectionFooter={this._renderSectionFooter}
+                            renderItem={this._renderResultItem()}
+                            ItemSeparatorComponent={ItemSeparatorComponent}
+                            SectionSeparatorComponent={SectionSeparatorComponent}
+                        />
+                        <SafeAreaView />
+                    </>
                 )}
             </View>
         );
@@ -199,6 +203,9 @@ export default class extends React.PureComponent {
     };
 
     _onChangeSearchText = (searchText) => {
+        if (searchText === this.state.searchText) {
+            return;
+        }
         const state = {searchText};
         if (!searchText) {
             state.result = null;
@@ -260,6 +267,19 @@ export default class extends React.PureComponent {
         if (text === undefined || text.length === 0) {
             return;
         }
+        this.props.doCustomSearch && this.props.doCustomSearch(text).then((result) => {
+            if (result && result.length > 0) {
+                let stateResult = this.state.result || [];
+                //去重
+                stateResult = stateResult.filter((itemO) => {
+                    return result.filter((itemT) => {
+                        return itemO.title === itemT.title;
+                    }).length == 0
+                });
+                stateResult.unshift(...result);
+                this.setState({ result: stateResult });
+            }
+        })
         !this.props.onItemClick && this._addHistory(text);
         !this.props.searchOnTextChange && Keyboard.dismiss();
         const result = this.props.doSearch(text).filter(i => i);

@@ -1,7 +1,7 @@
 import React from 'react';
 import Toast from 'react-native-root-toast';
 import ActionSheet from 'react-native-general-actionsheet';
-import * as ImagePicker from 'react-native-full-image-picker';
+import * as ImagePicker from '@hecom-rn/react-native-full-image-picker';
 import i18n from 'i18n-js';
 import { Typings, Delegate } from '../../standard';
 
@@ -19,6 +19,9 @@ export function getUi(props: Typings.Action.Setting.Params): Typings.Action.Sett
     };
     const groupOwner = Delegate.model.Group.getOwner(imId);
     const isOwner = groupOwner === Delegate.user.getMine().userId;
+    if (!isOwner) {
+        return null;
+    }
     return (
         <Delegate.component.SettingItem
             key={key}

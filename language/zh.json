@@ -23,8 +23,9 @@
     "IMPageChooseConversationTitle": "选择聊天",
     "IMPageChooseConversationCreateNew": "创建新聊天",
     "IMPageChooseUserSelectFromOrg": "按部门选同事",
+    "IMPageChooseUserAll": "所有人",
     "IMSettingAddGroupMember": "添加群成员",
-    "IMSettingAllMembers": "全体成员({{length}})",
+    "IMSettingAllMembers": "查看全体群成员({{length}})",
     "IMSettingAllowInvite": "允许添加成员",
     "IMSettingAvoid": "消息免打扰",
     "IMSettingChooseGroupMember": "选择群成员",
@@ -37,6 +38,8 @@
     "IMSettingGroupNameChangeTips": "请输入群聊名称",
     "IMSettingGroupNameNotEmpty": "群聊名称不能为空",
     "IMSettingLeaveGroupDestroy": "解散群聊",
+    "IMSettingGroupAnnouncement": "群公告",
+    "IMSettingGroupAnnouncementChange": "更改群公告",
     "IMSettingLeaveGroupQuit": "退出群聊",
     "IMSettingRemoveGroupMember": "删除群成员",
     "IMSettingTop": "置顶聊天",
@@ -44,5 +47,6 @@
     "IMSettingTransferOwnerAction": "转交",
     "IMToastError": "{{action}}失败",
     "IMToastMessageNotSupport": "当前版本暂不支持该消息",
-    "IMToastSuccess": "{{action}}成功"
+    "IMToastSuccess": "{{action}}成功",
+    "IMSettingGroupDataInfo": "资料"
 }

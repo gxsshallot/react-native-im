@@ -76,6 +76,7 @@ const model: Delegate.ModelPart = {
         getOwner: noDataDelegate('model.Group.getOwner'),
         getMembers: noDataDelegate('model.Group.getMembers'),
         getName: noDataDelegate('model.Group.getName'),
+        getAnnouncement: noDataDelegate('model.Group.getAnnouncement'),
         getAvatar: noDataDelegate('model.Group.getAvatar'),
         getAllowInvites: noDataDelegate('model.Group.getAllowInvites'),
         createOne: noPromiseDelegate('model.Group.createOne'),
@@ -139,7 +140,6 @@ const config: Delegate.ConfigPart = {
     pinyinField: 'pinyin',
     titleLoading: '加载中',
     buttonOK: '确定',
-    maxContactLimitNumber: 5000,
     messageType: {
         text: -1,
         voice: -1,

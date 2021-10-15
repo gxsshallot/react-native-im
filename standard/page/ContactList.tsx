@@ -8,13 +8,14 @@ import {
     SafeAreaView,
     StyleSheet,
     TouchableOpacity,
-    View
+    View,
+    Dimensions
 } from 'react-native';
 import PropTypes from 'prop-types';
 import Toast from 'react-native-root-toast';
-import NaviBar, {forceInset} from 'react-native-pure-navigation-bar';
+import NaviBar, {forceInset} from '@hecom/react-native-pure-navigation-bar';
 import ArrowImage from '@hecom/image-arrow';
-import Listener from 'react-native-general-listener';
+import Listener from '@hecom/listener';
 import * as PageKeys from '../pagekey';
 import {mapListToSection} from '../util';
 import {Conversation, Event} from '../typings';
@@ -44,11 +45,17 @@ export default class extends React.PureComponent {
         InteractionManager.runAfterInteractions(() => {
             this._loadData();
         });
+        Dimensions.addEventListener('change', this._onOrientationChange.bind(this));
     }
 
     componentWillUnmount() {
         this.listener && Listener.unregister([Event.Base, Event.StarUserChange], this.listener);
+        Dimensions.removeEventListener('change', this._onOrientationChange.bind(this));
     }
+
+    _onOrientationChange = () => {
+        this.forceUpdate();
+    };
 
     render() {
         const style = {
@@ -71,23 +78,42 @@ export default class extends React.PureComponent {
         );
     }
 
+    _rowRenderer = (data) => {
+        let subTitle = data.dept && data.dept.name;
+        if (data.title) {
+            subTitle += (subTitle ? ' | ' : '') + data.title
+        }
+        return (
+            <>
+                <delegate.component.ListCell
+                    avatar={{ imId: data.userId, chatType: Conversation.ChatType.Single }}
+                    title={data.name}
+                    subTitle={subTitle}
+                    right={this._renderRight(data)}
+                    onClick={this._clickItem.bind(this, data)}
+                />
+                {this.renderSeparator()}
+            </>
+        );
+    }
+
     _renderList = () => {
         const {itemHeight} = this.props;
+        const {items = []} = this.state;
+        let { width } = Dimensions.get("window");
         return (
-            <delegate.component.SeekBarSectionList
+            <delegate.component.FixedSectionList
                 style={styles.list}
                 sections={this.state.data}
-                renderItem={this._renderItem}
-                headerHeight={itemHeight * 3}
-                ItemSeparatorComponent={this.renderSeparator}
-                keyExtractor={item => item.userId}
-                ListHeaderComponent={this._renderHeader}
-                separatorHeight={StyleSheet.hairlineWidth}
-                stickySectionHeadersEnabled={true}
-                itemHeight={itemHeight}
+                renderItem={this._rowRenderer}
+                headerHeight={itemHeight * items.length}
+                renderHeaderComponent={this._renderHeader}
+                hasHeader={true}
+                itemHeight={itemHeight + StyleSheet.hairlineWidth}
                 sectionHeight={delegate.component.SectionHeader.defaultProps.height}
                 renderSectionHeader={this._renderSectionHeader}
-                initialNumToRender={20}
+                itemWidth= {width}
+                renderAheadOffset= {itemHeight * 20}
             />
         );
     };
@@ -96,18 +122,20 @@ export default class extends React.PureComponent {
         return <View style={styles.separator} />
     }
 
-    _renderSectionHeader = ({section: {title}}) => {
+    _renderSectionHeader = (title) => {
         return <delegate.component.SectionHeader title={title} />;
     };
 
     _renderHeader = () => {
-        return this.state.items.map(({title, subTitle, onClick, icon}, index) => (
-            <delegate.component.ListCell
+        return this.state.items.map(({title, subTitle, onClick, icon, showBranchTop, showBranchBottom}, index) => (
+            <delegate.component.HeaderCell
                 key={index}
                 title={title}
                 subTitle={subTitle}
                 onClick={onClick}
                 avatar={icon}
+                showBranchTop={showBranchTop}
+                showBranchBottom={showBranchBottom}
                 right={<ArrowImage style={styles.arrow} />}
             />
         ));
@@ -152,7 +180,7 @@ export default class extends React.PureComponent {
         return Promise.all([loadUser, loadOrg, loadStarUser])
             .then(([users, , starUsers = []]) => {
                 let data: Array<{}>;
-                if (users.length < delegate.config.maxContactLimitNumber) {
+                if (users.length < 100000) {
                     data = mapListToSection(users, delegate.config.pinyinField);
                     if (starUsers.length > 0) {
                         data.unshift({key: '☆', title: '星标好友', data: starUsers});
@@ -192,10 +220,7 @@ export default class extends React.PureComponent {
     };
 
     _clickSearchBar = () => {
-        this.props.navigation.navigate({
-            routeName: PageKeys.Search,
-            params: {},
-        });
+        this.props.navigation.navigate( PageKeys.Search, {});
     };
 
     _clickPhone = (phone) => {
