@@ -118,6 +118,11 @@
   resolved "https://registry.npmjs.org/@hecom/listener/-/listener-1.0.0.tgz#31fd889e8dbf3dcb304e93213052a5d3422e60d3"
   integrity sha512-hGsqbsecEDRDMgq/MBe2ZqmdUJIMY+NZrDACOC/CndGUoTVaS+LGHUjaidbrYN1b8dCpW2pa6DqRySiUeWHPiA==
 
+"@hecom/storage@1.1.0":
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/@hecom/storage/-/storage-1.1.0.tgz#709cb12d4e398ade09289d9037807a23f8a6c1a1"
+  integrity sha512-ift7LZVp/JXdYW8fyZh/2ng3qo8zDINAmju2HwBhz8S+WiQ4G0/Su11y0DLJ99tTRas8zwlZ6LHk31qTT5T26A==
+
 "@react-native-community/art@^1.1.2":
   version "1.2.0"
   resolved "https://registry.npm.taobao.org/@react-native-community/art/download/@react-native-community/art-1.2.0.tgz#386d95393f6042d9006f9d4bc6063fb898794460"
@@ -126,11 +131,6 @@
     art "^0.10.3"
     invariant "^2.2.4"
     prop-types "^15.7.2"
-
-"@react-native-community/async-storage@^1.6.1":
-  version "1.7.1"
-  resolved "https://registry.npmjs.org/@react-native-community/async-storage/-/async-storage-1.7.1.tgz#ef2104d865de61ad91bba66613e57e689ff4e6a1"
-  integrity sha512-/oX/x+EU4xNaqIaC/epVKzO8XghzImPA7l8cLz3USEFmtFiXFjBbTeeIFjjEm/u4/cv38Wi1xMEa10PHIWygRg==
 
 "@react-native-community/cameraroll@^1.2.1":
   version "1.4.1"
@@ -1712,9 +1712,9 @@ lodash.unescape@4.0.1:
   integrity sha1-vyJJiGzlFM2hEvrpIYzcBlIR/Jw=
 
 lodash@^4.17.11, lodash@^4.17.12, lodash@^4.17.13, lodash@^4.17.14, lodash@^4.17.4, lodash@^4.6.1:
-  version "4.17.15"
-  resolved "https://registry.npmjs.org/lodash/-/lodash-4.17.15.tgz#b447f6670a0455bbfeedd11392eff330ea097548"
-  integrity sha512-8xOcRHvCjnocdS5cpwXQXVzmmh5e5+saE2QGoeQmbKmRS6J3VQppPOIt0MnmE+4xlZoumy0GPG0D0MVIQbNA1A==
+  version "4.17.21"
+  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.21.tgz#679591c564c3bffaae8454cf0b3df370c3d6911c"
+  integrity sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==
 
 loose-envify@^1.0.0, loose-envify@^1.4.0:
   version "1.4.0"
@@ -2054,13 +2054,6 @@ react-native-general-searchbar@^1.0.6:
   version "1.0.6"
   resolved "https://registry.npmjs.org/react-native-general-searchbar/-/react-native-general-searchbar-1.0.6.tgz#e17f445e57f4402577f54ac0625800e167a5a9da"
   integrity sha512-JPQWtEN5tIJR7QhDgGzI0l78E1AhwR5pdKVeeNWplhlNUGmy5Rwt1/J4F5rR5yAembUA72E2MNaR8TiUGfSXXQ==
-
-react-native-general-storage@^1.0.5:
-  version "1.0.5"
-  resolved "https://registry.npm.taobao.org/react-native-general-storage/download/react-native-general-storage-1.0.5.tgz#0d80209fadd2446adb938f4e5d95ae76bd9125de"
-  integrity sha1-DYAgn63SRGrbk49OXZWudr2RJd4=
-  dependencies:
-    "@react-native-community/async-storage" "^1.6.1"
 
 react-native-gesture-handler@^1.6.0:
   version "1.6.0"
